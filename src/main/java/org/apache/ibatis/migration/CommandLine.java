@@ -218,6 +218,7 @@ public class CommandLine {
     printStream.println("--trace              Shows additional error details (if any).");
     printStream.println();
     printStream.println("Commands:");
+    printStream.println("  info               Display build version informations.");
     printStream.println("  init               Creates (if necessary) and initializes a migration path.");
     printStream.println("  bootstrap          Runs the bootstrap SQL script (see scripts/bootstrap.sql for more).");
     printStream.println("  new <description>  Creates a new migration with the provided description.");
