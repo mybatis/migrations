@@ -1,0 +1,38 @@
+<assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.1"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.1 http://maven.apache.org/xsd/assembly-1.1.1.xsd">
+  <id>bundle</id>
+  <baseDirectory>mybatis-migrations-${project.version}</baseDirectory>
+  <formats>
+    <format>zip</format>
+  </formats>
+  <files>
+    <file>
+      <source>LICENSE</source>
+      <fileMode>666</fileMode>
+    </file>
+    <file>
+      <source>NOTICE</source>
+      <fileMode>666</fileMode>
+    </file>
+    <file>
+      <source>MIGRATIONS-README</source>
+      <filtered>true</filtered>
+      <fileMode>666</fileMode>
+    </file>
+  </files>
+  <fileSets>
+    <!--
+     | shell scripts are generated
+    -->
+    <fileSet>
+      <directory>${project.build.directory}/appassembler/lib/</directory>
+      <outputDirectory>/lib</outputDirectory>
+    </fileSet>
+    <fileSet>
+      <directory>${project.build.directory}/appassembler/bin/</directory>
+      <outputDirectory>/bin</outputDirectory>
+      <fileMode>755</fileMode>
+    </fileSet>
+  </fileSets>
+</assembly>
