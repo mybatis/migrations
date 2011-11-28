@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 2010-2011 The myBatis Team
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<!--
+  version: $Id: site.xml 4131 2011-11-27 21:03:59Z simone.tripodi $
+-->
+<project xmlns="http://maven.apache.org/DECORATION/1.1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/DECORATION/1.1.0 http://maven.apache.org/xsd/decoration-1.1.0.xsd"
+  name="MyBatis Migrations">
+
+  <body>
+
+    <menu name="Migrations">
+      <item name="Introduction" href="migrations/index.html"/>
+      <item name="Installation" href="migrations/installation.html"/>
+      <item name="The 'migrate' Command" href="migrations/migrate.html">
+        <item name="init" href="migrations/init.html"/>
+        <item name="bootstrap" href="migrations/bootstrap.html"/>
+        <item name="new" href="migrations/new.html"/>
+        <item name="status" href="migrations/status.html"/>
+        <item name="up, down" href="migrations/updown.html"/>
+        <item name="version" href="migrations/version.html"/>
+        <item name="pending" href="migrations/pending.html"/>
+        <item name="script" href="migrations/script.html"/>
+        <item name="Command Shortcuts" href="migrations/shortcuts.html"/>
+      </item>
+    </menu>
+
+    <menu ref="reports"/>
+  </body>
+</project>
