@@ -32,6 +32,10 @@
   <artifactId>mybatis-migrations</artifactId>
   <version>1.0-SNAPSHOT</version>
 
+  <properties>
+    <findbugs.onlyAnalyze>org.apache.ibatis.migration</findbugs.onlyAnalyze>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>org.mybatis</groupId>
