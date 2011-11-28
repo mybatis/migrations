@@ -1,4 +1,4 @@
-Install MyBatis Migrations
+Install MyBatis Migrations ${project.version} (${implementation.build})
 
   MyBatis Migrations is a Java tool, so you must have Java installed in order to proceed. Users need at least the
   Java Runtime Environment (JRE), the Java Development Kit (JDK) is a plus.
