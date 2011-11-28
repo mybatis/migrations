@@ -25,18 +25,18 @@
   <body>
 
     <menu name="Migrations">
-      <item name="Introduction" href="migrations/index.html"/>
-      <item name="Installation" href="migrations/installation.html"/>
-      <item name="The 'migrate' Command" href="migrations/migrate.html">
-        <item name="init" href="migrations/init.html"/>
-        <item name="bootstrap" href="migrations/bootstrap.html"/>
-        <item name="new" href="migrations/new.html"/>
-        <item name="status" href="migrations/status.html"/>
-        <item name="up, down" href="migrations/updown.html"/>
-        <item name="version" href="migrations/version.html"/>
-        <item name="pending" href="migrations/pending.html"/>
-        <item name="script" href="migrations/script.html"/>
-        <item name="Command Shortcuts" href="migrations/shortcuts.html"/>
+      <item name="Introduction" href="index.html"/>
+      <item name="Installation" href="installation.html"/>
+      <item name="The 'migrate' Command" href="migrate.html">
+        <item name="init" href="init.html"/>
+        <item name="bootstrap" href="bootstrap.html"/>
+        <item name="new" href="new.html"/>
+        <item name="status" href="status.html"/>
+        <item name="up, down" href="updown.html"/>
+        <item name="version" href="version.html"/>
+        <item name="pending" href="pending.html"/>
+        <item name="script" href="script.html"/>
+        <item name="Command Shortcuts" href="shortcuts.html"/>
       </item>
     </menu>
 
