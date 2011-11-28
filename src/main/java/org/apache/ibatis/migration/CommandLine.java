@@ -38,7 +38,7 @@ public class CommandLine {
   private static final String VERSION = "version";
   private static final String STATUS = "status";
   private static final Set<String> KNOWN_COMMANDS = Collections.unmodifiableSet(
-          new HashSet<String>(Arrays.asList(INIT, NEW, UP, VERSION, DOWN, PENDING, STATUS, BOOTSTRAP, SCRIPT)));
+          new HashSet<String>(Arrays.asList(INFO, INIT, NEW, UP, VERSION, DOWN, PENDING, STATUS, BOOTSTRAP, SCRIPT)));
   private PrintStream printStream;
   private File repository;
   private String environment;
