@@ -10,6 +10,7 @@ import java.util.Set;
 
 import org.apache.ibatis.migration.commands.BootstrapCommand;
 import org.apache.ibatis.migration.commands.DownCommand;
+import org.apache.ibatis.migration.commands.InfoCommand;
 import org.apache.ibatis.migration.commands.InitializeCommand;
 import org.apache.ibatis.migration.commands.NewCommand;
 import org.apache.ibatis.migration.commands.PendingCommand;
@@ -26,6 +27,7 @@ public class CommandLine {
   private static final String TRACE = "--trace";
   private static final String HELP = "--help";
   private static final String TEMPLATE_PREFIX = "--template=";
+  private static final String INFO = "info";
   private static final String INIT = "init";
   private static final String BOOTSTRAP = "bootstrap";
   private static final String NEW = "new";
@@ -99,7 +101,9 @@ public class CommandLine {
     int exit = 0;
 
     try {
-      if (INIT.equals(command)) {
+      if (INFO.equals(command)) {
+          new InfoCommand().execute(params);
+      } else if (INIT.equals(command)) {
         new InitializeCommand(repository, environment, force).execute(params);
       } else if (BOOTSTRAP.equals(command)) {
         new BootstrapCommand(repository, environment, force).execute(params);
