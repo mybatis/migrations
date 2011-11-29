@@ -48,10 +48,8 @@ public class InitializeCommand extends BaseCommand {
 
   protected void createDirectoryIfNecessary(File path) {
     if (!path.exists()) {
-      File parent = new File(path.getParent());
-      createDirectoryIfNecessary(parent);
       printStream.println("Creating: " + path.getName());
-      if (!path.mkdir()) {
+      if (!path.mkdirs()) {
         throw new MigrationException("Could not create directory path for an unknown reason. Make sure you have access to the directory.");
       }
     }
