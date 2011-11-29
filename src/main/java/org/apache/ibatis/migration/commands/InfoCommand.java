@@ -2,11 +2,19 @@ package org.apache.ibatis.migration.commands;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintStream;
 import java.util.Properties;
 
 public final class InfoCommand
     implements Command
 {
+
+    private final PrintStream out;
+
+    public InfoCommand( PrintStream out )
+    {
+        this.out = out;
+    }
 
     public void execute( String... params )
     {
@@ -36,23 +44,23 @@ public final class InfoCommand
             }
         }
 
-        System.out.printf( "%s %s (%s)%n",
-                           properties.getProperty( "name" ),
-                           properties.getProperty( "version" ),
-                           properties.getProperty( "build" ) );
-        System.out.printf( "Java version: %s, vendor: %s%n",
-                           System.getProperty( "java.version" ),
-                           System.getProperty( "java.vendor" ) );
-        System.out.printf( "Java home: %s%n", System.getProperty( "java.home" ) );
-        System.out.printf( "Default locale: %s_%s, platform encoding: %s%n",
-                           System.getProperty( "user.language" ),
-                           System.getProperty( "user.country" ),
-                           System.getProperty( "sun.jnu.encoding" ) );
-        System.out.printf( "OS name: \"%s\", version: \"%s\", arch: \"%s\", family: \"%s\"%n",
-                           System.getProperty( "os.name" ),
-                           System.getProperty( "os.version" ),
-                           System.getProperty( "os.arch" ),
-                           getOsFamily() );
+        out.printf( "%s %s (%s)%n",
+                    properties.getProperty( "name" ),
+                    properties.getProperty( "version" ),
+                    properties.getProperty( "build" ) );
+        out.printf( "Java version: %s, vendor: %s%n",
+                    System.getProperty( "java.version" ),
+                    System.getProperty( "java.vendor" ) );
+        out.printf( "Java home: %s%n", System.getProperty( "java.home" ) );
+        out.printf( "Default locale: %s_%s, platform encoding: %s%n",
+                    System.getProperty( "user.language" ),
+                    System.getProperty( "user.country" ),
+                    System.getProperty( "sun.jnu.encoding" ) );
+        out.printf( "OS name: \"%s\", version: \"%s\", arch: \"%s\", family: \"%s\"%n",
+                    System.getProperty( "os.name" ),
+                    System.getProperty( "os.version" ),
+                    System.getProperty( "os.arch" ),
+                    getOsFamily() );
     }
 
     private static final String getOsFamily()

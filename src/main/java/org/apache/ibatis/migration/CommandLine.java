@@ -102,7 +102,7 @@ public class CommandLine {
 
     try {
       if (INFO.equals(command)) {
-          new InfoCommand().execute(params);
+          new InfoCommand(printStream).execute(params);
       } else if (INIT.equals(command)) {
         new InitializeCommand(repository, environment, force).execute(params);
       } else if (BOOTSTRAP.equals(command)) {
