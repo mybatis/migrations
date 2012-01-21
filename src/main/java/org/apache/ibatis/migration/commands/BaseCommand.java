@@ -105,7 +105,7 @@ public abstract class BaseCommand implements Command {
   protected List<Change> getChangelog() {
     SqlRunner runner = getSqlRunner();
     try {
-      List<Map<String, Object>> changelog = runner.selectAll("select ID, APPLIED_AT, DESCRIPTION from " + changelogTable() + " order by id");
+      List<Map<String, Object>> changelog = runner.selectAll("select ID, APPLIED_AT, DESCRIPTION from " + changelogTable() + " order by ID");
       List<Change> changes = new ArrayList<Change>();
       for (Map<String, Object> change : changelog) {
         String id = change.get("ID") == null ? null : change.get("ID").toString();
