@@ -260,6 +260,7 @@ public abstract class BaseCommand implements Command {
     scriptRunner.setDelimiter(delimiterString == null ? ";" : delimiterString);
     scriptRunner.setFullLineDelimiter(Boolean.valueOf(props.getProperty("full_line_delimiter")));
     scriptRunner.setSendFullScript(Boolean.valueOf(props.getProperty("send_full_script")));
+    scriptRunner.setRemoveCRs(Boolean.valueOf(props.getProperty("remove_crs")));
   }
 
   protected File baseFile(String fileName) {
