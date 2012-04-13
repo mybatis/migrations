@@ -33,6 +33,13 @@
 
   <name>MyBatis Migrations</name>
 
+  <contributors>
+    <contributor>
+      <name>Riccardo Cossu</name>
+      <email>riccardo[dot]cossu[at]gmail[dot]com</email>
+    </contributor>
+  </contributors>
+
   <properties>
     <findbugs.onlyAnalyze>org.apache.ibatis.migration</findbugs.onlyAnalyze>
   </properties>
