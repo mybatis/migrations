@@ -15,6 +15,10 @@ import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.sql.Connection;
+import java.sql.Driver;
+import java.sql.DriverManager;
+import java.sql.DriverPropertyInfo;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -24,12 +28,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.TimeZone;
+import java.util.logging.Logger;
 
 import org.apache.ibatis.datasource.unpooled.UnpooledDataSource;
 import org.apache.ibatis.io.ExternalResources;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.jdbc.ScriptRunner;
 import org.apache.ibatis.jdbc.SqlRunner;
+import org.apache.ibatis.logging.LogFactory;
 import org.apache.ibatis.migration.Change;
 import org.apache.ibatis.migration.MigrationException;
 import org.apache.ibatis.parsing.PropertyParser;
@@ -215,15 +221,15 @@ public abstract class BaseCommand implements Command {
 
   protected SqlRunner getSqlRunner() {
     try {
-      lazyInitializeDrivers();
-
       Properties props = environmentProperties();
       String driver = props.getProperty("driver");
       String url = props.getProperty("url");
       String username = props.getProperty("username");
       String password = props.getProperty("password");
+      
+      lazyInitializeDriver(driver);
 
-      UnpooledDataSource dataSource = new UnpooledDataSource(driverClassLoader, driver, url, username, password);
+      UnpooledDataSource dataSource = new UnpooledDataSource(driver, url, username, password);
       dataSource.setAutoCommit(true);
       return new SqlRunner(dataSource.getConnection());
     } catch (SQLException e) {
@@ -233,15 +239,16 @@ public abstract class BaseCommand implements Command {
 
   protected ScriptRunner getScriptRunner() {
     try {
-      lazyInitializeDrivers();
-
       Properties props = environmentProperties();
       String driver = props.getProperty("driver");
       String url = props.getProperty("url");
       String username = props.getProperty("username");
       String password = props.getProperty("password");
-      PrintWriter outWriter = new PrintWriter(printStream);
-      UnpooledDataSource dataSource = new UnpooledDataSource(driverClassLoader, driver, url, username, password);
+
+      lazyInitializeDriver(driver);
+      
+      PrintWriter outWriter = new PrintWriter(printStream);      
+      UnpooledDataSource dataSource = new UnpooledDataSource(driver, url, username, password);
       dataSource.setAutoCommit(false);
       ScriptRunner scriptRunner = new ScriptRunner(dataSource.getConnection());
       scriptRunner.setStopOnError(!force);
@@ -291,7 +298,7 @@ public abstract class BaseCommand implements Command {
     return envFile;
   }
 
-  private void lazyInitializeDrivers() {
+  private void lazyInitializeDriver(String driver) {
     try {
       File localDriverPath = getCustomDriverPath();
       if (driverClassLoader == null && localDriverPath.exists()) {
@@ -306,8 +313,12 @@ public abstract class BaseCommand implements Command {
         }
         URL[] urls = urlList.toArray(new URL[urlList.size()]);
         driverClassLoader = new URLClassLoader(urls);
+        
+        // see http://www.kfu.com/~nsayer/Java/dyn-jdbc.html
+        Driver d = (Driver) Class.forName(driver, true, driverClassLoader).newInstance();
+        DriverManager.registerDriver(new DriverProxy(d));            
       }
-    } catch (IOException e) {
+    } catch (Exception e) {
       throw new MigrationException("Error loading JDBC drivers. Cause: " + e, e);
     }
   }
@@ -403,5 +414,42 @@ public abstract class BaseCommand implements Command {
     } else {
       return new InputStreamReader(inputStream, charset);
     }
+  }  
+
+  private static class DriverProxy implements Driver {
+    private Driver driver;
+
+    DriverProxy(Driver d) {
+      this.driver = d;
+    }
+
+    public boolean acceptsURL(String u) throws SQLException {
+      return this.driver.acceptsURL(u);
+    }
+
+    public Connection connect(String u, Properties p) throws SQLException {
+      return this.driver.connect(u, p);
+    }
+
+    public int getMajorVersion() {
+      return this.driver.getMajorVersion();
+    }
+
+    public int getMinorVersion() {
+      return this.driver.getMinorVersion();
+    }
+
+    public DriverPropertyInfo[] getPropertyInfo(String u, Properties p) throws SQLException {
+      return this.driver.getPropertyInfo(u, p);
+    }
+
+    public boolean jdbcCompliant() {
+      return this.driver.jdbcCompliant();
+    }
+    
+    public Logger getParentLogger() {
+      return Logger.getLogger(LogFactory.GLOBAL_LOGGER_NAME);
+    }
   }
+
 }
