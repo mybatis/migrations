@@ -2,12 +2,13 @@ package org.apache.ibatis.migration;
 
 import org.apache.ibatis.migration.commands.Command;
 import org.apache.ibatis.migration.commands.Commands;
-import org.apache.ibatis.migration.options.OptionsParser;
 import org.apache.ibatis.migration.options.SelectedOptions;
 
 import java.io.File;
 import java.io.PrintStream;
 import java.util.Date;
+
+import static org.apache.ibatis.migration.options.OptionsParser.parse;
 
 public class CommandLine {
     private final PrintStream console = System.out;
@@ -18,42 +19,40 @@ public class CommandLine {
     }
 
     public void execute() {
-        final SelectedOptions selectedOptions = OptionsParser.parse(args);
-        if (!validOptions(selectedOptions) || selectedOptions.needsHelp()) {
-            printUsage();
-        } else {
-            try {
+        final SelectedOptions selectedOptions = parse(args);
+        try {
+            if (!validOptions(selectedOptions) || selectedOptions.needsHelp()) {
+                printUsage();
+            } else {
                 runCommand(selectedOptions);
-            } catch (Exception e) {
-                console.printf("\nERROR: %s", e.getMessage());
-                if (selectedOptions.isTrace()) {
-                    e.printStackTrace();
-                }
+            }
+        } catch (Exception e) {
+            console.printf("\nERROR: %s", e.getMessage());
+            if (selectedOptions.isTrace()) {
+                e.printStackTrace();
             }
         }
     }
 
     private void runCommand(SelectedOptions selectedOptions) {
-        final String command = selectedOptions.getCommand();
+        final String commandString = selectedOptions.getCommand();
 
         console.printf("------------------------------------------------------------------------%n");
-        console.printf("MyBatis Migrations - %s%n", command);
+        console.printf("MyBatis Migrations - %s%n", commandString);
         console.printf("------------------------------------------------------------------------%n");
 
         long start = System.currentTimeMillis();
         int exit = 0;
 
         try {
-            final Command resolvedCommand = Commands.resolveCommand(command.toUpperCase(), selectedOptions);
-            resolvedCommand.execute(selectedOptions.getParams());
+            final Command command = Commands.resolveCommand(commandString.toUpperCase(), selectedOptions);
+            command.execute(selectedOptions.getParams());
         } finally {
             console.printf("------------------------------------------------------------------------%n");
             console.printf("MyBatis Migrations %s%n", (exit < 0) ? "FAILURE" : "SUCCESS");
             console.printf("Total time: %ss%n", ((System.currentTimeMillis() - start) / 1000));
             console.printf("Finished at: %s%n", new Date());
-
             printMemoryUsage();
-
             console.printf("------------------------------------------------------------------------%n");
         }
     }
@@ -68,16 +67,22 @@ public class CommandLine {
     }
 
     private boolean validOptions(SelectedOptions selectedOptions) {
-        final File repository = selectedOptions.getRepository();
-        if (repository.exists() && !repository.isDirectory()) {
-            console.printf("Migrations path must be a directory: %s%n", repository.getAbsolutePath());
-            return false;
-        } else if (!selectedOptions.needsHelp() && selectedOptions.getCommand() == null) {
+        if (!selectedOptions.needsHelp() && selectedOptions.getCommand() == null) {
             console.printf("No command specified.%n");
             return false;
         }
 
-        return true;
+        return validBasePath(selectedOptions.getPaths().getBasePath());
+    }
+
+    private boolean validBasePath(File basePath) {
+        final boolean validDirectory = basePath.exists() && basePath.isDirectory();
+
+        if (!validDirectory) {
+            console.printf("Migrations path must be a directory: %s%n", basePath.getAbsolutePath());
+        }
+
+        return validDirectory;
     }
 
     private void printUsage() {

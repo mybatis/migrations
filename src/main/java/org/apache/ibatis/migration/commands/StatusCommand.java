@@ -1,6 +1,7 @@
 package org.apache.ibatis.migration.commands;
 
 import org.apache.ibatis.migration.Change;
+import org.apache.ibatis.migration.options.SelectedOptions;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -8,9 +9,8 @@ import java.util.Collections;
 import java.util.List;
 
 public class StatusCommand extends BaseCommand {
-
-    public StatusCommand(File repository, String environment, boolean force) {
-        super(repository, environment, force);
+    public StatusCommand(SelectedOptions options) {
+        super(options);
     }
 
     public void execute(String... params) {

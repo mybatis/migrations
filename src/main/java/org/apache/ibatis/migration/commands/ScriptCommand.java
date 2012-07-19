@@ -3,6 +3,8 @@ package org.apache.ibatis.migration.commands;
 import org.apache.ibatis.migration.Change;
 import org.apache.ibatis.migration.MigrationException;
 import org.apache.ibatis.migration.MigrationReader;
+import org.apache.ibatis.migration.options.SelectedOptions;
+import org.apache.ibatis.migration.utils.Util;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,8 +16,8 @@ import java.util.StringTokenizer;
 
 public class ScriptCommand extends BaseCommand {
 
-    public ScriptCommand(File repository, String environment, boolean force) {
-        super(repository, environment, force);
+    public ScriptCommand(SelectedOptions options) {
+        super(options);
     }
 
     public void execute(String... sparams) {
@@ -39,7 +41,7 @@ public class ScriptCommand extends BaseCommand {
             for (Change change : migrations) {
                 if (shouldRun(change, v1, v2)) {
                     printStream.println("-- " + change.getFilename());
-                    File file = scriptFile(change.getFilename());
+                    File file = Util.file(paths.getScriptPath(), change.getFilename());
                     MigrationReader migrationReader = new MigrationReader(scriptFileReader(file), undo, variables);
                     char[] cbuf = new char[1024];
                     int l;

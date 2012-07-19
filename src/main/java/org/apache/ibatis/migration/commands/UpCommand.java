@@ -4,20 +4,21 @@ import org.apache.ibatis.jdbc.ScriptRunner;
 import org.apache.ibatis.migration.Change;
 import org.apache.ibatis.migration.MigrationException;
 import org.apache.ibatis.migration.MigrationReader;
+import org.apache.ibatis.migration.options.SelectedOptions;
+import org.apache.ibatis.migration.utils.Util;
 
 import java.io.File;
 import java.util.List;
 
 public class UpCommand extends BaseCommand {
+    private final boolean runOneStepOnly;
 
-    private boolean runOneStepOnly = false;
-
-    public UpCommand(File repository, String environment, boolean force) {
-        super(repository, environment, force);
+    public UpCommand(SelectedOptions options) {
+        this(options, false);
     }
 
-    public UpCommand(File repository, String environment, boolean force, boolean runOneStepOnly) {
-        super(repository, environment, force);
+    public UpCommand(SelectedOptions options, boolean runOneStepOnly) {
+        super(options);
         this.runOneStepOnly = runOneStepOnly;
     }
 
@@ -34,7 +35,8 @@ public class UpCommand extends BaseCommand {
                     printStream.println(horizontalLine("Applying: " + change.getFilename(), 80));
                     ScriptRunner runner = getScriptRunner();
                     try {
-                        runner.runScript(new MigrationReader(scriptFileReader(scriptFile(change.getFilename())),
+                        final File scriptFile = Util.file(paths.getScriptPath(), change.getFilename());
+                        runner.runScript(new MigrationReader(scriptFileReader(scriptFile),
                             false,
                             environmentProperties()));
                     } finally {

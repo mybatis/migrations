@@ -2,16 +2,16 @@ package org.apache.ibatis.migration.commands;
 
 import org.apache.ibatis.migration.Change;
 import org.apache.ibatis.migration.MigrationException;
+import org.apache.ibatis.migration.options.SelectedOptions;
 
-import java.io.File;
 import java.math.BigDecimal;
 import java.util.List;
 
 public class VersionCommand extends BaseCommand {
-
-    public VersionCommand(File repository, String environment, boolean force) {
-        super(repository, environment, force);
+    public VersionCommand(SelectedOptions options) {
+        super(options);
     }
+
 
     public void execute(String... params) {
         ensureParamsPassed(params);
@@ -23,14 +23,14 @@ public class VersionCommand extends BaseCommand {
         Change change = getLastAppliedChange();
         if (version.compareTo(change.getId()) > 0) {
             printStream.println("Upgrading to: " + version);
-            Command up = new UpCommand(basePath, environment, force, true);
+            Command up = new UpCommand(options, true);
             while (!version.equals(change.getId())) {
                 up.execute();
                 change = getLastAppliedChange();
             }
         } else if (version.compareTo(change.getId()) < 0) {
             printStream.println("Downgrading to: " + version);
-            Command down = new DownCommand(basePath, environment, force);
+            Command down = new DownCommand(options);
             while (!version.equals(change.getId())) {
                 down.execute();
                 change = getLastAppliedChange();

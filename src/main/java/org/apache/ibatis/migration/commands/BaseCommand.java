@@ -5,9 +5,11 @@ import org.apache.ibatis.io.ExternalResources;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.jdbc.ScriptRunner;
 import org.apache.ibatis.jdbc.SqlRunner;
-import org.apache.ibatis.logging.LogFactory;
 import org.apache.ibatis.migration.Change;
 import org.apache.ibatis.migration.MigrationException;
+import org.apache.ibatis.migration.options.SelectedOptions;
+import org.apache.ibatis.migration.options.SelectedPaths;
+import org.apache.ibatis.migration.utils.Util;
 import org.apache.ibatis.parsing.PropertyParser;
 
 import java.io.File;
@@ -38,54 +40,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.TimeZone;
-import java.util.logging.Logger;
+
+import static org.apache.ibatis.migration.utils.Util.file;
 
 public abstract class BaseCommand implements Command {
-
     private static final String DATE_FORMAT = "yyyyMMddHHmmss";
-    protected PrintStream printStream = System.out;
-    protected File basePath;
-    protected File envPath;
-    protected File scriptPath;
-    protected File driverPath;
-    protected String environment;
-    protected String template;
-    protected boolean force;
+
     private ClassLoader driverClassLoader;
 
-    protected BaseCommand(File repository, String environment, boolean force) {
-        this.basePath = repository;
-        this.envPath = subdirectory(repository, "environments");
-        this.scriptPath = subdirectory(repository, "scripts");
-        this.driverPath = subdirectory(repository, "drivers");
-        this.environment = environment;
-        this.force = force;
-    }
+    protected PrintStream printStream = System.out;
+    protected final SelectedOptions options;
+    protected final SelectedPaths paths;
 
-    protected BaseCommand(File repository, String environment, String template, boolean force) {
-        this.basePath = repository;
-        this.envPath = subdirectory(repository, "environments");
-        this.scriptPath = subdirectory(repository, "scripts");
-        this.driverPath = subdirectory(repository, "drivers");
-        this.environment = environment;
-        this.template = template;
-        this.force = force;
-    }
-
-    public PrintStream getPrintStream() {
-        return printStream;
-    }
-
-    public void setPrintStream(PrintStream printStream) {
-        this.printStream = printStream;
-    }
-
-    public ClassLoader getDriverClassLoader() {
-        return driverClassLoader;
-    }
-
-    public void setDriverClassLoader(ClassLoader driverClassLoader) {
-        this.driverClassLoader = driverClassLoader;
+    protected BaseCommand(SelectedOptions selectedOptions) {
+        this.options = selectedOptions;
+        this.paths = selectedOptions.getPaths();
     }
 
     protected boolean paramsEmpty(String... params) {
@@ -93,9 +62,10 @@ public abstract class BaseCommand implements Command {
     }
 
     protected List<Change> getMigrations() {
-        String[] filenames = scriptPath.list();
+        final File myScriptPath = paths.getScriptPath();
+        String[] filenames = myScriptPath.list();
         if (filenames == null) {
-            throw new MigrationException(scriptPath + " does not exist.");
+            throw new MigrationException(myScriptPath + " does not exist.");
         }
         Arrays.sort(filenames);
         List<Change> migrations = new ArrayList<Change>();
@@ -212,7 +182,7 @@ public abstract class BaseCommand implements Command {
         }
     }
 
-    protected void copyExternalResourceTo(String resource, File toFile, Properties variables) {
+    protected void copyExternalResourceTo(String resource, File toFile) {
         printStream.println("Creating: " + toFile.getName());
         try {
             File sourceFile = new File(resource);
@@ -255,7 +225,7 @@ public abstract class BaseCommand implements Command {
             UnpooledDataSource dataSource = new UnpooledDataSource(driver, url, username, password);
             dataSource.setAutoCommit(false);
             ScriptRunner scriptRunner = new ScriptRunner(dataSource.getConnection());
-            scriptRunner.setStopOnError(!force);
+            scriptRunner.setStopOnError(!options.isForce());
             scriptRunner.setLogWriter(outWriter);
             scriptRunner.setErrorLogWriter(outWriter);
             setPropertiesFromFile(scriptRunner, props);
@@ -274,24 +244,8 @@ public abstract class BaseCommand implements Command {
         scriptRunner.setRemoveCRs(Boolean.valueOf(props.getProperty("remove_crs")));
     }
 
-    protected File baseFile(String fileName) {
-        return new File(basePath.getAbsolutePath() + File.separator + fileName);
-    }
-
-    protected File environmentFile(String fileName) {
-        return new File(envPath.getAbsolutePath() + File.separator + fileName);
-    }
-
-    protected File scriptFile(String fileName) {
-        return new File(scriptPath.getAbsolutePath() + File.separator + fileName);
-    }
-
-    protected File driverFile(String fileName) {
-        return new File(getCustomDriverPath().getAbsolutePath() + File.separator + fileName);
-    }
-
     protected File environmentFile() {
-        return environmentFile(environment + ".properties");
+        return file(paths.getEnvPath(), options.getEnvironment() + ".properties");
     }
 
     protected File existingEnvironmentFile() {
@@ -385,12 +339,8 @@ public abstract class BaseCommand implements Command {
         if (customDriverPath != null && customDriverPath.length() > 0) {
             return new File(customDriverPath);
         } else {
-            return driverPath;
+            return options.getPaths().getDriverPath();
         }
-    }
-
-    private File subdirectory(File base, String sub) {
-        return new File(base.getAbsoluteFile() + File.separator + sub);
     }
 
     private Change parseChangeFromFilename(String filename) {
@@ -452,10 +402,6 @@ public abstract class BaseCommand implements Command {
 
         public boolean jdbcCompliant() {
             return this.driver.jdbcCompliant();
-        }
-
-        public Logger getParentLogger() {
-            return Logger.getLogger(LogFactory.GLOBAL_LOGGER_NAME);
         }
     }
 

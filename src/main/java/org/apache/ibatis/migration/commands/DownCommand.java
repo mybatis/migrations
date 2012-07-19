@@ -5,16 +5,16 @@ import org.apache.ibatis.jdbc.SqlRunner;
 import org.apache.ibatis.migration.Change;
 import org.apache.ibatis.migration.MigrationException;
 import org.apache.ibatis.migration.MigrationReader;
+import org.apache.ibatis.migration.options.SelectedOptions;
+import org.apache.ibatis.migration.utils.Util;
 
-import java.io.File;
 import java.sql.SQLException;
 import java.util.Collections;
 import java.util.List;
 
 public class DownCommand extends BaseCommand {
-
-    public DownCommand(File repository, String environment, boolean force) {
-        super(repository, environment, force);
+    public DownCommand(SelectedOptions options) {
+        super(options);
     }
 
     public void execute(String... params) {
@@ -28,7 +28,8 @@ public class DownCommand extends BaseCommand {
                     printStream.println(horizontalLine("Undoing: " + change.getFilename(), 80));
                     ScriptRunner runner = getScriptRunner();
                     try {
-                        runner.runScript(new MigrationReader(scriptFileReader(scriptFile(change.getFilename())),
+                        runner.runScript(new MigrationReader(scriptFileReader(Util.file(paths.getScriptPath(),
+                            change.getFilename())),
                             true,
                             environmentProperties()));
                     } finally {

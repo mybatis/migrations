@@ -3,8 +3,6 @@ package org.apache.ibatis.migration.commands;
 import org.apache.ibatis.migration.MigrationException;
 import org.apache.ibatis.migration.options.SelectedOptions;
 
-import java.io.File;
-
 public enum Commands {
     INFO,
     INIT,
@@ -28,32 +26,27 @@ public enum Commands {
     }
 
     private static Command createCommand(Commands aResolvedCommand, SelectedOptions selectedOptions) {
-        final File repository = selectedOptions.getRepository();
-        final String environment = selectedOptions.getEnvironment();
-        final String template = selectedOptions.getTemplate();
-        final boolean force = selectedOptions.isForce();
-
         switch (aResolvedCommand) {
             case INFO:
                 return new InfoCommand(System.out);
             case INIT:
-                return new InitializeCommand(repository, environment, force);
+                return new InitializeCommand(selectedOptions);
             case BOOTSTRAP:
-                return new BootstrapCommand(repository, environment, force);
+                return new BootstrapCommand(selectedOptions);
             case NEW:
-                return new NewCommand(repository, environment, template, force);
+                return new NewCommand(selectedOptions);
             case UP:
-                return new UpCommand(repository, environment, force);
+                return new UpCommand(selectedOptions);
             case DOWN:
-                return new DownCommand(repository, environment, force);
+                return new DownCommand(selectedOptions);
             case PENDING:
-                return new PendingCommand(repository, environment, force);
+                return new PendingCommand(selectedOptions);
             case SCRIPT:
-                return new ScriptCommand(repository, environment, force);
+                return new ScriptCommand(selectedOptions);
             case VERSION:
-                return new VersionCommand(repository, environment, force);
+                return new VersionCommand(selectedOptions);
             case STATUS:
-                return new StatusCommand(repository, environment, force);
+                return new StatusCommand(selectedOptions);
             default:
                 return new Command() {
                     public void execute(String... params) {

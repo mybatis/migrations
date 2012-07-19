@@ -1,9 +1,7 @@
 package org.apache.ibatis.migration.options;
 
-import java.io.File;
-
 public class SelectedOptions {
-    private File repository = new File("./");
+    private SelectedPaths paths = new SelectedPaths();
     private String environment = "development";
     private String template;
     private boolean force;
@@ -13,12 +11,8 @@ public class SelectedOptions {
     private String parseError;
     private boolean help;
 
-    public File getRepository() {
-        return repository;
-    }
-
-    public void setRepository(File aRepository) {
-        repository = aRepository;
+    public SelectedPaths getPaths() {
+        return paths;
     }
 
     public String getEnvironment() {

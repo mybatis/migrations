@@ -4,16 +4,17 @@ import org.apache.ibatis.jdbc.ScriptRunner;
 import org.apache.ibatis.migration.Change;
 import org.apache.ibatis.migration.MigrationException;
 import org.apache.ibatis.migration.MigrationReader;
+import org.apache.ibatis.migration.options.SelectedOptions;
+import org.apache.ibatis.migration.utils.Util;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class PendingCommand extends BaseCommand {
 
-    public PendingCommand(File repository, String environment, boolean force) {
-        super(repository, environment, force);
+    public PendingCommand(SelectedOptions options) {
+        super(options);
     }
 
     public void execute(String... params) {
@@ -28,7 +29,8 @@ public class PendingCommand extends BaseCommand {
                 printStream.println(horizontalLine("Applying: " + change.getFilename(), 80));
                 ScriptRunner runner = getScriptRunner();
                 try {
-                    runner.runScript(new MigrationReader(scriptFileReader(scriptFile(change.getFilename())),
+                    runner.runScript(new MigrationReader(scriptFileReader(Util.file(paths.getScriptPath(),
+                        change.getFilename())),
                         false,
                         environmentProperties()));
                 } finally {
