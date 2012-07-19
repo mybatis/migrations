@@ -2,7 +2,9 @@ package org.apache.ibatis.migration.utils;
 
 import java.io.File;
 
-public class Util {
+public enum Util {
+    ;
+
     public static boolean isOption(String arg) {
         return arg.startsWith("--") && !arg.trim().endsWith("=");
     }

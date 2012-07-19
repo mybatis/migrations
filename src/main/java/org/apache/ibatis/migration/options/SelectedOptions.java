@@ -63,14 +63,6 @@ public class SelectedOptions {
         params = aParams;
     }
 
-    public String getParseError() {
-        return parseError;
-    }
-
-    public void setParseError(String aParseError) {
-        parseError = aParseError;
-    }
-
     public boolean needsHelp() {
         return help;
     }

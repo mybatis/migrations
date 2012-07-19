@@ -4,7 +4,9 @@ import java.io.File;
 
 import static org.apache.ibatis.migration.utils.Util.isOption;
 
-public final class OptionsParser {
+public enum OptionsParser {
+    ;
+
     public static SelectedOptions parse(String[] args) {
         final SelectedOptions selectedOptions = new SelectedOptions();
 
