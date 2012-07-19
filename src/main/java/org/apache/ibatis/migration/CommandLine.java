@@ -1,13 +1,13 @@
 package org.apache.ibatis.migration;
 
 import org.apache.ibatis.migration.commands.Command;
-import org.apache.ibatis.migration.commands.Commands;
 import org.apache.ibatis.migration.options.SelectedOptions;
 
 import java.io.File;
 import java.io.PrintStream;
 import java.util.Date;
 
+import static org.apache.ibatis.migration.commands.Commands.resolveCommand;
 import static org.apache.ibatis.migration.options.OptionsParser.parse;
 
 public class CommandLine {
@@ -45,7 +45,7 @@ public class CommandLine {
         int exit = 0;
 
         try {
-            final Command command = Commands.resolveCommand(commandString.toUpperCase(), selectedOptions);
+            final Command command = resolveCommand(commandString.toUpperCase(), selectedOptions);
             command.execute(selectedOptions.getParams());
         } finally {
             console.printf("------------------------------------------------------------------------%n");

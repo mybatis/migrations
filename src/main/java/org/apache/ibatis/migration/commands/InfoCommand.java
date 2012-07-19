@@ -5,9 +5,7 @@ import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.Properties;
 
-public final class InfoCommand
-    implements Command {
-
+public final class InfoCommand implements Command {
     private final PrintStream out;
 
     public InfoCommand(PrintStream out) {

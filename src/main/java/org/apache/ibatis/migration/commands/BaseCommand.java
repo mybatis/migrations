@@ -9,7 +9,6 @@ import org.apache.ibatis.migration.Change;
 import org.apache.ibatis.migration.MigrationException;
 import org.apache.ibatis.migration.options.SelectedOptions;
 import org.apache.ibatis.migration.options.SelectedPaths;
-import org.apache.ibatis.migration.utils.Util;
 import org.apache.ibatis.parsing.PropertyParser;
 
 import java.io.File;

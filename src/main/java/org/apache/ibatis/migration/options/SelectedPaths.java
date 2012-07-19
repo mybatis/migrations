@@ -14,28 +14,28 @@ public class SelectedPaths {
         return basePath;
     }
 
-    public void setBasePath(File aBasePath) {
-        basePath = aBasePath;
-    }
-
     public File getEnvPath() {
         return envPath == null ? file(basePath, "./environments") : envPath;
-    }
-
-    public void setEnvPath(File aEnvPath) {
-        envPath = aEnvPath;
     }
 
     public File getScriptPath() {
         return scriptPath == null ? file(basePath, "./scripts") : scriptPath;
     }
 
-    public void setScriptPath(File aScriptPath) {
-        scriptPath = aScriptPath;
-    }
-
     public File getDriverPath() {
         return driverPath == null ? file(basePath, "./drivers") : driverPath;
+    }
+
+    public void setBasePath(File aBasePath) {
+        basePath = aBasePath;
+    }
+
+    public void setEnvPath(File aEnvPath) {
+        envPath = aEnvPath;
+    }
+
+    public void setScriptPath(File aScriptPath) {
+        scriptPath = aScriptPath;
     }
 
     public void setDriverPath(File aDriverPath) {
