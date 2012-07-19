@@ -1,0 +1,10 @@
+
+# /
+derby.log
+ibderby
+*migrations.iml
+*migrations.ipr
+/migrations.iws
+/target
+.idea
+atlassian-ide-plugin.xml
