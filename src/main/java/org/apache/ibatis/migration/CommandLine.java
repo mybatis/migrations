@@ -1,42 +1,17 @@
 package org.apache.ibatis.migration;
 
-import org.apache.ibatis.migration.commands.BootstrapCommand;
-import org.apache.ibatis.migration.commands.DownCommand;
-import org.apache.ibatis.migration.commands.InfoCommand;
-import org.apache.ibatis.migration.commands.InitializeCommand;
-import org.apache.ibatis.migration.commands.NewCommand;
-import org.apache.ibatis.migration.commands.PendingCommand;
-import org.apache.ibatis.migration.commands.ScriptCommand;
-import org.apache.ibatis.migration.commands.StatusCommand;
-import org.apache.ibatis.migration.commands.UpCommand;
-import org.apache.ibatis.migration.commands.VersionCommand;
+import org.apache.ibatis.migration.commands.Command;
+import org.apache.ibatis.migration.commands.Commands;
 import org.apache.ibatis.migration.options.OptionsParser;
 import org.apache.ibatis.migration.options.SelectedOptions;
 
 import java.io.File;
 import java.io.PrintStream;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 public class CommandLine {
     private final PrintStream console = System.out;
     private final String[] args;
-
-    private static final String INFO = "info";
-    private static final String INIT = "init";
-    private static final String BOOTSTRAP = "bootstrap";
-    private static final String NEW = "new";
-    private static final String UP = "up";
-    private static final String DOWN = "down";
-    private static final String PENDING = "pending";
-    private static final String SCRIPT = "script";
-    private static final String VERSION = "version";
-    private static final String STATUS = "status";
-    private static final Set<String> KNOWN_COMMANDS = Collections.unmodifiableSet(
-        new HashSet<String>(Arrays.asList(INFO, INIT, NEW, UP, VERSION, DOWN, PENDING, STATUS, BOOTSTRAP, SCRIPT)));
 
     public CommandLine(String[] args) {
         this.args = args;
@@ -61,7 +36,6 @@ public class CommandLine {
     private void runCommand(SelectedOptions selectedOptions) {
         final String command = selectedOptions.getCommand();
 
-
         console.printf("------------------------------------------------------------------------%n");
         console.printf("MyBatis Migrations - %s%n", command);
         console.printf("------------------------------------------------------------------------%n");
@@ -70,49 +44,8 @@ public class CommandLine {
         int exit = 0;
 
         try {
-            final String params = selectedOptions.getParams();
-            final File repository = selectedOptions.getRepository();
-            final String environment = selectedOptions.getEnvironment();
-            final String template = selectedOptions.getTemplate();
-            final boolean force = selectedOptions.isForce();
-
-            if (INFO.equals(command)) {
-                new InfoCommand(System.out).execute(params);
-            } else if (INIT.equals(command)) {
-                new InitializeCommand(repository, environment, force).execute(params);
-            } else if (BOOTSTRAP.equals(command)) {
-                new BootstrapCommand(repository, environment, force).execute(params);
-            } else if (NEW.equals(command)) {
-                new NewCommand(repository, environment, template, force).execute(params);
-            } else if (STATUS.equals(command)) {
-                new StatusCommand(repository, environment, force).execute(params);
-            } else if (UP.equals(command)) {
-                new UpCommand(repository, environment, force).execute(params);
-            } else if (VERSION.equals(command)) {
-                new VersionCommand(repository, environment, force).execute(params);
-            } else if (PENDING.equals(command)) {
-                new PendingCommand(repository, environment, force).execute(params);
-            } else if (DOWN.equals(command)) {
-                new DownCommand(repository, environment, force).execute(params);
-            } else if (SCRIPT.equals(command)) {
-                new ScriptCommand(repository, environment, force).execute(params);
-            } else {
-                String match = null;
-                for (String knownCommand : KNOWN_COMMANDS) {
-                    if (knownCommand.startsWith(command)) {
-                        if (match != null) {
-                            throw new MigrationException("Ambiguous command shortcut: " + command);
-                        }
-                        match = knownCommand;
-                    }
-                }
-                if (match != null) {
-                    selectedOptions.setCommand(match);
-                    runCommand(selectedOptions);
-                } else {
-                    throw new MigrationException("Attempt to execute unknown command: " + command);
-                }
-            }
+            final Command resolvedCommand = Commands.resolveCommand(command.toUpperCase(), selectedOptions);
+            resolvedCommand.execute(selectedOptions.getParams());
         } finally {
             console.printf("------------------------------------------------------------------------%n");
             console.printf("MyBatis Migrations %s%n", (exit < 0) ? "FAILURE" : "SUCCESS");
