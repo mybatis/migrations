@@ -56,6 +56,14 @@ public abstract class BaseCommand implements Command {
         this.paths = selectedOptions.getPaths();
     }
 
+    public void setDriverClassLoader(ClassLoader aDriverClassLoader) {
+        driverClassLoader = aDriverClassLoader;
+    }
+
+    public void setPrintStream(PrintStream aPrintStream) {
+        printStream = aPrintStream;
+    }
+
     protected boolean paramsEmpty(String... params) {
         return params == null || params.length < 1 || params[0] == null || params[0].length() < 1;
     }
