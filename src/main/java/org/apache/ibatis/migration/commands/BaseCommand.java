@@ -237,6 +237,7 @@ public abstract class BaseCommand implements Command {
             scriptRunner.setStopOnError(!options.isForce());
             scriptRunner.setLogWriter(outWriter);
             scriptRunner.setErrorLogWriter(outWriter);
+            scriptRunner.setEscapeProcessing(false);
             setPropertiesFromFile(scriptRunner, props);
             return scriptRunner;
         } catch (Exception e) {
