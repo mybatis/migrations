@@ -11,6 +11,9 @@ favourite_section VARCHAR(25),
 PRIMARY KEY (id)
 );
 
+insert into author (id,username,password,email,bio,favourite_section)
+values (1,'jsmith','*****','jim@${url}','No bio','NONE');
+
 --//@UNDO
 -- SQL to undo the change goes here.
 

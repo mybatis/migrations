@@ -6,7 +6,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Properties;
+import java.util.Set;
 
 public class MigrationReader extends Reader {
 
@@ -14,7 +17,8 @@ public class MigrationReader extends Reader {
 
     private Reader target;
 
-    public MigrationReader(Reader source, boolean undo, Properties variables) throws IOException {
+    public MigrationReader(Reader source, boolean undo, Properties properties) throws IOException {
+        final Properties variables = filterVariables(properties);
         try {
             BufferedReader reader = new BufferedReader(source);
             StringBuilder doBuilder = new StringBuilder();
@@ -51,4 +55,28 @@ public class MigrationReader extends Reader {
         target.close();
     }
 
+
+    private Properties filterVariables(final Properties properties) {
+        final Set<String> KNOWN_PROPERTIES_TO_IGNORE = new HashSet<String>() {{
+            addAll(Arrays.asList(
+                    "time_zone", "script_char_set",
+                    "driver", "url", "username", "password",
+                    "send_full_script", "delimiter", "full_line_delimiter",
+                    "auto_commit", "driver_path"));
+        }};
+        return new Properties() {
+            @Override
+            public synchronized boolean containsKey(Object o) {
+                return KNOWN_PROPERTIES_TO_IGNORE.contains(o) ? false : properties.containsKey(o);
+            }
+
+            @Override
+            public String getProperty(String key) {
+                return KNOWN_PROPERTIES_TO_IGNORE.contains(key) ? null : properties.getProperty(key);
+            }
+        };
+    }
+
+
 }
+
