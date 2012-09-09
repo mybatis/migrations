@@ -42,14 +42,21 @@ public class CommandLine {
         console.printf("------------------------------------------------------------------------%n");
 
         long start = System.currentTimeMillis();
-        int exit = 0;
+        boolean exceptionCaught = false;
 
         try {
             final Command command = resolveCommand(commandString.toUpperCase(), selectedOptions);
             command.execute(selectedOptions.getParams());
+        } catch (Throwable t) {
+            exceptionCaught = true;
+            if (t instanceof MigrationException) {
+                throw (MigrationException)t;
+            } else {
+                throw new MigrationException(t);
+            }
         } finally {
             console.printf("------------------------------------------------------------------------%n");
-            console.printf("MyBatis Migrations %s%n", (exit < 0) ? "FAILURE" : "SUCCESS");
+            console.printf("MyBatis Migrations %s%n", (exceptionCaught) ? "FAILURE" : "SUCCESS");
             console.printf("Total time: %ss%n", ((System.currentTimeMillis() - start) / 1000));
             console.printf("Finished at: %s%n", new Date());
             printMemoryUsage();

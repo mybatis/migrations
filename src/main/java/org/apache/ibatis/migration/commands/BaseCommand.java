@@ -211,6 +211,7 @@ public abstract class BaseCommand implements Command {
             lazyInitializeDriver(driver);
 
             UnpooledDataSource dataSource = new UnpooledDataSource(driver, url, username, password);
+            dataSource.setDriverClassLoader(driverClassLoader);
             dataSource.setAutoCommit(true);
             return new SqlRunner(dataSource.getConnection());
         } catch (SQLException e) {
@@ -230,6 +231,7 @@ public abstract class BaseCommand implements Command {
 
             PrintWriter outWriter = new PrintWriter(printStream);
             UnpooledDataSource dataSource = new UnpooledDataSource(driver, url, username, password);
+            dataSource.setDriverClassLoader(driverClassLoader);
             dataSource.setAutoCommit(false);
             ScriptRunner scriptRunner = new ScriptRunner(dataSource.getConnection());
             scriptRunner.setStopOnError(!options.isForce());
