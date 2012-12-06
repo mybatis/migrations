@@ -67,11 +67,11 @@ public class ScriptCommand extends BaseCommand {
   private String generateVersionInsert(Change change) {
     return "INSERT INTO " + changelogTable() + " (ID, APPLIED_AT, DESCRIPTION) " +
         "VALUES (" + change.getId() + ", '" + generateAppliedTimeStampAsString() + "', '"
-        + change.getDescription().replace('\'', ' ') + "');";
+        + change.getDescription().replace('\'', ' ') + "')" + getDelimiter();
   }
 
   private String generateVersionDelete(Change change) {
-    return "DELETE FROM " + changelogTable() + " WHERE ID = " + change.getId() + ";";
+    return "DELETE FROM " + changelogTable() + " WHERE ID = " + change.getId() + getDelimiter();
   }
 
   private boolean shouldRun(Change change, BigDecimal v1, BigDecimal v2) {
@@ -81,6 +81,15 @@ public class ScriptCommand extends BaseCommand {
     } else {
       return (id.compareTo(v1) >= 0 && id.compareTo(v2) <= 0);
     }
+  }
+  
+  // Issue 699
+  private String getDelimiter() {
+    Properties props = environmentProperties();
+    StringBuilder delimiter = new StringBuilder();
+    if (Boolean.valueOf(props.getProperty("full_line_delimiter"))) delimiter.append("\n"); 
+    delimiter.append(props.getProperty("delimiter", ";"));
+    return delimiter.toString();
   }
 
 }
