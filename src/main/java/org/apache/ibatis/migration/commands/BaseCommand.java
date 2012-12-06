@@ -19,6 +19,7 @@ import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Date;
+import java.util.logging.Logger;
 
 import static org.apache.ibatis.migration.utils.Util.file;
 
@@ -392,6 +393,10 @@ public abstract class BaseCommand implements Command {
 
     public boolean jdbcCompliant() {
       return this.driver.jdbcCompliant();
+    }
+
+    public Logger getParentLogger() throws SQLFeatureNotSupportedException {
+      return Logger.getLogger(Logger.GLOBAL_LOGGER_NAME); // requires JDK version 1.6
     }
   }
 
