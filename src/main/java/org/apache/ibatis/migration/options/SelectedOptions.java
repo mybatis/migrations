@@ -8,7 +8,6 @@ public class SelectedOptions {
   private boolean trace;
   private String command;
   private String params;
-  private String parseError;
   private boolean help;
 
   public SelectedPaths getPaths() {
