@@ -39,7 +39,7 @@ public class CommandLine {
     final String commandString = selectedOptions.getCommand();
 
     console.printf("------------------------------------------------------------------------%n");
-    console.printf("MyBatis Migrations - %s%n", commandString);
+    console.printf("-- MyBatis Migrations - %s%n", commandString);
     console.printf("------------------------------------------------------------------------%n");
 
     long start = System.currentTimeMillis();
@@ -57,9 +57,9 @@ public class CommandLine {
       }
     } finally {
       console.printf("------------------------------------------------------------------------%n");
-      console.printf("MyBatis Migrations %s%n", (exceptionCaught) ? "FAILURE" : "SUCCESS");
-      console.printf("Total time: %ss%n", ((System.currentTimeMillis() - start) / 1000));
-      console.printf("Finished at: %s%n", new Date());
+      console.printf("-- MyBatis Migrations %s%n", (exceptionCaught) ? "FAILURE" : "SUCCESS");
+      console.printf("-- Total time: %ss%n", ((System.currentTimeMillis() - start) / 1000));
+      console.printf("-- Finished at: %s%n", new Date());
       printMemoryUsage();
       console.printf("------------------------------------------------------------------------%n");
     }
@@ -71,7 +71,7 @@ public class CommandLine {
     final long usedMemory = (runtime.totalMemory() - runtime.freeMemory()) / megaUnit;
     final long totalMemory = runtime.totalMemory() / megaUnit;
 
-    console.printf("Final Memory: %sM/%sM%n", usedMemory, totalMemory);
+    console.printf("-- Final Memory: %sM/%sM%n", usedMemory, totalMemory);
   }
 
   private boolean validOptions(SelectedOptions selectedOptions) {
