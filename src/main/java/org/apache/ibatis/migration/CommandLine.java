@@ -31,6 +31,7 @@ public class CommandLine {
       if (selectedOptions.isTrace()) {
         e.printStackTrace();
       }
+      System.exit(1); // Issue 730
     }
   }
 
