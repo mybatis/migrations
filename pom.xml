@@ -37,6 +37,27 @@
     </contributor>
   </contributors>
 
+  <scm>
+    <url>http://github.com/mybatis/migrations</url>
+    <connection>scm:git:ssh://github.com/mybatis/migrations.git</connection>
+    <developerConnection>scm:git:git+ssh://git@github.com/mybatis/migrations.git</developerConnection>
+    <tag>HEAD</tag>
+  </scm>
+  <issueManagement>
+    <system>GitHub Issue Management</system>
+    <url>https://github.com/mybatis/migrations/issues</url>
+  </issueManagement>
+  <ciManagement>
+    <system>Travis CI</system>
+    <url>https://travis-ci.org/mybatis/migrations</url>
+  </ciManagement>
+  <distributionManagement>
+    <site>
+      <id>github</id>
+      <url>gitsite:git@github.com/mybatis/migrations.git</url>
+    </site>
+  </distributionManagement>
+
   <properties>
     <findbugs.onlyAnalyze>org.apache.ibatis.migration</findbugs.onlyAnalyze>
   </properties>
