@@ -11,7 +11,7 @@
     <meta name="Date-Revision-yyyymmdd" content="20130211" />
     <meta http-equiv="Content-Language" content="en" />
     <title>MyBatis Migrations - 
-    MyBatis Migrations | Introduction</title>
+    MyBatis Migrations | Installation</title>
     <link rel="stylesheet" href="./css/apache-maven-fluido-1.3.0.min.css" />
     <link rel="stylesheet" href="./css/site.css" />
     <link rel="stylesheet" href="./css/print.css" media="print" />
@@ -58,17 +58,17 @@
                 <ul class="nav nav-list">
                     <li class="nav-header">Migrations</li>
                                 
-      <li class="active">
-    
-            <a href="#"><i class="none"></i>Introduction</a>
-          </li>
-                  
       <li>
     
-                          <a href="installation.html" title="Installation">
+                          <a href="index.html" title="Introduction">
           <i class="none"></i>
-        Installation</a>
+        Introduction</a>
             </li>
+                  
+      <li class="active">
+    
+            <a href="#"><i class="none"></i>Installation</a>
+          </li>
                                                                                                                                                                                                               
       <li>
     
@@ -142,104 +142,13 @@
               </ul>
         </li>
                               <li class="nav-header">Project Documentation</li>
-                                                                                                                                                                                                                                                                                                                    
+                                                                                                                                                                                                                                                                                                          
       <li>
     
                           <a href="project-info.html" title="Project Information">
-          <i class="icon-chevron-down"></i>
+          <i class="icon-chevron-right"></i>
         Project Information</a>
-                    <ul class="nav nav-list">
-                      
-      <li class="active">
-    
-            <a href="#"><i class="none"></i>About</a>
-          </li>
-                      
-      <li>
-    
-                          <a href="team-list.html" title="Project Team">
-          <i class="none"></i>
-        Project Team</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="dependency-info.html" title="Dependency Information">
-          <i class="none"></i>
-        Dependency Information</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="plugins.html" title="Project Plugins">
-          <i class="none"></i>
-        Project Plugins</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="integration.html" title="Continuous Integration">
-          <i class="none"></i>
-        Continuous Integration</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="issue-tracking.html" title="Issue Tracking">
-          <i class="none"></i>
-        Issue Tracking</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="source-repository.html" title="Source Repository">
-          <i class="none"></i>
-        Source Repository</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="license.html" title="Project License">
-          <i class="none"></i>
-        Project License</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="plugin-management.html" title="Plugin Management">
-          <i class="none"></i>
-        Plugin Management</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="distribution-management.html" title="Distribution Management">
-          <i class="none"></i>
-        Distribution Management</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="project-summary.html" title="Project Summary">
-          <i class="none"></i>
-        Project Summary</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="mail-lists.html" title="Mailing Lists">
-          <i class="none"></i>
-        Mailing Lists</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="dependencies.html" title="Dependencies">
-          <i class="none"></i>
-        Dependencies</a>
-            </li>
-              </ul>
-        </li>
+                  </li>
                                                                                                                                                                                                                                                         
       <li>
     
@@ -279,34 +188,95 @@
   distributed under the License is distributed on an "AS IS" BASIS,
   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   See the License for the specific language governing permissions and
-  limitations under the License. --><!-- version: $Id: index.xml 4024 2011-11-22 21:09:26Z simone.tripodi $ -->
+  limitations under the License. --><!-- version: $Id: installation.xml 4027 2011-11-22 21:33:13Z simone.tripodi $ -->
 
   
-    <div class="section"><h2>Introduction<a name="Introduction"></a></h2>
-      <p>Evolving databases has been one of the major challenges for software development. Often times, regardless of
-  our software development methodology, the database follows a different change management process. Despite our best
-  efforts, few tools and practices have been able to change that. The tools of the past have been GUI centric,
-  proprietary for a particular database and/or carried a steep license cost. Yet, at the end of the day they suffered
-  from the same challenges.</p>
-      <p>Recently, a few tools arrived and changed all of that. They did so by embracing simplicity and a few simple
-  rules for database evolution to follow. A couple of good examples are Rails Migrations and dbdeploy. Both tools are
-  similar in purpose, but quite different in implementation. The MyBatis Schema Migration System draws from both and
-  seeks to be the best migration tool of its kind.</p>
+    <div class="section"><h2>Installation<a name="Installation"></a></h2>
+      <p>MyBatis Migrations is a Java tool, so you must have Java installed in order to proceed. Users need at least the
+  Java Runtime Environment (JRE), the Java Development Kit (JDK) is a plus.</p>
+      <p>Additional optional installation steps are listed after the platform specific instructions.</p>
 
-      <div class="section"><h3>Goals<a name="Goals"></a></h3>
-        <p>To achieve a good database change management practice, we need to identify a few key goals.</p>
-        <p>Thus, the MyBatis Schema Migration System (or MyBatis Migrations for short) seeks to:</p>
+      <div class="section"><h3>Windows 2000/XP<a name="Windows_2000XP"></a></h3>
         <ul>
-          <li>Work with any database, new or existing</li>
-          <li>Leverage the source control system (e.g. Subversion)</li>
-          <li>Enable concurrent developers or teams to work independently</li>
-          <li>Allow conflicts very visible and easily manageable</li>
-          <li>Allow for forward and backward migration (evolve, devolve respectively)</li>
-          <li>Make the current status of the database easily accessible and comprehensible</li>
-          <li>Enable migrations despite access privileges or bureaucracy</li>
-          <li>Work with any methodology</li>
-          <li>Encourages good, consistent practices</li>
+            <li>
+  Unzip the distribution archive, i.e.
+  <tt>mybatis-${project.version}-migrations.zip</tt>
+  to the directory you wish to install MyBatis Migrations. These instructions assume you chose
+  <tt>C:\Program Files\mybatis</tt>
+  . The subdirectory
+  <tt>mybatis-migrations-${project.version}</tt>
+  will be created from the archive.
+</li>
+            <li>
+  Add the
+  <tt>MIGRATIONS_HOME</tt>
+  environment variable by opening up the system properties (WinKey + Pause), selecting the Advanced tab, and the
+  Environment Variables button, then adding the
+  <tt>MIGRATIONS_HOME</tt>
+  variable in the user variables with the value
+  <tt>C:\Program Files\mybatis\mybatis-migrations-${project.version}</tt>
+  . Be sure to omit any quotation marks around the path even if it contains spaces.
+</li>
+            <li>
+  In the same dialog, add the
+  <tt>MIGRATIONS</tt>
+  environment variable in the user variables with the value
+  <tt>%MIGRATIONS_HOME%\bin</tt>
+  .
+</li>
+            <li>
+  In the same dialog, update/create the Path environment variable in the user variables and prepend the value
+  <tt>%MIGRATIONS%</tt>
+  to add MyBatis Migrations available in the command line.
+</li>
         </ul>
+      </div>
+
+      <div class="section"><h3>Unix-based Operating Systems (Linux, Solaris and Mac OS X)<a name="Unix-based_Operating_Systems_Linux_Solaris_and_Mac_OS_X"></a></h3>
+        <ul>
+          <li>
+  Extract the distribution archive, i.e.
+  <tt>mybatis-${project.version}-migrations.zip</tt>
+  to the directory you wish to install MyBatis Migrations. These instructions assume you chose
+  <tt>/usr/local/mybatis/mybatis-migrations-${project.version}</tt>
+  . The subdirectory
+  <tt>mybatis-migrations-${project.version}</tt>
+  will be created from the archive.
+</li>
+          <li>
+  In a command terminal, add the
+  <tt>MIGRATIONS_HOME</tt>
+  environment variable, e.g.
+  <tt>export MIGRATIONS_HOME=/usr/local/mybatis/mybatis-migrations-${project.version}</tt>.
+</li>
+          <li>
+  Add the
+  <tt>MIGRATIONS</tt>
+  environment variable, e.g.
+  <tt>export MIGRATIONS=$MIGRATIONS_HOME/bin</tt>.
+</li>
+          <li>
+  Add
+  <tt>MIGRATIONS</tt>
+  environment variable to your path, e.g.
+  <tt>export PATH=$MIGRATIONS:$PATH</tt>.
+</li>
+        </ul>
+      </div>
+
+      <div class="section"><h3>What's Included?<a name="Whats_Included"></a></h3>
+        <p>The MyBatis Migrations package is small and simple. The following is the contents of the unzipped package:</p>
+        <ul>
+          <li>./lib/mybatis-${project.version}.jar</li>
+          <li>./bin/migrate</li>
+          <li>./bin/migrate.cmd</li>
+          <li>LICENSE</li>
+          <li>NOTICE</li>
+          <li>MIGRATIONS-README</li>
+        </ul>
+        <p>The single MyBatis JAR file is the only dependency that MyBatis Migrations has. script files do the same
+  thing, but as you can see, one is for *nix shells and the other is for Windows (Note: cygwin users should still call
+  the .cmd version).</p>
       </div>
     </div>
   

@@ -11,7 +11,7 @@
     <meta name="Date-Revision-yyyymmdd" content="20130211" />
     <meta http-equiv="Content-Language" content="en" />
     <title>MyBatis Migrations - 
-    MyBatis Migrations | Introduction</title>
+    MyBatis Migrations | Migrate > bootstrap</title>
     <link rel="stylesheet" href="./css/apache-maven-fluido-1.3.0.min.css" />
     <link rel="stylesheet" href="./css/site.css" />
     <link rel="stylesheet" href="./css/print.css" media="print" />
@@ -58,10 +58,12 @@
                 <ul class="nav nav-list">
                     <li class="nav-header">Migrations</li>
                                 
-      <li class="active">
+      <li>
     
-            <a href="#"><i class="none"></i>Introduction</a>
-          </li>
+                          <a href="index.html" title="Introduction">
+          <i class="none"></i>
+        Introduction</a>
+            </li>
                   
       <li>
     
@@ -69,7 +71,7 @@
           <i class="none"></i>
         Installation</a>
             </li>
-                                                                                                                                                                                                              
+                                                                                                                                                                                                                        
       <li>
     
                           <a href="migrate.html" title="The 'migrate' Command">
@@ -84,12 +86,10 @@
         init</a>
             </li>
                       
-      <li>
+      <li class="active">
     
-                          <a href="bootstrap.html" title="bootstrap">
-          <i class="none"></i>
-        bootstrap</a>
-            </li>
+            <a href="#"><i class="none"></i>bootstrap</a>
+          </li>
                       
       <li>
     
@@ -142,104 +142,13 @@
               </ul>
         </li>
                               <li class="nav-header">Project Documentation</li>
-                                                                                                                                                                                                                                                                                                                    
+                                                                                                                                                                                                                                                                                                          
       <li>
     
                           <a href="project-info.html" title="Project Information">
-          <i class="icon-chevron-down"></i>
+          <i class="icon-chevron-right"></i>
         Project Information</a>
-                    <ul class="nav nav-list">
-                      
-      <li class="active">
-    
-            <a href="#"><i class="none"></i>About</a>
-          </li>
-                      
-      <li>
-    
-                          <a href="team-list.html" title="Project Team">
-          <i class="none"></i>
-        Project Team</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="dependency-info.html" title="Dependency Information">
-          <i class="none"></i>
-        Dependency Information</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="plugins.html" title="Project Plugins">
-          <i class="none"></i>
-        Project Plugins</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="integration.html" title="Continuous Integration">
-          <i class="none"></i>
-        Continuous Integration</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="issue-tracking.html" title="Issue Tracking">
-          <i class="none"></i>
-        Issue Tracking</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="source-repository.html" title="Source Repository">
-          <i class="none"></i>
-        Source Repository</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="license.html" title="Project License">
-          <i class="none"></i>
-        Project License</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="plugin-management.html" title="Plugin Management">
-          <i class="none"></i>
-        Plugin Management</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="distribution-management.html" title="Distribution Management">
-          <i class="none"></i>
-        Distribution Management</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="project-summary.html" title="Project Summary">
-          <i class="none"></i>
-        Project Summary</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="mail-lists.html" title="Mailing Lists">
-          <i class="none"></i>
-        Mailing Lists</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="dependencies.html" title="Dependencies">
-          <i class="none"></i>
-        Dependencies</a>
-            </li>
-              </ul>
-        </li>
+                  </li>
                                                                                                                                                                                                                                                         
       <li>
     
@@ -279,35 +188,45 @@
   distributed under the License is distributed on an "AS IS" BASIS,
   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   See the License for the specific language governing permissions and
-  limitations under the License. --><!-- version: $Id: index.xml 4024 2011-11-22 21:09:26Z simone.tripodi $ -->
+  limitations under the License. --><!-- version: $Id: bootstrap.xml 4117 2011-11-27 19:23:29Z simone.tripodi $ -->
 
   
-    <div class="section"><h2>Introduction<a name="Introduction"></a></h2>
-      <p>Evolving databases has been one of the major challenges for software development. Often times, regardless of
-  our software development methodology, the database follows a different change management process. Despite our best
-  efforts, few tools and practices have been able to change that. The tools of the past have been GUI centric,
-  proprietary for a particular database and/or carried a steep license cost. Yet, at the end of the day they suffered
-  from the same challenges.</p>
-      <p>Recently, a few tools arrived and changed all of that. They did so by embracing simplicity and a few simple
-  rules for database evolution to follow. A couple of good examples are Rails Migrations and dbdeploy. Both tools are
-  similar in purpose, but quite different in implementation. The MyBatis Schema Migration System draws from both and
-  seeks to be the best migration tool of its kind.</p>
+    <div class="section"><h2>The 'bootstrap' command<a name="The_bootstrap_command"></a></h2>
+      <p>If you&#x2019;re working from an existing database, you need to start from a known state. There&#x2019;s no point in trying
+      to rewind time and shoehorn your existing database into a series of migration scripts. It&#x2019;s more practical to just
+      accept the current state of your database schema and identify this as the starting point. The bootstrap script and
+      command exist for this reason.</p>
 
-      <div class="section"><h3>Goals<a name="Goals"></a></h3>
-        <p>To achieve a good database change management practice, we need to identify a few key goals.</p>
-        <p>Thus, the MyBatis Schema Migration System (or MyBatis Migrations for short) seeks to:</p>
-        <ul>
-          <li>Work with any database, new or existing</li>
-          <li>Leverage the source control system (e.g. Subversion)</li>
-          <li>Enable concurrent developers or teams to work independently</li>
-          <li>Allow conflicts very visible and easily manageable</li>
-          <li>Allow for forward and backward migration (evolve, devolve respectively)</li>
-          <li>Make the current status of the database easily accessible and comprehensible</li>
-          <li>Enable migrations despite access privileges or bureaucracy</li>
-          <li>Work with any methodology</li>
-          <li>Encourages good, consistent practices</li>
-        </ul>
-      </div>
+      <p> In the scripts directory you&#x2019;ll find <tt>bootstrap.sql</tt>. You can put your
+      existing DDLscript in this file. If you don&#x2019;t have a DDL script, you can export your existing database schema and
+      put it in the bootstrap file. You&#x2019;ll want to clean it up so that it doesn&#x2019;t contain anything specific to any one
+      environment, but otherwise almost any script should work. Watch out for DDL that contains conditional elements or
+      branching logic that could generate multiple schemas. While this is sometimes necessary, it&#x2019;s a really good idea
+      to try to eliminate this aspect of your database schema (put such conditional and branching logic in your code or
+      stored procedures instead). If you have multiple DDL files, you&#x2019;ll have to merge them into the single bootstrap
+      file.</p>
+
+      <p>But worry not, it&#x2019;s the last time you&#x2019;ll ever modify it. One of the rules above was immutable change scripts...
+      the bootstrap is included in that rule.</p>
+
+      <p><span class="label warning">Note</span> The bootstrap.sql is a plain text file and is not a valid &#x201c;migration&#x201d;
+      that you&#x2019;ll learn about later. It&#x2019;s meant to be similar to the scripts you probably already use. Therefore you
+      cannot rollback the bootstrap file, nor is it tracked in the audit logs... without exception, whatever you put in
+      the bootstrap file cannot leverage the benefits of the other migration commands. But we have to start somewhere,
+      and it&#x2019;s best to look forward.</p>
+
+      <p>To run the bootstrap file, you simply call the bootstrap command. You do this once to initialize your database
+      into a known working state. From then on, you&#x2019;ll use migration scripts to evolve the database schema.</p>
+
+      <p>The bootstrap command has no parameters. So running it is as simple as:</p>
+
+      <div class="source"><pre class="prettyprint">/home/cbegin/testdb$ migrate bootstrap</pre></div>
+
+      <p>As usual, you can use the <tt>--path</tt> option to specify the repository path, otherwise the current
+        working directory is assumed to be the root of your migration repository (aka migration path).</p>
+
+      <p>If there are environment specific elements in your bootstrap script, you&#x2019;ll learn later that you can use
+      properties to deal with those.</p>
     </div>
   
 

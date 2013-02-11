@@ -11,7 +11,7 @@
     <meta name="Date-Revision-yyyymmdd" content="20130211" />
     <meta http-equiv="Content-Language" content="en" />
     <title>MyBatis Migrations - 
-    MyBatis Migrations | Introduction</title>
+    MyBatis Migrations | Migrate > version</title>
     <link rel="stylesheet" href="./css/apache-maven-fluido-1.3.0.min.css" />
     <link rel="stylesheet" href="./css/site.css" />
     <link rel="stylesheet" href="./css/print.css" media="print" />
@@ -58,10 +58,12 @@
                 <ul class="nav nav-list">
                     <li class="nav-header">Migrations</li>
                                 
-      <li class="active">
+      <li>
     
-            <a href="#"><i class="none"></i>Introduction</a>
-          </li>
+                          <a href="index.html" title="Introduction">
+          <i class="none"></i>
+        Introduction</a>
+            </li>
                   
       <li>
     
@@ -69,7 +71,7 @@
           <i class="none"></i>
         Installation</a>
             </li>
-                                                                                                                                                                                                              
+                                                                                                                                                                                                                        
       <li>
     
                           <a href="migrate.html" title="The 'migrate' Command">
@@ -112,12 +114,10 @@
         up, down</a>
             </li>
                       
-      <li>
+      <li class="active">
     
-                          <a href="version.html" title="version">
-          <i class="none"></i>
-        version</a>
-            </li>
+            <a href="#"><i class="none"></i>version</a>
+          </li>
                       
       <li>
     
@@ -142,104 +142,13 @@
               </ul>
         </li>
                               <li class="nav-header">Project Documentation</li>
-                                                                                                                                                                                                                                                                                                                    
+                                                                                                                                                                                                                                                                                                          
       <li>
     
                           <a href="project-info.html" title="Project Information">
-          <i class="icon-chevron-down"></i>
+          <i class="icon-chevron-right"></i>
         Project Information</a>
-                    <ul class="nav nav-list">
-                      
-      <li class="active">
-    
-            <a href="#"><i class="none"></i>About</a>
-          </li>
-                      
-      <li>
-    
-                          <a href="team-list.html" title="Project Team">
-          <i class="none"></i>
-        Project Team</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="dependency-info.html" title="Dependency Information">
-          <i class="none"></i>
-        Dependency Information</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="plugins.html" title="Project Plugins">
-          <i class="none"></i>
-        Project Plugins</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="integration.html" title="Continuous Integration">
-          <i class="none"></i>
-        Continuous Integration</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="issue-tracking.html" title="Issue Tracking">
-          <i class="none"></i>
-        Issue Tracking</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="source-repository.html" title="Source Repository">
-          <i class="none"></i>
-        Source Repository</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="license.html" title="Project License">
-          <i class="none"></i>
-        Project License</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="plugin-management.html" title="Plugin Management">
-          <i class="none"></i>
-        Plugin Management</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="distribution-management.html" title="Distribution Management">
-          <i class="none"></i>
-        Distribution Management</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="project-summary.html" title="Project Summary">
-          <i class="none"></i>
-        Project Summary</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="mail-lists.html" title="Mailing Lists">
-          <i class="none"></i>
-        Mailing Lists</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="dependencies.html" title="Dependencies">
-          <i class="none"></i>
-        Dependencies</a>
-            </li>
-              </ul>
-        </li>
+                  </li>
                                                                                                                                                                                                                                                         
       <li>
     
@@ -279,35 +188,55 @@
   distributed under the License is distributed on an "AS IS" BASIS,
   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   See the License for the specific language governing permissions and
-  limitations under the License. --><!-- version: $Id: index.xml 4024 2011-11-22 21:09:26Z simone.tripodi $ -->
+  limitations under the License. --><!-- version: $Id: version.xml 4127 2011-11-27 20:32:02Z simone.tripodi $ -->
 
   
-    <div class="section"><h2>Introduction<a name="Introduction"></a></h2>
-      <p>Evolving databases has been one of the major challenges for software development. Often times, regardless of
-  our software development methodology, the database follows a different change management process. Despite our best
-  efforts, few tools and practices have been able to change that. The tools of the past have been GUI centric,
-  proprietary for a particular database and/or carried a steep license cost. Yet, at the end of the day they suffered
-  from the same challenges.</p>
-      <p>Recently, a few tools arrived and changed all of that. They did so by embracing simplicity and a few simple
-  rules for database evolution to follow. A couple of good examples are Rails Migrations and dbdeploy. Both tools are
-  similar in purpose, but quite different in implementation. The MyBatis Schema Migration System draws from both and
-  seeks to be the best migration tool of its kind.</p>
+    <div class="section"><h2>The 'version' command<a name="The_version_command"></a></h2>
+      <p>The <tt>up</tt> and <tt>down</tt> commands are pretty prescriptive in how they work.
+      The <b>up</b> command evolves all the way up, and <b>down</b> only devolves one step down. Sometimes that might be
+limiting, so the <b>version</b> command exists to allow you to migrate the schema to any specific version of the database
+you like. You simply call it, specifying the version you&#x2019;d like to end up at, and the migrations system figures out whether
+it has to go up or down, and which migrations it needs to run. Here&#x2019;s an example.</p>
 
-      <div class="section"><h3>Goals<a name="Goals"></a></h3>
-        <p>To achieve a good database change management practice, we need to identify a few key goals.</p>
-        <p>Thus, the MyBatis Schema Migration System (or MyBatis Migrations for short) seeks to:</p>
-        <ul>
-          <li>Work with any database, new or existing</li>
-          <li>Leverage the source control system (e.g. Subversion)</li>
-          <li>Enable concurrent developers or teams to work independently</li>
-          <li>Allow conflicts very visible and easily manageable</li>
-          <li>Allow for forward and backward migration (evolve, devolve respectively)</li>
-          <li>Make the current status of the database easily accessible and comprehensible</li>
-          <li>Enable migrations despite access privileges or bureaucracy</li>
-          <li>Work with any methodology</li>
-          <li>Encourages good, consistent practices</li>
-        </ul>
-      </div>
+      <div class="source"><pre class="prettyprint">/home/cbegin/testdb$ migrate status
+ID             Applied At          Description
+==================================================================
+20090802210445    ...pending...    create changelog
+20090804225207    ...pending...    create author table
+20090804225328    ...pending...    create blog table
+20090804225333    ...pending...    create post table
+
+/home/cbegin/testdb$ migrate version 20090804225207
+
+/home/cbegin/testdb$ migrate status
+ID             Applied At          Description
+==================================================================
+20090802210445 2009-08-04 22:51:17 create changelog
+20090804225207 2009-08-04 22:51:17 create author table
+20090804225328    ...pending...    create blog table
+20090804225333    ...pending...    create post table
+
+/home/cbegin/testdb$ migrate up
+
+/home/cbegin/testdb$ migrate status
+ID             Applied At          Description
+==================================================================
+20090802210445 2009-08-04 22:51:17 create changelog
+20090804225207 2009-08-04 22:51:17 create author table
+20090804225328 2009-08-04 22:54:32 create blog table
+20090804225333 2009-08-04 22:54:32 create post table
+
+/home/cbegin/testdb$ migrate version 20090804225207
+
+/home/cbegin/testdb$ migrate status
+ID             Applied At          Description
+==================================================================
+20090802210445 2009-08-04 22:51:17 create changelog
+20090804225207 2009-08-04 22:51:17 create author table
+20090804225328    ...pending...    create blog table
+20090804225333    ...pending...    create post table</pre></div>
+
+      <p>The <b>version</b> command is a powerful utility for moving to a specific revision of the database.</p>
     </div>
   
 

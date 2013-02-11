@@ -11,7 +11,7 @@
     <meta name="Date-Revision-yyyymmdd" content="20130211" />
     <meta http-equiv="Content-Language" content="en" />
     <title>MyBatis Migrations - 
-    MyBatis Migrations | Introduction</title>
+    MyBatis Migrations | Migrate > Init</title>
     <link rel="stylesheet" href="./css/apache-maven-fluido-1.3.0.min.css" />
     <link rel="stylesheet" href="./css/site.css" />
     <link rel="stylesheet" href="./css/print.css" media="print" />
@@ -58,10 +58,12 @@
                 <ul class="nav nav-list">
                     <li class="nav-header">Migrations</li>
                                 
-      <li class="active">
+      <li>
     
-            <a href="#"><i class="none"></i>Introduction</a>
-          </li>
+                          <a href="index.html" title="Introduction">
+          <i class="none"></i>
+        Introduction</a>
+            </li>
                   
       <li>
     
@@ -69,7 +71,7 @@
           <i class="none"></i>
         Installation</a>
             </li>
-                                                                                                                                                                                                              
+                                                                                                                                                                                                                        
       <li>
     
                           <a href="migrate.html" title="The 'migrate' Command">
@@ -77,12 +79,10 @@
         The 'migrate' Command</a>
                     <ul class="nav nav-list">
                       
-      <li>
+      <li class="active">
     
-                          <a href="init.html" title="init">
-          <i class="none"></i>
-        init</a>
-            </li>
+            <a href="#"><i class="none"></i>init</a>
+          </li>
                       
       <li>
     
@@ -142,104 +142,13 @@
               </ul>
         </li>
                               <li class="nav-header">Project Documentation</li>
-                                                                                                                                                                                                                                                                                                                    
+                                                                                                                                                                                                                                                                                                          
       <li>
     
                           <a href="project-info.html" title="Project Information">
-          <i class="icon-chevron-down"></i>
+          <i class="icon-chevron-right"></i>
         Project Information</a>
-                    <ul class="nav nav-list">
-                      
-      <li class="active">
-    
-            <a href="#"><i class="none"></i>About</a>
-          </li>
-                      
-      <li>
-    
-                          <a href="team-list.html" title="Project Team">
-          <i class="none"></i>
-        Project Team</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="dependency-info.html" title="Dependency Information">
-          <i class="none"></i>
-        Dependency Information</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="plugins.html" title="Project Plugins">
-          <i class="none"></i>
-        Project Plugins</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="integration.html" title="Continuous Integration">
-          <i class="none"></i>
-        Continuous Integration</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="issue-tracking.html" title="Issue Tracking">
-          <i class="none"></i>
-        Issue Tracking</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="source-repository.html" title="Source Repository">
-          <i class="none"></i>
-        Source Repository</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="license.html" title="Project License">
-          <i class="none"></i>
-        Project License</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="plugin-management.html" title="Plugin Management">
-          <i class="none"></i>
-        Plugin Management</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="distribution-management.html" title="Distribution Management">
-          <i class="none"></i>
-        Distribution Management</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="project-summary.html" title="Project Summary">
-          <i class="none"></i>
-        Project Summary</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="mail-lists.html" title="Mailing Lists">
-          <i class="none"></i>
-        Mailing Lists</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="dependencies.html" title="Dependencies">
-          <i class="none"></i>
-        Dependencies</a>
-            </li>
-              </ul>
-        </li>
+                  </li>
                                                                                                                                                                                                                                                         
       <li>
     
@@ -279,34 +188,82 @@
   distributed under the License is distributed on an "AS IS" BASIS,
   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   See the License for the specific language governing permissions and
-  limitations under the License. --><!-- version: $Id: index.xml 4024 2011-11-22 21:09:26Z simone.tripodi $ -->
+  limitations under the License. --><!-- version: $Id: init.xml 4115 2011-11-27 19:14:42Z simone.tripodi $ -->
 
   
-    <div class="section"><h2>Introduction<a name="Introduction"></a></h2>
-      <p>Evolving databases has been one of the major challenges for software development. Often times, regardless of
-  our software development methodology, the database follows a different change management process. Despite our best
-  efforts, few tools and practices have been able to change that. The tools of the past have been GUI centric,
-  proprietary for a particular database and/or carried a steep license cost. Yet, at the end of the day they suffered
-  from the same challenges.</p>
-      <p>Recently, a few tools arrived and changed all of that. They did so by embracing simplicity and a few simple
-  rules for database evolution to follow. A couple of good examples are Rails Migrations and dbdeploy. Both tools are
-  similar in purpose, but quite different in implementation. The MyBatis Schema Migration System draws from both and
-  seeks to be the best migration tool of its kind.</p>
+    <div class="section"><h2>The 'init' command<a name="The_init_command"></a></h2>
+      <p>The <b>init</b> command initializes a new 'migration path', also called a 'repository' (of migration scripts). Regardless of whether your working with a new database or an existing one, you'll run init to create the workspace in which you'll place everything you need to manage database
+change. Running this command will create the directory specified by the <tt>--path</tt> option (which is the current working directory by default).
+Here's an example of running the init command:</p>
 
-      <div class="section"><h3>Goals<a name="Goals"></a></h3>
-        <p>To achieve a good database change management practice, we need to identify a few key goals.</p>
-        <p>Thus, the MyBatis Schema Migration System (or MyBatis Migrations for short) seeks to:</p>
-        <ul>
-          <li>Work with any database, new or existing</li>
-          <li>Leverage the source control system (e.g. Subversion)</li>
-          <li>Enable concurrent developers or teams to work independently</li>
-          <li>Allow conflicts very visible and easily manageable</li>
-          <li>Allow for forward and backward migration (evolve, devolve respectively)</li>
-          <li>Make the current status of the database easily accessible and comprehensible</li>
-          <li>Enable migrations despite access privileges or bureaucracy</li>
-          <li>Work with any methodology</li>
-          <li>Encourages good, consistent practices</li>
-        </ul>
+      <div class="source"><pre class="prettyprint">/$ migrate --path=/home/cbegin/testdb init</pre></div>
+
+      <p>If I was already in the <tt>/home/cbegin/testdb</tt> directory, I could simply run:</p>
+
+      <div class="source"><pre class="prettyprint">/home/cbegin/testdb$ migrate init</pre></div>
+
+      <p>When the command is completed, the directory will contain the following sub-directories:</p>
+
+      <div class="section"><h3>./drivers<a name="a.drivers"></a></h3>
+        <p>Place your JDBC driver .jar or .zip files in this directory. Upon running a migration, the drivers will be dynamically loaded.</p>
+      </div>
+
+      <div class="section"><h3>./environments<a name="a.environments"></a></h3>
+        <p>
+  In the environments folder you will find .properties files that represent your database instances. By default a
+  <b>development.properties</b>
+  file is created for you to configure your development time database properties. You can also create test.properties
+  and production.properties files. Details about the properties themselves follow later in this document. The
+  environment can be specified when running a migration by using the
+  <tt>--env=&lt;environment&gt;</tt>
+  option (without the path or &quot;.properties&quot; part).
+</p>
+  <p>The default environment is &quot;development&quot;. The properties file is self documented, but here it is for reference:</p>
+
+        <div class="source"><pre class="prettyprint">## Base time zone to ensure times are consistent across machines
+time_zone=GMT+0:00
+## The character set that scripts are encoded with
+# script_char_set=UTF-8
+## JDBC connection properties.
+driver=
+url=
+username=
+password=
+# Name of the table that tracks changes to the database
+changelog=CHANGELOG
+# If set to true, each statement is isolated
+# in its own transaction.  Otherwise the entire
+# script is executed in one transaction.
+auto_commit=false
+# This controls how statements are delimited.
+# By default statements are delimited by an
+# end of line semicolon.  Some databases may
+# (e.g. MS SQL Server) may require a full line
+# delimiter such as GO.
+delimiter=;
+full_line_delimiter=false
+# This ignores the line delimiters and
+# simply sends the entire script at once.
+# Use with JDBC drivers that can accept large
+# blocks of delimited text at once.
+send_full_script=false
+# Custom driver path to avoid copying your drivers
+# driver_path=</pre></div>
+      </div>
+
+      <div class="section"><h3>./scripts<a name="a.scripts"></a></h3>
+        <p>
+  This directory contains your migration SQL files. These are the files that contain your DDL to both upgrade and
+  downgrade your database structure. By default, the directory will contain the script to create the
+  <b>changelog</b>
+  table, plus one empty example migration script. To create a new migration script, use the
+  <b>&quot;new&quot;</b>
+  command. To run all pending migrations, use the
+  <b>&quot;up&quot;</b>
+  command. To undo the last migration applied, use the
+  <b>&quot;down&quot;</b>
+  command etc.
+</p>
       </div>
     </div>
   

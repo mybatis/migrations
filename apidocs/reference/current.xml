@@ -1,0 +1,1550 @@
+<api>
+<package name="org.apache.ibatis.migration"
+>
+<class name="Change"
+ extends="java.lang.Object"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="Change"
+ type="org.apache.ibatis.migration.Change"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<constructor name="Change"
+ type="org.apache.ibatis.migration.Change"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="id" type="java.math.BigDecimal">
+</parameter>
+</constructor>
+<constructor name="Change"
+ type="org.apache.ibatis.migration.Change"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="id" type="java.math.BigDecimal">
+</parameter>
+<parameter name="appliedTimestamp" type="java.lang.String">
+</parameter>
+<parameter name="description" type="java.lang.String">
+</parameter>
+</constructor>
+<method name="compareTo"
+ return="int"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="change" type="org.apache.ibatis.migration.Change">
+</parameter>
+</method>
+<method name="getAppliedTimestamp"
+ return="java.lang.String"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getDescription"
+ return="java.lang.String"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getFilename"
+ return="java.lang.String"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getId"
+ return="java.math.BigDecimal"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="setAppliedTimestamp"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="appliedTimestamp" type="java.lang.String">
+</parameter>
+</method>
+<method name="setDescription"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="description" type="java.lang.String">
+</parameter>
+</method>
+<method name="setFilename"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="filename" type="java.lang.String">
+</parameter>
+</method>
+<method name="setId"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="id" type="java.math.BigDecimal">
+</parameter>
+</method>
+</class>
+<class name="CommandLine"
+ extends="java.lang.Object"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="CommandLine"
+ type="org.apache.ibatis.migration.CommandLine"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="args" type="java.lang.String[]">
+</parameter>
+</constructor>
+<method name="execute"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+</class>
+<class name="MigrationException"
+ extends="org.apache.ibatis.exceptions.PersistenceException"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="MigrationException"
+ type="org.apache.ibatis.migration.MigrationException"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<constructor name="MigrationException"
+ type="org.apache.ibatis.migration.MigrationException"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="message" type="java.lang.String">
+</parameter>
+</constructor>
+<constructor name="MigrationException"
+ type="org.apache.ibatis.migration.MigrationException"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="message" type="java.lang.String">
+</parameter>
+<parameter name="cause" type="java.lang.Throwable">
+</parameter>
+</constructor>
+<constructor name="MigrationException"
+ type="org.apache.ibatis.migration.MigrationException"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="cause" type="java.lang.Throwable">
+</parameter>
+</constructor>
+</class>
+<class name="MigrationReader"
+ extends="java.io.Reader"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="MigrationReader"
+ type="org.apache.ibatis.migration.MigrationReader"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="source" type="java.io.Reader">
+</parameter>
+<parameter name="undo" type="boolean">
+</parameter>
+<parameter name="properties" type="java.util.Properties">
+</parameter>
+<exception name="IOException" type="java.io.IOException">
+</exception>
+</constructor>
+<method name="close"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<exception name="IOException" type="java.io.IOException">
+</exception>
+</method>
+<method name="read"
+ return="int"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="cbuf" type="char[]">
+</parameter>
+<parameter name="off" type="int">
+</parameter>
+<parameter name="len" type="int">
+</parameter>
+<exception name="IOException" type="java.io.IOException">
+</exception>
+</method>
+</class>
+<class name="Migrator"
+ extends="java.lang.Object"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="Migrator"
+ type="org.apache.ibatis.migration.Migrator"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<method name="main"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="args" type="java.lang.String[]">
+</parameter>
+</method>
+</class>
+</package>
+<package name="org.apache.ibatis.migration.commands"
+>
+<class name="BaseCommand"
+ extends="java.lang.Object"
+ abstract="true"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<implements name="org.apache.ibatis.migration.commands.Command">
+</implements>
+<constructor name="BaseCommand"
+ type="org.apache.ibatis.migration.commands.BaseCommand"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="selectedOptions" type="org.apache.ibatis.migration.options.SelectedOptions">
+</parameter>
+</constructor>
+<method name="changelogExists"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+</method>
+<method name="changelogTable"
+ return="java.lang.String"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+</method>
+<method name="copyExternalResourceTo"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="resource" type="java.lang.String">
+</parameter>
+<parameter name="toFile" type="java.io.File">
+</parameter>
+</method>
+<method name="copyResourceTo"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="resource" type="java.lang.String">
+</parameter>
+<parameter name="toFile" type="java.io.File">
+</parameter>
+</method>
+<method name="copyResourceTo"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="resource" type="java.lang.String">
+</parameter>
+<parameter name="toFile" type="java.io.File">
+</parameter>
+<parameter name="variables" type="java.util.Properties">
+</parameter>
+</method>
+<method name="environmentFile"
+ return="java.io.File"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+</method>
+<method name="environmentProperties"
+ return="java.util.Properties"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+</method>
+<method name="existingEnvironmentFile"
+ return="java.io.File"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+</method>
+<method name="generateAppliedTimeStampAsString"
+ return="java.lang.String"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+</method>
+<method name="getChangelog"
+ return="java.util.List&lt;org.apache.ibatis.migration.Change&gt;"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+</method>
+<method name="getLastAppliedChange"
+ return="org.apache.ibatis.migration.Change"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+</method>
+<method name="getMigrations"
+ return="java.util.List&lt;org.apache.ibatis.migration.Change&gt;"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+</method>
+<method name="getNextIDAsString"
+ return="java.lang.String"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+</method>
+<method name="getScriptRunner"
+ return="org.apache.ibatis.jdbc.ScriptRunner"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+</method>
+<method name="getSqlRunner"
+ return="org.apache.ibatis.jdbc.SqlRunner"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+</method>
+<method name="getStepCountParameter"
+ return="int"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="defaultSteps" type="int">
+</parameter>
+<parameter name="params" type="java.lang.String...">
+</parameter>
+</method>
+<method name="horizontalLine"
+ return="java.lang.String"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="caption" type="java.lang.String">
+</parameter>
+<parameter name="length" type="int">
+</parameter>
+</method>
+<method name="insertChangelog"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="change" type="org.apache.ibatis.migration.Change">
+</parameter>
+</method>
+<method name="paramsEmpty"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="params" type="java.lang.String...">
+</parameter>
+</method>
+<method name="scriptFileReader"
+ return="java.io.Reader"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="scriptFile" type="java.io.File">
+</parameter>
+<exception name="FileNotFoundException" type="java.io.FileNotFoundException">
+</exception>
+<exception name="UnsupportedEncodingException" type="java.io.UnsupportedEncodingException">
+</exception>
+</method>
+<method name="setDriverClassLoader"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="aDriverClassLoader" type="java.lang.ClassLoader">
+</parameter>
+</method>
+<method name="setPrintStream"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="aPrintStream" type="java.io.PrintStream">
+</parameter>
+</method>
+<field name="options"
+ type="org.apache.ibatis.migration.options.SelectedOptions"
+ transient="false"
+ volatile="false"
+ static="false"
+ final="true"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+</field>
+<field name="paths"
+ type="org.apache.ibatis.migration.options.SelectedPaths"
+ transient="false"
+ volatile="false"
+ static="false"
+ final="true"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+</field>
+<field name="printStream"
+ type="java.io.PrintStream"
+ transient="false"
+ volatile="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+</field>
+</class>
+<class name="BootstrapCommand"
+ extends="org.apache.ibatis.migration.commands.BaseCommand"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="BootstrapCommand"
+ type="org.apache.ibatis.migration.commands.BootstrapCommand"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="options" type="org.apache.ibatis.migration.options.SelectedOptions">
+</parameter>
+</constructor>
+<method name="execute"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="params" type="java.lang.String...">
+</parameter>
+</method>
+</class>
+<interface name="Command"
+ abstract="true"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<method name="execute"
+ return="void"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="params" type="java.lang.String...">
+</parameter>
+</method>
+</interface>
+<class name="Commands"
+ extends="java.lang.Enum"
+ abstract="false"
+ static="false"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<method name="resolveCommand"
+ return="org.apache.ibatis.migration.commands.Command"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="commandString" type="java.lang.String">
+</parameter>
+<parameter name="selectedOptions" type="org.apache.ibatis.migration.options.SelectedOptions">
+</parameter>
+</method>
+<method name="valueOf"
+ return="org.apache.ibatis.migration.commands.Commands"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="name" type="java.lang.String">
+</parameter>
+</method>
+<method name="values"
+ return="org.apache.ibatis.migration.commands.Commands[]"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+</class>
+<class name="DownCommand"
+ extends="org.apache.ibatis.migration.commands.BaseCommand"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="DownCommand"
+ type="org.apache.ibatis.migration.commands.DownCommand"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="options" type="org.apache.ibatis.migration.options.SelectedOptions">
+</parameter>
+</constructor>
+<method name="deleteChange"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="change" type="org.apache.ibatis.migration.Change">
+</parameter>
+</method>
+<method name="execute"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="params" type="java.lang.String...">
+</parameter>
+</method>
+</class>
+<class name="InfoCommand"
+ extends="java.lang.Object"
+ abstract="false"
+ static="false"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<implements name="org.apache.ibatis.migration.commands.Command">
+</implements>
+<constructor name="InfoCommand"
+ type="org.apache.ibatis.migration.commands.InfoCommand"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="out" type="java.io.PrintStream">
+</parameter>
+</constructor>
+<method name="execute"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="params" type="java.lang.String...">
+</parameter>
+</method>
+</class>
+<class name="InitializeCommand"
+ extends="org.apache.ibatis.migration.commands.BaseCommand"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="InitializeCommand"
+ type="org.apache.ibatis.migration.commands.InitializeCommand"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="selectedOptions" type="org.apache.ibatis.migration.options.SelectedOptions">
+</parameter>
+</constructor>
+<method name="createDirectoryIfNecessary"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="path" type="java.io.File">
+</parameter>
+</method>
+<method name="ensureDirectoryIsEmpty"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="path" type="java.io.File">
+</parameter>
+</method>
+<method name="execute"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="params" type="java.lang.String...">
+</parameter>
+</method>
+</class>
+<class name="NewCommand"
+ extends="org.apache.ibatis.migration.commands.BaseCommand"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="NewCommand"
+ type="org.apache.ibatis.migration.commands.NewCommand"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="options" type="org.apache.ibatis.migration.options.SelectedOptions">
+</parameter>
+</constructor>
+<method name="execute"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="params" type="java.lang.String...">
+</parameter>
+</method>
+</class>
+<class name="PendingCommand"
+ extends="org.apache.ibatis.migration.commands.BaseCommand"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="PendingCommand"
+ type="org.apache.ibatis.migration.commands.PendingCommand"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="options" type="org.apache.ibatis.migration.options.SelectedOptions">
+</parameter>
+</constructor>
+<method name="execute"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="params" type="java.lang.String...">
+</parameter>
+</method>
+</class>
+<class name="ScriptCommand"
+ extends="org.apache.ibatis.migration.commands.BaseCommand"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="ScriptCommand"
+ type="org.apache.ibatis.migration.commands.ScriptCommand"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="options" type="org.apache.ibatis.migration.options.SelectedOptions">
+</parameter>
+</constructor>
+<method name="execute"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="sparams" type="java.lang.String...">
+</parameter>
+</method>
+</class>
+<class name="StatusCommand"
+ extends="org.apache.ibatis.migration.commands.BaseCommand"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="StatusCommand"
+ type="org.apache.ibatis.migration.commands.StatusCommand"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="options" type="org.apache.ibatis.migration.options.SelectedOptions">
+</parameter>
+</constructor>
+<method name="execute"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="params" type="java.lang.String...">
+</parameter>
+</method>
+</class>
+<class name="UpCommand"
+ extends="org.apache.ibatis.migration.commands.BaseCommand"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="UpCommand"
+ type="org.apache.ibatis.migration.commands.UpCommand"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="options" type="org.apache.ibatis.migration.options.SelectedOptions">
+</parameter>
+</constructor>
+<constructor name="UpCommand"
+ type="org.apache.ibatis.migration.commands.UpCommand"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="options" type="org.apache.ibatis.migration.options.SelectedOptions">
+</parameter>
+<parameter name="runOneStepOnly" type="boolean">
+</parameter>
+</constructor>
+<method name="execute"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="params" type="java.lang.String...">
+</parameter>
+</method>
+</class>
+<class name="VersionCommand"
+ extends="org.apache.ibatis.migration.commands.BaseCommand"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="VersionCommand"
+ type="org.apache.ibatis.migration.commands.VersionCommand"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="options" type="org.apache.ibatis.migration.options.SelectedOptions">
+</parameter>
+</constructor>
+<method name="execute"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="params" type="java.lang.String...">
+</parameter>
+</method>
+</class>
+</package>
+<package name="org.apache.ibatis.migration.options"
+>
+<class name="Options"
+ extends="java.lang.Enum"
+ abstract="false"
+ static="false"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<method name="valueOf"
+ return="org.apache.ibatis.migration.options.Options"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="name" type="java.lang.String">
+</parameter>
+</method>
+<method name="values"
+ return="org.apache.ibatis.migration.options.Options[]"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+</class>
+<class name="OptionsParser"
+ extends="java.lang.Enum"
+ abstract="false"
+ static="false"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<method name="parse"
+ return="org.apache.ibatis.migration.options.SelectedOptions"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="args" type="java.lang.String[]">
+</parameter>
+</method>
+<method name="valueOf"
+ return="org.apache.ibatis.migration.options.OptionsParser"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="name" type="java.lang.String">
+</parameter>
+</method>
+<method name="values"
+ return="org.apache.ibatis.migration.options.OptionsParser[]"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+</class>
+<class name="SelectedOptions"
+ extends="java.lang.Object"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="SelectedOptions"
+ type="org.apache.ibatis.migration.options.SelectedOptions"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<method name="getCommand"
+ return="java.lang.String"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getEnvironment"
+ return="java.lang.String"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getParams"
+ return="java.lang.String"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getPaths"
+ return="org.apache.ibatis.migration.options.SelectedPaths"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getTemplate"
+ return="java.lang.String"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="isForce"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="isTrace"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="needsHelp"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="setCommand"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="aCommand" type="java.lang.String">
+</parameter>
+</method>
+<method name="setEnvironment"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="aEnvironment" type="java.lang.String">
+</parameter>
+</method>
+<method name="setForce"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="aForce" type="boolean">
+</parameter>
+</method>
+<method name="setHelp"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="aHelp" type="boolean">
+</parameter>
+</method>
+<method name="setParams"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="aParams" type="java.lang.String">
+</parameter>
+</method>
+<method name="setTemplate"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="aTemplate" type="java.lang.String">
+</parameter>
+</method>
+<method name="setTrace"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="aTrace" type="boolean">
+</parameter>
+</method>
+</class>
+<class name="SelectedPaths"
+ extends="java.lang.Object"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="SelectedPaths"
+ type="org.apache.ibatis.migration.options.SelectedPaths"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<method name="getBasePath"
+ return="java.io.File"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getDriverPath"
+ return="java.io.File"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getEnvPath"
+ return="java.io.File"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getScriptPath"
+ return="java.io.File"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="setBasePath"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="aBasePath" type="java.io.File">
+</parameter>
+</method>
+<method name="setDriverPath"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="aDriverPath" type="java.io.File">
+</parameter>
+</method>
+<method name="setEnvPath"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="aEnvPath" type="java.io.File">
+</parameter>
+</method>
+<method name="setScriptPath"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="aScriptPath" type="java.io.File">
+</parameter>
+</method>
+</class>
+</package>
+<package name="org.apache.ibatis.migration.utils"
+>
+<class name="Util"
+ extends="java.lang.Enum"
+ abstract="false"
+ static="false"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<method name="file"
+ return="java.io.File"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="path" type="java.io.File">
+</parameter>
+<parameter name="fileName" type="java.lang.String">
+</parameter>
+</method>
+<method name="isOption"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="arg" type="java.lang.String">
+</parameter>
+</method>
+<method name="valueOf"
+ return="org.apache.ibatis.migration.utils.Util"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="name" type="java.lang.String">
+</parameter>
+</method>
+<method name="values"
+ return="org.apache.ibatis.migration.utils.Util[]"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+</class>
+</package>
+</api>

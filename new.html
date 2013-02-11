@@ -11,7 +11,7 @@
     <meta name="Date-Revision-yyyymmdd" content="20130211" />
     <meta http-equiv="Content-Language" content="en" />
     <title>MyBatis Migrations - 
-    MyBatis Migrations | Introduction</title>
+    MyBatis Migrations | Migrate > new</title>
     <link rel="stylesheet" href="./css/apache-maven-fluido-1.3.0.min.css" />
     <link rel="stylesheet" href="./css/site.css" />
     <link rel="stylesheet" href="./css/print.css" media="print" />
@@ -58,10 +58,12 @@
                 <ul class="nav nav-list">
                     <li class="nav-header">Migrations</li>
                                 
-      <li class="active">
+      <li>
     
-            <a href="#"><i class="none"></i>Introduction</a>
-          </li>
+                          <a href="index.html" title="Introduction">
+          <i class="none"></i>
+        Introduction</a>
+            </li>
                   
       <li>
     
@@ -69,7 +71,7 @@
           <i class="none"></i>
         Installation</a>
             </li>
-                                                                                                                                                                                                              
+                                                                                                                                                                                                                        
       <li>
     
                           <a href="migrate.html" title="The 'migrate' Command">
@@ -91,12 +93,10 @@
         bootstrap</a>
             </li>
                       
-      <li>
+      <li class="active">
     
-                          <a href="new.html" title="new">
-          <i class="none"></i>
-        new</a>
-            </li>
+            <a href="#"><i class="none"></i>new</a>
+          </li>
                       
       <li>
     
@@ -142,104 +142,13 @@
               </ul>
         </li>
                               <li class="nav-header">Project Documentation</li>
-                                                                                                                                                                                                                                                                                                                    
+                                                                                                                                                                                                                                                                                                          
       <li>
     
                           <a href="project-info.html" title="Project Information">
-          <i class="icon-chevron-down"></i>
+          <i class="icon-chevron-right"></i>
         Project Information</a>
-                    <ul class="nav nav-list">
-                      
-      <li class="active">
-    
-            <a href="#"><i class="none"></i>About</a>
-          </li>
-                      
-      <li>
-    
-                          <a href="team-list.html" title="Project Team">
-          <i class="none"></i>
-        Project Team</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="dependency-info.html" title="Dependency Information">
-          <i class="none"></i>
-        Dependency Information</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="plugins.html" title="Project Plugins">
-          <i class="none"></i>
-        Project Plugins</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="integration.html" title="Continuous Integration">
-          <i class="none"></i>
-        Continuous Integration</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="issue-tracking.html" title="Issue Tracking">
-          <i class="none"></i>
-        Issue Tracking</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="source-repository.html" title="Source Repository">
-          <i class="none"></i>
-        Source Repository</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="license.html" title="Project License">
-          <i class="none"></i>
-        Project License</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="plugin-management.html" title="Plugin Management">
-          <i class="none"></i>
-        Plugin Management</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="distribution-management.html" title="Distribution Management">
-          <i class="none"></i>
-        Distribution Management</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="project-summary.html" title="Project Summary">
-          <i class="none"></i>
-        Project Summary</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="mail-lists.html" title="Mailing Lists">
-          <i class="none"></i>
-        Mailing Lists</a>
-            </li>
-                      
-      <li>
-    
-                          <a href="dependencies.html" title="Dependencies">
-          <i class="none"></i>
-        Dependencies</a>
-            </li>
-              </ul>
-        </li>
+                  </li>
                                                                                                                                                                                                                                                         
       <li>
     
@@ -279,35 +188,82 @@
   distributed under the License is distributed on an "AS IS" BASIS,
   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   See the License for the specific language governing permissions and
-  limitations under the License. --><!-- version: $Id: index.xml 4024 2011-11-22 21:09:26Z simone.tripodi $ -->
+  limitations under the License. --><!-- version: $Id: new.xml 4119 2011-11-27 19:43:04Z simone.tripodi $ -->
 
   
-    <div class="section"><h2>Introduction<a name="Introduction"></a></h2>
-      <p>Evolving databases has been one of the major challenges for software development. Often times, regardless of
-  our software development methodology, the database follows a different change management process. Despite our best
-  efforts, few tools and practices have been able to change that. The tools of the past have been GUI centric,
-  proprietary for a particular database and/or carried a steep license cost. Yet, at the end of the day they suffered
-  from the same challenges.</p>
-      <p>Recently, a few tools arrived and changed all of that. They did so by embracing simplicity and a few simple
-  rules for database evolution to follow. A couple of good examples are Rails Migrations and dbdeploy. Both tools are
-  similar in purpose, but quite different in implementation. The MyBatis Schema Migration System draws from both and
-  seeks to be the best migration tool of its kind.</p>
+    <div class="section"><h2>The 'new' command<a name="The_new_command"></a></h2>
+      <p>Now that you&#x2019;ve initialized your repository and bootstrapped your existing database schema, you&#x2019;re ready to
+      start leveraging the power of MyBatis Migrations!</p>
 
-      <div class="section"><h3>Goals<a name="Goals"></a></h3>
-        <p>To achieve a good database change management practice, we need to identify a few key goals.</p>
-        <p>Thus, the MyBatis Schema Migration System (or MyBatis Migrations for short) seeks to:</p>
-        <ul>
-          <li>Work with any database, new or existing</li>
-          <li>Leverage the source control system (e.g. Subversion)</li>
-          <li>Enable concurrent developers or teams to work independently</li>
-          <li>Allow conflicts very visible and easily manageable</li>
-          <li>Allow for forward and backward migration (evolve, devolve respectively)</li>
-          <li>Make the current status of the database easily accessible and comprehensible</li>
-          <li>Enable migrations despite access privileges or bureaucracy</li>
-          <li>Work with any methodology</li>
-          <li>Encourages good, consistent practices</li>
-        </ul>
-      </div>
+      <p>MyBatis Migrations are simple SQL script files (*.sql) that live in the <tt>scripts</tt> directory and
+      follow a very strict convention. Since this convention is so important, we don&#x2019;t want to leave it up to humans to
+      try to get it right every time... so we let automation do what it does best, and keep things consistent.</p>
+
+      <p>The <tt>new</tt> command generates the skeleton of a migration script that you can then simply fill in.
+      The command is simply run as follows:</p>
+
+      <div class="source"><pre class="prettyprint">/home/cbegin/testdb$ migrate new &quot;create blog table&quot;</pre></div>
+
+      <p>The parameter that the new command takes is a comment describing the migration that you're
+        creating. You don&#x2019;t need quotes around it, but it helps keep the command readable.</p>
+
+      <p>When the command is run, it will create a file named something like the following:</p>
+
+      <div class="source"><pre class="prettyprint">20090807221754_create_blog_table.sql</pre></div>
+
+      <p>This format is very important (which is why it&#x2019;s generated). The number at the beginning plays three roles.
+      Fist, it&#x2019;s a <i>practically unique</i> identifier, meaning it&#x2019;s highly unlikely that two people will generate the
+      same one at the same time (it&#x2019;s not a big deal to resolve if it does happen). Second, it&#x2019;s a timestamp, indicating
+      when the migration was created. Third, it is an ordinal index, formatted in a way that will keep the migrations
+      sorted in the order in which they were created. The remainder of the filename is the comment you specified in the
+      parameter. Finally, the suffix is .sql, indicating the file type that most editors will recognize.</p>
+
+      <p>The contents of the migration script also follows a specific and required pattern.
+      Here's the contents of the file we just generated:</p>
+
+      <div class="source"><pre class="prettyprint">--// create blog table
+-- Migration SQL that makes the change goes here.
+
+--//@UNDO
+-- SQL to undo the change goes here.</pre></div>
+
+      <p>Notice that your comment once again appears at the top of the file.
+      You can add more comments beneath it and throughout the script if you like.</p>
+
+      <p>The section immediately following that comment is where you would put your DDL commands to create the blog table.</p>
+
+      <p>Then notice the </p><div class="source"><pre class="prettyprint">--//@UNDO</pre></div> section. This section demarcates the script file sections, splitting
+      it into two distinct parts. Only the commands above the undo section will be executed when <i>upgrading</i> a database.
+      Everything beneath the undo section will be run when <i>downgrading</i> the database. Both sections are kept in
+      the same file for simplicity and clarity. The following is a filled in script:
+
+      <div class="source"><pre class="prettyprint">--// create blog table
+CREATE TABLE BLOG (
+  ID INT,
+  NAME VARCHAR(255),
+  PRIMARY KEY(ID)
+);
+
+--//@UNDO
+DROP TABLE BLOG;</pre></div>
+
+      <p>Notice that the commands are <b>terminated by a colon</b>. This is also important, and you will receive a
+      warning and likely a failure if you don't terminate the SQL statements with a colon.</p>
+
+      <p>Optionally, you can configure your own template to be consumed by the 'new' command. Configuration requires a
+      file named migrations.properties (in <tt>$MIGRATIONS_HOME</tt>). This file will contain the location of your template.</p>
+
+      <div class="source"><pre class="prettyprint"># Example of migration.properties
+
+new_command.template=templates/new_template_migration.sql</pre></div>
+
+      <p>Alternatively you can manually specify the location of your template as such:</p>
+
+      <div class="source"><pre class="prettyprint">migrate new &#x2013;template=&lt;path to template&gt; &quot;your description&quot;</pre></div>
+
+      <p>If neither of these are used, or valid, the default template shown on the previous page will be used.</p>
+
+      <p>So how do we run this script? Well, first it&#x2019;s probably important to understand the current state of the database.</p>
     </div>
   
 

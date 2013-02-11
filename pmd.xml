@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pmd version="4.3" timestamp="2013-02-11T21:49:23.869">
+<file name="/Users/stripodi/Documents/mybatis/migrations/src/main/java/org/apache/ibatis/migration/commands/BaseCommand.java">
+<violation beginline="289" endline="291" begincolumn="11" endcolumn="9" rule="EmptyCatchBlock" ruleset="Basic Rules" package="org.apache.ibatis.migration.commands" class="BaseCommand" method="environmentProperties" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyCatchBlock" priority="3">
+Avoid empty catch blocks
+</violation>
+<violation beginline="312" endline="312" begincolumn="67" endcolumn="79" rule="AvoidThreadGroup" ruleset="Basic Rules" package="org.apache.ibatis.migration.commands" class="BaseCommand" method="generateAppliedTimeStampAsString" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#AvoidThreadGroup" priority="3">
+Avoid using java.lang.ThreadGroup; it is not thread safe
+</violation>
+</file>
+<file name="/Users/stripodi/Documents/mybatis/migrations/src/main/java/org/apache/ibatis/migration/commands/InfoCommand.java">
+<violation beginline="23" endline="25" begincolumn="9" endcolumn="7" rule="EmptyCatchBlock" ruleset="Basic Rules" package="org.apache.ibatis.migration.commands" class="InfoCommand" method="execute" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyCatchBlock" priority="3">
+Avoid empty catch blocks
+</violation>
+<violation beginline="28" endline="30" begincolumn="11" endcolumn="9" rule="EmptyCatchBlock" ruleset="Basic Rules" package="org.apache.ibatis.migration.commands" class="InfoCommand" method="execute" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyCatchBlock" priority="3">
+Avoid empty catch blocks
+</violation>
+<violation beginline="53" endline="81" begincolumn="24" endcolumn="3" rule="UnnecessaryFinalModifier" ruleset="Basic Rules" package="org.apache.ibatis.migration.commands" class="InfoCommand" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#UnnecessaryFinalModifier" priority="3">
+Unnecessary final modifier in final class
+</violation>
+</file>
+</pmd>

@@ -1,0 +1,5 @@
+org.apache.ibatis.migration
+org.apache.ibatis.migration.commands
+org.apache.ibatis.migration.options
+org.apache.ibatis.migration.utils
+
