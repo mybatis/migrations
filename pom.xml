@@ -60,6 +60,7 @@
 
   <properties>
     <findbugs.onlyAnalyze>org.apache.ibatis.migration</findbugs.onlyAnalyze>
+    <clirr.comparisonVersion>3.1.0</clirr.comparisonVersion>
   </properties>
 
   <dependencies>
