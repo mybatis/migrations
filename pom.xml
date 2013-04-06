@@ -167,43 +167,7 @@
           </execution>
         </executions>
       </plugin>
-
-      <plugin>
-        <groupId>com.googlecode.maven-gcu-plugin</groupId>
-        <artifactId>maven-gcu-plugin</artifactId>
-        <executions>
-          <execution>
-            <phase>deploy</phase>
-            <goals>
-              <goal>upload</goal>
-            </goals>
-            <configuration>
-              <uploads>
-                <upload>
-                  <file>${project.build.directory}/${project.artifactId}-${project.version}.zip</file>
-                  <summary>MyBatis Schema Migrations ${project.version}</summary>
-                  <labels>
-                    <label>Featured</label>
-                    <label>Type-Archive</label>
-                    <label>Product-Migrations</label>
-                    <label>Version-${project.version}</label>
-                  </labels>
-                </upload>
-                <upload>
-                  <file>${project.build.directory}/${project.artifactId}-${project.version}.zip</file>
-                  <summary>MyBatis Schema Migrations ${project.version} - User Guide</summary>
-                  <labels>
-                    <label>Featured</label>
-                    <label>Type-Docs</label>
-                    <label>Product-Migrations</label>
-                    <label>Version-${project.version}</label>
-                  </labels>
-                </upload>
-              </uploads>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
+      
     </plugins>
   </build>
 
