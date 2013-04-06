@@ -1,5 +1,6 @@
 package org.apache.ibatis.migration.options;
 
+import org.hamcrest.core.StringContains;
 import org.junit.Test;
 
 import java.io.File;
@@ -9,7 +10,6 @@ import static org.apache.ibatis.migration.options.OptionsParser.parse;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-import static org.junit.internal.matchers.StringContains.containsString;
 
 public class OptionsParserTest {
   @Test
@@ -70,8 +70,8 @@ public class OptionsParserTest {
     final SelectedOptions options = parse(new String[]{command, ignoredCommand, anotherIgnored});
 
     assertThat(options.getCommand(), equalTo(command));
-    assertThat(options.getParams(), containsString(ignoredCommand));
-    assertThat(options.getParams(), containsString(anotherIgnored));
+    assertThat(options.getParams(), StringContains.containsString(ignoredCommand));
+    assertThat(options.getParams(), StringContains.containsString(anotherIgnored));
   }
 
   private String valuedOption(Options option, String aValue) {

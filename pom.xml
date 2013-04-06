@@ -21,7 +21,7 @@
   <parent>
     <groupId>org.mybatis</groupId>
     <artifactId>mybatis-parent</artifactId>
-    <version>17-SNAPSHOT</version>
+    <version>18</version>
   </parent>
 
   <artifactId>mybatis-migrations</artifactId>
@@ -67,7 +67,7 @@
     <dependency>
       <groupId>org.mybatis</groupId>
       <artifactId>mybatis</artifactId>
-      <version>3.1.1</version>
+      <version>3.2.2</version>
     </dependency>
     <dependency>
       <groupId>org.hamcrest</groupId>
@@ -78,13 +78,13 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.10</version>
+      <version>4.11</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.derby</groupId>
       <artifactId>derby</artifactId>
-      <version>10.3.2.1</version>
+      <version>10.9.1.0</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
