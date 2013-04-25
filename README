@@ -4,6 +4,8 @@ Install MyBatis Migrations ${project.version} (${implementation.build})
   Java Runtime Environment (JRE), the Java Development Kit (JDK) is a plus.
 
   Additional optional installation steps are listed after the platform specific instructions.
+  
+  See the reference documentation here http://mybatis.github.io/migrations/
 
 * Windows 2000/XP
 
