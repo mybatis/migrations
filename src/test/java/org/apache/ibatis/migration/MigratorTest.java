@@ -101,6 +101,7 @@ public class MigratorTest {
       testHelpCommand(f);
       testDoScriptCommand(f);
       testUndoScriptCommand(f);
+      testScriptCommandWithTheSameVersion(f);
 
     } catch (Throwable t) {
       System.err.println(buffer);
@@ -188,9 +189,20 @@ public class MigratorTest {
     assertFalse(buffer.toString().contains("FAILURE"));
     assertFalse(buffer.toString().contains("20080827200210"));
     assertFalse(buffer.toString().contains("20080827200211"));
-    assertTrue(buffer.toString().contains("20080827200212"));
+    assertFalse(buffer.toString().contains("20080827200212"));
     assertTrue(buffer.toString().contains("20080827200213"));
     assertTrue(buffer.toString().contains("20080827200214"));
+    assertFalse(buffer.toString().contains("20080827200215"));
+    assertFalse(buffer.toString().contains("-- @UNDO"));
+    buffer.clear();
+
+    safeMigratorMain(args("--path=" + f.getAbsolutePath(), "script", "0", "20080827200211"));
+    assertFalse(buffer.toString().contains("FAILURE"));
+    assertTrue(buffer.toString().contains("20080827200210"));
+    assertTrue(buffer.toString().contains("20080827200211"));
+    assertFalse(buffer.toString().contains("20080827200212"));
+    assertFalse(buffer.toString().contains("20080827200213"));
+    assertFalse(buffer.toString().contains("20080827200214"));
     assertFalse(buffer.toString().contains("20080827200215"));
     assertFalse(buffer.toString().contains("-- @UNDO"));
     buffer.clear();
@@ -202,10 +214,27 @@ public class MigratorTest {
     assertFalse(buffer.toString().contains("20080827200210"));
     assertFalse(buffer.toString().contains("20080827200211"));
     assertFalse(buffer.toString().contains("20080827200212"));
-    assertTrue(buffer.toString().contains("20080827200213"));
+    assertFalse(buffer.toString().contains("20080827200213"));
     assertTrue(buffer.toString().contains("20080827200214"));
     assertTrue(buffer.toString().contains("20080827200215"));
     assertTrue(buffer.toString().contains("-- @UNDO"));
+    buffer.clear();
+
+    safeMigratorMain(args("--path=" + f.getAbsolutePath(), "script", "20080827200211", "0"));
+    assertFalse(buffer.toString().contains("FAILURE"));
+    assertTrue(buffer.toString().contains("20080827200210"));
+    assertTrue(buffer.toString().contains("20080827200211"));
+    assertFalse(buffer.toString().contains("20080827200212"));
+    assertFalse(buffer.toString().contains("20080827200213"));
+    assertFalse(buffer.toString().contains("20080827200214"));
+    assertFalse(buffer.toString().contains("20080827200215"));
+    assertTrue(buffer.toString().contains("-- @UNDO"));
+    buffer.clear();
+  }
+
+  private void testScriptCommandWithTheSameVersion(File f) throws Exception {
+    safeMigratorMain(args("--path=" + f.getAbsolutePath(), "script", "20080827200211", "20080827200211"));
+    assertTrue(buffer.toString().contains("FAILURE"));
     buffer.clear();
   }
 
