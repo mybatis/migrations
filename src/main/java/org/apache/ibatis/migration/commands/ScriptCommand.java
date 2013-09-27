@@ -31,7 +31,11 @@ public class ScriptCommand extends BaseCommand {
       }
       BigDecimal v1 = new BigDecimal(parser.nextToken());
       BigDecimal v2 = new BigDecimal(parser.nextToken());
-      boolean undo = v1.compareTo(v2) > 0;
+      int comparison = v1.compareTo(v2);
+      if (comparison == 0) {
+        throw new MigrationException("The script command requires two different versions. Use 0 to include the first version.");
+      }
+      boolean undo = comparison > 0;
       Properties variables = environmentProperties();
       List<Change> migrations = getMigrations();
       Collections.sort(migrations);
@@ -77,9 +81,9 @@ public class ScriptCommand extends BaseCommand {
   private boolean shouldRun(Change change, BigDecimal v1, BigDecimal v2) {
     BigDecimal id = change.getId();
     if (v1.compareTo(v2) > 0) {
-      return (id.compareTo(v2) >= 0 && id.compareTo(v1) <= 0);
+      return (id.compareTo(v2) > 0 && id.compareTo(v1) <= 0);
     } else {
-      return (id.compareTo(v1) >= 0 && id.compareTo(v2) <= 0);
+      return (id.compareTo(v1) > 0 && id.compareTo(v2) <= 0);
     }
   }
   

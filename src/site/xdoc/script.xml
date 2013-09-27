@@ -40,7 +40,8 @@
       central development databases!).</p>
 
       <p>The script command is quite simple. It takes two version numbers as parameters. Think of it as generating a
-      script to apply all of the identified versions (inclusive) in the order specified.
+      script to apply all of the identified versions in the order specified (the lower version is exclusive and the
+      higher version is inclusive).
       For example, given the following:</p>
 
       <source>/home/cbegin/testdb$ migrate status
@@ -51,15 +52,22 @@ ID             Applied At          Description
 20090804225328 2009-08-05 24:55:23 create blog table
 20090804225333 2009-08-04 22:51:17 create post table</source>
 
-      <p>If we need to generate a “do” script to apply the two highlighted versions above, we’d run the following command:</p>
+      <p>If we need to generate a “do” script to apply the last two versions above, we’d run the following command:</p>
 
-      <source>/home/cbegin/testdb$ migrate script 20090804225328 20090804225333 > do.sql</source>
+      <source>/home/cbegin/testdb$ migrate script 20090804225207 20090804225333 > do.sql</source>
 
       <p>The script command outputs to stdout, so you can let it print to the console, or pipe it to a file or command.</p>
 
       <p>To generate the corresponding “undo” script, simply specify the version numbers in the opposite order:</p>
 
-      <source>/home/cbegin/testdb$ migrate script 20090804225333 20090804225328 > undo.sql</source>
+      <source>/home/cbegin/testdb$ migrate script 20090804225333 20090804225207 > undo.sql</source>
+
+      <p>To generate a script which includes the first version, specify '0' as the lower version:</p>
+
+      <source>/home/cbegin/testdb$ migrate script 0 20090804225207 > do.sql</source>
+
+      <source>/home/cbegin/testdb$ migrate script 20090804225207 0 > undo.sql</source>
+
     </section>
   </body>
 
