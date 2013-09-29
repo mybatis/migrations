@@ -14,8 +14,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
@@ -25,7 +24,7 @@
   </parent>
 
   <artifactId>mybatis-migrations</artifactId>
-  <version>3.1.1-SNAPSHOT</version>
+  <version>3.1.1</version>
 
   <name>MyBatis Migrations</name>
   <url>http://www.mybatis.org/migrations/</url>
@@ -41,7 +40,7 @@
     <url>http://github.com/mybatis/migrations</url>
     <connection>scm:git:ssh://github.com/mybatis/migrations.git</connection>
     <developerConnection>scm:git:git+ssh://git@github.com/mybatis/migrations.git</developerConnection>
-    <tag>HEAD</tag>
+    <tag>mybatis-migrations-3.1.1</tag>
   </scm>
   <issueManagement>
     <system>GitHub Issue Management</system>
@@ -67,7 +66,7 @@
     <dependency>
       <groupId>org.mybatis</groupId>
       <artifactId>mybatis</artifactId>
-      <version>3.2.3-SNAPSHOT</version>
+      <version>3.2.3</version>
     </dependency>
     <dependency>
       <groupId>org.hamcrest</groupId>
