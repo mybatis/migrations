@@ -1,4 +1,4 @@
---// First migration.
+-- // First migration.
 -- Migration SQL that makes the change goes here.
 
 CREATE TABLE comment (
@@ -9,7 +9,7 @@ comment     LONG VARCHAR NOT NULL,
 PRIMARY KEY (id)
 );
 
---//@UNDO
+-- //@UNDO
 -- SQL to undo the change goes here.
 
 DROP TABLE comment;

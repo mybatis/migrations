@@ -1,4 +1,4 @@
---// First migration.
+-- // First migration.
 -- Migration SQL that makes the change goes here.
 
 CREATE TABLE post (
@@ -25,7 +25,7 @@ tag_id      INT NOT NULL,
 PRIMARY KEY (post_id, tag_id)
 );
 
---//@UNDO
+-- //@UNDO
 -- SQL to undo the change goes here.
 
 DROP TABLE post_tag;

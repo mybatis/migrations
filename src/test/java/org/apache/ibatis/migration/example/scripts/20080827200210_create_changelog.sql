@@ -1,4 +1,4 @@
---// Create Changelog
+-- // Create Changelog
 
 -- Default DDL for changelog table that will keep
 -- a record of the migrations that have been run.
@@ -19,6 +19,6 @@ ALTER TABLE ${changelog}
 ADD CONSTRAINT PK_${changelog}
 PRIMARY KEY (id);
 
---//@UNDO
+-- //@UNDO
 
 DROP TABLE ${changelog};

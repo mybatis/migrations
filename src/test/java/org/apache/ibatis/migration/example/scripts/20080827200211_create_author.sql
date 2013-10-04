@@ -1,4 +1,4 @@
---// First migration.
+-- // First migration.
 -- Migration SQL that makes the change goes here.
 
 CREATE TABLE author (
@@ -14,7 +14,7 @@ PRIMARY KEY (id)
 insert into author (id,username,password,email,bio,favourite_section)
 values (1,'jsmith','*****','jim@${url}','No bio','NONE');
 
---//@UNDO
+-- //@UNDO
 -- SQL to undo the change goes here.
 
 DROP TABLE author;

@@ -1,4 +1,4 @@
---// First migration.
+-- // First migration.
 -- Migration SQL that makes the change goes here.
 
 CREATE PROCEDURE selectTwoSetsOfAuthors(DP1 INTEGER, DP2 INTEGER)
@@ -18,7 +18,7 @@ PARAMETER STYLE JAVA
 LANGUAGE JAVA
 EXTERNAL NAME 'databases.blog.StoredProcedures.selectAuthorViaOutParams';
 
---//@UNDO
+-- //@UNDO
 -- SQL to undo the change goes here.
 
 DROP PROCEDURE selectTwoSetsOfAuthors;
