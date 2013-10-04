@@ -1,4 +1,4 @@
---// First migration.
+-- // First migration.
 -- Migration SQL that makes the change goes here.
 
 CREATE TABLE blog (
@@ -8,7 +8,7 @@ title       VARCHAR(255),
 PRIMARY KEY (id)
 );
 
---//@UNDO
+-- //@UNDO
 -- SQL to undo the change goes here.
 
 DROP TABLE blog;

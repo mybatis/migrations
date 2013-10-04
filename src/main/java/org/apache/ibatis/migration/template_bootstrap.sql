@@ -1,17 +1,17 @@
---// Bootstrap.sql
+-- // Bootstrap.sql
 
 -- This is the only SQL script file that is NOT
 -- a valid migration and will not be run or tracked
 -- in the changelog.  There is no @UNDO section.
 
---// Do I need this file?
+-- // Do I need this file?
 
 -- New projects likely won't need this file.
 -- Existing projects will likely need this file.
 -- It's unlikely that this bootstrap should be run
 -- in the production environment.
 
---// Purpose
+-- // Purpose
 
 -- The purpose of this file is to provide a facility
 -- to initialize the database to a state before MyBatis
@@ -22,7 +22,7 @@
 -- be put in this bootstrap file (but does not have
 -- to be if you are comfortable with your current process.
 
---// Running
+-- // Running
 
 -- The bootstrap SQL is run with the "migrate bootstrap"
 -- command.  It must be run manually, it's never run as

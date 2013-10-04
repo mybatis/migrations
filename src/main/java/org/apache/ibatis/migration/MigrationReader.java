@@ -26,16 +26,14 @@ public class MigrationReader extends Reader {
       StringBuilder currentBuilder = doBuilder;
       String line;
       while ((line = reader.readLine()) != null) {
-        if (line != null) {
-          if (line.trim().startsWith("--//")) {
-            if (line.contains("@UNDO")) {
-              currentBuilder = undoBuilder;
-            }
-            line = line.replace("--//", "-- ");
+        if (line.trim().matches("^--\\s*//.*$")) {
+          if (line.contains("@UNDO")) {
+            currentBuilder = undoBuilder;
           }
-          currentBuilder.append(line);
-          currentBuilder.append(LINE_SEPARATOR);
+          line = line.replaceFirst("--\\s*//", "-- ");
         }
+        currentBuilder.append(line);
+        currentBuilder.append(LINE_SEPARATOR);
       }
       if (undo) {
         target = new StringReader(PropertyParser.parse(undoBuilder.toString(), variables));
@@ -67,7 +65,7 @@ public class MigrationReader extends Reader {
     return new Properties() {
       @Override
       public synchronized boolean containsKey(Object o) {
-        return KNOWN_PROPERTIES_TO_IGNORE.contains(o) ? false : properties.containsKey(o);
+        return !KNOWN_PROPERTIES_TO_IGNORE.contains(o) && properties.containsKey(o);
       }
 
       @Override

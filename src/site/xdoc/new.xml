@@ -58,10 +58,10 @@
       <p>The contents of the migration script also follows a specific and required pattern.
       Here's the contents of the file we just generated:</p>
 
-      <source>--// create blog table
+      <source>-- // create blog table
 -- Migration SQL that makes the change goes here.
 
---//@UNDO
+-- //@UNDO
 -- SQL to undo the change goes here.</source>
 
       <p>Notice that your comment once again appears at the top of the file.
@@ -69,19 +69,19 @@
 
       <p>The section immediately following that comment is where you would put your DDL commands to create the blog table.</p>
 
-      <p>Then notice the <source>--//@UNDO</source> section. This section demarcates the script file sections, splitting
+      <p>Then notice the <source>-- //@UNDO</source> section. This section demarcates the script file sections, splitting
       it into two distinct parts. Only the commands above the undo section will be executed when <i>upgrading</i> a database.
       Everything beneath the undo section will be run when <i>downgrading</i> the database. Both sections are kept in
       the same file for simplicity and clarity. The following is a filled in script:</p>
 
-      <source>--// create blog table
+      <source>-- // create blog table
 CREATE TABLE BLOG (
   ID INT,
   NAME VARCHAR(255),
   PRIMARY KEY(ID)
 );
 
---//@UNDO
+-- //@UNDO
 DROP TABLE BLOG;</source>
 
       <p>Notice that the commands are <b>terminated by a colon</b>. This is also important, and you will receive a
