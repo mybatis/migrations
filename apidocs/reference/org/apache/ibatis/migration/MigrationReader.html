@@ -147,6 +147,8 @@
     <li class="api apilevel-">
   <a href="../../../../org/apache/ibatis/migration/commands/package-summary.html">org.apache.ibatis.migration.commands</a></li>
     <li class="api apilevel-">
+  <a href="../../../../org/apache/ibatis/migration/operations/package-summary.html">org.apache.ibatis.migration.operations</a></li>
+    <li class="api apilevel-">
   <a href="../../../../org/apache/ibatis/migration/options/package-summary.html">org.apache.ibatis.migration.options</a></li>
     <li class="api apilevel-">
   <a href="../../../../org/apache/ibatis/migration/utils/package-summary.html">org.apache.ibatis.migration.utils</a></li>
@@ -156,11 +158,23 @@
           <div id="classes-nav">
             <ul>
               
+    <li><h2>Interfaces</h2>
+      <ul>
+          <li class="api apilevel-"><a href="../../../../org/apache/ibatis/migration/BootstrapScript.html">BootstrapScript</a></li>
+          <li class="api apilevel-"><a href="../../../../org/apache/ibatis/migration/ConnectionProvider.html">ConnectionProvider</a></li>
+          <li class="api apilevel-"><a href="../../../../org/apache/ibatis/migration/MigrationLoader.html">MigrationLoader</a></li>
+          <li class="api apilevel-"><a href="../../../../org/apache/ibatis/migration/MigrationScript.html">MigrationScript</a></li>
+      </ul>
+    </li>
               
     <li><h2>Classes</h2>
       <ul>
           <li class="api apilevel-"><a href="../../../../org/apache/ibatis/migration/Change.html">Change</a></li>
           <li class="api apilevel-"><a href="../../../../org/apache/ibatis/migration/CommandLine.html">CommandLine</a></li>
+          <li class="api apilevel-"><a href="../../../../org/apache/ibatis/migration/DataSourceConnectionProvider.html">DataSourceConnectionProvider</a></li>
+          <li class="api apilevel-"><a href="../../../../org/apache/ibatis/migration/FileMigrationLoader.html">FileMigrationLoader</a></li>
+          <li class="api apilevel-"><a href="../../../../org/apache/ibatis/migration/JavaMigrationLoader.html">JavaMigrationLoader</a></li>
+          <li class="api apilevel-"><a href="../../../../org/apache/ibatis/migration/JdbcConnectionProvider.html">JdbcConnectionProvider</a></li>
           <li class="selected api apilevel-"><a href="../../../../org/apache/ibatis/migration/MigrationReader.html">MigrationReader</a></li>
           <li class="api apilevel-"><a href="../../../../org/apache/ibatis/migration/Migrator.html">Migrator</a></li>
       </ul>
@@ -241,6 +255,13 @@
   
   
 
+  
+   
+  
+  
+  
+  
+
 
 <div class="sum-details-links">
 
@@ -265,6 +286,9 @@ Summary:
   &#124; <a href="#pubmethods">Methods</a>
   
 
+
+  &#124; <a href="#promethods">Protected Methods</a>
+  
 
 
   &#124; <a href="#inhmethods">Inherited Methods</a>
@@ -445,6 +469,8 @@ java.io.Reader
 
 
 
+
+
 </table>
 
 
@@ -466,7 +492,23 @@ java.io.Reader
             </nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../org/apache/ibatis/migration/MigrationReader.html#MigrationReader(java.io.Reader, boolean, java.util.Properties)">MigrationReader</a></span>(Reader source, boolean undo, Properties properties)</nobr>
+        <span class="sympad"><a href="../../../../org/apache/ibatis/migration/MigrationReader.html#MigrationReader(java.io.File, java.lang.String, boolean, java.util.Properties)">MigrationReader</a></span>(File file, String charset, boolean undo, Properties properties)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            </nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../org/apache/ibatis/migration/MigrationReader.html#MigrationReader(java.io.InputStream, java.lang.String, boolean, java.util.Properties)">MigrationReader</a></span>(InputStream inputStream, String charset, boolean undo, Properties properties)</nobr>
         
   </td></tr>
 
@@ -520,6 +562,31 @@ java.io.Reader
 </table>
 
 
+
+
+<!-- ========== METHOD SUMMARY =========== -->
+<table id="promethods" class="jd-sumtable"><tr><th colspan="12">Protected Methods</th></tr>
+
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            Reader</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../org/apache/ibatis/migration/MigrationReader.html#scriptFileReader(java.io.InputStream, java.lang.String)">scriptFileReader</a></span>(InputStream inputStream, String charset)</nobr>
+        
+  </td></tr>
+
+
+
+</table>
 
 
 
@@ -963,6 +1030,48 @@ From interface
 
 <tr class="api apilevel-" >
 <td colspan="12">
+  <a href="#" onclick="return toggleInherited(this, null)" id="inherited-methods-java.lang.AutoCloseable" class="jd-expando-trigger closed"
+          ><img id="inherited-methods-java.lang.AutoCloseable-trigger"
+          src="../../../../../assets/images/triangle-closed.png"
+          class="jd-expando-trigger-img" /></a>
+From interface
+
+  java.lang.AutoCloseable
+
+<div id="inherited-methods-java.lang.AutoCloseable">
+  <div id="inherited-methods-java.lang.AutoCloseable-list"
+        class="jd-inheritedlinks">
+  </div>
+  <div id="inherited-methods-java.lang.AutoCloseable-summary" style="display: none;">
+    <table class="jd-sumtable-expando">
+    
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            abstract
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">close</span>()</nobr>
+        
+  </td></tr>
+
+
+</table>
+  </div>
+</div>
+</td></tr>
+
+
+
+<tr class="api apilevel-" >
+<td colspan="12">
   <a href="#" onclick="return toggleInherited(this, null)" id="inherited-methods-java.lang.Readable" class="jd-expando-trigger closed"
           ><img id="inherited-methods-java.lang.Readable-trigger"
           src="../../../../../assets/images/triangle-closed.png"
@@ -1036,7 +1145,7 @@ From interface
 
 
 
-<A NAME="MigrationReader(java.io.Reader, boolean, java.util.Properties)"></A>
+<A NAME="MigrationReader(java.io.File, java.lang.String, boolean, java.util.Properties)"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -1049,7 +1158,47 @@ From interface
         
       </span>
       <span class="sympad">MigrationReader</span>
-      <span class="normal">(Reader source, boolean undo, Properties properties)</span>
+      <span class="normal">(File file, String charset, boolean undo, Properties properties)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p></p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Throws</h5>
+      <table class="jd-tagtable">  
+        <tr>
+            <th>IOException</td>
+            <td></td>
+        </tr>
+      </table>
+  </div>
+
+    </div>
+</div>
+
+
+<A NAME="MigrationReader(java.io.InputStream, java.lang.String, boolean, java.util.Properties)"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+         
+         
+        
+      </span>
+      <span class="sympad">MigrationReader</span>
+      <span class="normal">(InputStream inputStream, String charset, boolean undo, Properties properties)</span>
     </h4>
       <div class="api-level">
         <div>
@@ -1175,6 +1324,55 @@ From interface
 
 
 <!-- ========= METHOD DETAIL ======== -->
+
+<h2>Protected Methods</h2>
+
+
+
+<A NAME="scriptFileReader(java.io.InputStream, java.lang.String)"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        protected 
+         
+         
+         
+         
+        Reader
+      </span>
+      <span class="sympad">scriptFileReader</span>
+      <span class="normal">(InputStream inputStream, String charset)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p></p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Throws</h5>
+      <table class="jd-tagtable">  
+        <tr>
+            <th>FileNotFoundException</td>
+            <td></td>
+        </tr>  
+        <tr>
+            <th>UnsupportedEncodingException</td>
+            <td></td>
+        </tr>
+      </table>
+  </div>
+
+    </div>
+</div>
+
+
 
 
 

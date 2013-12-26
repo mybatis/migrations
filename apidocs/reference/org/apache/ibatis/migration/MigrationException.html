@@ -147,6 +147,8 @@
     <li class="api apilevel-">
   <a href="../../../../org/apache/ibatis/migration/commands/package-summary.html">org.apache.ibatis.migration.commands</a></li>
     <li class="api apilevel-">
+  <a href="../../../../org/apache/ibatis/migration/operations/package-summary.html">org.apache.ibatis.migration.operations</a></li>
+    <li class="api apilevel-">
   <a href="../../../../org/apache/ibatis/migration/options/package-summary.html">org.apache.ibatis.migration.options</a></li>
     <li class="api apilevel-">
   <a href="../../../../org/apache/ibatis/migration/utils/package-summary.html">org.apache.ibatis.migration.utils</a></li>
@@ -156,11 +158,23 @@
           <div id="classes-nav">
             <ul>
               
+    <li><h2>Interfaces</h2>
+      <ul>
+          <li class="api apilevel-"><a href="../../../../org/apache/ibatis/migration/BootstrapScript.html">BootstrapScript</a></li>
+          <li class="api apilevel-"><a href="../../../../org/apache/ibatis/migration/ConnectionProvider.html">ConnectionProvider</a></li>
+          <li class="api apilevel-"><a href="../../../../org/apache/ibatis/migration/MigrationLoader.html">MigrationLoader</a></li>
+          <li class="api apilevel-"><a href="../../../../org/apache/ibatis/migration/MigrationScript.html">MigrationScript</a></li>
+      </ul>
+    </li>
               
     <li><h2>Classes</h2>
       <ul>
           <li class="api apilevel-"><a href="../../../../org/apache/ibatis/migration/Change.html">Change</a></li>
           <li class="api apilevel-"><a href="../../../../org/apache/ibatis/migration/CommandLine.html">CommandLine</a></li>
+          <li class="api apilevel-"><a href="../../../../org/apache/ibatis/migration/DataSourceConnectionProvider.html">DataSourceConnectionProvider</a></li>
+          <li class="api apilevel-"><a href="../../../../org/apache/ibatis/migration/FileMigrationLoader.html">FileMigrationLoader</a></li>
+          <li class="api apilevel-"><a href="../../../../org/apache/ibatis/migration/JavaMigrationLoader.html">JavaMigrationLoader</a></li>
+          <li class="api apilevel-"><a href="../../../../org/apache/ibatis/migration/JdbcConnectionProvider.html">JdbcConnectionProvider</a></li>
           <li class="api apilevel-"><a href="../../../../org/apache/ibatis/migration/MigrationReader.html">MigrationReader</a></li>
           <li class="api apilevel-"><a href="../../../../org/apache/ibatis/migration/Migrator.html">Migrator</a></li>
       </ul>
@@ -600,6 +614,22 @@ From class
         <td class="jd-typecol"><nobr>
             
             synchronized
+            final
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">addSuppressed</span>(Throwable arg0)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            synchronized
             
             
             
@@ -612,10 +642,10 @@ From class
 
 
 	 
-    <tr class=" api apilevel-" >
+    <tr class="alt-color api apilevel-" >
         <td class="jd-typecol"><nobr>
             
-            
+            synchronized
             
             
             
@@ -628,7 +658,7 @@ From class
 
 
 	 
-    <tr class="alt-color api apilevel-" >
+    <tr class=" api apilevel-" >
         <td class="jd-typecol"><nobr>
             
             
@@ -644,7 +674,7 @@ From class
 
 
 	 
-    <tr class=" api apilevel-" >
+    <tr class="alt-color api apilevel-" >
         <td class="jd-typecol"><nobr>
             
             
@@ -660,7 +690,7 @@ From class
 
 
 	 
-    <tr class="alt-color api apilevel-" >
+    <tr class=" api apilevel-" >
         <td class="jd-typecol"><nobr>
             
             
@@ -671,6 +701,22 @@ From class
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad">getStackTrace</span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            synchronized
+            final
+            
+            
+            Throwable[]</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">getSuppressed</span>()</nobr>
         
   </td></tr>
 

@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pmd version="4.3" timestamp="2013-09-29T22:05:29.248">
-<file name="/Users/stripodi/Documents/mybatis/migrations/target/checkout/src/main/java/org/apache/ibatis/migration/commands/BaseCommand.java">
-<violation beginline="289" endline="291" begincolumn="11" endcolumn="9" rule="EmptyCatchBlock" ruleset="Basic Rules" package="org.apache.ibatis.migration.commands" class="BaseCommand" method="environmentProperties" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyCatchBlock" priority="3">
-Avoid empty catch blocks
-</violation>
-<violation beginline="312" endline="312" begincolumn="67" endcolumn="79" rule="AvoidThreadGroup" ruleset="Basic Rules" package="org.apache.ibatis.migration.commands" class="BaseCommand" method="generateAppliedTimeStampAsString" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#AvoidThreadGroup" priority="3">
-Avoid using java.lang.ThreadGroup; it is not thread safe
+<pmd version="4.3" timestamp="2013-12-27T01:56:12.441">
+<file name="/Users/ave/repo/mybatis-migrations/src/main/java/org/apache/ibatis/migration/JavaMigrationLoader.java">
+<violation beginline="109" endline="115" begincolumn="11" endcolumn="3" rule="UnusedFormalParameter" ruleset="Unused Code Rules" package="org.apache.ibatis.migration" class="JavaMigrationLoader" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedFormalParameter" priority="3">
+Avoid unused method parameters such as 'type'.
 </violation>
 </file>
-<file name="/Users/stripodi/Documents/mybatis/migrations/target/checkout/src/main/java/org/apache/ibatis/migration/commands/InfoCommand.java">
+<file name="/Users/ave/repo/mybatis-migrations/src/main/java/org/apache/ibatis/migration/commands/BaseCommand.java">
+<violation beginline="150" endline="152" begincolumn="11" endcolumn="9" rule="EmptyCatchBlock" ruleset="Basic Rules" package="org.apache.ibatis.migration.commands" class="BaseCommand" method="environmentProperties" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyCatchBlock" priority="3">
+Avoid empty catch blocks
+</violation>
+</file>
+<file name="/Users/ave/repo/mybatis-migrations/src/main/java/org/apache/ibatis/migration/commands/InfoCommand.java">
 <violation beginline="23" endline="25" begincolumn="9" endcolumn="7" rule="EmptyCatchBlock" ruleset="Basic Rules" package="org.apache.ibatis.migration.commands" class="InfoCommand" method="execute" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyCatchBlock" priority="3">
 Avoid empty catch blocks
 </violation>
@@ -17,6 +19,11 @@ Avoid empty catch blocks
 </violation>
 <violation beginline="53" endline="81" begincolumn="24" endcolumn="3" rule="UnnecessaryFinalModifier" ruleset="Basic Rules" package="org.apache.ibatis.migration.commands" class="InfoCommand" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#UnnecessaryFinalModifier" priority="3">
 Unnecessary final modifier in final class
+</violation>
+</file>
+<file name="/Users/ave/repo/mybatis-migrations/src/main/java/org/apache/ibatis/migration/operations/DatabaseOperation.java">
+<violation beginline="113" endline="113" begincolumn="67" endcolumn="79" rule="AvoidThreadGroup" ruleset="Basic Rules" package="org.apache.ibatis.migration.operations" class="DatabaseOperation" method="generateAppliedTimeStampAsString" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#AvoidThreadGroup" priority="3">
+Avoid using java.lang.ThreadGroup; it is not thread safe
 </violation>
 </file>
 </pmd>

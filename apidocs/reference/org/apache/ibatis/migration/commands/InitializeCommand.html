@@ -147,6 +147,8 @@
     <li class="selected api apilevel-">
   <a href="../../../../../org/apache/ibatis/migration/commands/package-summary.html">org.apache.ibatis.migration.commands</a></li>
     <li class="api apilevel-">
+  <a href="../../../../../org/apache/ibatis/migration/operations/package-summary.html">org.apache.ibatis.migration.operations</a></li>
+    <li class="api apilevel-">
   <a href="../../../../../org/apache/ibatis/migration/options/package-summary.html">org.apache.ibatis.migration.options</a></li>
     <li class="api apilevel-">
   <a href="../../../../../org/apache/ibatis/migration/utils/package-summary.html">org.apache.ibatis.migration.utils</a></li>
@@ -296,7 +298,7 @@ Summary:
 <div id="jd-header">
     public
      
-     
+    final 
     
     class
 <h1>InitializeCommand</h1>
@@ -611,22 +613,6 @@ From class
             
             
             
-            boolean</nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../../org/apache/ibatis/migration/commands/BaseCommand.html#changelogExists()">changelogExists</a></span>()</nobr>
-        
-  </td></tr>
-
-
-	 
-    <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            
-            
-            
-            
-            
             String</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
@@ -636,7 +622,7 @@ From class
 
 
 	 
-    <tr class="alt-color api apilevel-" >
+    <tr class=" api apilevel-" >
         <td class="jd-typecol"><nobr>
             
             
@@ -652,7 +638,7 @@ From class
 
 
 	 
-    <tr class=" api apilevel-" >
+    <tr class="alt-color api apilevel-" >
         <td class="jd-typecol"><nobr>
             
             
@@ -668,7 +654,7 @@ From class
 
 
 	 
-    <tr class="alt-color api apilevel-" >
+    <tr class=" api apilevel-" >
         <td class="jd-typecol"><nobr>
             
             
@@ -684,7 +670,7 @@ From class
 
 
 	 
-    <tr class=" api apilevel-" >
+    <tr class="alt-color api apilevel-" >
         <td class="jd-typecol"><nobr>
             
             
@@ -700,7 +686,7 @@ From class
 
 
 	 
-    <tr class="alt-color api apilevel-" >
+    <tr class=" api apilevel-" >
         <td class="jd-typecol"><nobr>
             
             
@@ -716,7 +702,7 @@ From class
 
 
 	 
-    <tr class=" api apilevel-" >
+    <tr class="alt-color api apilevel-" >
         <td class="jd-typecol"><nobr>
             
             
@@ -732,22 +718,6 @@ From class
 
 
 	 
-    <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            
-            
-            
-            
-            
-            String</nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../../org/apache/ibatis/migration/commands/BaseCommand.html#generateAppliedTimeStampAsString()">generateAppliedTimeStampAsString</a></span>()</nobr>
-        
-  </td></tr>
-
-
-	 
     <tr class=" api apilevel-" >
         <td class="jd-typecol"><nobr>
             
@@ -755,10 +725,10 @@ From class
             
             
             
-            List&lt;<a href="../../../../../org/apache/ibatis/migration/Change.html">Change</a>&gt;</nobr>
+            <a href="../../../../../org/apache/ibatis/migration/ConnectionProvider.html">ConnectionProvider</a></nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../../org/apache/ibatis/migration/commands/BaseCommand.html#getChangelog()">getChangelog</a></span>()</nobr>
+        <span class="sympad"><a href="../../../../../org/apache/ibatis/migration/commands/BaseCommand.html#getConnectionProvider()">getConnectionProvider</a></span>()</nobr>
         
   </td></tr>
 
@@ -771,10 +741,10 @@ From class
             
             
             
-            <a href="../../../../../org/apache/ibatis/migration/Change.html">Change</a></nobr>
+            <a href="../../../../../org/apache/ibatis/migration/options/DatabaseOperationOption.html">DatabaseOperationOption</a></nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../../org/apache/ibatis/migration/commands/BaseCommand.html#getLastAppliedChange()">getLastAppliedChange</a></span>()</nobr>
+        <span class="sympad"><a href="../../../../../org/apache/ibatis/migration/commands/BaseCommand.html#getDatabaseOperationOption()">getDatabaseOperationOption</a></span>()</nobr>
         
   </td></tr>
 
@@ -787,10 +757,10 @@ From class
             
             
             
-            List&lt;<a href="../../../../../org/apache/ibatis/migration/Change.html">Change</a>&gt;</nobr>
+            <a href="../../../../../org/apache/ibatis/migration/MigrationLoader.html">MigrationLoader</a></nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../../org/apache/ibatis/migration/commands/BaseCommand.html#getMigrations()">getMigrations</a></span>()</nobr>
+        <span class="sympad"><a href="../../../../../org/apache/ibatis/migration/commands/BaseCommand.html#getMigrationLoader()">getMigrationLoader</a></span>()</nobr>
         
   </td></tr>
 
@@ -819,74 +789,10 @@ From class
             
             
             
-            ScriptRunner</nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../../org/apache/ibatis/migration/commands/BaseCommand.html#getScriptRunner()">getScriptRunner</a></span>()</nobr>
-        
-  </td></tr>
-
-
-	 
-    <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            
-            
-            
-            
-            
-            SqlRunner</nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../../org/apache/ibatis/migration/commands/BaseCommand.html#getSqlRunner()">getSqlRunner</a></span>()</nobr>
-        
-  </td></tr>
-
-
-	 
-    <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            
-            
-            
-            
-            
             int</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad"><a href="../../../../../org/apache/ibatis/migration/commands/BaseCommand.html#getStepCountParameter(int, java.lang.String...)">getStepCountParameter</a></span>(int defaultSteps, String... params)</nobr>
-        
-  </td></tr>
-
-
-	 
-    <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            
-            
-            
-            
-            
-            String</nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../../org/apache/ibatis/migration/commands/BaseCommand.html#horizontalLine(java.lang.String, int)">horizontalLine</a></span>(String caption, int length)</nobr>
-        
-  </td></tr>
-
-
-	 
-    <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            
-            
-            
-            
-            
-            void</nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../../org/apache/ibatis/migration/commands/BaseCommand.html#insertChangelog(org.apache.ibatis.migration.Change)">insertChangelog</a></span>(<a href="../../../../../org/apache/ibatis/migration/Change.html">Change</a> change)</nobr>
         
   </td></tr>
 
@@ -915,22 +821,6 @@ From class
             
             
             
-            Reader</nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../../org/apache/ibatis/migration/commands/BaseCommand.html#scriptFileReader(java.io.File)">scriptFileReader</a></span>(File scriptFile)</nobr>
-        
-  </td></tr>
-
-
-	 
-    <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            
-            
-            
-            
-            
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
@@ -940,7 +830,7 @@ From class
 
 
 	 
-    <tr class=" api apilevel-" >
+    <tr class="alt-color api apilevel-" >
         <td class="jd-typecol"><nobr>
             
             
