@@ -4,6 +4,8 @@ import org.apache.ibatis.exceptions.PersistenceException;
 
 public class MigrationException extends PersistenceException {
 
+  private static final long serialVersionUID = 491769430730827896L;
+
   public MigrationException() {
     super();
   }
