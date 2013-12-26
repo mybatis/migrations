@@ -52,6 +52,7 @@ public final class DownOperation extends DatabaseOperation<DownOperation> {
               deleteChange(connectionProvider, change, option);
             } else {
               println(printStream, "Changelog doesn't exist. No further migrations will be undone (normal for the last migration).");
+              stepCount = steps;
             }
             println(printStream);
             stepCount++;
