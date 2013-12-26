@@ -3,9 +3,15 @@ package org.apache.ibatis.migration;
 import org.apache.ibatis.parsing.PropertyParser;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
+import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Properties;
@@ -17,8 +23,13 @@ public class MigrationReader extends Reader {
 
   private Reader target;
 
-  public MigrationReader(Reader source, boolean undo, Properties properties) throws IOException {
-    final Properties variables = filterVariables(properties);
+  public MigrationReader(File file, String charset, boolean undo, Properties properties) throws IOException {
+    this(new FileInputStream(file), charset, undo, properties);
+  }
+
+  public MigrationReader(InputStream inputStream, String charset, boolean undo, Properties properties) throws IOException {
+    final Reader source = scriptFileReader(inputStream, charset);
+    final Properties variables = filterVariables(properties == null ? new Properties() : properties);
     try {
       BufferedReader reader = new BufferedReader(source);
       StringBuilder doBuilder = new StringBuilder();
@@ -53,7 +64,15 @@ public class MigrationReader extends Reader {
     target.close();
   }
 
+  protected Reader scriptFileReader(InputStream inputStream, String charset) throws FileNotFoundException, UnsupportedEncodingException {
+    if (charset == null || charset.length() == 0) {
+      return new InputStreamReader(inputStream);
+    } else {
+      return new InputStreamReader(inputStream, charset);
+    }
+  }
 
+  @SuppressWarnings("serial")
   private Properties filterVariables(final Properties properties) {
     final Set<String> KNOWN_PROPERTIES_TO_IGNORE = new HashSet<String>() {{
       addAll(Arrays.asList(

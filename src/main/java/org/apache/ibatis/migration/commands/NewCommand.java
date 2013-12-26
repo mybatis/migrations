@@ -8,7 +8,7 @@ import org.apache.ibatis.migration.utils.Util;
 import java.io.FileNotFoundException;
 import java.util.Properties;
 
-public class NewCommand extends BaseCommand {
+public final class NewCommand extends BaseCommand {
 
   private static final String MIGRATIONS_HOME = "MIGRATIONS_HOME";
   private static final String MIGRATIONS_HOME_PROPERTY = "migrationHome";

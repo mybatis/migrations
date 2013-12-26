@@ -1,20 +1,19 @@
 package org.apache.ibatis.migration.commands;
 
-import org.apache.ibatis.migration.Change;
-import org.apache.ibatis.migration.MigrationException;
-import org.apache.ibatis.migration.MigrationReader;
-import org.apache.ibatis.migration.options.SelectedOptions;
-import org.apache.ibatis.migration.utils.Util;
-
-import java.io.File;
 import java.io.IOException;
+import java.io.Reader;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
-public class ScriptCommand extends BaseCommand {
+import org.apache.ibatis.migration.Change;
+import org.apache.ibatis.migration.MigrationException;
+import org.apache.ibatis.migration.operations.DatabaseOperation;
+import org.apache.ibatis.migration.options.SelectedOptions;
+
+public final class ScriptCommand extends BaseCommand {
 
   public ScriptCommand(SelectedOptions options) {
     super(options);
@@ -36,8 +35,7 @@ public class ScriptCommand extends BaseCommand {
         throw new MigrationException("The script command requires two different versions. Use 0 to include the first version.");
       }
       boolean undo = comparison > 0;
-      Properties variables = environmentProperties();
-      List<Change> migrations = getMigrations();
+      List<Change> migrations = getMigrationLoader().getMigrations();
       Collections.sort(migrations);
       if (undo) {
         Collections.reverse(migrations);
@@ -45,8 +43,7 @@ public class ScriptCommand extends BaseCommand {
       for (Change change : migrations) {
         if (shouldRun(change, v1, v2)) {
           printStream.println("-- " + change.getFilename());
-          File file = Util.file(paths.getScriptPath(), change.getFilename());
-          MigrationReader migrationReader = new MigrationReader(scriptFileReader(file), undo, variables);
+          Reader migrationReader = getMigrationLoader().getScriptReader(change, undo);
           char[] cbuf = new char[1024];
           int l;
           while ((l = migrationReader.read(cbuf)) == cbuf.length) {
@@ -70,7 +67,7 @@ public class ScriptCommand extends BaseCommand {
 
   private String generateVersionInsert(Change change) {
     return "INSERT INTO " + changelogTable() + " (ID, APPLIED_AT, DESCRIPTION) " +
-        "VALUES (" + change.getId() + ", '" + generateAppliedTimeStampAsString() + "', '"
+        "VALUES (" + change.getId() + ", '" + DatabaseOperation.generateAppliedTimeStampAsString() + "', '"
         + change.getDescription().replace('\'', ' ') + "')" + getDelimiter();
   }
 

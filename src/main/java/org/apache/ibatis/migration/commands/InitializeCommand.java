@@ -7,11 +7,12 @@ import org.apache.ibatis.migration.utils.Util;
 import java.io.File;
 import java.util.Properties;
 
-public class InitializeCommand extends BaseCommand {
+public final class InitializeCommand extends BaseCommand {
   public InitializeCommand(SelectedOptions selectedOptions) {
     super(selectedOptions);
   }
 
+  @SuppressWarnings("serial")
   public void execute(String... params) {
     final File basePath = paths.getBasePath();
     final File scriptPath = paths.getScriptPath();

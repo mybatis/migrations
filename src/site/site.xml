@@ -38,6 +38,7 @@
         <item name="script" href="script.html"/>
         <item name="Command Shortcuts" href="shortcuts.html"/>
       </item>
+      <item name="Runtime Schema Migration" href="runtime-migration.html"/>
     </menu>
 
     <menu ref="reports"/>
