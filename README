@@ -7,7 +7,7 @@ Install MyBatis Migrations ${project.version} (${implementation.build})
   
   See the reference documentation here http://mybatis.github.io/migrations/
 
-* Windows 2000/XP
+* Windows
 
   [1] Unzip the distribution archive, i.e. mybatis-${project.version}-migrations.zip to the directory you wish
       to install MyBatis Migrations.
