@@ -1,7 +1,7 @@
 MYBATIS Migrations
 ==================
 
-[![Build Status](https://travis-ci.org/mybatis/mybatis-migrations.svg?branch=master)](https://travis-ci.org/mybatis/mybatis-migrations)
+[![Build Status](https://travis-ci.org/mybatis/migrations.svg?branch=master)](https://travis-ci.org/mybatis/migrations)
 [![Maven central](https://maven-badges.herokuapp.com/maven-central/org.mybatis/mybatis-migrations/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.mybatis/mybatis-migrations)
 
 ![mybatis-migrations](http://mybatis.github.io/images/mybatis-logo.png)
