@@ -14,13 +14,13 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
     <groupId>org.mybatis</groupId>
     <artifactId>mybatis-parent</artifactId>
-    <version>20</version>
+    <version>22-SNAPSHOT</version>
   </parent>
 
   <artifactId>mybatis-migrations</artifactId>
@@ -59,14 +59,14 @@
 
   <properties>
     <findbugs.onlyAnalyze>org.apache.ibatis.migration</findbugs.onlyAnalyze>
-    <clirr.comparisonVersion>3.1.0</clirr.comparisonVersion>
+    <clirr.comparisonVersion>3.2.0</clirr.comparisonVersion>
   </properties>
 
   <dependencies>
     <dependency>
       <groupId>org.mybatis</groupId>
       <artifactId>mybatis</artifactId>
-      <version>3.2.4</version>
+      <version>3.2.8</version>
     </dependency>
     <dependency>
       <groupId>org.hamcrest</groupId>
@@ -83,13 +83,13 @@
     <dependency>
       <groupId>org.apache.derby</groupId>
       <artifactId>derby</artifactId>
-      <version>10.9.1.0</version>
+      <version>10.11.1.1</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.hsqldb</groupId>
       <artifactId>hsqldb</artifactId>
-      <version>2.2.9</version>
+      <version>2.3.2</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -97,7 +97,7 @@
   <build>
     <resources>
       <resource>
-        <directory>${basedir}</directory>
+        <directory>${project.basedir}</directory>
         <targetPath>META-INF</targetPath>
         <includes>
           <include>LICENSE</include>
@@ -131,7 +131,7 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>appassembler-maven-plugin</artifactId>
-        <version>1.1.1</version>
+        <version>1.8.1</version>
         <executions>
           <execution>
             <phase>package</phase>
