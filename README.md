@@ -1,3 +1,11 @@
+MYBATIS Migrations
+==================
+
+[![Build Status](https://travis-ci.org/mybatis/mybatis-migrations.svg?branch=master)](https://travis-ci.org/mybatis/mybatis-migrations)
+[![Maven central](https://maven-badges.herokuapp.com/maven-central/org.mybatis/mybatis-migrations/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.mybatis/mybatis-migrations)
+
+![mybatis-migrations](http://mybatis.github.io/images/mybatis-logo.png)
+
 Install MyBatis Migrations ${project.version} (${implementation.build})
 
   MyBatis Migrations is a Java tool, so you must have Java installed in order to proceed. Users need at least the
