@@ -1,4 +1,3 @@
-
 # /
 derby.log
 ibderby
@@ -8,3 +7,6 @@ ibderby
 /target
 .idea
 atlassian-ide-plugin.xml
+.classpath
+.project
+.settings
