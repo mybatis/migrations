@@ -15,14 +15,6 @@
  */
 package org.apache.ibatis.migration;
 
-import org.apache.ibatis.datasource.unpooled.UnpooledDataSource;
-import org.apache.ibatis.io.Resources;
-import org.apache.ibatis.jdbc.SqlRunner;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
-import javax.sql.DataSource;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -34,6 +26,13 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Map;
 import java.util.Properties;
+import javax.sql.DataSource;
+import org.apache.ibatis.datasource.unpooled.UnpooledDataSource;
+import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.jdbc.SqlRunner;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import static org.junit.Assert.*;
 
@@ -100,6 +99,8 @@ public class MigratorTest {
 
       testBootstrapCommand(f);
       testStatusContainsNoPendingEntriesUsingStatusShorthand(f);
+      testDoUpscriptCommand(f);
+
       testUpCommandWithSpecifiedSteps(f);
 
       assertAuthorEmailContainsPlaceholder();
@@ -246,6 +247,19 @@ public class MigratorTest {
     assertTrue(buffer.toString().contains("-- @UNDO"));
     buffer.clear();
   }
+
+  private void testDoUpscriptCommand(File f) throws Exception {
+    safeMigratorMain(args("--path=" + f.getAbsolutePath(), "upscript"));
+    assertFalse(buffer.toString().contains("FAILURE"));
+    assertTrue(buffer.toString().contains("20080827200210"));
+    assertTrue(buffer.toString().contains("20080827200211"));
+    assertTrue(buffer.toString().contains("20080827200212"));
+    assertTrue(buffer.toString().contains("20080827200213"));
+    assertTrue(buffer.toString().contains("20080827200214"));
+    assertTrue(buffer.toString().contains("20080827200215"));
+    assertFalse(buffer.toString().contains("-- @UNDO"));
+    buffer.clear();
+    }
 
   private void testScriptCommandWithTheSameVersion(File f) throws Exception {
     safeMigratorMain(args("--path=" + f.getAbsolutePath(), "script", "20080827200211", "20080827200211"));

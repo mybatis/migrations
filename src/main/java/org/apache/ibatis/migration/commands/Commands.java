@@ -28,7 +28,8 @@ public enum Commands {
   PENDING,
   SCRIPT,
   VERSION,
-  STATUS;
+  STATUS,
+  UPSCRIPT;
 
   public static Command resolveCommand(String commandString, SelectedOptions selectedOptions) {
     for (Commands command : values()) {
@@ -62,6 +63,8 @@ public enum Commands {
         return new VersionCommand(selectedOptions);
       case STATUS:
         return new StatusCommand(selectedOptions);
+      case UPSCRIPT:
+          return new MergedUpScriptCommand(selectedOptions);
       default:
         return new Command() {
           @Override
