@@ -47,7 +47,8 @@ public class FileMigrationLoader implements MigrationLoader {
   private Change parseChangeFromFilename(String filename) {
     try {
       Change change = new Change();
-      String[] parts = filename.split("\\.")[0].split("_");
+      int lastIndexOfDot = filename.lastIndexOf(".");
+      String[] parts = filename.substring(0, lastIndexOfDot).split("_");
       change.setId(new BigDecimal(parts[0]));
       StringBuilder builder = new StringBuilder();
       for (int i = 1; i < parts.length; i++) {

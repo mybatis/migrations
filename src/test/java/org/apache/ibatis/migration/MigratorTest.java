@@ -146,7 +146,7 @@ public class MigratorTest {
   }
 
   private void testVersionCommand(File f) throws Exception {
-    safeMigratorMain(args("--path=" + f.getAbsolutePath(), "version", "20080827200215"));
+    safeMigratorMain(args("--path=" + f.getAbsolutePath(), "version", "20080827200216"));
     assertFalse(buffer.toString().contains("FAILURE"));
     buffer.clear();
   }
