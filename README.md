@@ -15,7 +15,7 @@ Install MyBatis Migrations ${project.version} (${implementation.build})
   
   See the reference documentation here http://mybatis.github.io/migrations/
 
-* Windows
+## Windows
 
   [1] Unzip the distribution archive, i.e. mybatis-${project.version}-migrations.zip to the directory you wish
       to install MyBatis Migrations.
@@ -33,7 +33,7 @@ Install MyBatis Migrations ${project.version} (${implementation.build})
   [4] In the same dialog, update/create the Path environment variable in the user variables and prepend the value
       %MIGRATIONS% to add MyBatis Migrations available in the command line.
 
-* Unix-based Operating Systems (Linux, Solaris and Mac OS X)
+## Unix-based Operating Systems (Linux, Solaris and Mac OS X)
 
   [1] Extract the distribution archive, i.e. mybatis-${project.version}-migrations.zip to the directory you wish to
       install MyBatis Migrations. These instructions assume you chose
