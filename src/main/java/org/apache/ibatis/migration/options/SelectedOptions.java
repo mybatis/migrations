@@ -14,6 +14,10 @@ public class SelectedOptions {
     return paths;
   }
 
+  public void setPaths(SelectedPaths paths) {
+    this.paths = paths;
+  }
+
   public String getEnvironment() {
     return environment;
   }

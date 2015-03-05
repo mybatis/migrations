@@ -1,35 +1,21 @@
 package org.apache.ibatis.migration.commands;
 
-import static org.apache.ibatis.migration.utils.Util.*;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.LineNumberReader;
-import java.io.PrintStream;
-import java.io.PrintWriter;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Properties;
-import java.util.TimeZone;
-
 import org.apache.ibatis.datasource.unpooled.UnpooledDataSource;
 import org.apache.ibatis.io.ExternalResources;
 import org.apache.ibatis.io.Resources;
-import org.apache.ibatis.migration.ConnectionProvider;
-import org.apache.ibatis.migration.DataSourceConnectionProvider;
-import org.apache.ibatis.migration.FileMigrationLoader;
-import org.apache.ibatis.migration.MigrationException;
-import org.apache.ibatis.migration.MigrationLoader;
+import org.apache.ibatis.migration.*;
 import org.apache.ibatis.migration.options.DatabaseOperationOption;
 import org.apache.ibatis.migration.options.SelectedOptions;
 import org.apache.ibatis.migration.options.SelectedPaths;
 import org.apache.ibatis.parsing.PropertyParser;
+
+import java.io.*;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.text.SimpleDateFormat;
+import java.util.*;
+
+import static org.apache.ibatis.migration.utils.Util.file;
 
 public abstract class BaseCommand implements Command {
   private static final String DATE_FORMAT = "yyyyMMddHHmmss";
@@ -68,6 +54,10 @@ public abstract class BaseCommand implements Command {
   }
 
   protected String getNextIDAsString() {
+    return getNextTimestampIDAsString();
+  }
+
+  protected String getNextTimestampIDAsString() {
     try {
       // Ensure that two subsequent calls are less likely to return the same value.
       Thread.sleep(1000);
