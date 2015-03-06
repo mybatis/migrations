@@ -54,7 +54,37 @@ public abstract class BaseCommand implements Command {
   }
 
   protected String getNextIDAsString() {
+    if (getDatabaseOperationOption().useSequenceNumber()) {
+      return getNextSequenceNumberAsIdString();
+    }
+
     return getNextTimestampIDAsString();
+  }
+
+  protected String getNextSequenceNumberAsIdString() {
+    // if script directory is empty, use the initial sequence
+    if (paths.getScriptPath().list().length==0) {
+      return getDatabaseOperationOption().getInitialSequence().toString();
+    }
+
+    // else, initialise with the largest seq number from scripts dir and increment by 1
+    File[] sqlFiles = paths.getScriptPath().listFiles();
+
+    Arrays.sort(
+            sqlFiles,
+            new Comparator<File>() {
+              public int compare(File a, File b) {
+                return sequenceNumberOfFile(a.getName()).compareTo(sequenceNumberOfFile(b.getName()));
+              }
+            });
+
+    File lastFile = sqlFiles[sqlFiles.length - 1];
+    Integer nextSeqNumber = sequenceNumberOfFile(lastFile.getName()) + 1;
+    return nextSeqNumber.toString();
+  }
+
+  private Integer sequenceNumberOfFile(String fileName) {
+    return Integer.valueOf(fileName.substring(0, fileName.indexOf("_")));
   }
 
   protected String getNextTimestampIDAsString() {
@@ -221,6 +251,8 @@ public abstract class BaseCommand implements Command {
     option.setRemoveCRs(Boolean.valueOf(props.getProperty("remove_crs")));
     String delimiterString = props.getProperty("delimiter");
     option.setDelimiter(delimiterString == null ? ";" : delimiterString);
+    option.setUseSequenceNumber(Boolean.valueOf(props.getProperty("useSequenceNumber")));
+    option.setInitialSequence(Integer.valueOf(props.getProperty("initialSequence")));
     return option;
   }
 }
