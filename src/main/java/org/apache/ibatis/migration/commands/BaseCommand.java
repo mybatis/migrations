@@ -252,7 +252,9 @@ public abstract class BaseCommand implements Command {
     String delimiterString = props.getProperty("delimiter");
     option.setDelimiter(delimiterString == null ? ";" : delimiterString);
     option.setUseSequenceNumber(Boolean.valueOf(props.getProperty("useSequenceNumber")));
-    option.setInitialSequence(Integer.valueOf(props.getProperty("initialSequence")));
+    if (option.useSequenceNumber()) {
+      option.setInitialSequence(Integer.valueOf(props.getProperty("initialSequence")));
+    }
     return option;
   }
 }
