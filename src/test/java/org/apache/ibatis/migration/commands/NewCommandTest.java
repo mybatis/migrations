@@ -82,7 +82,9 @@ public class NewCommandTest {
 
         // cleaning up after the test
         for (File file : selectedPaths.getScriptPath().listFiles()) {
-            file.delete();
+            if (!file.getName().equals(".gitignore")) {
+              file.delete();
+            }
         }
     }
 
