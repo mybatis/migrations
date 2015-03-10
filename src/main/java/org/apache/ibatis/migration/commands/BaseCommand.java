@@ -84,7 +84,12 @@ public abstract class BaseCommand implements Command {
   }
 
   private Integer sequenceNumberOfFile(String fileName) {
-    return Integer.valueOf(fileName.substring(0, fileName.indexOf("_")));
+    try {
+      return Integer.valueOf(fileName.substring(0, fileName.indexOf("_")));
+    } catch (StringIndexOutOfBoundsException e) {
+      // File does not have any numbers. Will ignore this and make this the same as the initial number
+      return getDatabaseOperationOption().getInitialSequence() - 1;
+    }
   }
 
   protected String getNextTimestampIDAsString() {

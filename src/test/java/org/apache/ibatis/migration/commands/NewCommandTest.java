@@ -8,8 +8,10 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class NewCommandTest {
   private SelectedOptions newSelectedOption;
@@ -82,5 +84,19 @@ public class NewCommandTest {
         for (File file : selectedPaths.getScriptPath().listFiles()) {
             file.delete();
         }
+    }
+
+    @Test
+    public void testScriptsDirWithOnlyBootstrapFileWhichHasNoSequenceNumber() throws IOException {
+      File bootStrapFile = new File(selectedPaths.getScriptPath() + "/bootstrap.sql");
+      bootStrapFile.createNewFile();
+      assertTrue(bootStrapFile.exists());
+
+      newSelectedOption.setEnvironment("development_useSeqNum");
+      NewCommand newCommand = new NewCommand(newSelectedOption);
+
+      assertEquals("1", newCommand.getNextIDAsString());
+
+      bootStrapFile.delete();
     }
 }
