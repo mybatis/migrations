@@ -10,3 +10,6 @@ atlassian-ide-plugin.xml
 .classpath
 .project
 .settings
+
+# Allow this directory to be empty
+!src/test/java/org/apache/ibatis/migration/commands/scripts
