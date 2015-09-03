@@ -73,6 +73,7 @@ public final class StatusOperation extends DatabaseOperation<StatusOperation> {
     for (Change change : changelog) {
       if (migrations.indexOf(change) < 0) {
         missingScript++;
+        applied++;
         merged.add(change);
       }
     }
