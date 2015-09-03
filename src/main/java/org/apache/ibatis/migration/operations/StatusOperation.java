@@ -45,8 +45,7 @@ public final class StatusOperation extends DatabaseOperation<StatusOperation> {
     if (changelogExists(connectionProvider, option)) {
       changes = mergeWithChangelog(migrations, getChangelog(connectionProvider, option));
     } else {
-      changes = new ArrayList<Change>();
-      changes.addAll(migrations);
+      changes = new ArrayList<Change>(migrations);
       pending = migrations.size();
     }
     Collections.sort(changes);
