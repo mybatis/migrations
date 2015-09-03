@@ -83,6 +83,10 @@ public final class StatusOperation extends DatabaseOperation<StatusOperation> {
     return applied;
   }
 
+  public int getMissingScriptCount() {
+	  return missingScript;
+  }
+
   public int getPendingCount() {
     return pending;
   }
