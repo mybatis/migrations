@@ -28,6 +28,8 @@ import org.apache.ibatis.migration.options.DatabaseOperationOption;
 public final class StatusOperation extends DatabaseOperation<StatusOperation> {
   private int applied;
 
+  private int missingScript;
+
   private int pending;
 
   private List<Change> changes;
@@ -39,21 +41,11 @@ public final class StatusOperation extends DatabaseOperation<StatusOperation> {
     }
     println(printStream, "ID             Applied At          Description");
     println(printStream, horizontalLine("", 80));
-    changes = new ArrayList<Change>();
     List<Change> migrations = migrationsLoader.getMigrations();
     if (changelogExists(connectionProvider, option)) {
-      List<Change> changelog = getChangelog(connectionProvider, option);
-      for (Change change : migrations) {
-        int index = changelog.indexOf(change);
-        if (index > -1) {
-          changes.add(changelog.get(index));
-          applied++;
-        } else {
-          changes.add(change);
-          pending++;
-        }
-      }
+      changes = mergeWithChangelog(migrations, getChangelog(connectionProvider, option));
     } else {
+      changes = new ArrayList<Change>();
       changes.addAll(migrations);
       pending = migrations.size();
     }
@@ -63,6 +55,29 @@ public final class StatusOperation extends DatabaseOperation<StatusOperation> {
     }
     println(printStream);
     return this;
+  }
+  
+  private List<Change> mergeWithChangelog(List<Change> migrations, List<Change> changelog) {
+    List<Change> merged = new ArrayList<Change>();
+    for (Change migration : migrations) {
+      int index = changelog.indexOf(migration);
+      if (index > -1) {
+        Change change = changelog.get(index);
+        change.setFilename(migration.getFilename());
+        merged.add(change);
+        applied++;
+      } else {
+        merged.add(migration);
+        pending++;
+      }
+    }
+    for (Change change : changelog) {
+      if (migrations.indexOf(change) < 0) {
+        missingScript++;
+        merged.add(change);
+      }
+    }
+    return merged;
   }
 
   public int getAppliedCount() {
