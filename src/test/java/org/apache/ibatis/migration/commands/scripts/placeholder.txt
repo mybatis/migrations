@@ -1,0 +1,2 @@
+File to keep this directory from being killed by git,
+so that it can still be used by the command tests for temporary storage
