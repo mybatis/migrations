@@ -70,6 +70,7 @@ public class RuntimeMigrationTest {
   public void testInitialStatus() throws Exception {
     StatusOperation status = new StatusOperation().operate(connectionProvider, migrationsLoader, dbOption, new PrintStream(out));
     assertEquals(0, status.getAppliedCount());
+    assertEquals(0, status.getMissingScriptCount());
     assertEquals(3, status.getPendingCount());
     assertEquals(3, status.getCurrentStatus().size());
   }
@@ -97,6 +98,7 @@ public class RuntimeMigrationTest {
 
     StatusOperation status = new StatusOperation().operate(connectionProvider, migrationsLoader, dbOption, new PrintStream(out));
     assertEquals(3, status.getAppliedCount());
+    assertEquals(0, status.getMissingScriptCount());
     assertEquals(0, status.getPendingCount());
     assertEquals(3, status.getCurrentStatus().size());
   }
@@ -127,6 +129,26 @@ public class RuntimeMigrationTest {
     assertEquals("1", runQuery(connectionProvider, "select count(*) from changelog"));
     assertTableDoesNotExist(connectionProvider, "first_table");
     assertTableDoesNotExist(connectionProvider, "second_table");
+  }
+  
+  @Test
+  public void testMissingScript() throws Exception {
+	    new UpOperation().operate(connectionProvider, migrationsLoader, dbOption, new PrintStream(out));
+
+	    StatusOperation status = new StatusOperation().operate(connectionProvider, migrationsLoader, dbOption, new PrintStream(out));
+	    assertEquals(3, status.getAppliedCount());
+	    assertEquals(0, status.getMissingScriptCount());
+	    assertEquals(0, status.getPendingCount());
+	    assertEquals(3, status.getCurrentStatus().size());
+
+	    runSql(connectionProvider, "insert into changelog (ID, APPLIED_AT, DESCRIPTION) " +
+	    						   "values (20150903185011, '2015-09-03 18:56:11', 'Test entry')");
+
+	    status = new StatusOperation().operate(connectionProvider, migrationsLoader, dbOption, new PrintStream(out));
+	    assertEquals(4, status.getAppliedCount());
+	    assertEquals(1, status.getMissingScriptCount());
+	    assertEquals(0, status.getPendingCount());
+	    assertEquals(4, status.getCurrentStatus().size());
   }
 
   @Test
