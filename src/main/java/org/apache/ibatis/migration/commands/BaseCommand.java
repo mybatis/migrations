@@ -15,36 +15,22 @@
  */
 package org.apache.ibatis.migration.commands;
 
-import static org.apache.ibatis.migration.utils.Util.*;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.LineNumberReader;
-import java.io.PrintStream;
-import java.io.PrintWriter;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Properties;
-import java.util.TimeZone;
-
 import org.apache.ibatis.datasource.unpooled.UnpooledDataSource;
 import org.apache.ibatis.io.ExternalResources;
 import org.apache.ibatis.io.Resources;
-import org.apache.ibatis.migration.ConnectionProvider;
-import org.apache.ibatis.migration.DataSourceConnectionProvider;
-import org.apache.ibatis.migration.FileMigrationLoader;
-import org.apache.ibatis.migration.MigrationException;
-import org.apache.ibatis.migration.MigrationLoader;
+import org.apache.ibatis.migration.*;
 import org.apache.ibatis.migration.options.DatabaseOperationOption;
 import org.apache.ibatis.migration.options.SelectedOptions;
 import org.apache.ibatis.migration.options.SelectedPaths;
 import org.apache.ibatis.parsing.PropertyParser;
+
+import java.io.*;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.text.SimpleDateFormat;
+import java.util.*;
+
+import static org.apache.ibatis.migration.utils.Util.file;
 
 public abstract class BaseCommand implements Command {
   private static final String DATE_FORMAT = "yyyyMMddHHmmss";
@@ -83,6 +69,45 @@ public abstract class BaseCommand implements Command {
   }
 
   protected String getNextIDAsString() {
+    if (getDatabaseOperationOption().useSequenceNumber()) {
+      return getNextSequenceNumberAsIdString();
+    }
+
+    return getNextTimestampIDAsString();
+  }
+
+  protected String getNextSequenceNumberAsIdString() {
+    // if script directory is empty, use the initial sequence
+    if (paths.getScriptPath().list().length==0) {
+      return getDatabaseOperationOption().getInitialSequence().toString();
+    }
+
+    // else, initialise with the largest seq number from scripts dir and increment by 1
+    File[] sqlFiles = paths.getScriptPath().listFiles();
+
+    Arrays.sort(
+            sqlFiles,
+            new Comparator<File>() {
+              public int compare(File a, File b) {
+                return sequenceNumberOfFile(a.getName()).compareTo(sequenceNumberOfFile(b.getName()));
+              }
+            });
+
+    File lastFile = sqlFiles[sqlFiles.length - 1];
+    Integer nextSeqNumber = sequenceNumberOfFile(lastFile.getName()) + 1;
+    return nextSeqNumber.toString();
+  }
+
+  private Integer sequenceNumberOfFile(String fileName) {
+    try {
+      return Integer.valueOf(fileName.substring(0, fileName.indexOf("_")));
+    } catch (StringIndexOutOfBoundsException e) {
+      // File does not have any numbers. Will ignore this and make this the same as the initial number
+      return getDatabaseOperationOption().getInitialSequence() - 1;
+    }
+  }
+
+  protected String getNextTimestampIDAsString() {
     try {
       // Ensure that two subsequent calls are less likely to return the same value.
       Thread.sleep(1000);
@@ -246,6 +271,10 @@ public abstract class BaseCommand implements Command {
     option.setRemoveCRs(Boolean.valueOf(props.getProperty("remove_crs")));
     String delimiterString = props.getProperty("delimiter");
     option.setDelimiter(delimiterString == null ? ";" : delimiterString);
+    option.setUseSequenceNumber(Boolean.valueOf(props.getProperty("useSequenceNumber")));
+    if (option.useSequenceNumber()) {
+      option.setInitialSequence(Integer.valueOf(props.getProperty("initialSequence")));
+    }
     return option;
   }
 }

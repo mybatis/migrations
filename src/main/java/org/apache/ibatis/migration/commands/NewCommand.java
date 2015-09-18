@@ -27,7 +27,7 @@ public final class NewCommand extends BaseCommand {
 
   private static final String MIGRATIONS_HOME = "MIGRATIONS_HOME";
   private static final String MIGRATIONS_HOME_PROPERTY = "migrationHome";
-  private static final String CUSTOM_NEW_COMMAND_TEMPATE_PROPERTY = "new_command.template";
+  private static final String CUSTOM_NEW_COMMAND_TEMPLATE_PROPERTY = "new_command.template";
   private static final String MIGRATIONS_PROPERTIES = "migration.properties";
 
   public NewCommand(SelectedOptions options) {
@@ -58,7 +58,7 @@ public final class NewCommand extends BaseCommand {
         //get template name from properties file
         final String customConfiguredTemplate =
             ExternalResources.getConfiguredTemplate(migrationsHome + "/" + MIGRATIONS_PROPERTIES,
-                CUSTOM_NEW_COMMAND_TEMPATE_PROPERTY);
+                                                       CUSTOM_NEW_COMMAND_TEMPLATE_PROPERTY);
         copyExternalResourceTo(migrationsHome + "/" + customConfiguredTemplate,
             Util.file(paths.getScriptPath(), filename));
       } catch (FileNotFoundException e) {
