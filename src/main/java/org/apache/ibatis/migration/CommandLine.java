@@ -122,7 +122,7 @@ public class CommandLine {
     console.printf("  info               Display build version informations.%n");
     console.printf("  init               Creates (if necessary) and initializes a migration path.%n");
     console.printf("  bootstrap          Runs the bootstrap SQL script (see scripts/bootstrap.sql for more).%n");
-    console.printf("  new <description>  Creates a new migration with the provided description.%n");
+    console.printf("  new <desc> [n]     Creates a new migration with the provided description and 'n' version].%n");
     console.printf("  up [n]             Run unapplied migrations, ALL by default, or 'n' specified.%n");
     console.printf(
         "  down [n]           Undoes migrations applied to the database. ONE by default or 'n' specified.%n");

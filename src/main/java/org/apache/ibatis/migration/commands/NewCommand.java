@@ -39,10 +39,14 @@ public final class NewCommand extends BaseCommand {
       throw new MigrationException("No description specified for new migration.");
     }
     String description = params[0];
+    String changeIdOverride = null;
+    if (params.length > 1) {
+      changeIdOverride = params[1];
+    }
+
     Properties variables = new Properties();
     variables.setProperty("description", description);
-    existingEnvironmentFile();
-    String filename = getNextIDAsString() + "_" + description.replace(' ', '_') + ".sql";
+    String filename = (changeIdOverride == null ? getNextIDAsString() : changeIdOverride) + "_" + description.replace(' ', '_') + ".sql";
     String migrationsHome = "";
     migrationsHome = System.getenv(MIGRATIONS_HOME);
 

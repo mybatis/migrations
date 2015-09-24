@@ -58,6 +58,11 @@ public final class UpOperation extends DatabaseOperation<UpOperation> {
       Collections.sort(migrations);
       int stepCount = 0;
       for (Change change : migrations) {
+        if (lastChange != null && change.getId().compareTo(lastChange.getId()) == 0 && !change.equals(lastChange)) {
+          String errorMessage = String.format("Version conflict between changes [%s] and [%s], aborting and skipping: %s", lastChange.getId(), change.getId(), change.getFilename());
+            println(printStream, horizontalLine(errorMessage, 80));
+            throw new MigrationException(errorMessage);
+        }
         if (lastChange == null || change.getId().compareTo(lastChange.getId()) > 0) {
           println(printStream, horizontalLine("Applying: " + change.getFilename(), 80));
           ScriptRunner runner = getScriptRunner(connectionProvider, option, printStream);
@@ -67,6 +72,7 @@ public final class UpOperation extends DatabaseOperation<UpOperation> {
             runner.closeConnection();
           }
           insertChangelog(change, connectionProvider, option);
+          lastChange = change;
           println(printStream);
           stepCount++;
           if (steps != null && stepCount >= steps) {

@@ -85,14 +85,16 @@ public class Change implements Comparable<Change> {
 
     Change change = (Change) o;
 
-    return (id.equals(change.getId()));
+    return (id.equals(change.getId())) && (description == null ? change.getDescription() == null : description.equals(change.getDescription()));
   }
 
   public int hashCode() {
-    return id.hashCode();
+    return id.hashCode() ^ (description == null ? 0 : description.hashCode());
   }
 
   public int compareTo(Change change) {
-    return id.compareTo(change.getId());
+    return id.compareTo(change.getId()) != 0 ? id.compareTo(change.getId())
+        : (description == null ? (change.getDescription() == null ? 0 : 1)
+            : description.compareTo(change.getDescription()));
   }
 }
