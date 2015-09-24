@@ -16,6 +16,8 @@
 package org.apache.ibatis.migration.commands;
 
 import org.apache.ibatis.io.ExternalResources;
+import org.apache.ibatis.migration.Change;
+import org.apache.ibatis.migration.ChangeValidator;
 import org.apache.ibatis.migration.MigrationException;
 import org.apache.ibatis.migration.options.SelectedOptions;
 import org.apache.ibatis.migration.utils.Util;
@@ -50,6 +52,9 @@ public final class NewCommand extends BaseCommand {
     String migrationsHome = "";
     migrationsHome = System.getenv(MIGRATIONS_HOME);
 
+    Change change = ChangeValidator.parseChangeFromFilename(filename, environmentProperties());
+    ChangeValidator.validateChangeForConfiguration (change, environmentProperties());
+
     // Check if there is a system property
     if (migrationsHome == null) {
       migrationsHome = System.getProperty(MIGRATIONS_HOME_PROPERTY);
@@ -77,6 +82,7 @@ public final class NewCommand extends BaseCommand {
     printStream.println("Done!");
     printStream.println();
   }
+
 
   private void copyDefaultTemplate(Properties variables, String filename) {
     copyResourceTo("org/apache/ibatis/migration/template_migration.sql",
