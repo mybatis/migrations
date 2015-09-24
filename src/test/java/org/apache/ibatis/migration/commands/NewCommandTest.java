@@ -9,6 +9,7 @@ import org.junit.Test;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.net.URL;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -19,8 +20,10 @@ public class NewCommandTest {
 
   @Before
   public void setup() {
+    URL url = getClass().getClassLoader().getResource("org/apache/ibatis/migration/commands");
+
     selectedPaths = new SelectedPaths();
-    selectedPaths.setBasePath(new File("src/test/java/org/apache/ibatis/migration/commands"));
+    selectedPaths.setBasePath(new File(url.getFile()));
 
     newSelectedOption = new SelectedOptions();
     newSelectedOption.setCommand("New");
