@@ -35,6 +35,8 @@ import static org.apache.ibatis.migration.utils.Util.file;
 public abstract class BaseCommand implements Command {
   private static final String DATE_FORMAT = "yyyyMMddHHmmss";
 
+  private Properties envProperties;
+
   private ClassLoader driverClassLoader;
 
   protected PrintStream printStream = System.out;
@@ -174,24 +176,27 @@ public abstract class BaseCommand implements Command {
   }
 
   protected Properties environmentProperties() {
-    FileInputStream fileInputStream = null;
-    try {
-      File file = existingEnvironmentFile();
-      Properties props = new Properties();
-      fileInputStream = new FileInputStream(file);
-      props.load(fileInputStream);
-      return props;
-    } catch (IOException e) {
-      throw new MigrationException("Error loading environment properties.  Cause: " + e, e);
-    } finally {
-      if (fileInputStream != null) {
-        try {
-          fileInputStream.close();
-        } catch (IOException e) {
-          // Nothing to do here
+    if (envProperties == null) {
+      FileInputStream fileInputStream = null;
+      try {
+        File file = existingEnvironmentFile();
+        Properties props = new Properties();
+        fileInputStream = new FileInputStream(file);
+        props.load(fileInputStream);
+        envProperties = props;
+      } catch (IOException e) {
+        throw new MigrationException("Error loading environment properties.  Cause: " + e, e);
+      } finally {
+        if (fileInputStream != null) {
+          try {
+            fileInputStream.close();
+          } catch (IOException e) {
+            // Nothing to do here
+          }
         }
       }
     }
+    return envProperties;
   }
 
   protected int getStepCountParameter(int defaultSteps, String... params) {
