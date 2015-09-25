@@ -24,6 +24,8 @@ import org.apache.ibatis.migration.utils.Util;
 
 import java.io.FileNotFoundException;
 import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public final class NewCommand extends BaseCommand {
 
@@ -42,9 +44,13 @@ public final class NewCommand extends BaseCommand {
     }
     String description = params[0];
     String changeIdOverride = null;
-    if (params.length > 1) {
-      changeIdOverride = params[1];
-    }
+
+	Pattern p = Pattern.compile("(.+) (\\d+$)");
+	Matcher m = p.matcher(description);
+	if (m.find()) {
+		changeIdOverride = m.group(2);
+		description = m.group(1);
+	}
 
     Properties variables = new Properties();
     variables.setProperty("description", description);

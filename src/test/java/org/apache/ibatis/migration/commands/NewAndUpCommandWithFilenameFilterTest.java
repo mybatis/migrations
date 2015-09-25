@@ -76,12 +76,12 @@ public class NewAndUpCommandWithFilenameFilterTest {
     newSelectedOption.setEnvironment("development_useFilenameFilter");
 
     NewCommand newCommand = new NewCommand(newSelectedOption);
-    newCommand.execute("should start with one APP-8987", "1");
+    newCommand.execute("should start with one APP-8987 1");
     try {
-    	newCommand.execute("should start with two", "1");
-    	fail();
+      newCommand.execute("should start with two 1");
+      fail();
     } catch (MigrationException me) {
-    	assertTrue(me.getMessage().contains("filename filter"));
+      assertTrue(me.getMessage().contains("filename filter"));
     }
 
 	File[] files = selectedPaths.getScriptPath().listFiles(new FilenameFilter() {

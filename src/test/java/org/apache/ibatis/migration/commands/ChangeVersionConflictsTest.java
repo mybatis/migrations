@@ -77,7 +77,7 @@ public class ChangeVersionConflictsTest {
 
     NewCommand newCommand = new NewCommand(newSelectedOption);
     newCommand.execute("should start with one");
-    newCommand.execute("should start with two", "1");
+    newCommand.execute("should start with two 1");
 
   File[] files = selectedPaths.getScriptPath().listFiles(new FilenameFilter() {
       @Override
@@ -104,9 +104,9 @@ public class ChangeVersionConflictsTest {
 
     //Add Duplcate
     NewCommand newCommand = new NewCommand(newSelectedOption);
-    newCommand.execute("should start with one first", "1");
-    newCommand.execute("should start with two first", "2");
-    newCommand.execute("should start with two duplicate", "2");
+    newCommand.execute("should start with one first 1");
+    newCommand.execute("should start with two first 2");
+    newCommand.execute("should start with two duplicate 2");
 
     try {
       buffer.clear();
