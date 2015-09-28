@@ -71,10 +71,14 @@ public class Change implements Comparable<Change> {
 
   @Override
   public String toString() {
-    return id + " " + (appliedTimestamp == null ? "   ...pending...   " : appliedTimestamp) + " " + description;
+    return id + " " + (isPending() ? "   ...pending...   " : appliedTimestamp) + " " + description;
   }
 
-  @Override
+  public boolean isPending()
+  {
+    return appliedTimestamp == null;
+  }
+
   public boolean equals(Object o) {
     if (this == o) {
       return true;
