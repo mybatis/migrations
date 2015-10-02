@@ -34,6 +34,7 @@ import static org.apache.ibatis.migration.utils.Util.file;
 
 public abstract class BaseCommand implements Command {
   private static final String DATE_FORMAT = "yyyyMMddHHmmss";
+  private static final String FILENAME_SEQUENCE_NUMBER_PADDING = "sequence_number_padding";
 
   private Properties envProperties;
 
@@ -97,7 +98,9 @@ public abstract class BaseCommand implements Command {
 
     File lastFile = sqlFiles[sqlFiles.length - 1];
     Integer nextSeqNumber = sequenceNumberOfFile(lastFile.getName()) + 1;
-    return nextSeqNumber.toString();
+    Integer zerosToPadd = Integer.valueOf(environmentProperties().getProperty(FILENAME_SEQUENCE_NUMBER_PADDING, "1"));
+
+    return String.format("%0" + zerosToPadd + "d", nextSeqNumber);
   }
 
   private Integer sequenceNumberOfFile(String fileName) {
@@ -277,9 +280,9 @@ public abstract class BaseCommand implements Command {
     option.setRemoveCRs(Boolean.valueOf(props.getProperty("remove_crs")));
     String delimiterString = props.getProperty("delimiter");
     option.setDelimiter(delimiterString == null ? ";" : delimiterString);
-    option.setUseSequenceNumber(Boolean.valueOf(props.getProperty("useSequenceNumber")));
+    option.setUseSequenceNumber(Boolean.valueOf(props.getProperty("use_sequence_number")));
     if (option.useSequenceNumber()) {
-      option.setInitialSequence(Integer.valueOf(props.getProperty("initialSequence")));
+      option.setInitialSequence(Integer.valueOf(props.getProperty("initial_sequence_number")));
     }
     return option;
   }
