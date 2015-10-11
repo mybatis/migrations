@@ -34,6 +34,7 @@ public final class NewCommand extends BaseCommand {
     super(options);
   }
 
+  @Override
   public void execute(String... params) {
     if (paramsEmpty(params)) {
       throw new MigrationException("No description specified for new migration.");

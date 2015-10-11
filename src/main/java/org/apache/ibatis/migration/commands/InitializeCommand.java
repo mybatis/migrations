@@ -27,6 +27,7 @@ public final class InitializeCommand extends BaseCommand {
     super(selectedOptions);
   }
 
+  @Override
   @SuppressWarnings("serial")
   public void execute(String... params) {
     final File basePath = paths.getBasePath();

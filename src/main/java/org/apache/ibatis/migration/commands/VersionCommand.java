@@ -26,6 +26,7 @@ public final class VersionCommand extends BaseCommand {
     super(options);
   }
 
+  @Override
   public void execute(String... params) {
     ensureParamsPassed(params);
     ensureNumericParam(params);

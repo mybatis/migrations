@@ -71,10 +71,12 @@ public class MigrationReader extends Reader {
     }
   }
 
+  @Override
   public int read(char[] cbuf, int off, int len) throws IOException {
     return target.read(cbuf, off, len);
   }
 
+  @Override
   public void close() throws IOException {
     target.close();
   }

@@ -64,6 +64,7 @@ public enum Commands {
         return new StatusCommand(selectedOptions);
       default:
         return new Command() {
+          @Override
           public void execute(String... params) {
             System.out.println("unknown command");
           }

@@ -23,6 +23,7 @@ public final class BootstrapCommand extends BaseCommand {
     super(options);
   }
 
+  @Override
   public void execute(String... params) {
     BootstrapOperation operation = new BootstrapOperation(options.isForce());
     operation.operate(getConnectionProvider(), getMigrationLoader(), getDatabaseOperationOption(), printStream);
