@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>BaseCommand.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MyBatis Migrations</a> &gt; <a href="index.source.html" class="el_package">org.apache.ibatis.migration.commands</a> &gt; <span class="el_source">BaseCommand.java</span></div><h1>BaseCommand.java</h1><pre class="source lang-java linenums">/**
+ *    Copyright 2010-2015 the original author or authors.
+ *
+ *    Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+package org.apache.ibatis.migration.commands;
+
+import static org.apache.ibatis.migration.utils.Util.*;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.LineNumberReader;
+import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Properties;
+import java.util.TimeZone;
+
+import org.apache.ibatis.datasource.unpooled.UnpooledDataSource;
+import org.apache.ibatis.io.ExternalResources;
+import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.migration.ConnectionProvider;
+import org.apache.ibatis.migration.DataSourceConnectionProvider;
+import org.apache.ibatis.migration.FileMigrationLoader;
+import org.apache.ibatis.migration.MigrationException;
+import org.apache.ibatis.migration.MigrationLoader;
+import org.apache.ibatis.migration.options.DatabaseOperationOption;
+import org.apache.ibatis.migration.options.SelectedOptions;
+import org.apache.ibatis.migration.options.SelectedPaths;
+import org.apache.ibatis.parsing.PropertyParser;
+
+public abstract class BaseCommand implements Command {
+  private static final String DATE_FORMAT = &quot;yyyyMMddHHmmss&quot;;
+
+  private ClassLoader driverClassLoader;
+
+<span class="fc" id="L54">  protected PrintStream printStream = System.out;</span>
+
+  protected final SelectedOptions options;
+
+  protected final SelectedPaths paths;
+
+<span class="fc" id="L60">  protected BaseCommand(SelectedOptions selectedOptions) {</span>
+<span class="fc" id="L61">    this.options = selectedOptions;</span>
+<span class="fc" id="L62">    this.paths = selectedOptions.getPaths();</span>
+<span class="fc" id="L63">  }</span>
+
+  public void setDriverClassLoader(ClassLoader aDriverClassLoader) {
+<span class="nc" id="L66">    driverClassLoader = aDriverClassLoader;</span>
+<span class="nc" id="L67">  }</span>
+
+  public void setPrintStream(PrintStream aPrintStream) {
+<span class="nc" id="L70">    printStream = aPrintStream;</span>
+<span class="nc" id="L71">  }</span>
+
+  protected boolean paramsEmpty(String... params) {
+<span class="pc bpc" id="L74" title="4 of 8 branches missed.">    return params == null || params.length &lt; 1 || params[0] == null || params[0].length() &lt; 1;</span>
+  }
+
+  protected String changelogTable() {
+<span class="fc" id="L78">    String changelog = environmentProperties().getProperty(&quot;changelog&quot;);</span>
+<span class="pc bpc" id="L79" title="1 of 2 branches missed.">    if (changelog == null) {</span>
+<span class="nc" id="L80">      changelog = &quot;CHANGELOG&quot;;</span>
+    }
+<span class="fc" id="L82">    return changelog;</span>
+  }
+
+  protected String getNextIDAsString() {
+    try {
+      // Ensure that two subsequent calls are less likely to return the same value.
+<span class="fc" id="L88">      Thread.sleep(1000);</span>
+<span class="nc" id="L89">    } catch (InterruptedException e) {</span>
+      // ignore
+<span class="fc" id="L91">    }</span>
+<span class="fc" id="L92">    String timezone = environmentProperties().getProperty(&quot;time_zone&quot;);</span>
+<span class="pc bpc" id="L93" title="1 of 2 branches missed.">    if (timezone == null) {</span>
+<span class="nc" id="L94">      timezone = &quot;GMT+0:00&quot;;</span>
+    }
+<span class="fc" id="L96">    final SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);</span>
+<span class="fc" id="L97">    final Date now = new Date();</span>
+<span class="fc" id="L98">    dateFormat.setTimeZone(TimeZone.getTimeZone(timezone));</span>
+<span class="fc" id="L99">    return dateFormat.format(now);</span>
+  }
+
+  protected void copyResourceTo(String resource, File toFile) {
+<span class="fc" id="L103">    copyResourceTo(resource, toFile, null);</span>
+<span class="fc" id="L104">  }</span>
+
+  protected void copyResourceTo(String resource, File toFile, Properties variables) {
+<span class="fc" id="L107">    printStream.println(&quot;Creating: &quot; + toFile.getName());</span>
+    try {
+<span class="fc" id="L109">      LineNumberReader reader = new LineNumberReader(Resources.getResourceAsReader(this.getClass().getClassLoader(), resource));</span>
+      try {
+<span class="fc" id="L111">        PrintWriter writer = new PrintWriter(new FileWriter(toFile));</span>
+        try {
+          String line;
+<span class="fc bfc" id="L114" title="All 2 branches covered.">          while ((line = reader.readLine()) != null) {</span>
+<span class="fc" id="L115">            line = PropertyParser.parse(line, variables);</span>
+<span class="fc" id="L116">            writer.println(line);</span>
+          }
+        } finally {
+<span class="pc" id="L119">          writer.close();</span>
+<span class="fc" id="L120">        }</span>
+      } finally {
+<span class="pc" id="L122">        reader.close();</span>
+<span class="fc" id="L123">      }</span>
+<span class="nc" id="L124">    } catch (IOException e) {</span>
+<span class="nc" id="L125">      throw new MigrationException(&quot;Error copying &quot; + resource + &quot; to &quot; + toFile.getAbsolutePath() + &quot;.  Cause: &quot; + e, e);</span>
+<span class="fc" id="L126">    }</span>
+<span class="fc" id="L127">  }</span>
+
+  protected void copyExternalResourceTo(String resource, File toFile) {
+<span class="fc" id="L130">    printStream.println(&quot;Creating: &quot; + toFile.getName());</span>
+    try {
+<span class="fc" id="L132">      File sourceFile = new File(resource);</span>
+<span class="fc" id="L133">      ExternalResources.copyExternalResource(sourceFile, toFile);</span>
+<span class="nc" id="L134">    } catch (Exception e) {</span>
+<span class="nc" id="L135">      throw new MigrationException(&quot;Error copying &quot; + resource + &quot; to &quot; + toFile.getAbsolutePath() + &quot;.  Cause: &quot; + e, e);</span>
+<span class="fc" id="L136">    }</span>
+<span class="fc" id="L137">  }</span>
+
+  protected File environmentFile() {
+<span class="fc" id="L140">    return file(paths.getEnvPath(), options.getEnvironment() + &quot;.properties&quot;);</span>
+  }
+
+  protected File existingEnvironmentFile() {
+<span class="fc" id="L144">    File envFile = environmentFile();</span>
+<span class="pc bpc" id="L145" title="1 of 2 branches missed.">    if (!envFile.exists()) {</span>
+<span class="nc" id="L146">      throw new MigrationException(&quot;Environment file missing: &quot; + envFile.getAbsolutePath());</span>
+    }
+<span class="fc" id="L148">    return envFile;</span>
+  }
+
+  protected Properties environmentProperties() {
+<span class="fc" id="L152">    FileInputStream fileInputStream = null;</span>
+    try {
+<span class="fc" id="L154">      File file = existingEnvironmentFile();</span>
+<span class="fc" id="L155">      Properties props = new Properties();</span>
+<span class="fc" id="L156">      fileInputStream = new FileInputStream(file);</span>
+<span class="fc" id="L157">      props.load(fileInputStream);</span>
+<span class="fc" id="L158">      return props;</span>
+<span class="nc" id="L159">    } catch (IOException e) {</span>
+<span class="nc" id="L160">      throw new MigrationException(&quot;Error loading environment properties.  Cause: &quot; + e, e);</span>
+    } finally {
+<span class="pc bpc" id="L162" title="3 of 4 branches missed.">      if (fileInputStream != null) {</span>
+        try {
+<span class="pc" id="L164">          fileInputStream.close();</span>
+<span class="nc" id="L165">        } catch (IOException e) {</span>
+          // Nothing to do here
+<span class="pc" id="L167">        }</span>
+      }
+    }
+  }
+
+  protected int getStepCountParameter(int defaultSteps, String... params) {
+<span class="pc bpc" id="L173" title="1 of 2 branches missed.">    final String stringParam = params.length &gt; 0 ? params[0] : null;</span>
+<span class="pc bpc" id="L174" title="1 of 4 branches missed.">    if (stringParam == null || &quot;&quot;.equals(stringParam)) {</span>
+<span class="fc" id="L175">      return defaultSteps;</span>
+    } else {
+      try {
+<span class="fc" id="L178">        return Integer.parseInt(stringParam);</span>
+<span class="nc" id="L179">      } catch (NumberFormatException e) {</span>
+<span class="nc" id="L180">        throw new MigrationException(&quot;Invalid parameter passed to command: &quot; + params[0]);</span>
+      }
+    }
+  }
+
+  protected ConnectionProvider getConnectionProvider() {
+    try {
+<span class="fc" id="L187">      Properties props = environmentProperties();</span>
+<span class="fc" id="L188">      String driver = props.getProperty(&quot;driver&quot;);</span>
+<span class="fc" id="L189">      String url = props.getProperty(&quot;url&quot;);</span>
+<span class="fc" id="L190">      String username = props.getProperty(&quot;username&quot;);</span>
+<span class="fc" id="L191">      String password = props.getProperty(&quot;password&quot;);</span>
+
+<span class="fc" id="L193">      UnpooledDataSource dataSource = new UnpooledDataSource(getDriverClassLoader(), driver, url, username, password);</span>
+<span class="fc" id="L194">      return new DataSourceConnectionProvider(dataSource);</span>
+<span class="nc" id="L195">    } catch (Exception e) {</span>
+<span class="nc" id="L196">      throw new MigrationException(&quot;Error creating ScriptRunner.  Cause: &quot; + e, e);</span>
+    }
+  }
+
+  private ClassLoader getDriverClassLoader() {
+<span class="fc" id="L201">    File localDriverPath = getCustomDriverPath();</span>
+<span class="pc bpc" id="L202" title="1 of 2 branches missed.">    if (driverClassLoader != null) {</span>
+<span class="nc" id="L203">      return driverClassLoader;</span>
+<span class="pc bpc" id="L204" title="1 of 2 branches missed.">    } else if (localDriverPath.exists()) {</span>
+      try {
+<span class="nc" id="L206">        List&lt;URL&gt; urlList = new ArrayList&lt;URL&gt;();</span>
+<span class="nc bnc" id="L207" title="All 2 branches missed.">        for (File file : localDriverPath.listFiles()) {</span>
+<span class="nc" id="L208">          String filename = file.getCanonicalPath();</span>
+<span class="nc bnc" id="L209" title="All 2 branches missed.">          if (!filename.startsWith(&quot;/&quot;)) {</span>
+<span class="nc" id="L210">            filename = &quot;/&quot; + filename;</span>
+          }
+<span class="nc" id="L212">          urlList.add(new URL(&quot;jar:file:&quot; + filename + &quot;!/&quot;));</span>
+<span class="nc" id="L213">          urlList.add(new URL(&quot;file:&quot; + filename));</span>
+        }
+<span class="nc" id="L215">        URL[] urls = urlList.toArray(new URL[urlList.size()]);</span>
+<span class="nc" id="L216">        return new URLClassLoader(urls);</span>
+<span class="nc" id="L217">      } catch (Exception e) {</span>
+<span class="nc" id="L218">        throw new MigrationException(&quot;Error creating a driver ClassLoader. Cause: &quot; + e, e);</span>
+      }
+    }
+<span class="fc" id="L221">    return null;</span>
+  }
+
+  private File getCustomDriverPath() {
+<span class="fc" id="L225">    String customDriverPath = environmentProperties().getProperty(&quot;driver_path&quot;);</span>
+<span class="pc bpc" id="L226" title="3 of 4 branches missed.">    if (customDriverPath != null &amp;&amp; customDriverPath.length() &gt; 0) {</span>
+<span class="nc" id="L227">      return new File(customDriverPath);</span>
+    } else {
+<span class="fc" id="L229">      return options.getPaths().getDriverPath();</span>
+    }
+  }
+
+  protected MigrationLoader getMigrationLoader() {
+<span class="fc" id="L234">    return new FileMigrationLoader(paths.getScriptPath(), environmentProperties().getProperty(&quot;script_char_set&quot;), environmentProperties());</span>
+  }
+
+  protected DatabaseOperationOption getDatabaseOperationOption() {
+<span class="fc" id="L238">    DatabaseOperationOption option = new DatabaseOperationOption();</span>
+<span class="fc" id="L239">    option.setChangelogTable(changelogTable());</span>
+<span class="fc" id="L240">    Properties props = environmentProperties();</span>
+<span class="pc bpc" id="L241" title="1 of 2 branches missed.">    option.setStopOnError(!options.isForce());</span>
+<span class="fc" id="L242">    option.setEscapeProcessing(false);</span>
+<span class="fc" id="L243">    option.setAutoCommit(Boolean.valueOf(props.getProperty(&quot;auto_commit&quot;)));</span>
+<span class="fc" id="L244">    option.setFullLineDelimiter(Boolean.valueOf(props.getProperty(&quot;full_line_delimiter&quot;)));</span>
+<span class="fc" id="L245">    option.setSendFullScript(Boolean.valueOf(props.getProperty(&quot;send_full_script&quot;)));</span>
+<span class="fc" id="L246">    option.setRemoveCRs(Boolean.valueOf(props.getProperty(&quot;remove_crs&quot;)));</span>
+<span class="fc" id="L247">    String delimiterString = props.getProperty(&quot;delimiter&quot;);</span>
+<span class="pc bpc" id="L248" title="1 of 2 branches missed.">    option.setDelimiter(delimiterString == null ? &quot;;&quot; : delimiterString);</span>
+<span class="fc" id="L249">    return option;</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

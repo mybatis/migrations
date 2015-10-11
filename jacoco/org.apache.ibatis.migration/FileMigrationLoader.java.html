@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>FileMigrationLoader.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MyBatis Migrations</a> &gt; <a href="index.source.html" class="el_package">org.apache.ibatis.migration</a> &gt; <span class="el_source">FileMigrationLoader.java</span></div><h1>FileMigrationLoader.java</h1><pre class="source lang-java linenums">/**
+ *    Copyright 2010-2015 the original author or authors.
+ *
+ *    Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+package org.apache.ibatis.migration;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.Reader;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Properties;
+
+import org.apache.ibatis.migration.utils.Util;
+
+public class FileMigrationLoader implements MigrationLoader {
+  private final File scriptsDir;
+
+  private final String charset;
+
+  private final Properties properties;
+
+  public FileMigrationLoader(File scriptsDir, String charset, Properties properties) {
+<span class="fc" id="L37">    super();</span>
+<span class="fc" id="L38">    this.scriptsDir = scriptsDir;</span>
+<span class="fc" id="L39">    this.charset = charset;</span>
+<span class="fc" id="L40">    this.properties = properties;</span>
+<span class="fc" id="L41">  }</span>
+
+  @Override
+  public List&lt;Change&gt; getMigrations() {
+<span class="fc" id="L45">    List&lt;Change&gt; migrations = new ArrayList&lt;Change&gt;();</span>
+<span class="pc bpc" id="L46" title="1 of 2 branches missed.">    if (scriptsDir.isDirectory()) {</span>
+<span class="fc" id="L47">      String[] filenames = scriptsDir.list();</span>
+<span class="pc bpc" id="L48" title="1 of 2 branches missed.">      if (filenames == null) {</span>
+<span class="nc" id="L49">        throw new MigrationException(scriptsDir + &quot; does not exist.&quot;);</span>
+      }
+<span class="fc" id="L51">      Arrays.sort(filenames);</span>
+<span class="fc bfc" id="L52" title="All 2 branches covered.">      for (String filename : filenames) {</span>
+<span class="pc bpc" id="L53" title="1 of 4 branches missed.">        if (filename.endsWith(&quot;.sql&quot;) &amp;&amp; !&quot;bootstrap.sql&quot;.equals(filename)) {</span>
+<span class="fc" id="L54">          Change change = parseChangeFromFilename(filename);</span>
+<span class="fc" id="L55">          migrations.add(change);</span>
+        }
+      }
+    }
+<span class="fc" id="L59">    return migrations;</span>
+  }
+
+  private Change parseChangeFromFilename(String filename) {
+    try {
+<span class="fc" id="L64">      Change change = new Change();</span>
+<span class="fc" id="L65">      int lastIndexOfDot = filename.lastIndexOf(&quot;.&quot;);</span>
+<span class="fc" id="L66">      String[] parts = filename.substring(0, lastIndexOfDot).split(&quot;_&quot;);</span>
+<span class="fc" id="L67">      change.setId(new BigDecimal(parts[0]));</span>
+<span class="fc" id="L68">      StringBuilder builder = new StringBuilder();</span>
+<span class="fc bfc" id="L69" title="All 2 branches covered.">      for (int i = 1; i &lt; parts.length; i++) {</span>
+<span class="fc bfc" id="L70" title="All 2 branches covered.">        if (i &gt; 1) {</span>
+<span class="fc" id="L71">          builder.append(&quot; &quot;);</span>
+        }
+<span class="fc" id="L73">        builder.append(parts[i]);</span>
+      }
+<span class="fc" id="L75">      change.setDescription(builder.toString());</span>
+<span class="fc" id="L76">      change.setFilename(filename);</span>
+<span class="fc" id="L77">      return change;</span>
+<span class="nc" id="L78">    } catch (Exception e) {</span>
+<span class="nc" id="L79">      throw new MigrationException(&quot;Error parsing change from file.  Cause: &quot; + e, e);</span>
+    }
+  }
+
+  @Override
+  public Reader getScriptReader(Change change, boolean undo) {
+    try {
+<span class="fc" id="L86">      return new MigrationReader(Util.file(scriptsDir, change.getFilename()), charset, undo, properties);</span>
+<span class="nc" id="L87">    } catch (IOException e) {</span>
+<span class="nc" id="L88">      throw new MigrationException(&quot;Error reading &quot; + change.getFilename(), e);</span>
+    }
+  }
+
+  @Override
+  public Reader getBootstrapReader() {
+    try {
+<span class="fc" id="L95">      File bootstrap = Util.file(scriptsDir, &quot;bootstrap.sql&quot;);</span>
+<span class="pc bpc" id="L96" title="1 of 2 branches missed.">      if (bootstrap.exists()) {</span>
+<span class="fc" id="L97">        return new MigrationReader(bootstrap, charset, false, properties);</span>
+      }
+<span class="nc" id="L99">      return null;</span>
+<span class="nc" id="L100">    } catch (IOException e) {</span>
+<span class="nc" id="L101">      throw new MigrationException(&quot;Error reading bootstrap.sql&quot;, e);</span>
+    }
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

@@ -334,8 +334,6 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="classLoader" type="java.lang.ClassLoader">
-</parameter>
 <parameter name="packageNames" type="java.lang.String...">
 </parameter>
 </constructor>
@@ -346,6 +344,8 @@
  deprecated="not deprecated"
  visibility="public"
 >
+<parameter name="classLoader" type="java.lang.ClassLoader">
+</parameter>
 <parameter name="packageNames" type="java.lang.String...">
 </parameter>
 </constructor>

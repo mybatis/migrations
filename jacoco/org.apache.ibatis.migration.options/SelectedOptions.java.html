@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>SelectedOptions.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MyBatis Migrations</a> &gt; <a href="index.source.html" class="el_package">org.apache.ibatis.migration.options</a> &gt; <span class="el_source">SelectedOptions.java</span></div><h1>SelectedOptions.java</h1><pre class="source lang-java linenums">/**
+ *    Copyright 2010-2015 the original author or authors.
+ *
+ *    Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+package org.apache.ibatis.migration.options;
+
+<span class="fc" id="L18">public class SelectedOptions {</span>
+<span class="fc" id="L19">  private SelectedPaths paths = new SelectedPaths();</span>
+<span class="fc" id="L20">  private String environment = &quot;development&quot;;</span>
+  private String template;
+  private boolean force;
+  private boolean trace;
+  private String command;
+  private String params;
+  private boolean help;
+
+  public SelectedPaths getPaths() {
+<span class="fc" id="L29">    return paths;</span>
+  }
+
+  public String getEnvironment() {
+<span class="fc" id="L33">    return environment;</span>
+  }
+
+  public void setEnvironment(String aEnvironment) {
+<span class="fc" id="L37">    environment = aEnvironment;</span>
+<span class="fc" id="L38">  }</span>
+
+  public String getTemplate() {
+<span class="fc" id="L41">    return template;</span>
+  }
+
+  public void setTemplate(String aTemplate) {
+<span class="fc" id="L45">    template = aTemplate;</span>
+<span class="fc" id="L46">  }</span>
+
+  public boolean isForce() {
+<span class="fc" id="L49">    return force;</span>
+  }
+
+  public void setForce(boolean aForce) {
+<span class="fc" id="L53">    force = aForce;</span>
+<span class="fc" id="L54">  }</span>
+
+  public boolean isTrace() {
+<span class="fc" id="L57">    return trace;</span>
+  }
+
+  public void setTrace(boolean aTrace) {
+<span class="fc" id="L61">    trace = aTrace;</span>
+<span class="fc" id="L62">  }</span>
+
+  public String getCommand() {
+<span class="fc" id="L65">    return command;</span>
+  }
+
+  public void setCommand(String aCommand) {
+<span class="fc" id="L69">    command = aCommand;</span>
+<span class="fc" id="L70">  }</span>
+
+  public String getParams() {
+<span class="fc" id="L73">    return params;</span>
+  }
+
+  public void setParams(String aParams) {
+<span class="fc" id="L77">    params = aParams;</span>
+<span class="fc" id="L78">  }</span>
+
+  public boolean needsHelp() {
+<span class="fc" id="L81">    return help;</span>
+  }
+
+  public void setHelp(boolean aHelp) {
+<span class="fc" id="L85">    help = aHelp;</span>
+<span class="fc" id="L86">  }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>
