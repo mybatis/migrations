@@ -30,6 +30,7 @@ public final class UpCommand extends BaseCommand {
     this.runOneStepOnly = runOneStepOnly;
   }
 
+  @Override
   public void execute(String... params) {
     final int limit = getStepCountParameter(Integer.MAX_VALUE, params);
     UpOperation operation = new UpOperation(runOneStepOnly ? 1 : limit);

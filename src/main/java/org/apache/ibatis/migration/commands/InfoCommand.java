@@ -27,6 +27,7 @@ public final class InfoCommand implements Command {
     this.out = out;
   }
 
+  @Override
   public void execute(String... params) {
     Properties properties = new Properties();
     InputStream input = getClass().getClassLoader().getResourceAsStream(

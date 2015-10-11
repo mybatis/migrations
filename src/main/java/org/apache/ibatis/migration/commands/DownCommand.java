@@ -23,6 +23,7 @@ public final class DownCommand extends BaseCommand {
     super(options);
   }
 
+  @Override
   public void execute(String... params) {
     DownOperation operation = new DownOperation(getStepCountParameter(1, params));
     operation.operate(getConnectionProvider(), getMigrationLoader(), getDatabaseOperationOption(), printStream);

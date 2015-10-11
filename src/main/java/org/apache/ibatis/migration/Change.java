@@ -69,10 +69,12 @@ public class Change implements Comparable<Change> {
     this.filename = filename;
   }
 
+  @Override
   public String toString() {
     return id + " " + (appliedTimestamp == null ? "   ...pending...   " : appliedTimestamp) + " " + description;
   }
 
+  @Override
   public boolean equals(Object o) {
     if (this == o) {
       return true;
@@ -86,10 +88,12 @@ public class Change implements Comparable<Change> {
     return (id.equals(change.getId()));
   }
 
+  @Override
   public int hashCode() {
     return id.hashCode();
   }
 
+  @Override
   public int compareTo(Change change) {
     return id.compareTo(change.getId());
   }

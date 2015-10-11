@@ -352,6 +352,7 @@ public class MigratorTest {
 
     private StringBuilder builder = new StringBuilder();
 
+    @Override
     public void write(int b) throws IOException {
       builder.append((char) b);
 //      out.write(b);

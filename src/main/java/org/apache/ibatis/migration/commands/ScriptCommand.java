@@ -34,6 +34,7 @@ public final class ScriptCommand extends BaseCommand {
     super(options);
   }
 
+  @Override
   public void execute(String... sparams) {
     try {
       if (sparams == null || sparams.length < 1 || sparams[0] == null) {
