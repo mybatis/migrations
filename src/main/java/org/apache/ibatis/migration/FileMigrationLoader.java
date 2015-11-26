@@ -18,7 +18,6 @@ package org.apache.ibatis.migration;
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -64,7 +63,7 @@ public class FileMigrationLoader implements MigrationLoader {
       Change change = new Change();
       int lastIndexOfDot = filename.lastIndexOf(".");
       String[] parts = filename.substring(0, lastIndexOfDot).split("_");
-      change.setId(new BigDecimal(parts[0]));
+      change.setId(Long.valueOf(parts[0]));
       StringBuilder builder = new StringBuilder();
       for (int i = 1; i < parts.length; i++) {
         if (i > 1) {

@@ -17,7 +17,6 @@ package org.apache.ibatis.migration.operations;
 
 import java.io.PrintStream;
 import java.io.PrintWriter;
-import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -62,7 +61,7 @@ public abstract class DatabaseOperation<T extends DatabaseOperation<T>> {
         String id = change.get("ID") == null ? null : change.get("ID").toString();
         String appliedAt = change.get("APPLIED_AT") == null ? null : change.get("APPLIED_AT").toString();
         String description = change.get("DESCRIPTION") == null ? null : change.get("DESCRIPTION").toString();
-        changes.add(new Change(new BigDecimal(id), appliedAt, description));
+        changes.add(new Change(Long.valueOf(id), appliedAt, description));
       }
       return changes;
     } catch (SQLException e) {

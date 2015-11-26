@@ -15,11 +15,10 @@
  */
 package org.apache.ibatis.migration;
 
-import java.math.BigDecimal;
 
 public class Change implements Comparable<Change> {
 
-  private BigDecimal id;
+  private Long id;
   private String description;
   private String appliedTimestamp;
   private String filename;
@@ -27,21 +26,21 @@ public class Change implements Comparable<Change> {
   public Change() {
   }
 
-  public Change(BigDecimal id) {
+  public Change(Long id) {
     this.id = id;
   }
 
-  public Change(BigDecimal id, String appliedTimestamp, String description) {
+  public Change(Long id, String appliedTimestamp, String description) {
     this.id = id;
     this.appliedTimestamp = appliedTimestamp;
     this.description = description;
   }
 
-  public BigDecimal getId() {
+  public Long getId() {
     return id;
   }
 
-  public void setId(BigDecimal id) {
+  public void setId(Long id) {
     this.id = id;
   }
 

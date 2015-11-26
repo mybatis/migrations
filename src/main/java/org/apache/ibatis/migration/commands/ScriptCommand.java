@@ -17,7 +17,6 @@ package org.apache.ibatis.migration.commands;
 
 import java.io.IOException;
 import java.io.Reader;
-import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
@@ -44,8 +43,8 @@ public final class ScriptCommand extends BaseCommand {
       if (parser.countTokens() != 2) {
         throw new MigrationException("The script command requires a range of versions from v1 - v2.");
       }
-      BigDecimal v1 = new BigDecimal(parser.nextToken());
-      BigDecimal v2 = new BigDecimal(parser.nextToken());
+      Long v1 = Long.valueOf(parser.nextToken());
+      Long v2 = Long.valueOf(parser.nextToken());
       int comparison = v1.compareTo(v2);
       if (comparison == 0) {
         throw new MigrationException("The script command requires two different versions. Use 0 to include the first version.");
@@ -91,8 +90,8 @@ public final class ScriptCommand extends BaseCommand {
     return "DELETE FROM " + changelogTable() + " WHERE ID = " + change.getId() + getDelimiter();
   }
 
-  private boolean shouldRun(Change change, BigDecimal v1, BigDecimal v2) {
-    BigDecimal id = change.getId();
+  private boolean shouldRun(Change change, Long v1, Long v2) {
+    Long id = change.getId();
     if (v1.compareTo(v2) > 0) {
       return (id.compareTo(v2) > 0 && id.compareTo(v1) <= 0);
     } else {
