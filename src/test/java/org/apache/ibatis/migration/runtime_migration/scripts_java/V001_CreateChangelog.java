@@ -15,15 +15,13 @@
  */
 package org.apache.ibatis.migration.runtime_migration.scripts_java;
 
-import java.math.BigDecimal;
-
 import org.apache.ibatis.migration.MigrationScript;
 
 public class V001_CreateChangelog implements MigrationScript {
 
   @Override
-  public BigDecimal getId() {
-    return new BigDecimal(this.getClass().getSimpleName().substring(1, 4));
+  public Long getId() {
+    return Long.valueOf(this.getClass().getSimpleName().substring(1, 4));
   }
 
   @Override

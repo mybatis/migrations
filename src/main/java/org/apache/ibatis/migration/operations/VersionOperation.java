@@ -16,7 +16,6 @@
 package org.apache.ibatis.migration.operations;
 
 import java.io.PrintStream;
-import java.math.BigDecimal;
 import java.util.List;
 
 import org.apache.ibatis.migration.Change;
@@ -26,9 +25,9 @@ import org.apache.ibatis.migration.MigrationLoader;
 import org.apache.ibatis.migration.options.DatabaseOperationOption;
 
 public final class VersionOperation extends DatabaseOperation<VersionOperation> {
-  private BigDecimal version;
+  private Long version;
 
-  public VersionOperation(BigDecimal version) {
+  public VersionOperation(Long version) {
     super();
     this.version = version;
     if (version == null) {

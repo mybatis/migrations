@@ -17,7 +17,6 @@ package org.apache.ibatis.migration.operations;
 
 import java.io.PrintStream;
 import java.io.PrintWriter;
-import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -40,7 +39,9 @@ public abstract class DatabaseOperation<T extends DatabaseOperation<T>> {
     SqlRunner runner = getSqlRunner(connectionProvider);
     change.setAppliedTimestamp(generateAppliedTimeStampAsString());
     try {
-      runner.insert("insert into " + option.getChangelogTable() + " (ID, APPLIED_AT, DESCRIPTION) values (?,?,?)", change.getId(), change.getAppliedTimestamp(), change.getDescription());
+      String changelogInsert = option.getChangelogInsert();
+      runner.insert(changelogInsert.replace("${changelog}", option.getChangelogTable()), 
+    		  change.getId(), change.getAppliedTimestamp(), change.getDescription());
     } catch (SQLException e) {
       throw new MigrationException("Error querying last applied migration.  Cause: " + e, e);
     } finally {
@@ -62,7 +63,7 @@ public abstract class DatabaseOperation<T extends DatabaseOperation<T>> {
         String id = change.get("ID") == null ? null : change.get("ID").toString();
         String appliedAt = change.get("APPLIED_AT") == null ? null : change.get("APPLIED_AT").toString();
         String description = change.get("DESCRIPTION") == null ? null : change.get("DESCRIPTION").toString();
-        changes.add(new Change(new BigDecimal(id), appliedAt, description));
+        changes.add(new Change(Long.valueOf(id), appliedAt, description));
       }
       return changes;
     } catch (SQLException e) {

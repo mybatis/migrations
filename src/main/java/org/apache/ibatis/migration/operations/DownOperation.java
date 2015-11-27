@@ -87,7 +87,8 @@ public final class DownOperation extends DatabaseOperation<DownOperation> {
   protected void deleteChange(ConnectionProvider connectionProvider, Change change, DatabaseOperationOption option) {
     SqlRunner runner = getSqlRunner(connectionProvider);
     try {
-      runner.delete("delete from " + option.getChangelogTable() + " where id = ?", change.getId());
+      String changelogDelete = option.getChangelogDelete();
+      runner.delete(changelogDelete.replace("${changelog}", option.getChangelogTable()), change.getId());
     } catch (SQLException e) {
       throw new MigrationException("Error querying last applied migration.  Cause: " + e, e);
     } finally {

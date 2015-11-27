@@ -15,14 +15,11 @@
  */
 package org.apache.ibatis.migration;
 
-import org.apache.ibatis.datasource.unpooled.UnpooledDataSource;
-import org.apache.ibatis.io.Resources;
-import org.apache.ibatis.jdbc.SqlRunner;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
-import javax.sql.DataSource;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -35,7 +32,15 @@ import java.sql.SQLException;
 import java.util.Map;
 import java.util.Properties;
 
-import static org.junit.Assert.*;
+import javax.sql.DataSource;
+
+import org.apache.ibatis.datasource.unpooled.UnpooledDataSource;
+import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.jdbc.SqlRunner;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 public class MigratorTest {
 
@@ -89,6 +94,11 @@ public class MigratorTest {
     System.setOut(out);
     System.setSecurityManager(null);
   }
+  
+  @Before
+  public void testSetup() {
+	  buffer.clear();
+  }
 
   @Test
   public void shouldRunThroughFullMigrationUseCaseInOneTestToEnsureOrder() throws Throwable {
@@ -113,10 +123,6 @@ public class MigratorTest {
       testStatusContainsPendingMigrations(f);
       testPendingCommand(f);
       testStatusContainsNoPendingMigrations(f);
-      testHelpCommand(f);
-      testDoScriptCommand(f);
-      testUndoScriptCommand(f);
-      testScriptCommandWithTheSameVersion(f);
 
     } catch (Throwable t) {
       System.err.println(buffer);
@@ -192,15 +198,17 @@ public class MigratorTest {
     buffer.clear();
   }
 
-  private void testHelpCommand(File f) throws Exception {
-    safeMigratorMain(args("--path=" + f.getAbsolutePath(), "--help"));
+  @Test
+  public void testHelpCommand() throws Exception {
+    safeMigratorMain(args("--path=" + getExampleDir().getAbsolutePath(), "--help"));
     assertFalse(buffer.toString().contains("FAILURE"));
     assertTrue(buffer.toString().contains("--help"));
     buffer.clear();
   }
 
-  private void testDoScriptCommand(File f) throws Exception {
-    safeMigratorMain(args("--path=" + f.getAbsolutePath(), "script", "20080827200212", "20080827200214"));
+  @Test
+  public void testDoScriptCommand() throws Exception {
+    safeMigratorMain(args("--path=" + getExampleDir().getAbsolutePath(), "script", "20080827200212", "20080827200214"));
     assertFalse(buffer.toString().contains("FAILURE"));
     assertFalse(buffer.toString().contains("20080827200210"));
     assertFalse(buffer.toString().contains("20080827200211"));
@@ -211,7 +219,7 @@ public class MigratorTest {
     assertFalse(buffer.toString().contains("-- @UNDO"));
     buffer.clear();
 
-    safeMigratorMain(args("--path=" + f.getAbsolutePath(), "script", "0", "20080827200211"));
+    safeMigratorMain(args("--path=" + getExampleDir().getAbsolutePath(), "script", "0", "20080827200211"));
     assertFalse(buffer.toString().contains("FAILURE"));
     assertTrue(buffer.toString().contains("20080827200210"));
     assertTrue(buffer.toString().contains("20080827200211"));
@@ -222,9 +230,18 @@ public class MigratorTest {
     assertFalse(buffer.toString().contains("-- @UNDO"));
     buffer.clear();
   }
+  
+  @Test
+  public void testDoScriptCommandCustomChangelogStatements() throws Exception {
+	safeMigratorMain(args("--path=" + getExampleDir().getAbsolutePath(), "--env=nosql", "script", "0", "20080827200210"));
+	assertFalse(buffer.toString().contains("FAILURE"));
+	assertTrue(buffer.toString().contains("20080827200210"));
+	assertTrue(buffer.toString().contains("INSERT INTO CHANGELOG VALUES (20080827200210"));
+  }
 
-  private void testUndoScriptCommand(File f) throws Exception {
-    safeMigratorMain(args("--path=" + f.getAbsolutePath(), "script", "20080827200215", "20080827200213"));
+  @Test
+  public void testUndoScriptCommand() throws Exception {
+    safeMigratorMain(args("--path=" + getExampleDir().getAbsolutePath(), "script", "20080827200215", "20080827200213"));
     assertFalse(buffer.toString().contains("FAILURE"));
     assertFalse(buffer.toString().contains("20080827200210"));
     assertFalse(buffer.toString().contains("20080827200211"));
@@ -235,7 +252,7 @@ public class MigratorTest {
     assertTrue(buffer.toString().contains("-- @UNDO"));
     buffer.clear();
 
-    safeMigratorMain(args("--path=" + f.getAbsolutePath(), "script", "20080827200211", "0"));
+    safeMigratorMain(args("--path=" + getExampleDir().getAbsolutePath(), "script", "20080827200211", "0"));
     assertFalse(buffer.toString().contains("FAILURE"));
     assertTrue(buffer.toString().contains("20080827200210"));
     assertTrue(buffer.toString().contains("20080827200211"));
@@ -246,9 +263,19 @@ public class MigratorTest {
     assertTrue(buffer.toString().contains("-- @UNDO"));
     buffer.clear();
   }
+  
+  @Test
+  public void testUndoScriptCommandCustomChangelogStatements() throws Exception {
+	safeMigratorMain(args("--path=" + getExampleDir().getAbsolutePath(), "--env=nosql", "script", "20080827200210", "0"));
+	assertFalse(buffer.toString().contains("FAILURE"));
+	assertTrue(buffer.toString().contains("20080827200210"));
+	assertTrue(buffer.toString().contains("INSERT OVERWRITE TABLE CHANGELOG SELECT ID, APPLIED_AT, DESCRIPTION FROM CHANGELOG WHERE ID <> 20080827200210"));
+	assertTrue(buffer.toString().contains("-- @UNDO"));
+  }
 
-  private void testScriptCommandWithTheSameVersion(File f) throws Exception {
-    safeMigratorMain(args("--path=" + f.getAbsolutePath(), "script", "20080827200211", "20080827200211"));
+  @Test
+  public void testScriptCommandWithTheSameVersion() throws Exception {
+    safeMigratorMain(args("--path=" + getExampleDir().getAbsolutePath(), "script", "20080827200211", "20080827200211"));
     assertTrue(buffer.toString().contains("FAILURE"));
     buffer.clear();
   }

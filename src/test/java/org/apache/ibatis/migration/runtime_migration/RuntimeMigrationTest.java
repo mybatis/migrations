@@ -15,12 +15,12 @@
  */
 package org.apache.ibatis.migration.runtime_migration;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.PrintStream;
-import java.math.BigDecimal;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -146,7 +146,7 @@ public class RuntimeMigrationTest {
     // Need changelog.
     new UpOperation(1).operate(connectionProvider, migrationsLoader, dbOption, new PrintStream(out));
 
-    new VersionOperation(new BigDecimal("20130707120738")).operate(connectionProvider, migrationsLoader, dbOption, new PrintStream(out));
+    new VersionOperation(Long.valueOf("20130707120738")).operate(connectionProvider, migrationsLoader, dbOption, new PrintStream(out));
     assertEquals("2", runQuery(connectionProvider, "select count(*) from changelog"));
     assertEquals("0", runQuery(connectionProvider, "select count(*) from first_table"));
     assertTableDoesNotExist(connectionProvider, "second_table");
@@ -156,7 +156,7 @@ public class RuntimeMigrationTest {
   public void testVersionDown() throws Exception {
     new UpOperation().operate(connectionProvider, migrationsLoader, dbOption, new PrintStream(out));
 
-    new VersionOperation(new BigDecimal("20130707120738")).operate(connectionProvider, migrationsLoader, dbOption, new PrintStream(out));
+    new VersionOperation(Long.valueOf("20130707120738")).operate(connectionProvider, migrationsLoader, dbOption, new PrintStream(out));
     assertEquals("2", runQuery(connectionProvider, "select count(*) from changelog"));
     assertEquals("0", runQuery(connectionProvider, "select count(*) from first_table"));
     assertTableDoesNotExist(connectionProvider, "second_table");

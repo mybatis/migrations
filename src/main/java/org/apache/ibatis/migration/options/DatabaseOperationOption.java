@@ -17,10 +17,18 @@ package org.apache.ibatis.migration.options;
 
 public class DatabaseOperationOption {
   private static final String DEFAULT_CHANGELOG_TABLE = "CHANGELOG";
+  
+  private static final String DEFAULT_CHANGELOG_INSERT = "INSERT INTO ${changelog} (ID, APPLIED_AT, DESCRIPTION) VALUES (?,?,?)";
+
+  private static final String DEFAULT_CHANGELOG_DELETE = "DELETE FROM ${changelog} WHERE ID = ?";
 
   private static final String DEFAULT_DELIMITER = ";";
 
   private String changelogTable;
+  
+  private String changelogInsert;
+  
+  private String changelogDelete;
 
   private boolean stopOnError = true;
 
@@ -42,6 +50,22 @@ public class DatabaseOperationOption {
 
   public void setChangelogTable(String changelogTable) {
     this.changelogTable = changelogTable;
+  }
+  
+  public String getChangelogInsert() {
+	  return changelogInsert == null ? DEFAULT_CHANGELOG_INSERT : changelogInsert;
+  }
+  
+  public void setChangelogInsert(String changelogInsert) {
+	  this.changelogInsert = changelogInsert;
+  }
+  
+  public String getChangelogDelete() {
+	  return changelogDelete == null ? DEFAULT_CHANGELOG_DELETE : changelogDelete;
+  }
+  
+  public void setChangelogDelete(String changelogDelete) {
+	  this.changelogDelete = changelogDelete;
   }
 
   public boolean isStopOnError() {
