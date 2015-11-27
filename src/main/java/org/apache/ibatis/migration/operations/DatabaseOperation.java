@@ -39,7 +39,9 @@ public abstract class DatabaseOperation<T extends DatabaseOperation<T>> {
     SqlRunner runner = getSqlRunner(connectionProvider);
     change.setAppliedTimestamp(generateAppliedTimeStampAsString());
     try {
-      runner.insert("insert into " + option.getChangelogTable() + " (ID, APPLIED_AT, DESCRIPTION) values (?,?,?)", change.getId(), change.getAppliedTimestamp(), change.getDescription());
+      String changelogInsert = option.getChangelogInsert();
+      runner.insert(changelogInsert.replace("${changelog}", option.getChangelogTable()), 
+    		  change.getId(), change.getAppliedTimestamp(), change.getDescription());
     } catch (SQLException e) {
       throw new MigrationException("Error querying last applied migration.  Cause: " + e, e);
     } finally {

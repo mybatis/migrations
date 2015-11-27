@@ -81,13 +81,17 @@ public final class ScriptCommand extends BaseCommand {
   }
 
   private String generateVersionInsert(Change change) {
-    return "INSERT INTO " + changelogTable() + " (ID, APPLIED_AT, DESCRIPTION) " +
-        "VALUES (" + change.getId() + ", '" + DatabaseOperation.generateAppliedTimeStampAsString() + "', '"
-        + change.getDescription().replace('\'', ' ') + "')" + getDelimiter();
+	String changelogInsert = getDatabaseOperationOption().getChangelogInsert();
+	String values = change.getId() + ", '" + DatabaseOperation.generateAppliedTimeStampAsString() + "', '"
+	        + change.getDescription().replace('\'', ' ') + "'";
+    return changelogInsert.replace("${changelog}", getDatabaseOperationOption().getChangelogTable())
+    		.replace("?,?,?", values) + getDelimiter();
   }
 
   private String generateVersionDelete(Change change) {
-    return "DELETE FROM " + changelogTable() + " WHERE ID = " + change.getId() + getDelimiter();
+	String changelogDelete = getDatabaseOperationOption().getChangelogDelete();
+    return changelogDelete.replace("${changelog}", getDatabaseOperationOption().getChangelogTable())
+    		.replace("?", Long.toString(change.getId())) + getDelimiter();
   }
 
   private boolean shouldRun(Change change, Long v1, Long v2) {

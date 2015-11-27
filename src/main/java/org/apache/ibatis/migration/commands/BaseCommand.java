@@ -15,7 +15,7 @@
  */
 package org.apache.ibatis.migration.commands;
 
-import static org.apache.ibatis.migration.utils.Util.*;
+import static org.apache.ibatis.migration.utils.Util.file;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -72,14 +72,6 @@ public abstract class BaseCommand implements Command {
 
   protected boolean paramsEmpty(String... params) {
     return params == null || params.length < 1 || params[0] == null || params[0].length() < 1;
-  }
-
-  protected String changelogTable() {
-    String changelog = environmentProperties().getProperty("changelog");
-    if (changelog == null) {
-      changelog = "CHANGELOG";
-    }
-    return changelog;
   }
 
   protected String getNextIDAsString() {
@@ -235,9 +227,11 @@ public abstract class BaseCommand implements Command {
   }
 
   protected DatabaseOperationOption getDatabaseOperationOption() {
+	Properties props = environmentProperties();
     DatabaseOperationOption option = new DatabaseOperationOption();
-    option.setChangelogTable(changelogTable());
-    Properties props = environmentProperties();
+    option.setChangelogTable(props.getProperty("changelog"));
+    option.setChangelogInsert(props.getProperty("changelog_insert"));
+    option.setChangelogDelete(props.getProperty("changelog_delete"));
     option.setStopOnError(!options.isForce());
     option.setEscapeProcessing(false);
     option.setAutoCommit(Boolean.valueOf(props.getProperty("auto_commit")));
