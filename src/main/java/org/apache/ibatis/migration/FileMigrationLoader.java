@@ -18,7 +18,6 @@ package org.apache.ibatis.migration;
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -27,6 +26,7 @@ import java.util.Properties;
 import org.apache.ibatis.migration.utils.Util;
 
 public class FileMigrationLoader implements MigrationLoader {
+
   private final File scriptsDir;
 
   private final String charset;
@@ -51,33 +51,13 @@ public class FileMigrationLoader implements MigrationLoader {
       Arrays.sort(filenames);
       for (String filename : filenames) {
         if (filename.endsWith(".sql") && !"bootstrap.sql".equals(filename)) {
-          Change change = parseChangeFromFilename(filename);
+          Change change = ChangeValidator.parseChangeFromFilename(filename, properties);
+          ChangeValidator.validateChangeForConfiguration (change, properties);
           migrations.add(change);
         }
       }
     }
     return migrations;
-  }
-
-  private Change parseChangeFromFilename(String filename) {
-    try {
-      Change change = new Change();
-      int lastIndexOfDot = filename.lastIndexOf(".");
-      String[] parts = filename.substring(0, lastIndexOfDot).split("_");
-      change.setId(new BigDecimal(parts[0]));
-      StringBuilder builder = new StringBuilder();
-      for (int i = 1; i < parts.length; i++) {
-        if (i > 1) {
-          builder.append(" ");
-        }
-        builder.append(parts[i]);
-      }
-      change.setDescription(builder.toString());
-      change.setFilename(filename);
-      return change;
-    } catch (Exception e) {
-      throw new MigrationException("Error parsing change from file.  Cause: " + e, e);
-    }
   }
 
   @Override
@@ -101,4 +81,5 @@ public class FileMigrationLoader implements MigrationLoader {
       throw new MigrationException("Error reading bootstrap.sql", e);
     }
   }
+
 }

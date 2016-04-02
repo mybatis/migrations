@@ -71,7 +71,9 @@ public class Change implements Comparable<Change> {
 
   @Override
   public String toString() {
-    return id + " " + (appliedTimestamp == null ? "   ...pending...   " : appliedTimestamp) + " " + description;
+    String status = appliedTimestamp == null ? "   ...pending...   " : appliedTimestamp;
+    String message = filename == null ? " ...missing script... " : " ";
+    return id + " " + status + message + description;
   }
 
   @Override
@@ -85,16 +87,18 @@ public class Change implements Comparable<Change> {
 
     Change change = (Change) o;
 
-    return (id.equals(change.getId()));
+    return (id.equals(change.getId())) && (description == null ? change.getDescription() == null : description.equals(change.getDescription()));
   }
 
   @Override
   public int hashCode() {
-    return id.hashCode();
+    return id.hashCode() ^ (description == null ? 0 : description.hashCode());
   }
 
   @Override
   public int compareTo(Change change) {
-    return id.compareTo(change.getId());
+    return id.compareTo(change.getId()) != 0 ? id.compareTo(change.getId())
+        : (description == null ? (change.getDescription() == null ? 0 : 1)
+            : description.compareTo(change.getDescription()));
   }
 }

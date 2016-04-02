@@ -66,8 +66,10 @@ public final class VersionOperation extends DatabaseOperation<VersionOperation> 
 
   private void ensureVersionExists(MigrationLoader migrationsLoader) {
     List<Change> migrations = migrationsLoader.getMigrations();
-    if (!migrations.contains(new Change(version))) {
-      throw new MigrationException("A migration for the specified version number does not exist.");
-    }
+    for (Change change : migrations)
+      if (change.getId().compareTo(version) == 0)
+        return;
+
+    throw new MigrationException("A migration for the specified version number does not exist.");
   }
 }

@@ -36,6 +36,10 @@ public class DatabaseOperationOption {
 
   private String delimiter;
 
+  private boolean useSequenceNumber = false;
+
+  private Integer initialSequence;
+
   public String getChangelogTable() {
     return changelogTable == null ? DEFAULT_CHANGELOG_TABLE : changelogTable;
   }
@@ -98,5 +102,21 @@ public class DatabaseOperationOption {
 
   public void setDelimiter(String delimiter) {
     this.delimiter = delimiter;
+  }
+
+  public void setUseSequenceNumber(boolean useSequenceNumber) {
+    this.useSequenceNumber = useSequenceNumber;
+  }
+
+  public boolean useSequenceNumber() {
+      return useSequenceNumber;
+  }
+
+  public void setInitialSequence(Integer initialSequence) {
+    this.initialSequence = initialSequence;
+  }
+
+  public Integer getInitialSequence() {
+    return initialSequence;
   }
 }

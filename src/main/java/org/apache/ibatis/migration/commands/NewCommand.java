@@ -16,18 +16,22 @@
 package org.apache.ibatis.migration.commands;
 
 import org.apache.ibatis.io.ExternalResources;
+import org.apache.ibatis.migration.Change;
+import org.apache.ibatis.migration.ChangeValidator;
 import org.apache.ibatis.migration.MigrationException;
 import org.apache.ibatis.migration.options.SelectedOptions;
 import org.apache.ibatis.migration.utils.Util;
 
 import java.io.FileNotFoundException;
 import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public final class NewCommand extends BaseCommand {
 
   private static final String MIGRATIONS_HOME = "MIGRATIONS_HOME";
   private static final String MIGRATIONS_HOME_PROPERTY = "migrationHome";
-  private static final String CUSTOM_NEW_COMMAND_TEMPATE_PROPERTY = "new_command.template";
+  private static final String CUSTOM_NEW_COMMAND_TEMPLATE_PROPERTY = "new_command.template";
   private static final String MIGRATIONS_PROPERTIES = "migration.properties";
 
   public NewCommand(SelectedOptions options) {
@@ -40,12 +44,23 @@ public final class NewCommand extends BaseCommand {
       throw new MigrationException("No description specified for new migration.");
     }
     String description = params[0];
+    String changeIdOverride = null;
+
+	Pattern p = Pattern.compile("(.+) (\\d+$)");
+	Matcher m = p.matcher(description);
+	if (m.find()) {
+		changeIdOverride = m.group(2);
+		description = m.group(1);
+	}
+
     Properties variables = new Properties();
     variables.setProperty("description", description);
-    existingEnvironmentFile();
-    String filename = getNextIDAsString() + "_" + description.replace(' ', '_') + ".sql";
+    String filename = (changeIdOverride == null ? getNextIDAsString() : changeIdOverride) + "_" + description.replace(' ', '_') + ".sql";
     String migrationsHome = "";
     migrationsHome = System.getenv(MIGRATIONS_HOME);
+
+    Change change = ChangeValidator.parseChangeFromFilename(filename, environmentProperties());
+    ChangeValidator.validateChangeForConfiguration (change, environmentProperties());
 
     // Check if there is a system property
     if (migrationsHome == null) {
@@ -59,7 +74,7 @@ public final class NewCommand extends BaseCommand {
         //get template name from properties file
         final String customConfiguredTemplate =
             ExternalResources.getConfiguredTemplate(migrationsHome + "/" + MIGRATIONS_PROPERTIES,
-                CUSTOM_NEW_COMMAND_TEMPATE_PROPERTY);
+                                                       CUSTOM_NEW_COMMAND_TEMPLATE_PROPERTY);
         copyExternalResourceTo(migrationsHome + "/" + customConfiguredTemplate,
             Util.file(paths.getScriptPath(), filename));
       } catch (FileNotFoundException e) {
@@ -74,6 +89,7 @@ public final class NewCommand extends BaseCommand {
     printStream.println("Done!");
     printStream.println();
   }
+
 
   private void copyDefaultTemplate(Properties variables, String filename) {
     copyResourceTo("org/apache/ibatis/migration/template_migration.sql",

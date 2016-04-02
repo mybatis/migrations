@@ -33,6 +33,8 @@ import java.util.Properties;
 import java.util.Set;
 
 public class MigrationReader extends Reader {
+  // FEFF because this is the Unicode char represented by the UTF-8 byte order mark (EF BB BF).
+  public static final String UTF8_BOM = "\uFEFF";
 
   private static final String LINE_SEPARATOR = System.getProperty("line.separator", "\n");
 
@@ -51,7 +53,15 @@ public class MigrationReader extends Reader {
       StringBuilder undoBuilder = new StringBuilder();
       StringBuilder currentBuilder = doBuilder;
       String line;
+      boolean firstLine = true;
+
       while ((line = reader.readLine()) != null) {
+        if (firstLine) {
+          if ("UTF-8".equalsIgnoreCase(charset) && line.startsWith(UTF8_BOM)) {
+            line = line.substring(1);
+          }
+          firstLine = false;
+        }
         if (line.trim().matches("^--\\s*//.*$")) {
           if (line.contains("@UNDO")) {
             currentBuilder = undoBuilder;

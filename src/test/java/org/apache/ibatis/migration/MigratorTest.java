@@ -50,22 +50,7 @@ public class MigratorTest {
     buffer = new StringOutputStream();
     System.setOut(new PrintStream(buffer));
 
-    DataSource ds = createUnpooledDataSource(BLOG_PROPERTIES);
-    Connection conn = ds.getConnection();
-    SqlRunner executor = new SqlRunner(conn);
-    safeRun(executor, "DROP TABLE bootstrap");
-    safeRun(executor, "DROP TABLE comment");
-    safeRun(executor, "DROP TABLE post_tag");
-    safeRun(executor, "DROP TABLE tag");
-    safeRun(executor, "DROP TABLE post");
-    safeRun(executor, "DROP TABLE blog");
-    safeRun(executor, "DROP TABLE author");
-    safeRun(executor, "DROP PROCEDURE selectTwoSetsOfAuthors");
-    safeRun(executor, "DROP PROCEDURE insertAuthor");
-    safeRun(executor, "DROP PROCEDURE selectAuthorViaOutParams");
-    safeRun(executor, "DROP TABLE changelog");
-    conn.commit();
-    conn.close();
+    ensureCleanTestDB();
 
     System.setSecurityManager(new SecurityManager() {
 
@@ -85,9 +70,11 @@ public class MigratorTest {
   }
 
   @AfterClass
-  public static void teardown() {
+  public static void teardown() throws Exception {
     System.setOut(out);
     System.setSecurityManager(null);
+
+    ensureCleanTestDB();
   }
 
   @Test
@@ -386,5 +373,22 @@ public class MigratorTest {
     return ds;
   }
 
-
+  public static void ensureCleanTestDB() throws Exception {
+    DataSource ds = createUnpooledDataSource(BLOG_PROPERTIES);
+    Connection conn = ds.getConnection();
+    SqlRunner executor = new SqlRunner(conn);
+    safeRun(executor, "DROP TABLE bootstrap");
+    safeRun(executor, "DROP TABLE comment");
+    safeRun(executor, "DROP TABLE post_tag");
+    safeRun(executor, "DROP TABLE tag");
+    safeRun(executor, "DROP TABLE post");
+    safeRun(executor, "DROP TABLE blog");
+    safeRun(executor, "DROP TABLE author");
+    safeRun(executor, "DROP PROCEDURE selectTwoSetsOfAuthors");
+    safeRun(executor, "DROP PROCEDURE insertAuthor");
+    safeRun(executor, "DROP PROCEDURE selectAuthorViaOutParams");
+    safeRun(executor, "DROP TABLE changelog");
+    conn.commit();
+    conn.close();
+  }
 }

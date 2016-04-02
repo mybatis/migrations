@@ -1,4 +1,5 @@
--- // Second migration.
+﻿-- // Second migration.
+-- Unicode test data جراءات امنية, استنفار امني
 -- Migration SQL that makes the change goes here.
 
 CREATE TABLE second_table (
