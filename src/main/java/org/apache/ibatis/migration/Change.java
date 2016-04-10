@@ -79,6 +79,7 @@ public class Change implements Comparable<Change> {
     return appliedTimestamp == null;
   }
 
+  @Override
   public boolean equals(Object o) {
     if (this == o) {
       return true;
