@@ -15,12 +15,11 @@
  */
 package org.apache.ibatis.migration;
 
-import org.apache.ibatis.migration.commands.Command;
-import org.apache.ibatis.migration.options.SelectedOptions;
-
 import java.io.File;
 import java.io.PrintStream;
 import java.util.Date;
+import org.apache.ibatis.migration.commands.Command;
+import org.apache.ibatis.migration.options.SelectedOptions;
 
 import static org.apache.ibatis.migration.commands.Commands.resolveCommand;
 import static org.apache.ibatis.migration.options.OptionsParser.parse;
@@ -131,6 +130,8 @@ public class CommandLine {
     console.printf("  status             Prints the changelog from the database if the changelog table exists.%n");
     console.printf(
         "  script <v1> <v2>   Generates a delta migration script from version v1 to v2 (undo if v1 > v2).%n");
+      console.printf(
+        "  upscript             Generates a delta migration script from all pending changes (undo not supported).%n");
     console.printf("%n");
     console.printf("  * Shortcuts are accepted by using the first few (unambiguous) letters of each command..%n");
     console.printf("%n");
