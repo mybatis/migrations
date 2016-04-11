@@ -31,7 +31,6 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.security.Permission;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Map;
 import java.util.Properties;
@@ -87,26 +86,8 @@ public class MigratorTest {
 
   @AfterClass
   public static void teardown() {
-
-
     System.setOut(out);
     System.setSecurityManager(null);
-  }
-
-  private void testDoPendingScriptCommand(File f) throws Exception
-  {
-
-    safeMigratorMain(args("--path=" + f.getAbsolutePath(), "script", "pending"));
-    assertTrue(buffer.toString().contains("INSERT"));
-    assertTrue(buffer.toString().contains("CHANGELOG"));
-    assertFalse(buffer.toString().contains("-- @UNDO"));
-    buffer.clear();
-
-    safeMigratorMain(args("--path=" + f.getAbsolutePath(), "script", "pending_undo"));
-    assertTrue(buffer.toString().contains("DELETE"));
-    assertTrue(buffer.toString().contains("CHANGELOG"));
-    assertTrue(buffer.toString().contains("-- @UNDO"));
-    buffer.clear();
   }
 
   @Test
@@ -179,6 +160,20 @@ public class MigratorTest {
   private void testDownCommandGiven2Steps(File f) throws Exception {
     safeMigratorMain(args("--path=" + f.getAbsolutePath(), "down", "2"));
     assertFalse(buffer.toString().contains("FAILURE"));
+    buffer.clear();
+  }
+
+  private void testDoPendingScriptCommand(File f) throws Exception {
+    safeMigratorMain(args("--path=" + f.getAbsolutePath(), "script", "pending"));
+    assertTrue(buffer.toString().contains("INSERT"));
+    assertTrue(buffer.toString().contains("CHANGELOG"));
+    assertFalse(buffer.toString().contains("-- @UNDO"));
+    buffer.clear();
+
+    safeMigratorMain(args("--path=" + f.getAbsolutePath(), "script", "pending_undo"));
+    assertTrue(buffer.toString().contains("DELETE"));
+    assertTrue(buffer.toString().contains("CHANGELOG"));
+    assertTrue(buffer.toString().contains("-- @UNDO"));
     buffer.clear();
   }
 

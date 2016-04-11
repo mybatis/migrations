@@ -74,8 +74,7 @@ public class Change implements Comparable<Change> {
     return id + " " + (isPending() ? "   ...pending...   " : appliedTimestamp) + " " + description;
   }
 
-  public boolean isPending()
-  {
+  public boolean isPending() {
     return appliedTimestamp == null;
   }
 

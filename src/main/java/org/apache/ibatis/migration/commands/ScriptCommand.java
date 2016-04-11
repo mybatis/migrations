@@ -48,13 +48,11 @@ public final class ScriptCommand extends BaseCommand {
 
       String firstToken = parser.nextToken();
 
-      if(tokenCount == 1 && firstToken.equals("pending")){
+      if (tokenCount == 1 && firstToken.equals("pending")) {
         scriptPending = true;
-      } else if(tokenCount == 1 && firstToken.equals("pending_undo")) {
+      } else if (tokenCount == 1 && firstToken.equals("pending_undo")) {
         scriptPendingUndo = true;
-      }
-
-      else if (!scriptPending&& !scriptPendingUndo && tokenCount != 2) {
+      } else if (!scriptPending && !scriptPendingUndo && tokenCount != 2) {
         throw new MigrationException("The script command requires a range of versions from v1 - v2.");
       }
 
@@ -100,7 +98,6 @@ public final class ScriptCommand extends BaseCommand {
     } catch (IOException e) {
       throw new MigrationException("Error generating script. Cause: " + e, e);
     }
-
   }
 
   private String generateVersionInsert(Change change) {
@@ -126,7 +123,7 @@ public final class ScriptCommand extends BaseCommand {
       return change.isPending();
     }
   }
-  
+
   // Issue 699
   private String getDelimiter() {
     Properties props = environmentProperties();
