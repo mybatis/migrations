@@ -120,7 +120,7 @@ public final class ScriptCommand extends BaseCommand {
       }
     }
     else {
-      return change.isPending();
+      return change.getAppliedTimestamp() == null;
     }
   }
 

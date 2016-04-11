@@ -71,11 +71,7 @@ public class Change implements Comparable<Change> {
 
   @Override
   public String toString() {
-    return id + " " + (isPending() ? "   ...pending...   " : appliedTimestamp) + " " + description;
-  }
-
-  public boolean isPending() {
-    return appliedTimestamp == null;
+    return id + " " + (appliedTimestamp == null ? "   ...pending...   " : appliedTimestamp) + " " + description;
   }
 
   @Override
