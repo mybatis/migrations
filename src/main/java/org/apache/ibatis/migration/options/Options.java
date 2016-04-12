@@ -24,5 +24,6 @@ public enum Options {
   FORCE,
   TRACE,
   HELP,
-  TEMPLATE
+  TEMPLATE,
+  IDPATTERN
 }

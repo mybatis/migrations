@@ -290,7 +290,18 @@ public class MigratorTest {
     assertEquals(3, scriptPath.list().length);
     safeMigratorMain(args("--path=" + basePath.getAbsolutePath(), "new", "test new migration"));
     assertEquals(4, scriptPath.list().length);
+  }
 
+  @Test
+  public void shouldRespectIdPattern() throws Exception {
+    String idPattern = "000";
+    File basePath = getTempDir();
+    safeMigratorMain(args("--path=" + basePath.getAbsolutePath(), "--idpattern=" + idPattern, "init"));
+    File changelog = new File(basePath.getCanonicalPath() + File.separator + "scripts" + File.separator + "001_create_changelog.sql");
+    assertTrue(changelog.exists());
+    safeMigratorMain(args("--path=" + basePath.getAbsolutePath(), "--idpattern=" + idPattern, "new", "new migration"));
+    File newMigration = new File(basePath.getCanonicalPath() + File.separator + "scripts" + File.separator + "003_new_migration.sql");
+    assertTrue(newMigration.exists());
   }
 
   @Test

@@ -39,11 +39,12 @@ public class OptionsParserTest {
   @Test
   public void testEnvAndTemplate() {
     final String testValue = "test";
-    final String[] args = {valuedOption(ENV, testValue), valuedOption(TEMPLATE, testValue)};
+    final String[] args = {valuedOption(ENV, testValue), valuedOption(TEMPLATE, testValue), valuedOption(Options.IDPATTERN, testValue)};
     final SelectedOptions options = parse(args);
 
     assertThat(options.getEnvironment(), equalTo(testValue));
     assertThat(options.getTemplate(), equalTo(testValue));
+    assertThat(options.getIdPattern(), equalTo(testValue));
   }
 
   @Test

@@ -81,6 +81,9 @@ public enum OptionsParser {
         case TEMPLATE:
           options.setTemplate(argParts[1]);
           break;
+        case IDPATTERN:
+          options.setIdPattern(argParts[1]);
+          break;
       }
     }
 

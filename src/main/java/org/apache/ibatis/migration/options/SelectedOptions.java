@@ -19,6 +19,7 @@ public class SelectedOptions {
   private SelectedPaths paths = new SelectedPaths();
   private String environment = "development";
   private String template;
+  private String idPattern;
   private boolean force;
   private boolean trace;
   private String command;
@@ -43,6 +44,14 @@ public class SelectedOptions {
 
   public void setTemplate(String aTemplate) {
     template = aTemplate;
+  }
+
+  public String getIdPattern() {
+    return idPattern;
+  }
+
+  public void setIdPattern(String idPattern) {
+    this.idPattern = idPattern;
   }
 
   public boolean isForce() {

@@ -27,6 +27,8 @@ import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -36,6 +38,7 @@ import java.util.TimeZone;
 
 import org.apache.ibatis.datasource.unpooled.UnpooledDataSource;
 import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.migration.Change;
 import org.apache.ibatis.migration.ConnectionProvider;
 import org.apache.ibatis.migration.DataSourceConnectionProvider;
 import org.apache.ibatis.migration.FileMigrationLoader;
@@ -43,6 +46,7 @@ import org.apache.ibatis.migration.MigrationException;
 import org.apache.ibatis.migration.MigrationLoader;
 import org.apache.ibatis.migration.io.ExternalResources;
 import org.apache.ibatis.migration.options.DatabaseOperationOption;
+import org.apache.ibatis.migration.options.Options;
 import org.apache.ibatis.migration.options.SelectedOptions;
 import org.apache.ibatis.migration.options.SelectedPaths;
 import org.apache.ibatis.parsing.PropertyParser;
@@ -96,6 +100,37 @@ public abstract class BaseCommand implements Command {
     } catch (InterruptedException e) {
       // ignore
     }
+    String idPattern = options.getIdPattern();
+    if (idPattern == null) {
+      try {
+        idPattern = getPropertyOption(Options.IDPATTERN.toString().toLowerCase());
+      } catch (FileNotFoundException e) {
+        // ignore
+      }
+    }
+    if (idPattern != null) {
+      return generatePatternedId(idPattern);
+    } else {
+      return generateTimestampId();
+    }
+  }
+
+  private String generatePatternedId(String pattern) {
+    DecimalFormat fmt = new DecimalFormat(pattern);
+    List<Change> migrations = getMigrationLoader().getMigrations();
+    if (migrations.size() == 0) {
+      return fmt.format(1);
+    }
+    Change lastChange = migrations.get(migrations.size() - 1);
+    try {
+      long lastId = (Long) fmt.parse(lastChange.getId().toString());
+      return fmt.format(++lastId);
+    } catch (ParseException e) {
+      throw new MigrationException("Failed to parse last id '" + lastChange.getId() + "' using the specified idPattern '" + pattern + "'");
+    }
+  }
+
+  private String generateTimestampId() {
     String timezone = environmentProperties().getProperty("time_zone");
     if (timezone == null) {
       timezone = "GMT+0:00";
