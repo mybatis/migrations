@@ -48,22 +48,22 @@ public final class InfoCommand implements Command {
     }
 
 <span class="nc" id="L50">    out.printf(&quot;%s %s (%s)%n&quot;,</span>
-        properties.getProperty(&quot;name&quot;),
-        properties.getProperty(&quot;version&quot;),
-        properties.getProperty(&quot;build&quot;));
+<span class="nc" id="L51">        properties.getProperty(&quot;name&quot;),</span>
+<span class="nc" id="L52">        properties.getProperty(&quot;version&quot;),</span>
+<span class="nc" id="L53">        properties.getProperty(&quot;build&quot;));</span>
 <span class="nc" id="L54">    out.printf(&quot;Java version: %s, vendor: %s%n&quot;,</span>
-        System.getProperty(&quot;java.version&quot;),
-        System.getProperty(&quot;java.vendor&quot;));
+<span class="nc" id="L55">        System.getProperty(&quot;java.version&quot;),</span>
+<span class="nc" id="L56">        System.getProperty(&quot;java.vendor&quot;));</span>
 <span class="nc" id="L57">    out.printf(&quot;Java home: %s%n&quot;, System.getProperty(&quot;java.home&quot;));</span>
 <span class="nc" id="L58">    out.printf(&quot;Default locale: %s_%s, platform encoding: %s%n&quot;,</span>
-        System.getProperty(&quot;user.language&quot;),
-        System.getProperty(&quot;user.country&quot;),
-        System.getProperty(&quot;sun.jnu.encoding&quot;));
+<span class="nc" id="L59">        System.getProperty(&quot;user.language&quot;),</span>
+<span class="nc" id="L60">        System.getProperty(&quot;user.country&quot;),</span>
+<span class="nc" id="L61">        System.getProperty(&quot;sun.jnu.encoding&quot;));</span>
 <span class="nc" id="L62">    out.printf(&quot;OS name: \&quot;%s\&quot;, version: \&quot;%s\&quot;, arch: \&quot;%s\&quot;, family: \&quot;%s\&quot;%n&quot;,</span>
-        System.getProperty(&quot;os.name&quot;),
-        System.getProperty(&quot;os.version&quot;),
-        System.getProperty(&quot;os.arch&quot;),
-        getOsFamily());
+<span class="nc" id="L63">        System.getProperty(&quot;os.name&quot;),</span>
+<span class="nc" id="L64">        System.getProperty(&quot;os.version&quot;),</span>
+<span class="nc" id="L65">        System.getProperty(&quot;os.arch&quot;),</span>
+<span class="nc" id="L66">        getOsFamily());</span>
 <span class="nc" id="L67">  }</span>
 
   private static final String getOsFamily() {

@@ -63,7 +63,7 @@ import org.apache.ibatis.migration.options.SelectedOptions;
       case STATUS:
 <span class="fc" id="L64">        return new StatusCommand(selectedOptions);</span>
       default:
-<span class="pc" id="L66">        return new Command() {</span>
+<span class="nc" id="L66">        return new Command() {</span>
           @Override
           public void execute(String... params) {
 <span class="nc" id="L69">            System.out.println(&quot;unknown command&quot;);</span>

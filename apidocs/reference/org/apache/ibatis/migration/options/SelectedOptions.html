@@ -149,6 +149,8 @@
     <li class="api apilevel-">
   <a href="../../../../../org/apache/ibatis/migration/commands/package-summary.html">org.apache.ibatis.migration.commands</a></li>
     <li class="api apilevel-">
+  <a href="../../../../../org/apache/ibatis/migration/io/package-summary.html">org.apache.ibatis.migration.io</a></li>
+    <li class="api apilevel-">
   <a href="../../../../../org/apache/ibatis/migration/operations/package-summary.html">org.apache.ibatis.migration.operations</a></li>
     <li class="selected api apilevel-">
   <a href="../../../../../org/apache/ibatis/migration/options/package-summary.html">org.apache.ibatis.migration.options</a></li>
@@ -443,13 +445,29 @@ Summary:
             String
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../../../../org/apache/ibatis/migration/options/SelectedOptions.html#getParams()">getParams</a></span>()
+        <span class="sympad"><a href="../../../../../org/apache/ibatis/migration/options/SelectedOptions.html#getIdPattern()">getIdPattern</a></span>()
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            
+            
+            
+            String
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../../../org/apache/ibatis/migration/options/SelectedOptions.html#getParams()">getParams</a></span>()
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
         <td class="jd-typecol">
             
             
@@ -465,7 +483,7 @@ Summary:
 
 
 	 
-    <tr class="alt-color api apilevel-" >
+    <tr class=" api apilevel-" >
         <td class="jd-typecol">
             
             
@@ -481,7 +499,7 @@ Summary:
 
 
 	 
-    <tr class=" api apilevel-" >
+    <tr class="alt-color api apilevel-" >
         <td class="jd-typecol">
             
             
@@ -497,7 +515,7 @@ Summary:
 
 
 	 
-    <tr class="alt-color api apilevel-" >
+    <tr class=" api apilevel-" >
         <td class="jd-typecol">
             
             
@@ -513,7 +531,7 @@ Summary:
 
 
 	 
-    <tr class=" api apilevel-" >
+    <tr class="alt-color api apilevel-" >
         <td class="jd-typecol">
             
             
@@ -529,7 +547,7 @@ Summary:
 
 
 	 
-    <tr class="alt-color api apilevel-" >
+    <tr class=" api apilevel-" >
         <td class="jd-typecol">
             
             
@@ -545,7 +563,7 @@ Summary:
 
 
 	 
-    <tr class=" api apilevel-" >
+    <tr class="alt-color api apilevel-" >
         <td class="jd-typecol">
             
             
@@ -561,7 +579,7 @@ Summary:
 
 
 	 
-    <tr class="alt-color api apilevel-" >
+    <tr class=" api apilevel-" >
         <td class="jd-typecol">
             
             
@@ -577,7 +595,7 @@ Summary:
 
 
 	 
-    <tr class=" api apilevel-" >
+    <tr class="alt-color api apilevel-" >
         <td class="jd-typecol">
             
             
@@ -588,6 +606,22 @@ Summary:
         </td>
         <td class="jd-linkcol" width="100%">
         <span class="sympad"><a href="../../../../../org/apache/ibatis/migration/options/SelectedOptions.html#setHelp(boolean)">setHelp</a></span>(boolean aHelp)
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">
+            
+            
+            
+            
+            
+            void
+        </td>
+        <td class="jd-linkcol" width="100%">
+        <span class="sympad"><a href="../../../../../org/apache/ibatis/migration/options/SelectedOptions.html#setIdPattern(java.lang.String)">setIdPattern</a></span>(String idPattern)
         
   </td></tr>
 
@@ -813,7 +847,7 @@ From class
             void
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad">wait</span>()
+        <span class="sympad">wait</span>(long arg0, int arg1)
         
   </td></tr>
 
@@ -829,7 +863,7 @@ From class
             void
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad">wait</span>(long arg0, int arg1)
+        <span class="sympad">wait</span>(long arg0)
         
   </td></tr>
 
@@ -845,7 +879,7 @@ From class
             void
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad">wait</span>(long arg0)
+        <span class="sympad">wait</span>()
         
   </td></tr>
 
@@ -980,6 +1014,37 @@ From class
         String
       </span>
       <span class="sympad">getEnvironment</span>
+      <span class="normal">()</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p></p></div>
+
+    </div>
+</div>
+
+
+<a id="getIdPattern()"></a>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+         
+         
+        String
+      </span>
+      <span class="sympad">getIdPattern</span>
       <span class="normal">()</span>
     </h4>
       <div class="api-level">
@@ -1291,6 +1356,37 @@ From class
       </span>
       <span class="sympad">setHelp</span>
       <span class="normal">(boolean aHelp)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p></p></div>
+
+    </div>
+</div>
+
+
+<a id="setIdPattern(java.lang.String)"></a>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+         
+         
+        void
+      </span>
+      <span class="sympad">setIdPattern</span>
+      <span class="normal">(String idPattern)</span>
     </h4>
       <div class="api-level">
         <div>

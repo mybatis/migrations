@@ -46,9 +46,9 @@ public final class InitializeCommand extends BaseCommand {
 <span class="fc" id="L46">    copyResourceTo(&quot;org/apache/ibatis/migration/template_environment.properties&quot;, environmentFile());</span>
 <span class="fc" id="L47">    copyResourceTo(&quot;org/apache/ibatis/migration/template_bootstrap.sql&quot;, Util.file(scriptPath, &quot;bootstrap.sql&quot;));</span>
 <span class="fc" id="L48">    copyResourceTo(&quot;org/apache/ibatis/migration/template_changelog.sql&quot;,</span>
-        Util.file(scriptPath, getNextIDAsString() + &quot;_create_changelog.sql&quot;));
+<span class="fc" id="L49">        Util.file(scriptPath, getNextIDAsString() + &quot;_create_changelog.sql&quot;));</span>
 <span class="fc" id="L50">    copyResourceTo(&quot;org/apache/ibatis/migration/template_migration.sql&quot;,</span>
-        Util.file(scriptPath, getNextIDAsString() + &quot;_first_migration.sql&quot;),
+<span class="fc" id="L51">        Util.file(scriptPath, getNextIDAsString() + &quot;_first_migration.sql&quot;),</span>
 <span class="fc" id="L52">        new Properties() {</span>
           {
 <span class="fc" id="L54">            setProperty(&quot;description&quot;, &quot;First migration.&quot;);</span>
@@ -64,7 +64,7 @@ public final class InitializeCommand extends BaseCommand {
 <span class="nc bnc" id="L64" title="All 2 branches missed.">      for (String entry : list) {</span>
 <span class="nc bnc" id="L65" title="All 2 branches missed.">        if (!entry.startsWith(&quot;.&quot;)) {</span>
 <span class="nc" id="L66">          throw new MigrationException(</span>
-              &quot;Directory must be empty (.svn etc allowed): &quot; + path.getAbsolutePath());
+<span class="nc" id="L67">              &quot;Directory must be empty (.svn etc allowed): &quot; + path.getAbsolutePath());</span>
         }
       }
     }

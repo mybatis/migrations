@@ -26,87 +26,111 @@ import java.util.StringTokenizer;
 import org.apache.ibatis.migration.Change;
 import org.apache.ibatis.migration.MigrationException;
 import org.apache.ibatis.migration.operations.DatabaseOperation;
+import org.apache.ibatis.migration.operations.StatusOperation;
 import org.apache.ibatis.migration.options.SelectedOptions;
 
 public final class ScriptCommand extends BaseCommand {
 
   public ScriptCommand(SelectedOptions options) {
-<span class="fc" id="L34">    super(options);</span>
-<span class="fc" id="L35">  }</span>
+<span class="fc" id="L35">    super(options);</span>
+<span class="fc" id="L36">  }</span>
 
   @Override
   public void execute(String... sparams) {
     try {
-<span class="pc bpc" id="L40" title="3 of 6 branches missed.">      if (sparams == null || sparams.length &lt; 1 || sparams[0] == null) {</span>
-<span class="nc" id="L41">        throw new MigrationException(&quot;The script command requires a range of versions from v1 - v2.&quot;);</span>
+<span class="pc bpc" id="L41" title="3 of 6 branches missed.">      if (sparams == null || sparams.length &lt; 1 || sparams[0] == null) {</span>
+<span class="nc" id="L42">        throw new MigrationException(&quot;The script command requires a range of versions from v1 - v2.&quot;);</span>
       }
-<span class="fc" id="L43">      StringTokenizer parser = new StringTokenizer(sparams[0]);</span>
-<span class="pc bpc" id="L44" title="1 of 2 branches missed.">      if (parser.countTokens() != 2) {</span>
-<span class="nc" id="L45">        throw new MigrationException(&quot;The script command requires a range of versions from v1 - v2.&quot;);</span>
-      }
-<span class="fc" id="L47">      BigDecimal v1 = new BigDecimal(parser.nextToken());</span>
-<span class="fc" id="L48">      BigDecimal v2 = new BigDecimal(parser.nextToken());</span>
-<span class="fc" id="L49">      int comparison = v1.compareTo(v2);</span>
-<span class="fc bfc" id="L50" title="All 2 branches covered.">      if (comparison == 0) {</span>
-<span class="fc" id="L51">        throw new MigrationException(&quot;The script command requires two different versions. Use 0 to include the first version.&quot;);</span>
-      }
-<span class="fc bfc" id="L53" title="All 2 branches covered.">      boolean undo = comparison &gt; 0;</span>
-<span class="fc" id="L54">      List&lt;Change&gt; migrations = getMigrationLoader().getMigrations();</span>
-<span class="fc" id="L55">      Collections.sort(migrations);</span>
-<span class="fc bfc" id="L56" title="All 2 branches covered.">      if (undo) {</span>
-<span class="fc" id="L57">        Collections.reverse(migrations);</span>
-      }
-<span class="fc bfc" id="L59" title="All 2 branches covered.">      for (Change change : migrations) {</span>
-<span class="fc bfc" id="L60" title="All 2 branches covered.">        if (shouldRun(change, v1, v2)) {</span>
-<span class="fc" id="L61">          printStream.println(&quot;-- &quot; + change.getFilename());</span>
-<span class="fc" id="L62">          Reader migrationReader = getMigrationLoader().getScriptReader(change, undo);</span>
-<span class="fc" id="L63">          char[] cbuf = new char[1024];</span>
-          int l;
-<span class="fc bfc" id="L65" title="All 2 branches covered.">          while ((l = migrationReader.read(cbuf)) == cbuf.length) {</span>
-<span class="fc" id="L66">            printStream.print(new String(cbuf, 0, l));</span>
-          }
+<span class="fc" id="L44">      StringTokenizer parser = new StringTokenizer(sparams[0]);</span>
+<span class="fc" id="L45">      int tokenCount = parser.countTokens();</span>
+<span class="fc" id="L46">      boolean scriptPending = false;</span>
+<span class="fc" id="L47">      boolean scriptPendingUndo = false;</span>
 
-<span class="pc bpc" id="L69" title="1 of 2 branches missed.">          if (l &gt; 0) {</span>
-<span class="fc" id="L70">            printStream.print(new String(cbuf, 0, l - 1));</span>
-          }
-<span class="fc" id="L72">          printStream.println();</span>
-<span class="fc" id="L73">          printStream.println();</span>
-<span class="fc bfc" id="L74" title="All 2 branches covered.">          printStream.println(undo ? generateVersionDelete(change) : generateVersionInsert(change));</span>
-<span class="fc" id="L75">          printStream.println();</span>
+<span class="fc" id="L49">      String firstToken = parser.nextToken();</span>
+
+<span class="fc bfc" id="L51" title="All 4 branches covered.">      if (tokenCount == 1 &amp;&amp; firstToken.equals(&quot;pending&quot;)) {</span>
+<span class="fc" id="L52">        scriptPending = true;</span>
+<span class="pc bpc" id="L53" title="1 of 4 branches missed.">      } else if (tokenCount == 1 &amp;&amp; firstToken.equals(&quot;pending_undo&quot;)) {</span>
+<span class="fc" id="L54">        scriptPendingUndo = true;</span>
+<span class="pc bpc" id="L55" title="3 of 6 branches missed.">      } else if (!scriptPending &amp;&amp; !scriptPendingUndo &amp;&amp; tokenCount != 2) {</span>
+<span class="nc" id="L56">        throw new MigrationException(&quot;The script command requires a range of versions from v1 - v2.&quot;);</span>
+      }
+
+<span class="fc bfc" id="L59" title="All 4 branches covered.">      BigDecimal v1 = (scriptPending || scriptPendingUndo) ? null : new BigDecimal(firstToken);</span>
+<span class="fc bfc" id="L60" title="All 4 branches covered.">      BigDecimal v2 = (scriptPending || scriptPendingUndo) ? null :new BigDecimal(parser.nextToken());</span>
+
+      boolean undo;
+<span class="fc" id="L63">      undo = scriptPendingUndo;</span>
+<span class="fc bfc" id="L64" title="All 4 branches covered.">      if(!scriptPending &amp;&amp; !scriptPendingUndo) {</span>
+<span class="fc" id="L65">        int comparison = v1.compareTo(v2);</span>
+<span class="fc bfc" id="L66" title="All 2 branches covered.">        if (comparison == 0) {</span>
+<span class="fc" id="L67">          throw new MigrationException(&quot;The script command requires two different versions. Use 0 to include the first version.&quot;);</span>
         }
-<span class="fc" id="L77">      }</span>
-<span class="nc" id="L78">    } catch (IOException e) {</span>
-<span class="nc" id="L79">      throw new MigrationException(&quot;Error generating script. Cause: &quot; + e, e);</span>
-<span class="fc" id="L80">    }</span>
+<span class="fc bfc" id="L69" title="All 2 branches covered.">        undo = comparison &gt; 0;</span>
+      }
 
-<span class="fc" id="L82">  }</span>
+<span class="fc bfc" id="L72" title="All 4 branches covered.">      List&lt;Change&gt; migrations =  (scriptPending || scriptPendingUndo) ?</span>
+<span class="fc" id="L73">              new StatusOperation().operate(getConnectionProvider(), getMigrationLoader(), getDatabaseOperationOption(), null).getCurrentStatus() :</span>
+<span class="fc" id="L74">              getMigrationLoader().getMigrations();</span>
+<span class="fc" id="L75">      Collections.sort(migrations);</span>
+<span class="fc bfc" id="L76" title="All 2 branches covered.">      if (undo) {</span>
+<span class="fc" id="L77">        Collections.reverse(migrations);</span>
+      }
+<span class="fc bfc" id="L79" title="All 2 branches covered.">      for (Change change : migrations) {</span>
+<span class="fc bfc" id="L80" title="All 6 branches covered.">        if (shouldRun(change, v1, v2, scriptPending || scriptPendingUndo)) {</span>
+<span class="fc" id="L81">          printStream.println(&quot;-- &quot; + change.getFilename());</span>
+<span class="fc" id="L82">          Reader migrationReader = getMigrationLoader().getScriptReader(change, undo);</span>
+<span class="fc" id="L83">          char[] cbuf = new char[1024];</span>
+          int l;
+<span class="fc bfc" id="L85" title="All 2 branches covered.">          while ((l = migrationReader.read(cbuf)) == cbuf.length) {</span>
+<span class="fc" id="L86">            printStream.print(new String(cbuf, 0, l));</span>
+          }
+
+<span class="pc bpc" id="L89" title="1 of 2 branches missed.">          if (l &gt; 0) {</span>
+<span class="fc" id="L90">            printStream.print(new String(cbuf, 0, l - 1));</span>
+          }
+<span class="fc" id="L92">          printStream.println();</span>
+<span class="fc" id="L93">          printStream.println();</span>
+<span class="fc bfc" id="L94" title="All 2 branches covered.">          printStream.println(undo ? generateVersionDelete(change) : generateVersionInsert(change));</span>
+<span class="fc" id="L95">          printStream.println();</span>
+        }
+<span class="fc" id="L97">      }</span>
+<span class="nc" id="L98">    } catch (IOException e) {</span>
+<span class="nc" id="L99">      throw new MigrationException(&quot;Error generating script. Cause: &quot; + e, e);</span>
+<span class="fc" id="L100">    }</span>
+<span class="fc" id="L101">  }</span>
 
   private String generateVersionInsert(Change change) {
-<span class="fc" id="L85">    return &quot;INSERT INTO &quot; + changelogTable() + &quot; (ID, APPLIED_AT, DESCRIPTION) &quot; +</span>
-        &quot;VALUES (&quot; + change.getId() + &quot;, '&quot; + DatabaseOperation.generateAppliedTimeStampAsString() + &quot;', '&quot;
-        + change.getDescription().replace('\'', ' ') + &quot;')&quot; + getDelimiter();
+<span class="fc" id="L104">    return &quot;INSERT INTO &quot; + changelogTable() + &quot; (ID, APPLIED_AT, DESCRIPTION) &quot; +</span>
+<span class="fc" id="L105">        &quot;VALUES (&quot; + change.getId() + &quot;, '&quot; + DatabaseOperation.generateAppliedTimeStampAsString() + &quot;', '&quot;</span>
+<span class="fc" id="L106">        + change.getDescription().replace('\'', ' ') + &quot;')&quot; + getDelimiter();</span>
   }
 
   private String generateVersionDelete(Change change) {
-<span class="fc" id="L91">    return &quot;DELETE FROM &quot; + changelogTable() + &quot; WHERE ID = &quot; + change.getId() + getDelimiter();</span>
+<span class="fc" id="L110">    return &quot;DELETE FROM &quot; + changelogTable() + &quot; WHERE ID = &quot; + change.getId() + getDelimiter();</span>
   }
 
-  private boolean shouldRun(Change change, BigDecimal v1, BigDecimal v2) {
-<span class="fc" id="L95">    BigDecimal id = change.getId();</span>
-<span class="fc bfc" id="L96" title="All 2 branches covered.">    if (v1.compareTo(v2) &gt; 0) {</span>
-<span class="fc bfc" id="L97" title="All 4 branches covered.">      return (id.compareTo(v2) &gt; 0 &amp;&amp; id.compareTo(v1) &lt;= 0);</span>
-    } else {
-<span class="fc bfc" id="L99" title="All 4 branches covered.">      return (id.compareTo(v1) &gt; 0 &amp;&amp; id.compareTo(v2) &lt;= 0);</span>
+  private boolean shouldRun(Change change, BigDecimal v1, BigDecimal v2, boolean pendingOnly) {
+<span class="fc bfc" id="L114" title="All 2 branches covered.">    if(!pendingOnly) {</span>
+<span class="fc" id="L115">      BigDecimal id = change.getId();</span>
+<span class="fc bfc" id="L116" title="All 2 branches covered.">      if (v1.compareTo(v2) &gt; 0) {</span>
+<span class="fc bfc" id="L117" title="All 4 branches covered.">        return (id.compareTo(v2) &gt; 0 &amp;&amp; id.compareTo(v1) &lt;= 0);</span>
+      } else {
+<span class="fc bfc" id="L119" title="All 4 branches covered.">        return (id.compareTo(v1) &gt; 0 &amp;&amp; id.compareTo(v2) &lt;= 0);</span>
+      }
+    }
+    else {
+<span class="fc bfc" id="L123" title="All 2 branches covered.">      return change.getAppliedTimestamp() == null;</span>
     }
   }
-  
+
   // Issue 699
   private String getDelimiter() {
-<span class="fc" id="L105">    Properties props = environmentProperties();</span>
-<span class="fc" id="L106">    StringBuilder delimiter = new StringBuilder();</span>
-<span class="pc bpc" id="L107" title="1 of 2 branches missed.">    if (Boolean.valueOf(props.getProperty(&quot;full_line_delimiter&quot;))) delimiter.append(&quot;\n&quot;); </span>
-<span class="fc" id="L108">    delimiter.append(props.getProperty(&quot;delimiter&quot;, &quot;;&quot;));</span>
-<span class="fc" id="L109">    return delimiter.toString();</span>
+<span class="fc" id="L129">    Properties props = environmentProperties();</span>
+<span class="fc" id="L130">    StringBuilder delimiter = new StringBuilder();</span>
+<span class="pc bpc" id="L131" title="1 of 2 branches missed.">    if (Boolean.valueOf(props.getProperty(&quot;full_line_delimiter&quot;))) delimiter.append(&quot;\n&quot;); </span>
+<span class="fc" id="L132">    delimiter.append(props.getProperty(&quot;delimiter&quot;, &quot;;&quot;));</span>
+<span class="fc" id="L133">    return delimiter.toString();</span>
   }
 
 }

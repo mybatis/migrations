@@ -149,6 +149,8 @@
     <li class="api apilevel-">
   <a href="../../../../../org/apache/ibatis/migration/commands/package-summary.html">org.apache.ibatis.migration.commands</a></li>
     <li class="api apilevel-">
+  <a href="../../../../../org/apache/ibatis/migration/io/package-summary.html">org.apache.ibatis.migration.io</a></li>
+    <li class="api apilevel-">
   <a href="../../../../../org/apache/ibatis/migration/operations/package-summary.html">org.apache.ibatis.migration.operations</a></li>
     <li class="selected api apilevel-">
   <a href="../../../../../org/apache/ibatis/migration/options/package-summary.html">org.apache.ibatis.migration.options</a></li>
@@ -428,26 +430,33 @@ Summary:
     
     <tr class=" api apilevel-" >
         <td class="jd-descrcol"><a href="../../../../../org/apache/ibatis/migration/options/Options.html">Options</a>&nbsp;</td>
-        <td class="jd-linkcol">PATH&nbsp;</td>
+        <td class="jd-linkcol">IDPATTERN&nbsp;</td>
         <td class="jd-descrcol" width="100%">&nbsp;</td>
     </tr>
     
     
     <tr class="alt-color api apilevel-" >
         <td class="jd-descrcol"><a href="../../../../../org/apache/ibatis/migration/options/Options.html">Options</a>&nbsp;</td>
-        <td class="jd-linkcol">SCRIPTPATH&nbsp;</td>
+        <td class="jd-linkcol">PATH&nbsp;</td>
         <td class="jd-descrcol" width="100%">&nbsp;</td>
     </tr>
     
     
     <tr class=" api apilevel-" >
         <td class="jd-descrcol"><a href="../../../../../org/apache/ibatis/migration/options/Options.html">Options</a>&nbsp;</td>
-        <td class="jd-linkcol">TEMPLATE&nbsp;</td>
+        <td class="jd-linkcol">SCRIPTPATH&nbsp;</td>
         <td class="jd-descrcol" width="100%">&nbsp;</td>
     </tr>
     
     
     <tr class="alt-color api apilevel-" >
+        <td class="jd-descrcol"><a href="../../../../../org/apache/ibatis/migration/options/Options.html">Options</a>&nbsp;</td>
+        <td class="jd-linkcol">TEMPLATE&nbsp;</td>
+        <td class="jd-descrcol" width="100%">&nbsp;</td>
+    </tr>
+    
+    
+    <tr class=" api apilevel-" >
         <td class="jd-descrcol"><a href="../../../../../org/apache/ibatis/migration/options/Options.html">Options</a>&nbsp;</td>
         <td class="jd-linkcol">TRACE&nbsp;</td>
         <td class="jd-descrcol" width="100%">&nbsp;</td>
@@ -565,13 +574,13 @@ From class
         <td class="jd-typecol">
             
             
-            
+            final
             
             
             int
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad">compareTo</span>(Object arg0)
+        <span class="sympad">compareTo</span>(E arg0)
         
   </td></tr>
 
@@ -581,13 +590,13 @@ From class
         <td class="jd-typecol">
             
             
-            final
+            
             
             
             int
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad">compareTo</span>(E arg0)
+        <span class="sympad">compareTo</span>(Object arg0)
         
   </td></tr>
 
@@ -885,7 +894,7 @@ From class
             void
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad">wait</span>()
+        <span class="sympad">wait</span>(long arg0, int arg1)
         
   </td></tr>
 
@@ -901,7 +910,7 @@ From class
             void
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad">wait</span>(long arg0, int arg1)
+        <span class="sympad">wait</span>(long arg0)
         
   </td></tr>
 
@@ -917,7 +926,7 @@ From class
             void
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad">wait</span>(long arg0)
+        <span class="sympad">wait</span>()
         
   </td></tr>
 
@@ -1129,6 +1138,36 @@ From interface
         <a href="../../../../../org/apache/ibatis/migration/options/Options.html">Options</a>
       </span>
         HELP
+    </h4>
+      <div class="api-level">
+        
+
+
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p></p></div>
+
+    
+    </div>
+</div>
+
+
+
+<a id="IDPATTERN"></a>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+        final 
+        <a href="../../../../../org/apache/ibatis/migration/options/Options.html">Options</a>
+      </span>
+        IDPATTERN
     </h4>
       <div class="api-level">
         
