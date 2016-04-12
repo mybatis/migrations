@@ -41,6 +41,15 @@ Here's an example of running the init command:</p>
 
       <p>When the command is completed, the directory will contain the following sub-directories:</p>
 
+      <p>Since version 3.2.1, you can change the default timestamp based file prefix to number sequence by specifying <code>--idpattern</code> option. With the following command, for example, the prefix of the generated scripts will be three digit zero-padded number like '001'.</p>
+
+      <source>/home/cbegin/testdb$ migrate --idpattern=000 init</source>
+
+      <p>Instead of specifying the pattern as a command line argument, you can set it in the configuration file <code>$MIGRATION_HOME/migration.properties</code> as follows.</p>
+
+      <source># Example of migration.properties
+idpattern=000</source>
+
       <subsection name="./drivers">
         <p>Place your JDBC driver .jar or .zip files in this directory. Upon running a migration, the drivers will be dynamically loaded.</p>
       </subsection>
