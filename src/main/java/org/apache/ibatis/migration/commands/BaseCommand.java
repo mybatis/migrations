@@ -19,6 +19,7 @@ import static org.apache.ibatis.migration.utils.Util.*;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.LineNumberReader;
@@ -48,6 +49,12 @@ import org.apache.ibatis.parsing.PropertyParser;
 
 public abstract class BaseCommand implements Command {
   private static final String DATE_FORMAT = "yyyyMMddHHmmss";
+
+  private static final String MIGRATIONS_HOME = "MIGRATIONS_HOME";
+
+  private static final String MIGRATIONS_HOME_PROPERTY = "migrationHome";
+
+  private static final String MIGRATIONS_PROPERTIES = "migration.properties";
 
   private ClassLoader driverClassLoader;
 
@@ -126,6 +133,15 @@ public abstract class BaseCommand implements Command {
     }
   }
 
+  protected String migrationsHome() {
+    String migrationsHome =  System.getenv(MIGRATIONS_HOME);
+    // Check if there is a system property
+    if (migrationsHome == null) {
+      migrationsHome = System.getProperty(MIGRATIONS_HOME_PROPERTY);
+    }
+    return migrationsHome;
+  }
+
   protected void copyExternalResourceTo(String resource, File toFile) {
     printStream.println("Creating: " + toFile.getName());
     try {
@@ -134,6 +150,14 @@ public abstract class BaseCommand implements Command {
     } catch (Exception e) {
       throw new MigrationException("Error copying " + resource + " to " + toFile.getAbsolutePath() + ".  Cause: " + e, e);
     }
+  }
+
+  protected String getPropertyOption(String key) throws FileNotFoundException {
+    String migrationsHome = migrationsHome();
+    if (migrationsHome == null || migrationsHome.isEmpty()) {
+      return null;
+    }
+    return ExternalResources.getConfiguredTemplate(migrationsHome + "/" + MIGRATIONS_PROPERTIES, key);
   }
 
   protected File environmentFile() {
