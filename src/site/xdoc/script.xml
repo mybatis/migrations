@@ -50,7 +50,7 @@ ID             Applied At          Description
 20090802210445 2009-08-04 22:51:17 create changelog
 20090804225207 2009-08-04 22:51:17 create author table
 20090804225328 2009-08-05 24:55:23 create blog table
-20090804225333 2009-08-04 22:51:17 create post table</source>
+20090804225333    ...pending...    create post table</source>
 
       <p>If we need to generate a “do” script to apply the last two versions above, we’d run the following command:</p>
 
@@ -67,6 +67,24 @@ ID             Applied At          Description
       <source>/home/cbegin/testdb$ migrate script 0 20090804225207 > do.sql</source>
 
       <source>/home/cbegin/testdb$ migrate script 20090804225207 0 > undo.sql</source>
+
+      <p>Since version 3.2.1, two handy shortcut parameters <b>pending</b> and <b>pending_undo</b> were added.</p>
+
+      <p>In the above example, only the last migration is pending, so the command below:</p>
+
+      <source>/home/cbegin/testdb$ migrate script pending</source>
+
+      <p>is equivalent to the following:</p>
+
+      <source>/home/cbegin/testdb$ migrate script 20090804225328 20090804225333</source>
+
+      <p>Similary, the command below:</p>
+
+      <source>/home/cbegin/testdb$ migrate script pending_undo</source>
+
+      <p>is equivalent to the following:</p>
+
+      <source>/home/cbegin/testdb$ migrate script 20090804225333 20090804225328</source>
 
     </section>
   </body>
