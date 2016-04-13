@@ -156,7 +156,7 @@
             <phase>package</phase>
             <configuration>
               <descriptors>
-                <descriptor>${basedir}/src/main/assembly/bundle.xml</descriptor>
+                <descriptor>${project.basedir}/src/main/assembly/bundle.xml</descriptor>
               </descriptors>
             </configuration>
           </execution>
