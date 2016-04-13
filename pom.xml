@@ -112,15 +112,7 @@
         <directory>${project.build.sourceDirectory}</directory>
         <excludes>
           <exclude>**/*.java</exclude>
-          <exclude>**/pom.properties</exclude>
         </excludes>
-      </resource>
-      <resource>
-        <directory>${project.build.sourceDirectory}</directory>
-        <filtering>true</filtering>
-        <includes>
-          <include>**/pom.properties</include>
-        </includes>
       </resource>
     </resources>
     <testResources>
