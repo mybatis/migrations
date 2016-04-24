@@ -45,14 +45,14 @@
     -->
     <fileSet>
       <directory>${project.build.directory}/appassembler/lib/</directory>
-      <outputDirectory>/lib</outputDirectory>
+      <outputDirectory>lib</outputDirectory>
       <excludes>
         <exclude>*.xml</exclude>
       </excludes>
     </fileSet>
     <fileSet>
       <directory>${project.build.directory}/appassembler/bin/</directory>
-      <outputDirectory>/bin</outputDirectory>
+      <outputDirectory>bin</outputDirectory>
       <fileMode>755</fileMode>
     </fileSet>
   </fileSets>
