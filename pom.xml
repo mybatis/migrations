@@ -154,7 +154,7 @@
           <programs>
             <program>
               <mainClass>org.apache.ibatis.migration.Migrator</mainClass>
-              <name>migrate</name>
+              <id>migrate</id>
             </program>
           </programs>
         </configuration>
