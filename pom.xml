@@ -194,6 +194,10 @@
               <name>derby.system.home</name>
               <value>${project.build.directory}</value>
             </property>
+            <property>
+              <name>java.io.tmpdir</name>
+              <value>${project.build.directory}</value>
+            </property>
           </systemProperties>
         </configuration>
       </plugin>
