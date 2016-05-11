@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2015 the original author or authors.
+ *    Copyright 2010-2016 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -23,6 +23,8 @@ public class DatabaseOperationOption {
   private String changelogTable;
 
   private boolean stopOnError = true;
+
+  private boolean throwWarning = true;
 
   private boolean autoCommit;
 
@@ -50,6 +52,14 @@ public class DatabaseOperationOption {
 
   public void setStopOnError(boolean stopOnError) {
     this.stopOnError = stopOnError;
+  }
+
+  public boolean isThrowWarning() {
+    return throwWarning;
+  }
+
+  public void setThrowWarning(boolean throwWarning) {
+    this.throwWarning = throwWarning;
   }
 
   public boolean isAutoCommit() {

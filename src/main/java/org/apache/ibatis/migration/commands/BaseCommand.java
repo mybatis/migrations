@@ -298,6 +298,7 @@ public abstract class BaseCommand implements Command {
     option.setChangelogTable(changelogTable());
     Properties props = environmentProperties();
     option.setStopOnError(!options.isForce());
+    option.setThrowWarning(!options.isForce());
     option.setEscapeProcessing(false);
     option.setAutoCommit(Boolean.valueOf(props.getProperty("auto_commit")));
     option.setFullLineDelimiter(Boolean.valueOf(props.getProperty("full_line_delimiter")));
