@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2015 the original author or authors.
+ *    Copyright 2010-2016 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -50,13 +50,17 @@ public class FileMigrationLoader implements MigrationLoader {
       }
       Arrays.sort(filenames);
       for (String filename : filenames) {
-        if (filename.endsWith(".sql") && !"bootstrap.sql".equals(filename)) {
+        if (filename.endsWith(".sql") && !isSpecialFile(filename)) {
           Change change = parseChangeFromFilename(filename);
           migrations.add(change);
         }
       }
     }
     return migrations;
+  }
+
+  private boolean isSpecialFile(String filename) {
+    return "bootstrap.sql".equals(filename) || "onabort.sql".equals(filename);
   }
 
   private Change parseChangeFromFilename(String filename) {
@@ -91,14 +95,25 @@ public class FileMigrationLoader implements MigrationLoader {
 
   @Override
   public Reader getBootstrapReader() {
+    String fileName = "bootstrap.sql";
+    return getSoleScriptReader(fileName);
+  }
+
+  @Override
+  public Reader getOnAbortReader() {
+    String fileName = "onabort.sql";
+    return getSoleScriptReader(fileName);
+  }
+
+  private Reader getSoleScriptReader(String fileName) {
     try {
-      File bootstrap = Util.file(scriptsDir, "bootstrap.sql");
-      if (bootstrap.exists()) {
-        return new MigrationReader(bootstrap, charset, false, properties);
+      File scriptFile = Util.file(scriptsDir, fileName);
+      if (scriptFile.exists()) {
+        return new MigrationReader(scriptFile, charset, false, properties);
       }
       return null;
     } catch (IOException e) {
-      throw new MigrationException("Error reading bootstrap.sql", e);
+      throw new MigrationException("Error reading " + fileName, e);
     }
   }
 }

@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2015 the original author or authors.
+ *    Copyright 2010-2016 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -16,9 +16,11 @@
 package org.apache.ibatis.migration.operations;
 
 import java.io.PrintStream;
+import java.io.Reader;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.ibatis.jdbc.RuntimeSqlException;
 import org.apache.ibatis.jdbc.ScriptRunner;
 import org.apache.ibatis.migration.Change;
 import org.apache.ibatis.migration.ConnectionProvider;
@@ -57,24 +59,42 @@ public final class UpOperation extends DatabaseOperation<UpOperation> {
       List<Change> migrations = migrationsLoader.getMigrations();
       Collections.sort(migrations);
       int stepCount = 0;
-      for (Change change : migrations) {
-        if (lastChange == null || change.getId().compareTo(lastChange.getId()) > 0) {
-          println(printStream, horizontalLine("Applying: " + change.getFilename(), 80));
-          ScriptRunner runner = getScriptRunner(connectionProvider, option, printStream);
-          try {
-            runner.runScript(migrationsLoader.getScriptReader(change, false));
-          } finally {
-            runner.closeConnection();
-          }
-          insertChangelog(change, connectionProvider, option);
-          println(printStream);
-          stepCount++;
-          if (steps != null && stepCount >= steps) {
-            break;
+      ScriptRunner runner = getScriptRunner(connectionProvider, option, printStream);
+      Reader scriptReader = null;
+      Reader onAbortScriptReader = null;
+      try {
+        for (Change change : migrations) {
+          if (lastChange == null || change.getId().compareTo(lastChange.getId()) > 0) {
+            println(printStream, horizontalLine("Applying: " + change.getFilename(), 80));
+            scriptReader = migrationsLoader.getScriptReader(change, false);
+            runner.runScript(scriptReader);
+            insertChangelog(change, connectionProvider, option);
+            println(printStream);
+            stepCount++;
+            if (steps != null && stepCount >= steps) {
+              break;
+            }
           }
         }
+        return this;
+      } catch (RuntimeSqlException e) {
+        onAbortScriptReader = migrationsLoader.getOnAbortReader();
+        if (onAbortScriptReader != null) {
+          println(printStream);
+          println(printStream, horizontalLine("Executing onabort.sql script.", 80));
+          runner.runScript(onAbortScriptReader);
+          println(printStream);
+        }
+        throw e;
+      } finally {
+        if (scriptReader != null) {
+          scriptReader.close();
+        }
+        if (onAbortScriptReader != null) {
+          onAbortScriptReader.close();
+        }
+        runner.closeConnection();
       }
-      return this;
     } catch (Exception e) {
       throw new MigrationException("Error executing command.  Cause: " + e, e);
     }

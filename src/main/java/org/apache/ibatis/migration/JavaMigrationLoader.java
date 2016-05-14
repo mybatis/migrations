@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2015 the original author or authors.
+ *    Copyright 2010-2016 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -77,7 +77,8 @@ public class JavaMigrationLoader implements MigrationLoader {
       resolver.find(new Test() {
         @Override
         public boolean matches(Class<?> type) {
-          return type != null && MigrationScript.class.isAssignableFrom(type) && type.getName().equals(className);
+          return type != null && MigrationScript.class.isAssignableFrom(type)
+              && type.getName().equals(className);
         }
       }, pkg);
     }
@@ -98,27 +99,31 @@ public class JavaMigrationLoader implements MigrationLoader {
 
   @Override
   public Reader getBootstrapReader() {
-    ResolverUtil<BootstrapScript> resolver = getResolver(BootstrapScript.class);
-    resolver.findImplementations(BootstrapScript.class, packageNames);
-    Set<Class<? extends BootstrapScript>> classes = resolver.getClasses();
+    return getSoleScriptReader(BootstrapScript.class);
+  }
+
+  @Override
+  public Reader getOnAbortReader() {
+    return getSoleScriptReader(OnAbortScript.class);
+  }
+
+  public <T extends SimpleScript> Reader getSoleScriptReader(Class<T> scriptClass) {
+    ResolverUtil<T> resolver = getResolver(scriptClass);
+    resolver.findImplementations(scriptClass, packageNames);
+    Set<Class<? extends T>> classes = resolver.getClasses();
     if (classes == null || classes.isEmpty()) {
       return null;
     }
     if (classes.size() > 1) {
-      throw new MigrationException("There can be only one BootstrapScript implementation.");
+      throw new MigrationException("There can be only one implementation of " + scriptClass.getName());
     }
-    Reader reader = null;
-    for (Class<? extends BootstrapScript> clazz : classes) {
-      try {
-        BootstrapScript script = clazz.newInstance();
-        reader = new StringReader(script.getScript());
-      } catch (Exception e) {
-        throw new MigrationException("Could not instanciate BootstrapScript: " + clazz.getName(), e);
-      }
-      // There should be only one class.
-      break;
+    Class<? extends T> clazz = classes.iterator().next();
+    try {
+      T script = clazz.newInstance();
+      return new StringReader(script.getScript());
+    } catch (Exception e) {
+      throw new MigrationException("Could not instanciate script class: " + clazz.getName(), e);
     }
-    return reader;
   }
 
   private <T> ResolverUtil<T> getResolver(Class<T> type) {
