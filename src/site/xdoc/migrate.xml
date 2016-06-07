@@ -38,6 +38,7 @@
 --help               Displays this usage message.
 --trace              Shows additional error details (if any).
 --template           (Optional) Specify template to be used with ‘new'command
+--filetemplate       (Optional) Specify a file to be use from ./files with the 'new' command to auto-populate undo section
 Commands:
   init               Creates (if necessary) and initializes a migration path.
   bootstrap          Runs the bootstrap SQL script (see scripts/bootstrap.sql for more).

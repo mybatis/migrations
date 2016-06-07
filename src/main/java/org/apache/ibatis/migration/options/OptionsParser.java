@@ -63,6 +63,9 @@ public enum OptionsParser {
         case SCRIPTPATH:
           options.getPaths().setScriptPath(new File(argParts[1]));
           break;
+        case REFERENCEDFILESPATH:
+          options.getPaths().setReferencedFilesPath(new File(argParts[1]));
+          break;
         case DRIVERPATH:
           options.getPaths().setDriverPath(new File(argParts[1]));
           break;
@@ -80,6 +83,9 @@ public enum OptionsParser {
           break;
         case TEMPLATE:
           options.setTemplate(argParts[1]);
+          break;
+        case FILETEMPLATE:
+          options.setFileTemplate(argParts[1]);
           break;
         case IDPATTERN:
           options.setIdPattern(argParts[1]);

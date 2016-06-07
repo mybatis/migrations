@@ -29,13 +29,20 @@ import org.apache.ibatis.migration.utils.Util;
 public class FileMigrationLoader implements MigrationLoader {
   private final File scriptsDir;
 
+  private final File referencedFileDir;
+
   private final String charset;
 
   private final Properties properties;
 
   public FileMigrationLoader(File scriptsDir, String charset, Properties properties) {
+    this(scriptsDir, null, charset, properties);
+  }
+
+  public FileMigrationLoader(File scriptsDir, File referencedFileDir, String charset, Properties properties) {
     super();
     this.scriptsDir = scriptsDir;
+    this.referencedFileDir = referencedFileDir;
     this.charset = charset;
     this.properties = properties;
   }
@@ -87,7 +94,7 @@ public class FileMigrationLoader implements MigrationLoader {
   @Override
   public Reader getScriptReader(Change change, boolean undo) {
     try {
-      return new MigrationReader(Util.file(scriptsDir, change.getFilename()), charset, undo, properties);
+      return new MigrationReader(Util.file(scriptsDir, change.getFilename()), referencedFileDir, charset, undo, properties);
     } catch (IOException e) {
       throw new MigrationException("Error reading " + change.getFilename(), e);
     }
@@ -109,7 +116,7 @@ public class FileMigrationLoader implements MigrationLoader {
     try {
       File scriptFile = Util.file(scriptsDir, fileName);
       if (scriptFile.exists()) {
-        return new MigrationReader(scriptFile, charset, false, properties);
+        return new MigrationReader(scriptFile, referencedFileDir, charset, false, properties);
       }
       return null;
     } catch (IOException e) {

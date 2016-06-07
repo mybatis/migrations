@@ -19,6 +19,7 @@ public class SelectedOptions {
   private SelectedPaths paths = new SelectedPaths();
   private String environment = "development";
   private String template;
+  private String fileTemplate;
   private String idPattern;
   private boolean force;
   private boolean trace;
@@ -44,6 +45,14 @@ public class SelectedOptions {
 
   public void setTemplate(String aTemplate) {
     template = aTemplate;
+  }
+
+  public String getFileTemplate() {
+    return fileTemplate;
+  }
+
+  public void setFileTemplate(String fileTemplate) {
+    this.fileTemplate = fileTemplate;
   }
 
   public String getIdPattern() {

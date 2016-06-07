@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2015 the original author or authors.
+ *    Copyright 2010-2016 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@ public class SelectedPaths {
   private File envPath;
   private File scriptPath;
   private File driverPath;
+  private File referencedFilesPath;
 
   public File getBasePath() {
     return basePath;
@@ -41,6 +42,10 @@ public class SelectedPaths {
     return driverPath == null ? file(basePath, "./drivers") : driverPath;
   }
 
+  public File getReferencedFilesPath() {
+    return referencedFilesPath == null ? file(basePath, "./files") : referencedFilesPath;
+  }
+
   public void setBasePath(File aBasePath) {
     basePath = aBasePath;
   }
@@ -55,5 +60,9 @@ public class SelectedPaths {
 
   public void setDriverPath(File aDriverPath) {
     driverPath = aDriverPath;
+  }
+
+  public void setReferencedFilesPath(File aReferencedFilesPath) {
+    referencedFilesPath = aReferencedFilesPath;
   }
 }

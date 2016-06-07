@@ -109,6 +109,14 @@ send_full_script=false
   command etc.
 </p>
       </subsection>
+
+        <subsection name="./files">
+            <p>
+                This directory contains your referenced files. These are generally going to be packages and package bodies
+                that will be changed over time. They can be referenced from migration scripts using <strong>@FILE:</strong>
+                and allow for a proper diff trail in your version control repository.
+            </p>
+        </subsection>
     </section>
   </body>
 
