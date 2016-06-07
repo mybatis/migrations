@@ -71,7 +71,9 @@ public class Change implements Comparable<Change> {
 
   @Override
   public String toString() {
-    return id + " " + (appliedTimestamp == null ? "   ...pending...   " : appliedTimestamp) + " " + description;
+    String status = appliedTimestamp == null ? "   ...pending...   " : appliedTimestamp;
+    String message = filename == null ? " ...missing script... " : " ";
+    return id + " " + status + message + description;
   }
 
   @Override
