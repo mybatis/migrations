@@ -19,12 +19,14 @@ import org.apache.ibatis.migration.MigrationException;
 import org.apache.ibatis.migration.options.SelectedOptions;
 import org.apache.ibatis.migration.utils.Util;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Properties;
 
 public final class NewCommand extends BaseCommand {
 
-  private static final String CUSTOM_NEW_COMMAND_TEMPATE_PROPERTY = "new_command.template";
+  private static final String CUSTOM_NEW_COMMAND_TEMPLATE_PROPERTY = "new_command.template";
 
   public NewCommand(SelectedOptions options) {
     super(options);
@@ -40,31 +42,43 @@ public final class NewCommand extends BaseCommand {
     variables.setProperty("description", description);
     existingEnvironmentFile();
     String filename = getNextIDAsString() + "_" + description.replace(' ', '_') + ".sql";
+    String fileTemplate = options.getFileTemplate();
+    File fileTemplateFile = null;
+    if (fileTemplate != null) {
+      fileTemplateFile = Util.file(paths.getReferencedFilesPath(), fileTemplate);
+      if (!fileTemplateFile.exists()) {
+        try {
+          fileTemplateFile.createNewFile();
+        } catch (IOException e) {
+          //nothing
+        }
+      }
+    }
 
     if (options.getTemplate() != null) {
-      copyExternalResourceTo(options.getTemplate(), Util.file(paths.getScriptPath(), filename));
+      copyExternalResourceTo(options.getTemplate(), Util.file(paths.getScriptPath(), filename), fileTemplateFile);
     } else {
       try {
-        String customConfiguredTemplate = getPropertyOption(CUSTOM_NEW_COMMAND_TEMPATE_PROPERTY);
+        String customConfiguredTemplate = getPropertyOption(CUSTOM_NEW_COMMAND_TEMPLATE_PROPERTY);
         if (customConfiguredTemplate != null) {
           copyExternalResourceTo(migrationsHome() + "/" + customConfiguredTemplate,
-              Util.file(paths.getScriptPath(), filename));
+            Util.file(paths.getScriptPath(), filename), fileTemplateFile);
         } else {
-          copyDefaultTemplate(variables, filename);
+          copyDefaultTemplate(variables, filename, fileTemplateFile);
         }
       } catch (FileNotFoundException e) {
         printStream.append(
-            "Your migrations configuration did not find your custom template.  Using the default template.");
-        copyDefaultTemplate(variables, filename);
+          "Your migrations configuration did not find your custom template.  Using the default template.");
+        copyDefaultTemplate(variables, filename, fileTemplateFile);
       }
     }
     printStream.println("Done!");
     printStream.println();
   }
 
-  private void copyDefaultTemplate(Properties variables, String filename) {
+  private void copyDefaultTemplate(Properties variables, String filename, File fileTemplate) {
     copyResourceTo("org/apache/ibatis/migration/template_migration.sql",
-        Util.file(paths.getScriptPath(), filename),
-        variables);
+      Util.file(paths.getScriptPath(), filename),
+      variables, fileTemplate);
   }
 }

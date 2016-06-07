@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2015 the original author or authors.
+ *    Copyright 2010-2016 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -172,11 +172,13 @@ public class RuntimeMigrationTest {
   }
 
   protected FileMigrationLoader createMigrationsLoader() {
-    URL url = getClass().getClassLoader().getResource("org/apache/ibatis/migration/runtime_migration/scripts");
-    File scriptsDir = new File(url.getFile());
+    URL scriptsUrl = getClass().getClassLoader().getResource("org/apache/ibatis/migration/runtime_migration/scripts");
+    File scriptsDir = new File(scriptsUrl.getFile());
+    URL referencedFileUrl = getClass().getClassLoader().getResource("org/apache/ibatis/migration/runtime_migration/files");
+    File referencedFileDir = new File(referencedFileUrl.getFile());
     Properties properties = new Properties();
     properties.setProperty("changelog", "CHANGELOG");
-    FileMigrationLoader migrationsLoader = new FileMigrationLoader(scriptsDir, "utf-8", properties);
+    FileMigrationLoader migrationsLoader = new FileMigrationLoader(scriptsDir, referencedFileDir, "utf-8", properties);
     return migrationsLoader;
   }
 

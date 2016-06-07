@@ -24,9 +24,11 @@ import org.junit.Test;
 
 import javax.sql.DataSource;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.security.Permission;
@@ -35,7 +37,10 @@ import java.sql.SQLException;
 import java.util.Map;
 import java.util.Properties;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 public class MigratorTest {
 
@@ -285,7 +290,7 @@ public class MigratorTest {
     File basePath = getTempDir();
     safeMigratorMain(args("--path=" + basePath.getAbsolutePath(), "init"));
     assertNotNull(basePath.list());
-    assertEquals(4, basePath.list().length);
+    assertEquals(5, basePath.list().length);
     File scriptPath = new File(basePath.getCanonicalPath() + File.separator + "scripts");
     assertEquals(3, scriptPath.list().length);
     safeMigratorMain(args("--path=" + basePath.getAbsolutePath(), "new", "test new migration"));
@@ -305,11 +310,26 @@ public class MigratorTest {
   }
 
   @Test
+  public void shouldUseFileTemplate() throws Exception {
+    File basePath = getTempDir();
+    safeMigratorMain(args("--path=" + basePath.getAbsolutePath(), "init"));
+    assertNotNull(basePath.list());
+    assertEquals(5, basePath.list().length);
+    File fileTemplate = File.createTempFile("fileTemplate", ".sql", new File(basePath.getAbsolutePath() + File.separator + "files"));
+    addTextToFile(fileTemplate);
+    safeMigratorMain(args("--path=" + basePath.getAbsolutePath(), "--fileTemplate=" + fileTemplate.getName(), "new", "test file template"));
+    File scriptPath = new File(basePath.getCanonicalPath() + File.separator + "scripts");
+    assertEquals(4, scriptPath.list().length);
+
+    fileTemplate.delete();
+  }
+
+  @Test
   public void useCustomTemplate() throws Exception {
     File basePath = getTempDir();
     safeMigratorMain(args("--path=" + basePath.getAbsolutePath(), "init"));
     assertNotNull(basePath.list());
-    assertEquals(4, basePath.list().length);
+    assertEquals(5, basePath.list().length);
     File scriptPath = new File(basePath.getCanonicalPath() + File.separator + "scripts");
     assertEquals(3, scriptPath.list().length);
 
@@ -326,7 +346,7 @@ public class MigratorTest {
     File basePath = getTempDir();
     safeMigratorMain(args("--path=" + basePath.getAbsolutePath(), "init"));
     assertNotNull(basePath.list());
-    assertEquals(4, basePath.list().length);
+    assertEquals(5, basePath.list().length);
     File scriptPath = new File(basePath.getCanonicalPath() + File.separator + "scripts");
     assertEquals(3, scriptPath.list().length);
 
@@ -344,7 +364,7 @@ public class MigratorTest {
     File basePath = getTempDir();
     safeMigratorMain(args("--path=" + basePath.getAbsolutePath(), "init"));
     assertNotNull(basePath.list());
-    assertEquals(4, basePath.list().length);
+    assertEquals(5, basePath.list().length);
     File scriptPath = new File(basePath.getCanonicalPath() + File.separator + "scripts");
     assertEquals(3, scriptPath.list().length);
 
@@ -414,5 +434,15 @@ public class MigratorTest {
     return ds;
   }
 
-
+  private void addTextToFile(File file) throws Exception {
+    PrintWriter writer = new PrintWriter(new FileWriter(file));
+    try {
+      writer.println("Added line: Begin");
+      writer.println("Added line: End");
+    } finally {
+      if (writer != null) {
+        writer.close();
+      }
+    }
+  }
 }

@@ -39,11 +39,13 @@ public class OptionsParserTest {
   @Test
   public void testEnvAndTemplate() {
     final String testValue = "test";
-    final String[] args = {valuedOption(ENV, testValue), valuedOption(TEMPLATE, testValue), valuedOption(Options.IDPATTERN, testValue)};
+    final String[] args = {valuedOption(ENV, testValue), valuedOption(TEMPLATE, testValue),
+            valuedOption(FILETEMPLATE, testValue), valuedOption(IDPATTERN, testValue)};
     final SelectedOptions options = parse(args);
 
     assertThat(options.getEnvironment(), equalTo(testValue));
     assertThat(options.getTemplate(), equalTo(testValue));
+    assertThat(options.getFileTemplate(), equalTo(testValue));
     assertThat(options.getIdPattern(), equalTo(testValue));
   }
 
@@ -57,19 +59,22 @@ public class OptionsParserTest {
     paths.setBasePath(testFile);
     paths.setEnvPath(testFile);
     paths.setScriptPath(testFile);
+    paths.setReferencedFilesPath(testFile);
     paths.setDriverPath(testFile);
 
     final String[] args = {
-        valuedOption(PATH, testFile.getAbsolutePath()),
-        valuedOption(ENVPATH, testFile.getAbsolutePath()),
-        valuedOption(SCRIPTPATH, testFile.getAbsolutePath()),
-        valuedOption(DRIVERPATH, testFile.getAbsolutePath())
+            valuedOption(PATH, testFile.getAbsolutePath()),
+            valuedOption(ENVPATH, testFile.getAbsolutePath()),
+            valuedOption(SCRIPTPATH, testFile.getAbsolutePath()),
+            valuedOption(REFERENCEDFILESPATH, testFile.getAbsolutePath()),
+            valuedOption(DRIVERPATH, testFile.getAbsolutePath())
     };
 
     final SelectedOptions pathOptions = parse(args);
     checkFileOptionSet(pathOptions.getPaths().getBasePath(), testFileName);
     checkFileOptionSet(pathOptions.getPaths().getEnvPath(), testFileName);
     checkFileOptionSet(pathOptions.getPaths().getScriptPath(), testFileName);
+    checkFileOptionSet(pathOptions.getPaths().getReferencedFilesPath(), testFileName);
     checkFileOptionSet(pathOptions.getPaths().getDriverPath(), testFileName);
   }
 

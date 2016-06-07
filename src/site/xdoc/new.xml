@@ -111,6 +111,11 @@ new_command.template=templates/new_template_migration.sql</source>
 
       <p>If neither of these are used, or valid, the default template shown on the previous page will be used.</p>
 
+        <p>Optionally, you can use a file from the files directory to be consumed by the command. It will add code
+            to the upgrade and undo sections based on that fileTemplate</p>
+
+        <source><![CDATA[migrate new –filetemplate=<name of file in ./files directory> "your description"]]></source>
+
       <p>So how do we run this script? Well, first it’s probably important to understand the current state of the database.</p>
     </section>
   </body>

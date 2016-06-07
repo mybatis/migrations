@@ -1,40 +1,19 @@
 /**
- *    Copyright 2010-2016 the original author or authors.
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
+ * Copyright 2010-2016 the original author or authors.
+ * <p>
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package org.apache.ibatis.migration.commands;
-
-import static org.apache.ibatis.migration.utils.Util.*;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.LineNumberReader;
-import java.io.PrintStream;
-import java.io.PrintWriter;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.text.DecimalFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Properties;
-import java.util.TimeZone;
 
 import org.apache.ibatis.datasource.unpooled.UnpooledDataSource;
 import org.apache.ibatis.io.Resources;
@@ -51,7 +30,33 @@ import org.apache.ibatis.migration.options.SelectedOptions;
 import org.apache.ibatis.migration.options.SelectedPaths;
 import org.apache.ibatis.parsing.PropertyParser;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.LineNumberReader;
+import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Properties;
+import java.util.TimeZone;
+
+import static org.apache.ibatis.migration.utils.Util.file;
+
 public abstract class BaseCommand implements Command {
+  public static final String UNDO = "@UNDO";
+  public static final String FILE = "@FILE:";
+
   private static final String DATE_FORMAT = "yyyyMMddHHmmss";
 
   private static final String MIGRATIONS_HOME = "MIGRATIONS_HOME";
@@ -142,21 +147,24 @@ public abstract class BaseCommand implements Command {
   }
 
   protected void copyResourceTo(String resource, File toFile) {
-    copyResourceTo(resource, toFile, null);
+    copyResourceTo(resource, toFile, null, null);
   }
 
   protected void copyResourceTo(String resource, File toFile, Properties variables) {
+    copyResourceTo(resource, toFile, variables, null);
+  }
+
+  protected void copyResourceTo(String resource, File toFile, Properties variables, File fileTemplate) {
     printStream.println("Creating: " + toFile.getName());
     try {
       LineNumberReader reader = new LineNumberReader(Resources.getResourceAsReader(this.getClass().getClassLoader(), resource));
       try {
         PrintWriter writer = new PrintWriter(new FileWriter(toFile));
         try {
-          String line;
-          while ((line = reader.readLine()) != null) {
-            line = PropertyParser.parse(line, variables);
-            writer.println(line);
-          }
+          String description = variables != null ?
+            variables.getProperty("description", "no_description") :
+            "no_description";
+          writeFile(description, fileTemplate, reader, writer, variables);
         } finally {
           writer.close();
         }
@@ -168,8 +176,59 @@ public abstract class BaseCommand implements Command {
     }
   }
 
+  private void writeFile(String description, File fileTemplate, BufferedReader reader, PrintWriter writer,
+                         Properties variables) throws IOException {
+    String line;
+    boolean addFileTemplate = false;
+    boolean addFileReference = false;
+    String delimiterString = null;
+    if (fileTemplate != null) {
+      delimiterString = environmentProperties().getProperty("delimiter");
+      delimiterString = (delimiterString == null ? ";" : delimiterString);
+    }
+    while ((line = reader.readLine()) != null) {
+      if (variables != null) {
+        line = PropertyParser.parse(line, variables);
+      }
+      if (fileTemplate != null) {
+        if (line.contains(UNDO)) {
+          addFileTemplate = true;
+        } else if (line.contains(description)) {
+          addFileReference = true;
+        }
+      }
+      if (addFileReference && line.trim().isEmpty()) {
+        writer.println(FILE + fileTemplate.getName());
+        writer.println(delimiterString);
+        addFileReference = false;
+      } else if (addFileTemplate && line.trim().isEmpty()) {
+        writeFileTemplate(fileTemplate, writer, delimiterString);
+        addFileTemplate = false;
+      } else {
+        writer.println(line);
+      }
+    }
+  }
+
+  private void writeFileTemplate(File fileTemplate, PrintWriter writer, String delimiterString) throws IOException {
+    String line;
+    InputStreamReader inputStreamReader = null;
+    try {
+      inputStreamReader = new InputStreamReader(new FileInputStream(fileTemplate));
+      BufferedReader fileReader = new BufferedReader(inputStreamReader);
+      while ((line = fileReader.readLine()) != null) {
+        writer.println(line);
+      }
+      writer.println(delimiterString);
+    } finally {
+      if (inputStreamReader != null) {
+        inputStreamReader.close();
+      }
+    }
+  }
+
   protected String migrationsHome() {
-    String migrationsHome =  System.getenv(MIGRATIONS_HOME);
+    String migrationsHome = System.getenv(MIGRATIONS_HOME);
     // Check if there is a system property
     if (migrationsHome == null) {
       migrationsHome = System.getProperty(MIGRATIONS_HOME_PROPERTY);
@@ -177,11 +236,29 @@ public abstract class BaseCommand implements Command {
     return migrationsHome;
   }
 
-  protected void copyExternalResourceTo(String resource, File toFile) {
+  protected void copyExternalResourceTo(String resource, File toFile, File fileTemplate) {
     printStream.println("Creating: " + toFile.getName());
+    File tempFile = null;
     try {
       File sourceFile = new File(resource);
+      if (fileTemplate != null) {
+        tempFile = File.createTempFile(toFile.getName() + "_temp", ".tmp");
+        InputStreamReader inputStreamReader = null;
+        BufferedReader reader = new BufferedReader(inputStreamReader);
+        PrintWriter writer = new PrintWriter(new FileWriter(tempFile));
+        try {
+          inputStreamReader = new InputStreamReader(new FileInputStream(fileTemplate));
+          writeFile(toFile.getName(), fileTemplate, reader, writer, null);
+        } finally {
+          writer.close();
+          inputStreamReader.close();
+        }
+        sourceFile = tempFile;
+      }
       ExternalResources.copyExternalResource(sourceFile, toFile);
+      if (tempFile != null) {
+        tempFile.delete();
+      }
     } catch (Exception e) {
       throw new MigrationException("Error copying " + resource + " to " + toFile.getAbsolutePath() + ".  Cause: " + e, e);
     }
@@ -290,7 +367,8 @@ public abstract class BaseCommand implements Command {
   }
 
   protected MigrationLoader getMigrationLoader() {
-    return new FileMigrationLoader(paths.getScriptPath(), environmentProperties().getProperty("script_char_set"), environmentProperties());
+    return new FileMigrationLoader(paths.getScriptPath(), paths.getReferencedFilesPath(),
+      environmentProperties().getProperty("script_char_set"), environmentProperties());
   }
 
   protected DatabaseOperationOption getDatabaseOperationOption() {
