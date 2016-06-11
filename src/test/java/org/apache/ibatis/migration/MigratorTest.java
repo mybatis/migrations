@@ -39,10 +39,11 @@ import static org.junit.Assert.*;
 
 public class MigratorTest {
 
-  public static final String BLOG_PROPERTIES = "databases/blog/blog-derby.properties";
+  public static final String BLOG_PROPERTIES = "databases/blog/blog.properties";
 
   private static PrintStream out;
   private static StringOutputStream buffer;
+  private static DataSource ds;
 
   @BeforeClass
   public static void setup() throws Exception {
@@ -50,7 +51,7 @@ public class MigratorTest {
     buffer = new StringOutputStream();
     System.setOut(new PrintStream(buffer));
 
-    DataSource ds = createUnpooledDataSource(BLOG_PROPERTIES);
+    ds = createUnpooledDataSource(BLOG_PROPERTIES);
     Connection conn = ds.getConnection();
     SqlRunner executor = new SqlRunner(conn);
     safeRun(executor, "DROP TABLE bootstrap");
@@ -148,7 +149,6 @@ public class MigratorTest {
   }
 
   private void assertAuthorEmailContainsPlaceholder() throws IOException, SQLException {
-    final DataSource ds = createUnpooledDataSource(BLOG_PROPERTIES);
     final Connection conn = ds.getConnection();
     final SqlRunner executor = new SqlRunner(conn);
     final Map<String, Object> author = executor.selectOne("select * from author where id = ?", 1);
