@@ -20,7 +20,6 @@ import java.io.Reader;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
-import java.util.Properties;
 import java.util.StringTokenizer;
 
 import org.apache.ibatis.migration.Change;
@@ -126,10 +125,10 @@ public final class ScriptCommand extends BaseCommand {
 
   // Issue 699
   private String getDelimiter() {
-    Properties props = environmentProperties();
     StringBuilder delimiter = new StringBuilder();
-    if (Boolean.valueOf(props.getProperty("full_line_delimiter"))) delimiter.append("\n"); 
-    delimiter.append(props.getProperty("delimiter", ";"));
+    if (environment().isFullLineDelimiter())
+      delimiter.append("\n");
+    delimiter.append(environment().getDelimiter());
     return delimiter.toString();
   }
 

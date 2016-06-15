@@ -31,13 +31,13 @@ public class FileMigrationLoader implements MigrationLoader {
 
   private final String charset;
 
-  private final Properties properties;
+  private final Properties variables;
 
-  public FileMigrationLoader(File scriptsDir, String charset, Properties properties) {
+  public FileMigrationLoader(File scriptsDir, String charset, Properties variables) {
     super();
     this.scriptsDir = scriptsDir;
     this.charset = charset;
-    this.properties = properties;
+    this.variables = variables;
   }
 
   @Override
@@ -87,7 +87,7 @@ public class FileMigrationLoader implements MigrationLoader {
   @Override
   public Reader getScriptReader(Change change, boolean undo) {
     try {
-      return new MigrationReader(Util.file(scriptsDir, change.getFilename()), charset, undo, properties);
+      return new MigrationReader(Util.file(scriptsDir, change.getFilename()), charset, undo, variables);
     } catch (IOException e) {
       throw new MigrationException("Error reading " + change.getFilename(), e);
     }
@@ -109,7 +109,7 @@ public class FileMigrationLoader implements MigrationLoader {
     try {
       File scriptFile = Util.file(scriptsDir, fileName);
       if (scriptFile.exists()) {
-        return new MigrationReader(scriptFile, charset, false, properties);
+        return new MigrationReader(scriptFile, charset, false, variables);
       }
       return null;
     } catch (IOException e) {

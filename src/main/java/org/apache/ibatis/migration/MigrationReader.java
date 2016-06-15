@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2015 the original author or authors.
+ *    Copyright 2010-2016 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -15,8 +15,6 @@
  */
 package org.apache.ibatis.migration;
 
-import org.apache.ibatis.parsing.PropertyParser;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -27,10 +25,9 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Properties;
-import java.util.Set;
+
+import org.apache.ibatis.parsing.PropertyParser;
 
 public class MigrationReader extends Reader {
 
@@ -38,13 +35,12 @@ public class MigrationReader extends Reader {
 
   private Reader target;
 
-  public MigrationReader(File file, String charset, boolean undo, Properties properties) throws IOException {
-    this(new FileInputStream(file), charset, undo, properties);
+  public MigrationReader(File file, String charset, boolean undo, Properties variables) throws IOException {
+    this(new FileInputStream(file), charset, undo, variables);
   }
 
-  public MigrationReader(InputStream inputStream, String charset, boolean undo, Properties properties) throws IOException {
+  public MigrationReader(InputStream inputStream, String charset, boolean undo, Properties variables) throws IOException {
     final Reader source = scriptFileReader(inputStream, charset);
-    final Properties variables = filterVariables(properties == null ? new Properties() : properties);
     try {
       BufferedReader reader = new BufferedReader(source);
       StringBuilder doBuilder = new StringBuilder();
@@ -88,29 +84,5 @@ public class MigrationReader extends Reader {
       return new InputStreamReader(inputStream, charset);
     }
   }
-
-  @SuppressWarnings("serial")
-  private Properties filterVariables(final Properties properties) {
-    final Set<String> KNOWN_PROPERTIES_TO_IGNORE = new HashSet<String>() {{
-      addAll(Arrays.asList(
-          "time_zone", "script_char_set",
-          "driver", "url", "username", "password",
-          "send_full_script", "delimiter", "full_line_delimiter",
-          "auto_commit", "driver_path"));
-    }};
-    return new Properties() {
-      @Override
-      public synchronized boolean containsKey(Object o) {
-        return !KNOWN_PROPERTIES_TO_IGNORE.contains(o) && properties.containsKey(o);
-      }
-
-      @Override
-      public String getProperty(String key) {
-        return KNOWN_PROPERTIES_TO_IGNORE.contains(key) ? null : properties.getProperty(key);
-      }
-    };
-  }
-
-
 }
 

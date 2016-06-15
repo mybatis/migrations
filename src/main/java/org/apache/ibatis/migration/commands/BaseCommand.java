@@ -18,7 +18,6 @@ package org.apache.ibatis.migration.commands;
 import static org.apache.ibatis.migration.utils.Util.*;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -41,6 +40,7 @@ import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.migration.Change;
 import org.apache.ibatis.migration.ConnectionProvider;
 import org.apache.ibatis.migration.DataSourceConnectionProvider;
+import org.apache.ibatis.migration.Environment;
 import org.apache.ibatis.migration.FileMigrationLoader;
 import org.apache.ibatis.migration.MigrationException;
 import org.apache.ibatis.migration.MigrationLoader;
@@ -61,6 +61,8 @@ public abstract class BaseCommand implements Command {
   private static final String MIGRATIONS_PROPERTIES = "migration.properties";
 
   private ClassLoader driverClassLoader;
+
+  private Environment environment;
 
   protected PrintStream printStream = System.out;
 
@@ -86,11 +88,7 @@ public abstract class BaseCommand implements Command {
   }
 
   protected String changelogTable() {
-    String changelog = environmentProperties().getProperty("changelog");
-    if (changelog == null) {
-      changelog = "CHANGELOG";
-    }
-    return changelog;
+    return environment().getVariables().getProperty(Environment.CHANGELOG, "CHANGELOG");
   }
 
   protected String getNextIDAsString() {
@@ -131,13 +129,9 @@ public abstract class BaseCommand implements Command {
   }
 
   private String generateTimestampId() {
-    String timezone = environmentProperties().getProperty("time_zone");
-    if (timezone == null) {
-      timezone = "GMT+0:00";
-    }
     final SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
     final Date now = new Date();
-    dateFormat.setTimeZone(TimeZone.getTimeZone(timezone));
+    dateFormat.setTimeZone(TimeZone.getTimeZone(environment().getTimeZone()));
     return dateFormat.format(now);
   }
 
@@ -207,25 +201,12 @@ public abstract class BaseCommand implements Command {
     return envFile;
   }
 
-  protected Properties environmentProperties() {
-    FileInputStream fileInputStream = null;
-    try {
-      File file = existingEnvironmentFile();
-      Properties props = new Properties();
-      fileInputStream = new FileInputStream(file);
-      props.load(fileInputStream);
-      return props;
-    } catch (IOException e) {
-      throw new MigrationException("Error loading environment properties.  Cause: " + e, e);
-    } finally {
-      if (fileInputStream != null) {
-        try {
-          fileInputStream.close();
-        } catch (IOException e) {
-          // Nothing to do here
-        }
-      }
+  protected Environment environment() {
+    if (environment != null) {
+      return environment;
     }
+    environment = new Environment(existingEnvironmentFile());
+    return environment;
   }
 
   protected int getStepCountParameter(int defaultSteps, String... params) {
@@ -243,13 +224,9 @@ public abstract class BaseCommand implements Command {
 
   protected ConnectionProvider getConnectionProvider() {
     try {
-      Properties props = environmentProperties();
-      String driver = props.getProperty("driver");
-      String url = props.getProperty("url");
-      String username = props.getProperty("username");
-      String password = props.getProperty("password");
-
-      UnpooledDataSource dataSource = new UnpooledDataSource(getDriverClassLoader(), driver, url, username, password);
+      UnpooledDataSource dataSource = new UnpooledDataSource(getDriverClassLoader(),
+          environment().getDriver(), environment().getUrl(), environment().getUsername(),
+          environment().getPassword());
       return new DataSourceConnectionProvider(dataSource);
     } catch (Exception e) {
       throw new MigrationException("Error creating ScriptRunner.  Cause: " + e, e);
@@ -281,7 +258,7 @@ public abstract class BaseCommand implements Command {
   }
 
   private File getCustomDriverPath() {
-    String customDriverPath = environmentProperties().getProperty("driver_path");
+    String customDriverPath = environment().getDriverPath();
     if (customDriverPath != null && customDriverPath.length() > 0) {
       return new File(customDriverPath);
     } else {
@@ -290,22 +267,23 @@ public abstract class BaseCommand implements Command {
   }
 
   protected MigrationLoader getMigrationLoader() {
-    return new FileMigrationLoader(paths.getScriptPath(), environmentProperties().getProperty("script_char_set"), environmentProperties());
+    return new FileMigrationLoader(paths.getScriptPath(),
+        environment().getScriptCharset(),
+        environment().getVariables());
   }
 
   protected DatabaseOperationOption getDatabaseOperationOption() {
     DatabaseOperationOption option = new DatabaseOperationOption();
     option.setChangelogTable(changelogTable());
-    Properties props = environmentProperties();
     option.setStopOnError(!options.isForce());
     option.setThrowWarning(!options.isForce());
     option.setEscapeProcessing(false);
-    option.setAutoCommit(Boolean.valueOf(props.getProperty("auto_commit")));
-    option.setFullLineDelimiter(Boolean.valueOf(props.getProperty("full_line_delimiter")));
-    option.setSendFullScript(Boolean.valueOf(props.getProperty("send_full_script")));
-    option.setRemoveCRs(Boolean.valueOf(props.getProperty("remove_crs")));
-    String delimiterString = props.getProperty("delimiter");
-    option.setDelimiter(delimiterString == null ? ";" : delimiterString);
+    option.setAutoCommit(environment().isAutoCommit());
+    option.setFullLineDelimiter(
+        environment().isFullLineDelimiter());
+    option.setSendFullScript(environment().isSendFullScript());
+    option.setRemoveCRs(environment().isRemoveCrs());
+    option.setDelimiter(environment().getDelimiter());
     return option;
   }
 }
