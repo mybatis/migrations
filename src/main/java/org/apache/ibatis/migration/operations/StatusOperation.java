@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2015 the original author or authors.
+ *    Copyright 2010-2016 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -25,14 +25,13 @@ import org.apache.ibatis.migration.ConnectionProvider;
 import org.apache.ibatis.migration.MigrationLoader;
 import org.apache.ibatis.migration.options.DatabaseOperationOption;
 
-public final class StatusOperation extends DatabaseOperation<StatusOperation> {
+public final class StatusOperation extends DatabaseOperation {
   private int applied;
 
   private int pending;
 
   private List<Change> changes;
 
-  @Override
   public StatusOperation operate(ConnectionProvider connectionProvider, MigrationLoader migrationsLoader, DatabaseOperationOption option, PrintStream printStream) {
     if (option == null) {
       option = new DatabaseOperationOption();

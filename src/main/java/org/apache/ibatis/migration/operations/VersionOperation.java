@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2015 the original author or authors.
+ *    Copyright 2010-2016 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import org.apache.ibatis.migration.MigrationException;
 import org.apache.ibatis.migration.MigrationLoader;
 import org.apache.ibatis.migration.options.DatabaseOperationOption;
 
-public final class VersionOperation extends DatabaseOperation<VersionOperation> {
+public final class VersionOperation extends DatabaseOperation {
   private BigDecimal version;
 
   public VersionOperation(BigDecimal version) {
@@ -36,7 +36,6 @@ public final class VersionOperation extends DatabaseOperation<VersionOperation> 
     }
   }
 
-  @Override
   public VersionOperation operate(ConnectionProvider connectionProvider, MigrationLoader migrationsLoader, DatabaseOperationOption option, PrintStream printStream) {
     if (option == null) {
       option = new DatabaseOperationOption();

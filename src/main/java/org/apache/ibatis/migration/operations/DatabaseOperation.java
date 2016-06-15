@@ -29,12 +29,9 @@ import org.apache.ibatis.jdbc.SqlRunner;
 import org.apache.ibatis.migration.Change;
 import org.apache.ibatis.migration.ConnectionProvider;
 import org.apache.ibatis.migration.MigrationException;
-import org.apache.ibatis.migration.MigrationLoader;
 import org.apache.ibatis.migration.options.DatabaseOperationOption;
 
-public abstract class DatabaseOperation<T extends DatabaseOperation<T>> {
-
-  public abstract T operate(ConnectionProvider connectionProvider, MigrationLoader migrationsLoader, DatabaseOperationOption option, PrintStream printStream);
+public abstract class DatabaseOperation {
 
   protected void insertChangelog(Change change, ConnectionProvider connectionProvider, DatabaseOperationOption option) {
     SqlRunner runner = getSqlRunner(connectionProvider);

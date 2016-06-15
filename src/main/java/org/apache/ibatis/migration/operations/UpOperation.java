@@ -28,7 +28,7 @@ import org.apache.ibatis.migration.MigrationException;
 import org.apache.ibatis.migration.MigrationLoader;
 import org.apache.ibatis.migration.options.DatabaseOperationOption;
 
-public final class UpOperation extends DatabaseOperation<UpOperation> {
+public final class UpOperation extends DatabaseOperation {
   private final Integer steps;
 
   public UpOperation() {
@@ -44,7 +44,6 @@ public final class UpOperation extends DatabaseOperation<UpOperation> {
     }
   }
 
-  @Override
   public UpOperation operate(ConnectionProvider connectionProvider, MigrationLoader migrationsLoader, DatabaseOperationOption option, PrintStream printStream) {
     try {
       if (option == null) {
