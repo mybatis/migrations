@@ -24,7 +24,7 @@ import java.util.Properties;
 
 public final class NewCommand extends BaseCommand {
 
-  private static final String CUSTOM_NEW_COMMAND_TEMPATE_PROPERTY = "new_command.template";
+  private static final String CUSTOM_NEW_COMMAND_TEMPLATE_PROPERTY = "new_command.template";
 
   public NewCommand(SelectedOptions options) {
     super(options);
@@ -45,7 +45,7 @@ public final class NewCommand extends BaseCommand {
       copyExternalResourceTo(options.getTemplate(), Util.file(paths.getScriptPath(), filename));
     } else {
       try {
-        String customConfiguredTemplate = getPropertyOption(CUSTOM_NEW_COMMAND_TEMPATE_PROPERTY);
+        String customConfiguredTemplate = getPropertyOption(CUSTOM_NEW_COMMAND_TEMPLATE_PROPERTY);
         if (customConfiguredTemplate != null) {
           copyExternalResourceTo(migrationsHome() + "/" + customConfiguredTemplate,
               Util.file(paths.getScriptPath(), filename));
