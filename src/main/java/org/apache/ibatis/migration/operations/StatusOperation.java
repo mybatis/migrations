@@ -24,6 +24,7 @@ import org.apache.ibatis.migration.Change;
 import org.apache.ibatis.migration.ConnectionProvider;
 import org.apache.ibatis.migration.MigrationLoader;
 import org.apache.ibatis.migration.options.DatabaseOperationOption;
+import org.apache.ibatis.migration.utils.Util;
 
 public final class StatusOperation extends DatabaseOperation {
   private int applied;
@@ -37,7 +38,7 @@ public final class StatusOperation extends DatabaseOperation {
       option = new DatabaseOperationOption();
     }
     println(printStream, "ID             Applied At          Description");
-    println(printStream, horizontalLine("", 80));
+    println(printStream, Util.horizontalLine("", 80));
     changes = new ArrayList<Change>();
     List<Change> migrations = migrationsLoader.getMigrations();
     if (changelogExists(connectionProvider, option)) {

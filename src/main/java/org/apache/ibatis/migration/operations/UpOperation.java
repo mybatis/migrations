@@ -18,7 +18,9 @@ package org.apache.ibatis.migration.operations;
 import java.io.PrintStream;
 import java.io.Reader;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.jdbc.RuntimeSqlException;
 import org.apache.ibatis.jdbc.ScriptRunner;
@@ -26,7 +28,10 @@ import org.apache.ibatis.migration.Change;
 import org.apache.ibatis.migration.ConnectionProvider;
 import org.apache.ibatis.migration.MigrationException;
 import org.apache.ibatis.migration.MigrationLoader;
+import org.apache.ibatis.migration.hook.MigrationHook;
+import org.apache.ibatis.migration.hook.MigrationProxy;
 import org.apache.ibatis.migration.options.DatabaseOperationOption;
+import org.apache.ibatis.migration.utils.Util;
 
 public final class UpOperation extends DatabaseOperation {
   private final Integer steps;
@@ -45,6 +50,10 @@ public final class UpOperation extends DatabaseOperation {
   }
 
   public UpOperation operate(ConnectionProvider connectionProvider, MigrationLoader migrationsLoader, DatabaseOperationOption option, PrintStream printStream) {
+    return operate(connectionProvider, migrationsLoader, option, printStream, null);
+  }
+
+  public UpOperation operate(ConnectionProvider connectionProvider, MigrationLoader migrationsLoader, DatabaseOperationOption option, PrintStream printStream, MigrationHook hook) {
     try {
       if (option == null) {
         option = new DatabaseOperationOption();
@@ -59,28 +68,48 @@ public final class UpOperation extends DatabaseOperation {
       Collections.sort(migrations);
       int stepCount = 0;
       ScriptRunner runner = getScriptRunner(connectionProvider, option, printStream);
+
+      Map<String, Object> hookBindings = new HashMap<String, Object>();
+      hookBindings.put(MigrationHook.MIGRATION_PROXY, new MigrationProxy(connectionProvider, runner));
+
       Reader scriptReader = null;
       Reader onAbortScriptReader = null;
       try {
         for (Change change : migrations) {
           if (lastChange == null || change.getId().compareTo(lastChange.getId()) > 0) {
-            println(printStream, horizontalLine("Applying: " + change.getFilename(), 80));
+            if (stepCount == 0 && hook != null) {
+              hookBindings.remove(MigrationHook.CHANGE);
+              hook.before(hookBindings);
+            }
+            if (hook != null) {
+              hookBindings.put(MigrationHook.CHANGE, change.clone());
+              hook.beforeEach(hookBindings);
+            }
+            println(printStream, Util.horizontalLine("Applying: " + change.getFilename(), 80));
             scriptReader = migrationsLoader.getScriptReader(change, false);
             runner.runScript(scriptReader);
             insertChangelog(change, connectionProvider, option);
             println(printStream);
+            if (hook != null) {
+              hookBindings.put(MigrationHook.CHANGE, change.clone());
+              hook.afterEach(hookBindings);
+            }
             stepCount++;
             if (steps != null && stepCount >= steps) {
               break;
             }
           }
         }
+        if (stepCount > 0 && hook != null) {
+          hookBindings.remove(MigrationHook.CHANGE);
+          hook.after(hookBindings);
+        }
         return this;
       } catch (RuntimeSqlException e) {
         onAbortScriptReader = migrationsLoader.getOnAbortReader();
         if (onAbortScriptReader != null) {
           println(printStream);
-          println(printStream, horizontalLine("Executing onabort.sql script.", 80));
+          println(printStream, Util.horizontalLine("Executing onabort.sql script.", 80));
           runner.runScript(onAbortScriptReader);
           println(printStream);
         }
@@ -94,7 +123,10 @@ public final class UpOperation extends DatabaseOperation {
         }
         runner.closeConnection();
       }
-    } catch (Exception e) {
+    } catch (Throwable e) {
+      while (e instanceof MigrationException) {
+        e = e.getCause();
+      }
       throw new MigrationException("Error executing command.  Cause: " + e, e);
     }
   }

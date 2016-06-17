@@ -13,18 +13,12 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package org.apache.ibatis.migration.options;
+package org.apache.ibatis.migration.hook;
 
-public enum Options {
-  PATH,
-  ENVPATH,
-  SCRIPTPATH,
-  DRIVERPATH,
-  HOOKPATH,
-  ENV,
-  FORCE,
-  TRACE,
-  HELP,
-  TEMPLATE,
-  IDPATTERN
+import java.util.Map;
+
+public interface HookScript {
+
+  void execute(Map<String, Object> bindingMap);
+
 }

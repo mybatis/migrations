@@ -18,7 +18,9 @@ package org.apache.ibatis.migration.operations;
 import java.io.PrintStream;
 import java.sql.SQLException;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.jdbc.ScriptRunner;
 import org.apache.ibatis.jdbc.SqlRunner;
@@ -26,7 +28,10 @@ import org.apache.ibatis.migration.Change;
 import org.apache.ibatis.migration.ConnectionProvider;
 import org.apache.ibatis.migration.MigrationException;
 import org.apache.ibatis.migration.MigrationLoader;
+import org.apache.ibatis.migration.hook.MigrationHook;
+import org.apache.ibatis.migration.hook.MigrationProxy;
 import org.apache.ibatis.migration.options.DatabaseOperationOption;
+import org.apache.ibatis.migration.utils.Util;
 
 public final class DownOperation extends DatabaseOperation {
   private Integer steps;
@@ -40,7 +45,15 @@ public final class DownOperation extends DatabaseOperation {
     this.steps = steps;
   }
 
-  public DownOperation operate(ConnectionProvider connectionProvider, MigrationLoader migrationsLoader, DatabaseOperationOption option, PrintStream printStream) {
+  public DownOperation operate(ConnectionProvider connectionProvider,
+      MigrationLoader migrationsLoader, DatabaseOperationOption option,
+      PrintStream printStream) {
+    return operate(connectionProvider, migrationsLoader, option, printStream, null);
+  }
+
+  public DownOperation operate(ConnectionProvider connectionProvider,
+      MigrationLoader migrationsLoader, DatabaseOperationOption option, PrintStream printStream,
+      MigrationHook hook) {
     try {
       if (option == null) {
         option = new DatabaseOperationOption();
@@ -53,40 +66,67 @@ public final class DownOperation extends DatabaseOperation {
         Collections.sort(migrations);
         Collections.reverse(migrations);
         int stepCount = 0;
-        for (Change change : migrations) {
-          if (change.getId().equals(lastChange.getId())) {
-            println(printStream, horizontalLine("Undoing: " + change.getFilename(), 80));
-            ScriptRunner runner = getScriptRunner(connectionProvider, option, printStream);
-            try {
+        ScriptRunner runner = getScriptRunner(connectionProvider, option, printStream);
+
+        Map<String, Object> hookBindings = new HashMap<String, Object>();
+        hookBindings.put(MigrationHook.MIGRATION_PROXY,
+            new MigrationProxy(connectionProvider, runner));
+
+        try {
+          for (Change change : migrations) {
+            if (change.getId().equals(lastChange.getId())) {
+              if (stepCount == 0 && hook != null) {
+                hookBindings.remove(MigrationHook.CHANGE);
+                hook.before(hookBindings);
+              }
+              if (hook != null) {
+                hookBindings.put(MigrationHook.CHANGE, change.clone());
+                hook.beforeEach(hookBindings);
+              }
+              println(printStream, Util.horizontalLine("Undoing: " + change.getFilename(), 80));
               runner.runScript(migrationsLoader.getScriptReader(change, true));
-            } finally {
-              runner.closeConnection();
+              if (changelogExists(connectionProvider, option)) {
+                deleteChange(connectionProvider, change, option);
+              } else {
+                println(printStream,
+                    "Changelog doesn't exist. No further migrations will be undone (normal for the last migration).");
+                stepCount = steps;
+              }
+              println(printStream);
+              if (hook != null) {
+                hookBindings.put(MigrationHook.CHANGE, change.clone());
+                hook.afterEach(hookBindings);
+              }
+              stepCount++;
+              if (steps == null || stepCount >= steps) {
+                break;
+              }
+              lastChange = getLastAppliedChange(connectionProvider, option);
             }
-            if (changelogExists(connectionProvider, option)) {
-              deleteChange(connectionProvider, change, option);
-            } else {
-              println(printStream, "Changelog doesn't exist. No further migrations will be undone (normal for the last migration).");
-              stepCount = steps;
-            }
-            println(printStream);
-            stepCount++;
-            if (steps == null || stepCount >= steps) {
-              break;
-            }
-            lastChange = getLastAppliedChange(connectionProvider, option);
           }
+          if (stepCount > 0 && hook != null) {
+            hookBindings.remove(MigrationHook.CHANGE);
+            hook.after(hookBindings);
+          }
+        } finally {
+          runner.closeConnection();
         }
       }
       return this;
-    } catch (Exception e) {
+    } catch (Throwable e) {
+      while (e instanceof MigrationException) {
+        e = e.getCause();
+      }
       throw new MigrationException("Error undoing last migration.  Cause: " + e, e);
     }
   }
 
-  protected void deleteChange(ConnectionProvider connectionProvider, Change change, DatabaseOperationOption option) {
+  protected void deleteChange(ConnectionProvider connectionProvider, Change change,
+      DatabaseOperationOption option) {
     SqlRunner runner = getSqlRunner(connectionProvider);
     try {
-      runner.delete("delete from " + option.getChangelogTable() + " where id = ?", change.getId());
+      runner.delete("delete from " + option.getChangelogTable() + " where id = ?",
+          change.getId());
     } catch (SQLException e) {
       throw new MigrationException("Error querying last applied migration.  Cause: " + e, e);
     } finally {

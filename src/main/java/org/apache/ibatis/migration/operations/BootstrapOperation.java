@@ -23,6 +23,7 @@ import org.apache.ibatis.migration.ConnectionProvider;
 import org.apache.ibatis.migration.MigrationException;
 import org.apache.ibatis.migration.MigrationLoader;
 import org.apache.ibatis.migration.options.DatabaseOperationOption;
+import org.apache.ibatis.migration.utils.Util;
 
 public final class BootstrapOperation extends DatabaseOperation {
   private final boolean force;
@@ -46,7 +47,7 @@ public final class BootstrapOperation extends DatabaseOperation {
       } else {
         Reader bootstrapReader = migrationsLoader.getBootstrapReader();
         if (bootstrapReader != null) {
-          println(printStream, horizontalLine("Applying: bootstrap.sql", 80));
+          println(printStream, Util.horizontalLine("Applying: bootstrap.sql", 80));
           ScriptRunner runner = getScriptRunner(connectionProvider, option, printStream);
           try {
             runner.runScript(bootstrapReader);

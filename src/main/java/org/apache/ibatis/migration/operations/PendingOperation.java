@@ -26,6 +26,7 @@ import org.apache.ibatis.migration.ConnectionProvider;
 import org.apache.ibatis.migration.MigrationException;
 import org.apache.ibatis.migration.MigrationLoader;
 import org.apache.ibatis.migration.options.DatabaseOperationOption;
+import org.apache.ibatis.migration.utils.Util;
 
 public final class PendingOperation extends DatabaseOperation {
 
@@ -40,7 +41,7 @@ public final class PendingOperation extends DatabaseOperation {
       List<Change> pending = getPendingChanges(connectionProvider, migrationsLoader, option);
       println(printStream, "WARNING: Running pending migrations out of order can create unexpected results.");
       for (Change change : pending) {
-        println(printStream, horizontalLine("Applying: " + change.getFilename(), 80));
+        println(printStream, Util.horizontalLine("Applying: " + change.getFilename(), 80));
         ScriptRunner runner = getScriptRunner(connectionProvider, option, printStream);
         try {
           runner.runScript(migrationsLoader.getScriptReader(change, false));

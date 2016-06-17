@@ -26,12 +26,14 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Map;
 import java.util.Properties;
 
 import org.apache.ibatis.migration.ConnectionProvider;
 import org.apache.ibatis.migration.FileMigrationLoader;
 import org.apache.ibatis.migration.JdbcConnectionProvider;
 import org.apache.ibatis.migration.MigrationLoader;
+import org.apache.ibatis.migration.hook.MigrationHook;
 import org.apache.ibatis.migration.operations.BootstrapOperation;
 import org.apache.ibatis.migration.operations.DownOperation;
 import org.apache.ibatis.migration.operations.PendingOperation;
@@ -39,6 +41,7 @@ import org.apache.ibatis.migration.operations.StatusOperation;
 import org.apache.ibatis.migration.operations.UpOperation;
 import org.apache.ibatis.migration.operations.VersionOperation;
 import org.apache.ibatis.migration.options.DatabaseOperationOption;
+import org.apache.ibatis.migration.utils.TestUtil;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -107,6 +110,47 @@ public class RuntimeMigrationTest {
     assertEquals("2", runQuery(connectionProvider, "select count(*) from changelog"));
     assertEquals("0", runQuery(connectionProvider, "select count(*) from first_table"));
     assertTableDoesNotExist(connectionProvider, "second_table");
+  }
+
+  @Test
+  public void testUpWithHook() throws Exception {
+    final PrintStream printStream = new PrintStream(out);
+    MigrationHook hook = new MigrationHook() {
+      @Override
+      public void beforeEach(Map<String, Object> bindingMap) {
+        printStream.println("<BEFORE_EACH>");
+      }
+
+      @Override
+      public void before(Map<String, Object> bindingMap) {
+        printStream.println("<BEFORE>");
+      }
+
+      @Override
+      public void afterEach(Map<String, Object> bindingMap) {
+        printStream.println("<AFTER_EACH>");
+      }
+
+      @Override
+      public void after(Map<String, Object> bindingMap) {
+        printStream.println("<AFTER>");
+      }
+    };
+    new UpOperation(3).operate(connectionProvider, migrationsLoader, dbOption, printStream,
+        hook);
+    String output = out.toString("utf-8");
+    assertEquals(1, TestUtil.countStr(output, "<BEFORE>"));
+    assertEquals(3, TestUtil.countStr(output, "<BEFORE_EACH>"));
+    assertEquals(3, TestUtil.countStr(output, "<AFTER_EACH>"));
+    assertEquals(1, TestUtil.countStr(output, "<AFTER>"));
+    out.reset();
+    new DownOperation(2).operate(connectionProvider, migrationsLoader, dbOption, printStream,
+        hook);
+    output = out.toString("utf-8");
+    assertEquals(1, TestUtil.countStr(output, "<BEFORE>"));
+    assertEquals(2, TestUtil.countStr(output, "<BEFORE_EACH>"));
+    assertEquals(2, TestUtil.countStr(output, "<AFTER_EACH>"));
+    assertEquals(1, TestUtil.countStr(output, "<AFTER>"));
   }
 
   @Test

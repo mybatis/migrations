@@ -17,7 +17,7 @@ package org.apache.ibatis.migration;
 
 import java.math.BigDecimal;
 
-public class Change implements Comparable<Change> {
+public class Change implements Comparable<Change>, Cloneable {
 
   private BigDecimal id;
   private String description;
@@ -96,5 +96,14 @@ public class Change implements Comparable<Change> {
   @Override
   public int compareTo(Change change) {
     return id.compareTo(change.getId());
+  }
+
+  @Override
+  public Change clone() {
+    try {
+      return (Change) super.clone();
+    } catch (CloneNotSupportedException e) {
+      throw new InternalError(e.getMessage());
+    }
   }
 }

@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2015 the original author or authors.
+ *    Copyright 2010-2016 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package org.apache.ibatis.migration.commands;
 
+import org.apache.ibatis.migration.hook.MigrationHook;
 import org.apache.ibatis.migration.operations.DownOperation;
 import org.apache.ibatis.migration.options.SelectedOptions;
 
@@ -26,6 +27,18 @@ public final class DownCommand extends BaseCommand {
   @Override
   public void execute(String... params) {
     DownOperation operation = new DownOperation(getStepCountParameter(1, params));
-    operation.operate(getConnectionProvider(), getMigrationLoader(), getDatabaseOperationOption(), printStream);
+    operation.operate(getConnectionProvider(), getMigrationLoader(),
+        getDatabaseOperationOption(), printStream, createHook());
+  }
+
+  private MigrationHook createHook() {
+    String before = environment().getHookBeforeDown();
+    String beforeEach = environment().getHookBeforeEachDown();
+    String afterEach = environment().getHookAfterEachDown();
+    String after = environment().getHookAfterDown();
+    if (before == null && beforeEach == null && afterEach == null && after == null) {
+      return null;
+    }
+    return createFileMigrationHook(before, beforeEach, afterEach, after);
   }
 }

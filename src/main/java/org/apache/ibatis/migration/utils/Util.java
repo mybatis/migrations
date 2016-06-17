@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2015 the original author or authors.
+ *    Copyright 2010-2016 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -26,5 +26,18 @@ public enum Util {
 
   public static File file(File path, String fileName) {
     return new File(path.getAbsolutePath() + File.separator + fileName);
+  }
+
+  public static String horizontalLine(String caption, int length) {
+    StringBuilder builder = new StringBuilder();
+    builder.append("==========");
+    if (caption.length() > 0) {
+      caption = " " + caption + " ";
+      builder.append(caption);
+    }
+    for (int i = 0; i < length - caption.length() - 10; i++) {
+      builder.append("=");
+    }
+    return builder.toString();
   }
 }

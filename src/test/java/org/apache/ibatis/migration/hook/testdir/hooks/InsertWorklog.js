@@ -1,4 +1,4 @@
-/**
+/*
  *    Copyright 2010-2016 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,18 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package org.apache.ibatis.migration.options;
 
-public enum Options {
-  PATH,
-  ENVPATH,
-  SCRIPTPATH,
-  DRIVERPATH,
-  HOOKPATH,
-  ENV,
-  FORCE,
-  TRACE,
-  HELP,
-  TEMPLATE,
-  IDPATTERN
-}
+// Rhino has println(), but Nashorn does not.
+// Both has print(), but Nashorn's outputs newline.
+if (typeof println == 'undefined')
+	this.println = print;
+
+migrationProxy.executeSql("insert into worklog (str1) values ('" + change.getId() + "');");
+println('');

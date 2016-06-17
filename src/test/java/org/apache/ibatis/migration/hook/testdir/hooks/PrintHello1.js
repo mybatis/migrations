@@ -1,4 +1,4 @@
-/**
+/*
  *    Copyright 2010-2016 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,22 +13,16 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package org.apache.ibatis.migration;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.util.Properties;
+// Rhino has println(), but Nashorn does not.
+// Both has print(), but Nashorn's outputs newline.
+if (typeof println == 'undefined')
+	this.println = print;
 
-public class MigratorTestUtil {
-  public static Connection getConnection(Properties envProperties)
-      throws SQLException, ClassNotFoundException {
-    Class.forName(envProperties.getProperty("driver"));
-    return DriverManager.getConnection(envProperties.getProperty("url"),
-        envProperties.getProperty("username"), envProperties.getProperty("password"));
-  }
+println('HELLO_1');
 
-  public static String[] args(String... args) {
-    return args;
-  }
-}
+var SCRIPT_VAR = 1;
+println('SCRIPT_VAR=' + SCRIPT_VAR);
+
+println('');
+

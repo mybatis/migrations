@@ -33,7 +33,9 @@ public class Environment {
 
   private enum SETTING_KEY {
     time_zone, delimiter, script_char_set, full_line_delimiter, send_full_script, auto_commit,
-    remove_crs, driver_path, driver, url, username, password
+    remove_crs, driver_path, driver, url, username, password, hook_before_up,
+    hook_before_each_up, hook_after_each_up, hook_after_up, hook_before_down,
+    hook_before_each_down, hook_after_each_down, hook_after_down
   }
 
   private static final List<String> SETTING_KEYS;
@@ -60,6 +62,15 @@ public class Environment {
   private final String username;
   private final String password;
 
+  private final String hookBeforeUp;
+  private final String hookBeforeEachUp;
+  private final String hookAfterEachUp;
+  private final String hookAfterUp;
+  private final String hookBeforeDown;
+  private final String hookBeforeEachDown;
+  private final String hookAfterEachDown;
+  private final String hookAfterDown;
+
   private final Properties variables = new Properties();
 
   public Environment(File file) {
@@ -84,6 +95,15 @@ public class Environment {
       this.url = prop.getProperty(SETTING_KEY.url.name());
       this.username = prop.getProperty(SETTING_KEY.username.name());
       this.password = prop.getProperty(SETTING_KEY.password.name());
+
+      this.hookBeforeUp = prop.getProperty(SETTING_KEY.hook_before_up.name());
+      this.hookBeforeEachUp = prop.getProperty(SETTING_KEY.hook_before_each_up.name());
+      this.hookAfterEachUp = prop.getProperty(SETTING_KEY.hook_after_each_up.name());
+      this.hookAfterUp = prop.getProperty(SETTING_KEY.hook_after_up.name());
+      this.hookBeforeDown = prop.getProperty(SETTING_KEY.hook_before_down.name());
+      this.hookBeforeEachDown = prop.getProperty(SETTING_KEY.hook_before_each_down.name());
+      this.hookAfterEachDown = prop.getProperty(SETTING_KEY.hook_after_each_down.name());
+      this.hookAfterDown = prop.getProperty(SETTING_KEY.hook_after_down.name());
 
       // User defined variables.
       Set<Entry<Object, Object>> entries = prop.entrySet();
@@ -154,6 +174,38 @@ public class Environment {
 
   public String getPassword() {
     return password;
+  }
+
+  public String getHookBeforeUp() {
+    return hookBeforeUp;
+  }
+
+  public String getHookBeforeEachUp() {
+    return hookBeforeEachUp;
+  }
+
+  public String getHookAfterEachUp() {
+    return hookAfterEachUp;
+  }
+
+  public String getHookAfterUp() {
+    return hookAfterUp;
+  }
+
+  public String getHookBeforeDown() {
+    return hookBeforeDown;
+  }
+
+  public String getHookBeforeEachDown() {
+    return hookBeforeEachDown;
+  }
+
+  public String getHookAfterEachDown() {
+    return hookAfterEachDown;
+  }
+
+  public String getHookAfterDown() {
+    return hookAfterDown;
   }
 
   public Properties getVariables() {

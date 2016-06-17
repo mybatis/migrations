@@ -109,19 +109,6 @@ public abstract class DatabaseOperation {
     }
   }
 
-  protected String horizontalLine(String caption, int length) {
-    StringBuilder builder = new StringBuilder();
-    builder.append("==========");
-    if (caption.length() > 0) {
-      caption = " " + caption + " ";
-      builder.append(caption);
-    }
-    for (int i = 0; i < length - caption.length() - 10; i++) {
-      builder.append("=");
-    }
-    return builder.toString();
-  }
-
   public static String generateAppliedTimeStampAsString() {
     return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.sql.Date(System.currentTimeMillis()));
   }

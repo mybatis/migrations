@@ -58,12 +58,14 @@ public class OptionsParserTest {
     paths.setEnvPath(testFile);
     paths.setScriptPath(testFile);
     paths.setDriverPath(testFile);
+    paths.setHookPath(testFile);
 
     final String[] args = {
         valuedOption(PATH, testFile.getAbsolutePath()),
         valuedOption(ENVPATH, testFile.getAbsolutePath()),
         valuedOption(SCRIPTPATH, testFile.getAbsolutePath()),
-        valuedOption(DRIVERPATH, testFile.getAbsolutePath())
+        valuedOption(DRIVERPATH, testFile.getAbsolutePath()),
+        valuedOption(HOOKPATH, testFile.getAbsolutePath())
     };
 
     final SelectedOptions pathOptions = parse(args);
@@ -71,6 +73,7 @@ public class OptionsParserTest {
     checkFileOptionSet(pathOptions.getPaths().getEnvPath(), testFileName);
     checkFileOptionSet(pathOptions.getPaths().getScriptPath(), testFileName);
     checkFileOptionSet(pathOptions.getPaths().getDriverPath(), testFileName);
+    checkFileOptionSet(pathOptions.getPaths().getHookPath(), testFileName);
   }
 
   private void checkFileOptionSet(File aFile, String expectedFileName) {

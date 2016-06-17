@@ -44,6 +44,10 @@ import org.apache.ibatis.migration.Environment;
 import org.apache.ibatis.migration.FileMigrationLoader;
 import org.apache.ibatis.migration.MigrationException;
 import org.apache.ibatis.migration.MigrationLoader;
+import org.apache.ibatis.migration.hook.FileHookScriptFactory;
+import org.apache.ibatis.migration.hook.FileMigrationHook;
+import org.apache.ibatis.migration.hook.HookScriptFactory;
+import org.apache.ibatis.migration.hook.MigrationHook;
 import org.apache.ibatis.migration.io.ExternalResources;
 import org.apache.ibatis.migration.options.DatabaseOperationOption;
 import org.apache.ibatis.migration.options.Options;
@@ -270,6 +274,14 @@ public abstract class BaseCommand implements Command {
     return new FileMigrationLoader(paths.getScriptPath(),
         environment().getScriptCharset(),
         environment().getVariables());
+  }
+
+  protected MigrationHook createFileMigrationHook(String before, String beforeEach,
+      String afterEach, String after) {
+    HookScriptFactory factory = new FileHookScriptFactory(options.getPaths(), environment(),
+        printStream);
+    return new FileMigrationHook(factory.create(before), factory.create(beforeEach),
+        factory.create(afterEach), factory.create(after));
   }
 
   protected DatabaseOperationOption getDatabaseOperationOption() {

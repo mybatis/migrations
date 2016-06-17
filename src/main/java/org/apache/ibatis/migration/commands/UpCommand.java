@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2015 the original author or authors.
+ *    Copyright 2010-2016 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package org.apache.ibatis.migration.commands;
 
+import org.apache.ibatis.migration.hook.MigrationHook;
 import org.apache.ibatis.migration.operations.UpOperation;
 import org.apache.ibatis.migration.options.SelectedOptions;
 
@@ -34,6 +35,18 @@ public final class UpCommand extends BaseCommand {
   public void execute(String... params) {
     final int limit = getStepCountParameter(Integer.MAX_VALUE, params);
     UpOperation operation = new UpOperation(runOneStepOnly ? 1 : limit);
-    operation.operate(getConnectionProvider(), getMigrationLoader(), getDatabaseOperationOption(), printStream);
+    operation.operate(getConnectionProvider(), getMigrationLoader(),
+        getDatabaseOperationOption(), printStream, createHook());
+  }
+
+  private MigrationHook createHook() {
+    String before = environment().getHookBeforeUp();
+    String beforeEach = environment().getHookBeforeEachUp();
+    String afterEach = environment().getHookAfterEachUp();
+    String after = environment().getHookAfterUp();
+    if (before == null && beforeEach == null && afterEach == null && after == null) {
+      return null;
+    }
+    return createFileMigrationHook(before, beforeEach, afterEach, after);
   }
 }
