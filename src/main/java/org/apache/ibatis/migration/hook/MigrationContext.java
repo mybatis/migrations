@@ -21,20 +21,24 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 import org.apache.ibatis.jdbc.ScriptRunner;
+import org.apache.ibatis.migration.Change;
 import org.apache.ibatis.migration.ConnectionProvider;
 
-public class MigrationProxy {
+public class MigrationContext {
   private ConnectionProvider connectionProvider;
   private ScriptRunner scriptRunner;
+  private Change change;
 
-  public MigrationProxy(ConnectionProvider connectionProvider, ScriptRunner scriptRunner) {
+  public MigrationContext(ConnectionProvider connectionProvider, ScriptRunner scriptRunner,
+      Change change) {
     super();
     this.connectionProvider = connectionProvider;
     this.scriptRunner = scriptRunner;
+    this.change = change;
   }
 
   /**
-   * @return A new connection to the database. The returned connection must be closed.
+   * @return A new {@link Connection} to the database. The returned connection must be closed.
    * @throws SQLException
    *           If a database access error occurs.
    */
@@ -50,7 +54,19 @@ public class MigrationProxy {
     scriptRunner.runScript(reader);
   }
 
+  /**
+   * @param reader
+   *          SQL to execute.
+   */
   public void executeSql(String sql) {
     executeSql(new StringReader(sql));
+  }
+
+  /**
+   * @return Returns an instance of {@link Change} object for an each hook; <code>null</code>
+   *         otherwise.
+   */
+  public Change getChange() {
+    return change;
   }
 }

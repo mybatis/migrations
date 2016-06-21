@@ -53,7 +53,7 @@ public class SqlHookScript implements HookScript {
 
   @Override
   public void execute(Map<String, Object> bindingMap) {
-    MigrationProxy proxy = (MigrationProxy) bindingMap.get(MigrationHook.MIGRATION_PROXY);
+    MigrationContext context = (MigrationContext) bindingMap.get(MigrationHook.MIGRATION_CONTEXT);
     printStream.println(Util.horizontalLine("Applying SQL hook: " + scriptFile.getName(), 80));
 
     FileInputStream inputStream = null;
@@ -65,7 +65,7 @@ public class SqlHookScript implements HookScript {
       while ((length = inputStream.read(buffer)) != -1) {
         outputStream.write(buffer, 0, length);
       }
-      proxy.executeSql(
+      context.executeSql(
           new StringReader(PropertyParser.parse(outputStream.toString(charset), variables)));
     } catch (IOException e) {
       throw new MigrationException("Error occurred while running SQL hook script.", e);

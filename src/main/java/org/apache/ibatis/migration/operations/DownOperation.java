@@ -29,7 +29,7 @@ import org.apache.ibatis.migration.ConnectionProvider;
 import org.apache.ibatis.migration.MigrationException;
 import org.apache.ibatis.migration.MigrationLoader;
 import org.apache.ibatis.migration.hook.MigrationHook;
-import org.apache.ibatis.migration.hook.MigrationProxy;
+import org.apache.ibatis.migration.hook.MigrationContext;
 import org.apache.ibatis.migration.options.DatabaseOperationOption;
 import org.apache.ibatis.migration.utils.Util;
 
@@ -69,18 +69,18 @@ public final class DownOperation extends DatabaseOperation {
         ScriptRunner runner = getScriptRunner(connectionProvider, option, printStream);
 
         Map<String, Object> hookBindings = new HashMap<String, Object>();
-        hookBindings.put(MigrationHook.MIGRATION_PROXY,
-            new MigrationProxy(connectionProvider, runner));
 
         try {
           for (Change change : migrations) {
             if (change.getId().equals(lastChange.getId())) {
               if (stepCount == 0 && hook != null) {
-                hookBindings.remove(MigrationHook.CHANGE);
+                hookBindings.put(MigrationHook.MIGRATION_CONTEXT,
+                    new MigrationContext(connectionProvider, runner, null));
                 hook.before(hookBindings);
               }
               if (hook != null) {
-                hookBindings.put(MigrationHook.CHANGE, change.clone());
+                hookBindings.put(MigrationHook.MIGRATION_CONTEXT,
+                    new MigrationContext(connectionProvider, runner, change.clone()));
                 hook.beforeEach(hookBindings);
               }
               println(printStream, Util.horizontalLine("Undoing: " + change.getFilename(), 80));
@@ -94,7 +94,8 @@ public final class DownOperation extends DatabaseOperation {
               }
               println(printStream);
               if (hook != null) {
-                hookBindings.put(MigrationHook.CHANGE, change.clone());
+                hookBindings.put(MigrationHook.MIGRATION_CONTEXT,
+                    new MigrationContext(connectionProvider, runner, change.clone()));
                 hook.afterEach(hookBindings);
               }
               stepCount++;
@@ -105,7 +106,8 @@ public final class DownOperation extends DatabaseOperation {
             }
           }
           if (stepCount > 0 && hook != null) {
-            hookBindings.remove(MigrationHook.CHANGE);
+            hookBindings.put(MigrationHook.MIGRATION_CONTEXT,
+                new MigrationContext(connectionProvider, runner, null));
             hook.after(hookBindings);
           }
         } finally {

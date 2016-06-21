@@ -19,5 +19,5 @@
 if (typeof println == 'undefined')
 	this.println = print;
 
-migrationProxy.executeSql("insert into worklog (str1) values ('" + change.getId() + "');");
+migrationContext.executeSql("insert into worklog (str1) values ('" + migrationContext.getChange().getId() + "');");
 println('');
