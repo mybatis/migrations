@@ -74,30 +74,33 @@
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>          <strong class="jxr_keyword">case</strong> DRIVERPATH:
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>            options.getPaths().setDriverPath(<strong class="jxr_keyword">new</strong> File(argParts[1]));
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>            <strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>          <strong class="jxr_keyword">case</strong> ENV:
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>            options.setEnvironment(argParts[1]);
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>          <strong class="jxr_keyword">case</strong> HOOKPATH:
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>            options.getPaths().setHookPath(<strong class="jxr_keyword">new</strong> File(argParts[1]));
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>            <strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>          <strong class="jxr_keyword">case</strong> FORCE:
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>            options.setForce(<strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>          <strong class="jxr_keyword">case</strong> ENV:
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>            options.setEnvironment(argParts[1]);
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>            <strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>          <strong class="jxr_keyword">case</strong> TRACE:
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>            options.setTrace(<strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>          <strong class="jxr_keyword">case</strong> FORCE:
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>            options.setForce(<strong class="jxr_keyword">true</strong>);
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>            <strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>          <strong class="jxr_keyword">case</strong> HELP:
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>            options.setHelp(<strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>          <strong class="jxr_keyword">case</strong> TRACE:
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>            options.setTrace(<strong class="jxr_keyword">true</strong>);
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>            <strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>          <strong class="jxr_keyword">case</strong> TEMPLATE:
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>            options.setTemplate(argParts[1]);
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>          <strong class="jxr_keyword">case</strong> HELP:
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>            options.setHelp(<strong class="jxr_keyword">true</strong>);
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>            <strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>          <strong class="jxr_keyword">case</strong> IDPATTERN:
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>            options.setIdPattern(argParts[1]);
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>          <strong class="jxr_keyword">case</strong> TEMPLATE:
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>            options.setTemplate(argParts[1]);
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>            <strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>        }
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>      }
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>      <strong class="jxr_keyword">return</strong> isOption;
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>    }
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  }
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>          <strong class="jxr_keyword">case</strong> IDPATTERN:
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>            options.setIdPattern(argParts[1]);
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>            <strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>        }
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>      }
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>      <strong class="jxr_keyword">return</strong> isOption;
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>    }
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2010&#x2013;2016 <a href="http://www.mybatis.org/">MyBatis.org</a>. All rights reserved.</div>
