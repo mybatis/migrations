@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+       Copyright 2010-2016 the original author or authors.
+
+       Licensed under the Apache License, Version 2.0 (the "License");
+       you may not use this file except in compliance with the License.
+       You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+       Unless required by applicable law or agreed to in writing, software
+       distributed under the License is distributed on an "AS IS" BASIS,
+       WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+       See the License for the specific language governing permissions and
+       limitations under the License.
+
+-->
+<document xmlns="http://maven.apache.org/XDOC/2.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+
+  <properties>
+    <title>MyBatis Migrations | Migration hooks</title>
+    <author email="mybatis-dev@googlegroups.com">The MyBatis Team</author>
+  </properties>
+
+  <body>
+
+    <section name="Migration Hooks">
+
+      <p>
+        Since 3.3.0, MyBatis Migrations supports pre/post-migration hooks.
+      </p>
+
+      <subsection name="Overview">
+
+        <p>
+          You can write scripts that are executed before or after up/down operation.<br />
+          The following hooks are supported.
+        </p>
+
+        <ul>
+          <li>before up/down : executed before the first migration</li>
+          <li>before each up/down : executed before each migration</li>
+          <li>after each up/down : executed after each migration</li>
+          <li>after up/down : executed after the last migration</li>
+        </ul>
+
+        <p>
+          Hook scripts can be written in <b>SQL</b> or <b>JSR-223</b> compliannt script languages.
+        </p>
+
+      </subsection>
+
+      <subsection name="Quick start">
+
+        <p>
+          Here is what you need to do to use hook scripts.
+        </p>
+
+        <ol>
+          <li>Create <i>hooks</i> directory.</li>
+          <li>Create a hook script in <i>hooks</i> directory.</li>
+          <li>Add a setting to the environment properties file.</li>
+        </ol>
+
+        <h4>1. Create <i>hooks</i> directory.</h4>
+
+        <p>
+          Create a directory named <i>hooks</i> in the base directory.
+        </p>
+
+        <h4>2. Create a hook script in <i>hooks</i> directory.</h4>
+
+        <p>
+          The following script outputs the famous string to the log.<br />
+          Save this script in the <i>hooks</i> directory as <i>hello.js</i>.
+        </p>
+
+        <source><![CDATA[print('Hello, World!');]]></source>
+
+        <h4>3. Add a setting to the environment properties file.</h4>
+
+        <p>
+          To configure Migrations, add the following line to the <i>development.properties</i> in the <i>environments</i> directory.
+        </p>
+
+        <source><![CDATA[hook_before_up=JavaScript:hello.js]]></source>
+
+        <p>
+          The details will be explained in the later section, but the above line tells Migrations to execute <i>hello.js</i> at the beginning of <code>migrate up</code> operation.
+        </p>
+
+        <p>
+          Now, if you run <code>migrate up</code>, you will find the following lines in the log.
+        </p>
+
+        <source><![CDATA[========== Applying JSR-223 hook : hello.js ==========
+Hello, World!]]></source>
+
+        <p>
+          <span class="label important">NOTE</span>
+          The hook script will not be executed if there was no pending migration.
+        </p>
+
+      </subsection>
+
+      <subsection name="Configuration">
+
+        <p>
+          As shown in the Quick Start section, migration hook is configured by adding a line in the environment properties file in <code>key=value</code> format.<br />
+        </p>
+
+        <h4>Keys for available hooks</h4>
+
+        <p>
+          Here is the list of available hooks.
+        </p>
+
+        <ul>
+          <li>hook_before_up</li>
+          <li>hook_before_each_up</li>
+          <li>hook_after_each_up</li>
+          <li>hook_after_up</li>
+          <li>hook_before_down</li>
+          <li>hook_before_each_down</li>
+          <li>hook_after_each_down</li>
+          <li>hook_after_down</li>
+        </ul>
+
+        <h4>Minimum setting : language and file name</h4>
+
+        <p>
+          The value part of the setting line consists of two or more segments separated with a colon <code>:</code>.<br />
+          The first segment is the language name (e.g. <code>SQL</code>, <code>JavaScript</code>, <code>Groovy</code>, etc.). The second segment is the file name. These two segments are required.
+          Here are some examples:
+        </p>
+
+        <source><![CDATA[hook_before_up=SQL:insert_log.sql
+hook_after_up=JavaScript:RestartServer.js]]></source>
+
+      </subsection>
+
+      <subsection name="Constant variables">
+
+        <p>
+          The other segments are used to define constant variables specific to this particular hook script. These variables can have arbitrary names, but there also are some special variable names for JSR-223 hooks that are explained in the later section.
+        </p>
+
+        <p>
+          The following settings reference the same hook script <i>printvar.js</i> with different variable values.
+        </p>
+
+        <source><![CDATA[// development.properties
+hook_before_up=JavaScript:printvar.js:when=before:what=up
+hook_after_down=JavaScript:printvar.js:when=after:what=down]]></source>
+
+        <p>
+          Constant variables can be referenced as global variables in JavaScript.
+        </p>
+
+        <source><![CDATA[// printvar.js
+print('This is ' + when + ' ' + what + ' hook.');]]></source>
+
+        <p>
+          The above script will print <code>This is before up hook.</code> on <code>migrate up</code> and <code>This is after down hook.</code> on <code>migrate down</code>.
+        </p>
+
+        <p>
+          Also, if there are global variables defined in the environment properties file, they can be used in hook scripts in the same manner.
+        </p>
+
+        <source><![CDATA[// development.properties
+foo=bar]]></source>
+
+        <p>
+          These variables can be used in SQL hook scripts as well.
+        </p>
+
+        <source><![CDATA[# development.properties
+hook_before_up=SQL:update_timestamp.sql:col=before
+hook_after_up=SQL:update_timestamp.sql:col=after]]></source>
+        <source><![CDATA[// update_timestamp.sql
+update worklog set ${col} = current_date();]]></source>
+
+      </subsection>
+
+      <subsection name="Advanced usage of JSR-223 scripts">
+
+        <h4>Get paths to the directories</h4>
+
+        <p>
+          An instance of <a href="/migrations/apidocs/org/apache/ibatis/migration/options/SelectedPaths.html" target="_blank">SelectedPaths</a> object is accessible as a global variable <code>migrationPaths</code>.
+        </p>
+
+        <source><![CDATA[print(migrationPaths.getBasePath());
+print(migrationPaths.getEnvPath());
+print(migrationPaths.getScriptPath());
+print(migrationPaths.getDriverPath());
+print(migrationPaths.getHookPath());]]></source>
+
+        <h4>Accessing <i>Change</i> object (in each hook only)</h4>
+
+        <p>
+          In an each hook script, an instance of <a href="/migrations/apidocs/org/apache/ibatis/migration/Change.html" target="_blank">Change</a> object is accessible via the global variable <code>migrationContext</code>.
+        </p>
+
+        <source><![CDATA[print(migrationContext.getChange().getId());
+print(migrationContext.getChange().getFilename());]]></source>
+
+        <p>
+          <span class="label important">NOTE</span>
+          The Change instance is a clone and will be discarded after each exection, so modifying it would be meaningless.
+        </p>
+
+        <h4>Execute SQL statement</h4>
+
+        <p>
+          You can execute arbitrary SQL statement via the built-in global object <code>migrationContext</code>.
+        </p>
+
+        <source><![CDATA[migrationContext.executeSql("insert into worklog (str1) values ('done!');");]]></source>
+
+        <p>
+          If you need more than just executing SQL statement, you can get an instance of <code>java.sql.Connection</code> from <code>migrationContext</code>.
+        </p>
+
+        <source><![CDATA[con = migrationContext.getConnection();
+try {
+  stmt = con.createStatement();
+  rs = stmt.executeQuery("select * from changelog");
+  while (rs.next()) {
+    print("id = " + rs.getString("id"));
+  }
+} finally {
+  con.close();
+  con = null;
+  rs = null;
+  stmt = null;
+}]]></source>
+
+
+        <h4>Invoking function</h4>
+
+        <p>
+          When configuring JSR-223 hook scripts, it is possible to specify a top level function to invoke. The following script contains two functions <code>foo</code> and <code>bar</code> and <code>bar</code> takes two arguments.
+        </p>
+
+        <source><![CDATA[// foobar.js
+function foo() {
+  print('foo');
+}
+
+function bar(id, name) {
+  print(id + ':' + name);
+}]]></source>
+
+        <p>
+          To invoke these function, specify the function name using a special variable name <code>_function</code> and parameter values with <code>_arg</code>.
+        </p>
+
+        <source><![CDATA[hook_before_up=js:foobar.js:_function=foo
+hook_after_up=js:foobar.js:_function=bar:_arg=100:_arg=John]]></source>
+
+        <p>
+          <span class="label important">NOTE</span>
+          Some JSR-223 implementation may not support function invocation.
+        </p>
+
+        <h4>Invoking method</h4>
+
+        <p>
+          Similar to function invocation, it is also possible to invoke a method of an top level object.
+        </p>
+
+        <source><![CDATA[// doggy.js
+var dog = new Object();
+dog.bark = function(who, times) {
+  print('bow-wow ' + times + ' times at ' + who);
+});]]></source>
+
+        <p>
+          In the hook setting, use <code>_object</code> to specify the object name and <code>_method</code> to specify the method name.
+        </p>
+
+        <source><![CDATA[hook_before_up=js:doggy.js:_object=dog:_method=bark:_arg=Lucy:_arg=128]]></source>
+
+        <p>
+          <span class="label important">NOTE</span>
+          Some JSR-223 implementation may not support method invocation.
+        </p>
+
+        <h4>Retain variable value throughout the operation</h4>
+
+        <p>
+          When single up/down operation executes multiple migrations, variables are reset on each migration.<br />
+          There are two ways to retain variable value throughout the operation.
+        </p>
+
+        <ol>
+          <li>
+            Initialize the variable in before_up/down script and use it in before/after_each_up/down script.
+            <source><![CDATA[// before_up hook script
+var counter = 1;]]></source>
+            <source><![CDATA[// before_each_up hook script
+print(counter++);]]></source>
+          </li>
+          <li>
+            Initialize only when the variable is <i>undefined</i>.
+            <source><![CDATA[if (typeof counter == 'undefined') this.counter = 1;
+println(counter++);]]></source>
+          </li>
+        </ol>
+
+        <h4>Use other languages than JavaScript</h4>
+
+        <p>
+          To use other JSR-223 compliant scripting language than JavaScript, you need to copy required .jar files to <i>$MIGRATIONS_HOME/lib</i> directory.
+        </p>
+
+        <p>
+          To write hook scripts in <a href="http://groovy-lang.org" target="_blank">Groovy</a>, for example, you will need <a href="http://mvnrepository.com/artifact/org.codehaus.groovy/groovy" target="_blank">groovy.jar</a> and <a href="http://mvnrepository.com/artifact/org.codehaus.groovy/groovy-jsr223" target="_blank">groovy-jsr223.jar</a>.<br />
+          Once the JARs are placed in <i>$MIGRATIONS_HOME/lib</i> directory, the rest is pretty much the same as JavaScript.<br />
+          Save the following script as <code>hello.groovy</code> in <i>hooks</i> directory with the following content...
+        </p>
+
+        <source><![CDATA[println('Hello groovy!')]]></source>
+
+        <p>...and add the setting to the environment properties file.</p>
+
+        <source><![CDATA[hook_before_up=groovy:hello.groovy]]></source>
+
+      </subsection>
+
+    </section>
+
+  </body>
+
+</document>
