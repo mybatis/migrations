@@ -19,5 +19,5 @@
 if (typeof println == 'undefined')
 	this.println = print;
 
-migrationContext.executeSql("insert into worklog (str1) values ('" + migrationContext.getChange().getId() + "');");
+hookContext.executeSql("insert into worklog (str1) values ('" + hookContext.getChange().getId() + "');");
 println('');

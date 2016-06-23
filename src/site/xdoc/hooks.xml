@@ -203,11 +203,11 @@ print(migrationPaths.getHookPath());]]></source>
         <h4>Accessing <i>Change</i> object (in each hook only)</h4>
 
         <p>
-          In an each hook script, an instance of <a href="/migrations/apidocs/org/apache/ibatis/migration/Change.html" target="_blank">Change</a> object is accessible via the global variable <code>migrationContext</code>.
+          In an each hook script, an instance of <a href="/migrations/apidocs/org/apache/ibatis/migration/Change.html" target="_blank">Change</a> object is accessible via the global variable <code>hookContext</code>.
         </p>
 
-        <source><![CDATA[print(migrationContext.getChange().getId());
-print(migrationContext.getChange().getFilename());]]></source>
+        <source><![CDATA[print(hookContext.getChange().getId());
+print(hookContext.getChange().getFilename());]]></source>
 
         <p>
           <span class="label important">NOTE</span>
@@ -217,16 +217,16 @@ print(migrationContext.getChange().getFilename());]]></source>
         <h4>Execute SQL statement</h4>
 
         <p>
-          You can execute arbitrary SQL statement via the built-in global object <code>migrationContext</code>.
+          You can execute arbitrary SQL statement via the built-in global object <code>hookContext</code>.
         </p>
 
-        <source><![CDATA[migrationContext.executeSql("insert into worklog (str1) values ('done!');");]]></source>
+        <source><![CDATA[hookContext.executeSql("insert into worklog (str1) values ('done!');");]]></source>
 
         <p>
-          If you need more than just executing SQL statement, you can get an instance of <code>java.sql.Connection</code> from <code>migrationContext</code>.
+          If you need more than just executing SQL statement, you can get an instance of <code>java.sql.Connection</code> from <code>hookContext</code>.
         </p>
 
-        <source><![CDATA[con = migrationContext.getConnection();
+        <source><![CDATA[con = hookContext.getConnection();
 try {
   stmt = con.createStatement();
   rs = stmt.executeQuery("select * from changelog");

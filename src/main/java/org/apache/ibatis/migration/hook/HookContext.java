@@ -24,12 +24,12 @@ import org.apache.ibatis.jdbc.ScriptRunner;
 import org.apache.ibatis.migration.Change;
 import org.apache.ibatis.migration.ConnectionProvider;
 
-public class MigrationContext {
+public class HookContext {
   private ConnectionProvider connectionProvider;
   private ScriptRunner scriptRunner;
   private Change change;
 
-  public MigrationContext(ConnectionProvider connectionProvider, ScriptRunner scriptRunner,
+  public HookContext(ConnectionProvider connectionProvider, ScriptRunner scriptRunner,
       Change change) {
     super();
     this.connectionProvider = connectionProvider;

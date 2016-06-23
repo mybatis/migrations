@@ -29,7 +29,7 @@ import org.apache.ibatis.migration.ConnectionProvider;
 import org.apache.ibatis.migration.MigrationException;
 import org.apache.ibatis.migration.MigrationLoader;
 import org.apache.ibatis.migration.hook.MigrationHook;
-import org.apache.ibatis.migration.hook.MigrationContext;
+import org.apache.ibatis.migration.hook.HookContext;
 import org.apache.ibatis.migration.options.DatabaseOperationOption;
 import org.apache.ibatis.migration.utils.Util;
 
@@ -77,13 +77,13 @@ public final class UpOperation extends DatabaseOperation {
         for (Change change : migrations) {
           if (lastChange == null || change.getId().compareTo(lastChange.getId()) > 0) {
             if (stepCount == 0 && hook != null) {
-              hookBindings.put(MigrationHook.MIGRATION_CONTEXT,
-                  new MigrationContext(connectionProvider, runner, null));
+              hookBindings.put(MigrationHook.HOOK_CONTEXT,
+                  new HookContext(connectionProvider, runner, null));
               hook.before(hookBindings);
             }
             if (hook != null) {
-              hookBindings.put(MigrationHook.MIGRATION_CONTEXT,
-                  new MigrationContext(connectionProvider, runner, change.clone()));
+              hookBindings.put(MigrationHook.HOOK_CONTEXT,
+                  new HookContext(connectionProvider, runner, change.clone()));
               hook.beforeEach(hookBindings);
             }
             println(printStream, Util.horizontalLine("Applying: " + change.getFilename(), 80));
@@ -92,8 +92,8 @@ public final class UpOperation extends DatabaseOperation {
             insertChangelog(change, connectionProvider, option);
             println(printStream);
             if (hook != null) {
-              hookBindings.put(MigrationHook.MIGRATION_CONTEXT,
-                  new MigrationContext(connectionProvider, runner, change.clone()));
+              hookBindings.put(MigrationHook.HOOK_CONTEXT,
+                  new HookContext(connectionProvider, runner, change.clone()));
               hook.afterEach(hookBindings);
             }
             stepCount++;
@@ -103,8 +103,8 @@ public final class UpOperation extends DatabaseOperation {
           }
         }
         if (stepCount > 0 && hook != null) {
-          hookBindings.put(MigrationHook.MIGRATION_CONTEXT,
-              new MigrationContext(connectionProvider, runner, null));
+          hookBindings.put(MigrationHook.HOOK_CONTEXT,
+              new HookContext(connectionProvider, runner, null));
           hook.after(hookBindings);
         }
         return this;

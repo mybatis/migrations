@@ -25,7 +25,7 @@ function printVars(arg1, arg2) {
   println('');
 
   // to verify 'change' object is just a clone
-  migrationContext.getChange().setDescription('bogus description');
+  hookContext.getChange().setDescription('bogus description');
 
   local_var1 = 'This overwrites the variable defined in env file, '
     + 'but should be reset on next invocation.'

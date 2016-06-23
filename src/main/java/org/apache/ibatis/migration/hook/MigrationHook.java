@@ -19,7 +19,7 @@ import java.util.Map;
 
 public interface MigrationHook {
 
-  public static final String MIGRATION_CONTEXT = "migrationContext";
+  public static final String HOOK_CONTEXT = "hookContext";
 
   void before(Map<String, Object> bindingMap);
 
