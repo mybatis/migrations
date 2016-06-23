@@ -37,7 +37,7 @@
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.ibatis.migration.MigrationException;
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.apache.ibatis.migration.MigrationLoader;
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.apache.ibatis.migration.hook.MigrationHook;
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.apache.ibatis.migration.hook.MigrationContext;
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.apache.ibatis.migration.hook.HookContext;
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.apache.ibatis.migration.options.DatabaseOperationOption;
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> org.apache.ibatis.migration.utils.Util;
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  
@@ -85,13 +85,13 @@
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>          <strong class="jxr_keyword">for</strong> (Change change : migrations) {
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>            <strong class="jxr_keyword">if</strong> (lastChange == <strong class="jxr_keyword">null</strong> || change.getId().compareTo(lastChange.getId()) &gt; 0) {
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>              <strong class="jxr_keyword">if</strong> (stepCount == 0 &amp;&amp; hook != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>                hookBindings.put(MigrationHook.MIGRATION_CONTEXT,
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>                    <strong class="jxr_keyword">new</strong> <a href="../../../../../org/apache/ibatis/migration/hook/MigrationContext.html">MigrationContext</a>(connectionProvider, runner, <strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>                hookBindings.put(MigrationHook.HOOK_CONTEXT,
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>                    <strong class="jxr_keyword">new</strong> <a href="../../../../../org/apache/ibatis/migration/hook/HookContext.html">HookContext</a>(connectionProvider, runner, <strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>                hook.before(hookBindings);
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>              }
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>              <strong class="jxr_keyword">if</strong> (hook != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>                hookBindings.put(MigrationHook.MIGRATION_CONTEXT,
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>                    <strong class="jxr_keyword">new</strong> <a href="../../../../../org/apache/ibatis/migration/hook/MigrationContext.html">MigrationContext</a>(connectionProvider, runner, change.clone()));
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>                hookBindings.put(MigrationHook.HOOK_CONTEXT,
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>                    <strong class="jxr_keyword">new</strong> <a href="../../../../../org/apache/ibatis/migration/hook/HookContext.html">HookContext</a>(connectionProvider, runner, change.clone()));
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>                hook.beforeEach(hookBindings);
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>              }
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>              println(printStream, Util.horizontalLine(<span class="jxr_string">"Applying: "</span> + change.getFilename(), 80));
@@ -100,8 +100,8 @@
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>              insertChangelog(change, connectionProvider, option);
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>              println(printStream);
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>              <strong class="jxr_keyword">if</strong> (hook != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>                hookBindings.put(MigrationHook.MIGRATION_CONTEXT,
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>                    <strong class="jxr_keyword">new</strong> <a href="../../../../../org/apache/ibatis/migration/hook/MigrationContext.html">MigrationContext</a>(connectionProvider, runner, change.clone()));
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>                hookBindings.put(MigrationHook.HOOK_CONTEXT,
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>                    <strong class="jxr_keyword">new</strong> <a href="../../../../../org/apache/ibatis/migration/hook/HookContext.html">HookContext</a>(connectionProvider, runner, change.clone()));
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>                hook.afterEach(hookBindings);
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>              }
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>              stepCount++;
@@ -111,8 +111,8 @@
 <a class="jxr_linenumber" name="L103" href="#L103">103</a>           }
 <a class="jxr_linenumber" name="L104" href="#L104">104</a>         }
 <a class="jxr_linenumber" name="L105" href="#L105">105</a>         <strong class="jxr_keyword">if</strong> (stepCount &gt; 0 &amp;&amp; hook != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L106" href="#L106">106</a>           hookBindings.put(MigrationHook.MIGRATION_CONTEXT,
-<a class="jxr_linenumber" name="L107" href="#L107">107</a>               <strong class="jxr_keyword">new</strong> <a href="../../../../../org/apache/ibatis/migration/hook/MigrationContext.html">MigrationContext</a>(connectionProvider, runner, <strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L106" href="#L106">106</a>           hookBindings.put(MigrationHook.HOOK_CONTEXT,
+<a class="jxr_linenumber" name="L107" href="#L107">107</a>               <strong class="jxr_keyword">new</strong> <a href="../../../../../org/apache/ibatis/migration/hook/HookContext.html">HookContext</a>(connectionProvider, runner, <strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L108" href="#L108">108</a>           hook.after(hookBindings);
 <a class="jxr_linenumber" name="L109" href="#L109">109</a>         }
 <a class="jxr_linenumber" name="L110" href="#L110">110</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;

@@ -61,7 +61,7 @@
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>    @Override
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> execute(Map&lt;String, Object&gt; bindingMap) {
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>      <a href="../../../../../org/apache/ibatis/migration/hook/MigrationContext.html">MigrationContext</a> context = (MigrationContext) bindingMap.get(MigrationHook.MIGRATION_CONTEXT);
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>      <a href="../../../../../org/apache/ibatis/migration/hook/HookContext.html">HookContext</a> context = (HookContext) bindingMap.get(MigrationHook.HOOK_CONTEXT);
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>      printStream.println(Util.horizontalLine(<span class="jxr_string">"Applying SQL hook: "</span> + scriptFile.getName(), 80));
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>      FileInputStream inputStream = <strong class="jxr_keyword">null</strong>;
