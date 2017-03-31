@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-       Copyright 2010-2016 the original author or authors.
+       Copyright 2010-2017 the original author or authors.
 
        Licensed under the Apache License, Version 2.0 (the "License");
        you may not use this file except in compliance with the License.
@@ -43,7 +43,7 @@ Here's an example of running the init command:</p>
 
       <source>/home/cbegin/testdb$ migrate --idpattern=000 init</source>
 
-      <p>Instead of specifying the pattern as a command line argument, you can set it in the configuration file <code>$MIGRATION_HOME/migration.properties</code> as follows.</p>
+      <p>Instead of specifying the pattern as a command line argument, you can set it in the configuration file <code>$MIGRATIONS_HOME/migration.properties</code> as follows.</p>
 
       <source># Example of migration.properties
 idpattern=000</source>

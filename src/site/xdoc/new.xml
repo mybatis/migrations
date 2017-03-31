@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-       Copyright 2010-2016 the original author or authors.
+       Copyright 2010-2017 the original author or authors.
 
        Licensed under the Apache License, Version 2.0 (the "License");
        you may not use this file except in compliance with the License.
@@ -61,7 +61,7 @@
 
       <source>003_create_blog_table.sql</source>
 
-      <p>Instead of specifying the pattern as a command line argument, you can set it in the configuration file <code>$MIGRATION_HOME/migration.properties</code> as follows.</p>
+      <p>Instead of specifying the pattern as a command line argument, you can set it in the configuration file <code>$MIGRATIONS_HOME/migration.properties</code> as follows.</p>
 
       <source># Example of migration.properties
 idpattern=000</source>
@@ -107,7 +107,7 @@ new_command.template=templates/new_template_migration.sql</source>
 
       <p>Alternatively you can manually specify the location of your template as such:</p>
 
-      <source><![CDATA[migrate new –template=<path to template> "your description"]]></source>
+      <source><![CDATA[migrate new --template=<path to template> "your description"]]></source>
 
       <p>If neither of these are used, or valid, the default template shown on the previous page will be used.</p>
 
