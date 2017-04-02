@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2016 the original author or authors.
+ *    Copyright 2010-2017 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -60,7 +60,10 @@ public abstract class BaseCommand implements Command {
 
   private static final String MIGRATIONS_HOME = "MIGRATIONS_HOME";
 
-  private static final String MIGRATIONS_HOME_PROPERTY = "migrationHome";
+  /* TODO: remove in the next major release */
+  private static final String MIGRATIONS_HOME_PROPERTY_DEPRECATED = "migrationHome";
+
+  private static final String MIGRATIONS_HOME_PROPERTY = "migrationsHome";
 
   private static final String MIGRATIONS_PROPERTIES = "migration.properties";
 
@@ -171,6 +174,9 @@ public abstract class BaseCommand implements Command {
     // Check if there is a system property
     if (migrationsHome == null) {
       migrationsHome = System.getProperty(MIGRATIONS_HOME_PROPERTY);
+      if (migrationsHome == null) {
+        migrationsHome = System.getProperty(MIGRATIONS_HOME_PROPERTY_DEPRECATED);
+      }
     }
     return migrationsHome;
   }
