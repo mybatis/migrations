@@ -336,7 +336,7 @@ public class MigratorTest {
 
   @Test
   public void useCustomTemplateWithBadPath() throws Exception {
-    System.setProperty("migrationHome", "/tmp");
+    System.setProperty("migrationsHome", "/tmp");
     File basePath = getTempDir();
     Migrator.main(TestUtil.args("--path=" + basePath.getAbsolutePath(), "init"));
     assertNotNull(basePath.list());
