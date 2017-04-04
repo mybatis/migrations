@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2016 the original author or authors.
+ *    Copyright 2010-2017 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -42,13 +42,13 @@ public final class NewCommand extends BaseCommand {
     String filename = getNextIDAsString() + "_" + description.replace(' ', '_') + ".sql";
 
     if (options.getTemplate() != null) {
-      copyExternalResourceTo(options.getTemplate(), Util.file(paths.getScriptPath(), filename));
+      copyExternalResourceTo(options.getTemplate(), Util.file(paths.getScriptPath(), filename), variables);
     } else {
       try {
         String customConfiguredTemplate = getPropertyOption(CUSTOM_NEW_COMMAND_TEMPLATE_PROPERTY);
         if (customConfiguredTemplate != null) {
           copyExternalResourceTo(migrationsHome() + "/" + customConfiguredTemplate,
-              Util.file(paths.getScriptPath(), filename));
+              Util.file(paths.getScriptPath(), filename), variables);
         } else {
           copyDefaultTemplate(variables, filename);
         }
@@ -63,7 +63,8 @@ public final class NewCommand extends BaseCommand {
   }
 
   private void copyDefaultTemplate(Properties variables, String filename) {
-    copyResourceTo("org/apache/ibatis/migration/template_migration.sql",
+    copyResourceTo(
+        "org/apache/ibatis/migration/template_migration.sql",
         Util.file(paths.getScriptPath(), filename),
         variables);
   }

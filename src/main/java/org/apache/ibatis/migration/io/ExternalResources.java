@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2016 the original author or authors.
+ *    Copyright 2010-2017 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -15,13 +15,8 @@
  */
 package org.apache.ibatis.migration.io;
 
-import java.io.Closeable;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.channels.FileChannel;
 import java.util.Properties;
 
 /**
@@ -31,34 +26,6 @@ public class ExternalResources {
 
   private ExternalResources() {
     // do nothing
-  }
-
-  public static void copyExternalResource(File sourceFile, File destFile) throws IOException {
-    if (!destFile.exists()) {
-      destFile.createNewFile();
-    }
-
-    FileChannel source = null;
-    FileChannel destination = null;
-    try {
-      source = new FileInputStream(sourceFile).getChannel();
-      destination = new FileOutputStream(destFile).getChannel();
-      destination.transferFrom(source, 0, source.size());
-    } finally {
-      closeQuietly(source);
-      closeQuietly(destination);
-    }
-
-  }
-
-  private static void closeQuietly(Closeable closeable) {
-    if (closeable != null) {
-      try {
-        closeable.close();
-      } catch (IOException e) {
-        // do nothing, close quietly
-      }
-    }
   }
 
   public static String getConfiguredTemplate(String templatePath, String templateProperty) throws FileNotFoundException {

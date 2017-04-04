@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2016 the original author or authors.
+ *    Copyright 2010-2017 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -19,9 +19,12 @@ import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Connection;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Scanner;
 
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.jdbc.SqlRunner;
@@ -300,6 +303,7 @@ public class MigratorTest {
 
   @Test
   public void useCustomTemplate() throws Exception {
+    String desc = "test new migration";
     File basePath = getTempDir();
     Migrator.main(TestUtil.args("--path=" + basePath.getAbsolutePath(), "init"));
     assertNotNull(basePath.list());
@@ -308,10 +312,18 @@ public class MigratorTest {
     assertEquals(3, scriptPath.list().length);
 
     File templatePath = File.createTempFile("customTemplate", "sql");
-    templatePath.createNewFile();
+    PrintWriter writer = new PrintWriter(templatePath);
+    writer.println("// ${description}");
+    writer.close();
     Migrator.main(TestUtil.args("--path=" + basePath.getAbsolutePath(), "new",
-        "test new migration", "--template=" + templatePath.getAbsolutePath()));
-    assertEquals(4, scriptPath.list().length);
+        desc, "--template=" + templatePath.getAbsolutePath()));
+    String[] scripts = scriptPath.list();
+    Arrays.sort(scripts);
+    assertEquals(4, scripts.length);
+    Scanner scanner = new Scanner(new File(scriptPath, scripts[scripts.length - 2]));
+    if (scanner.hasNextLine()) {
+      assertEquals("// " + desc, scanner.nextLine());
+    }
 
     templatePath.delete();
   }
@@ -330,7 +342,6 @@ public class MigratorTest {
     Migrator.main(TestUtil.args("--path=" + basePath.getAbsolutePath(), "new",
         "test new migration", "--template="));
     assertEquals(4, scriptPath.list().length);
-
     templatePath.delete();
   }
 

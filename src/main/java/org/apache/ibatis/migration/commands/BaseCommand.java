@@ -19,6 +19,7 @@ import static org.apache.ibatis.migration.utils.Util.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.LineNumberReader;
@@ -149,23 +150,13 @@ public abstract class BaseCommand implements Command {
   protected void copyResourceTo(String resource, File toFile, Properties variables) {
     printStream.println("Creating: " + toFile.getName());
     try {
-      LineNumberReader reader = new LineNumberReader(Resources.getResourceAsReader(this.getClass().getClassLoader(), resource));
-      try {
-        PrintWriter writer = new PrintWriter(new FileWriter(toFile));
-        try {
-          String line;
-          while ((line = reader.readLine()) != null) {
-            line = PropertyParser.parse(line, variables);
-            writer.println(line);
-          }
-        } finally {
-          writer.close();
-        }
-      } finally {
-        reader.close();
-      }
+      copyTemplate(
+          Resources.getResourceAsFile(this.getClass().getClassLoader(), resource), toFile,
+          variables);
     } catch (IOException e) {
-      throw new MigrationException("Error copying " + resource + " to " + toFile.getAbsolutePath() + ".  Cause: " + e, e);
+      throw new MigrationException(
+          "Error copying " + resource + " to " + toFile.getAbsolutePath() + ".  Cause: " + e,
+          e);
     }
   }
 
@@ -181,13 +172,32 @@ public abstract class BaseCommand implements Command {
     return migrationsHome;
   }
 
-  protected void copyExternalResourceTo(String resource, File toFile) {
+  protected void copyExternalResourceTo(String resource, File toFile, Properties variables) {
     printStream.println("Creating: " + toFile.getName());
     try {
       File sourceFile = new File(resource);
-      ExternalResources.copyExternalResource(sourceFile, toFile);
+      copyTemplate(sourceFile, toFile, variables);
     } catch (Exception e) {
       throw new MigrationException("Error copying " + resource + " to " + toFile.getAbsolutePath() + ".  Cause: " + e, e);
+    }
+  }
+
+  protected static void copyTemplate(File template, File toFile, Properties variables)
+      throws IOException {
+    LineNumberReader reader = new LineNumberReader(new FileReader(template));
+    try {
+      PrintWriter writer = new PrintWriter(new FileWriter(toFile));
+      try {
+        String line;
+        while ((line = reader.readLine()) != null) {
+          line = PropertyParser.parse(line, variables);
+          writer.println(line);
+        }
+      } finally {
+        writer.close();
+      }
+    } finally {
+      reader.close();
     }
   }
 
