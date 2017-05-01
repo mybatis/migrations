@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.LineNumberReader;
 import java.io.PrintStream;
 import java.io.PrintWriter;
+import java.io.Reader;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.text.DecimalFormat;
@@ -151,7 +152,7 @@ public abstract class BaseCommand implements Command {
     printStream.println("Creating: " + toFile.getName());
     try {
       copyTemplate(
-          Resources.getResourceAsFile(this.getClass().getClassLoader(), resource), toFile,
+          Resources.getResourceAsReader(this.getClass().getClassLoader(), resource), toFile,
           variables);
     } catch (IOException e) {
       throw new MigrationException(
@@ -182,9 +183,14 @@ public abstract class BaseCommand implements Command {
     }
   }
 
-  protected static void copyTemplate(File template, File toFile, Properties variables)
+  protected static void copyTemplate(File templateFile, File toFile, Properties variables)
       throws IOException {
-    LineNumberReader reader = new LineNumberReader(new FileReader(template));
+    copyTemplate(new FileReader(templateFile), toFile, variables);
+  }
+
+  protected static void copyTemplate(Reader templateReader, File toFile, Properties variables)
+      throws IOException {
+    LineNumberReader reader = new LineNumberReader(templateReader);
     try {
       PrintWriter writer = new PrintWriter(new FileWriter(toFile));
       try {
