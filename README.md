@@ -18,34 +18,30 @@ Install MyBatis Migrations ${project.version} (${implementation.build})
   
   See the reference documentation here http://mybatis.github.io/migrations/
 
-* Windows
+## Installation
 
-  [1] Unzip the distribution archive, i.e. mybatis-${project.version}-migrations.zip to the directory you wish
+### Windows
+
+1. Unzip the distribution archive, i.e. mybatis-${project.version}-migrations.zip to the directory you wish
       to install MyBatis Migrations.
       These instructions assume you chose C:\Program Files\mybatis.
       The subdirectory mybatis-migrations-${project.version} will be created from the archive.
-
-  [2] Add the MIGRATIONS_HOME environment variable by opening up the system properties (WinKey + Pause), selecting the
+1. Add the MIGRATIONS_HOME environment variable by opening up the system properties (WinKey + Pause), selecting the
       Advanced tab, and the Environment Variables button, then adding the MIGRATIONS_HOME variable in the user
       variables with the value C:\Program Files\mybatis\mybatis-migrations-${project.version}.
       Be sure to omit any quotation marks around the path even if it contains spaces.
-
-  [3] In the same dialog, add the MIGRATIONS environment variable in the user variables with the
+1. In the same dialog, add the MIGRATIONS environment variable in the user variables with the
       value %MIGRATIONS_HOME%\bin.
-
-  [4] In the same dialog, update/create the Path environment variable in the user variables and prepend the value
+1. In the same dialog, update/create the Path environment variable in the user variables and prepend the value
       %MIGRATIONS% to add MyBatis Migrations available in the command line.
 
-* Unix-based Operating Systems (Linux, Solaris and Mac OS X)
+### Unix-based Operating Systems (Linux, Solaris and Mac OS X)
 
-  [1] Extract the distribution archive, i.e. mybatis-${project.version}-migrations.zip to the directory you wish to
+1. Extract the distribution archive, i.e. mybatis-${project.version}-migrations.zip to the directory you wish to
       install MyBatis Migrations. These instructions assume you chose
       /usr/local/mybatis/mybatis-migrations-${project.version}.
       The subdirectory mybatis-migrations-${project.version} will be created from the archive.
+1. In a command terminal, add the MIGRATIONS_HOME environment variable, e.g. export MIGRATIONS_HOME=/usr/local/mybatis/mybatis-migrations-${project.version}.
+1. Add the MIGRATIONS environment variable, e.g. export MIGRATIONS=$MIGRATIONS_HOME/bin.
+1. Add MIGRATIONS environment variable to your path, e.g. export PATH=$MIGRATIONS:$PATH.
 
-  [2] In a command terminal, add the MIGRATIONS_HOME environment variable,
-      e.g. export MIGRATIONS_HOME=/usr/local/mybatis/mybatis-migrations-${project.version}.
-
-  [3] Add the MIGRATIONS environment variable, e.g. export MIGRATIONS=$MIGRATIONS_HOME/bin.
-
-  [4] Add MIGRATIONS environment variable to your path, e.g. export PATH=$MIGRATIONS:$PATH.
