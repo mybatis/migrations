@@ -18,6 +18,8 @@ package org.apache.ibatis.migration.operations;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -70,14 +72,17 @@ public abstract class DatabaseOperation {
   }
 
   protected boolean changelogExists(ConnectionProvider connectionProvider, DatabaseOperationOption option) {
-    SqlRunner runner = getSqlRunner(connectionProvider);
     try {
-      runner.selectAll("select ID, APPLIED_AT, DESCRIPTION from " + option.getChangelogTable());
-      return true;
+      Connection connection = connectionProvider.getConnection();
+      final ResultSet rs = connection.getMetaData().getTables(null, null, null, new String[]{"TABLE"});
+      boolean result = false;
+      while(rs.next()) {
+        result |= rs.getString("table_name").toLowerCase().equals(option.getChangelogTable().toLowerCase());
+      }
+      connection.close();
+      return result;
     } catch (SQLException e) {
-      return false;
-    } finally {
-      runner.closeConnection();
+      throw new MigrationException("Could not check changelog existence. Cause: " +e, e);
     }
   }
 
