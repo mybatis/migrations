@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2015 the original author or authors.
+ *    Copyright 2010-2017 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -15,12 +15,12 @@
  */
 package org.apache.ibatis.migration.commands;
 
+import java.io.File;
+import java.util.Properties;
+
 import org.apache.ibatis.migration.MigrationException;
 import org.apache.ibatis.migration.options.SelectedOptions;
 import org.apache.ibatis.migration.utils.Util;
-
-import java.io.File;
-import java.util.Properties;
 
 public final class InitializeCommand extends BaseCommand {
   public InitializeCommand(SelectedOptions selectedOptions) {
