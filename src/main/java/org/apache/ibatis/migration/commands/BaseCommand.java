@@ -15,7 +15,7 @@
  */
 package org.apache.ibatis.migration.commands;
 
-import static org.apache.ibatis.migration.utils.Util.*;
+import static org.apache.ibatis.migration.utils.Util.file;
 
 import java.io.File;
 import java.io.FileNotFoundException;

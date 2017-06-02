@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2016 the original author or authors.
+ *    Copyright 2010-2017 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -56,11 +56,11 @@ public final class ScriptCommand extends BaseCommand {
       }
 
       BigDecimal v1 = (scriptPending || scriptPendingUndo) ? null : new BigDecimal(firstToken);
-      BigDecimal v2 = (scriptPending || scriptPendingUndo) ? null :new BigDecimal(parser.nextToken());
+      BigDecimal v2 = (scriptPending || scriptPendingUndo) ? null : new BigDecimal(parser.nextToken());
 
       boolean undo;
       undo = scriptPendingUndo;
-      if(!scriptPending && !scriptPendingUndo) {
+      if (!scriptPending && !scriptPendingUndo) {
         int comparison = v1.compareTo(v2);
         if (comparison == 0) {
           throw new MigrationException("The script command requires two different versions. Use 0 to include the first version.");
@@ -110,7 +110,7 @@ public final class ScriptCommand extends BaseCommand {
   }
 
   private boolean shouldRun(Change change, BigDecimal v1, BigDecimal v2, boolean pendingOnly) {
-    if(!pendingOnly) {
+    if (!pendingOnly) {
       BigDecimal id = change.getId();
       if (v1.compareTo(v2) > 0) {
         return (id.compareTo(v2) > 0 && id.compareTo(v1) <= 0);
@@ -126,8 +126,9 @@ public final class ScriptCommand extends BaseCommand {
   // Issue 699
   private String getDelimiter() {
     StringBuilder delimiter = new StringBuilder();
-    if (environment().isFullLineDelimiter())
+    if (environment().isFullLineDelimiter()) {
       delimiter.append("\n");
+    }
     delimiter.append(environment().getDelimiter());
     return delimiter.toString();
   }

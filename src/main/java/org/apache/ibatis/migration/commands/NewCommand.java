@@ -15,12 +15,12 @@
  */
 package org.apache.ibatis.migration.commands;
 
+import java.io.FileNotFoundException;
+import java.util.Properties;
+
 import org.apache.ibatis.migration.MigrationException;
 import org.apache.ibatis.migration.options.SelectedOptions;
 import org.apache.ibatis.migration.utils.Util;
-
-import java.io.FileNotFoundException;
-import java.util.Properties;
 
 public final class NewCommand extends BaseCommand {
 
