@@ -124,13 +124,13 @@ public class CommandLine {
     console.printf("  bootstrap          Runs the bootstrap SQL script (see scripts/bootstrap.sql for more).%n");
     console.printf("  new <description>  Creates a new migration with the provided description.%n");
     console.printf("  up [n]             Run unapplied migrations, ALL by default, or 'n' specified.%n");
-    console.printf(
-        "  down [n]           Undoes migrations applied to the database. ONE by default or 'n' specified.%n");
+    console
+        .printf("  down [n]           Undoes migrations applied to the database. ONE by default or 'n' specified.%n");
     console.printf("  version <version>  Migrates the database up or down to the specified version.%n");
     console.printf("  pending            Force executes pending migrations out of order (not recommended).%n");
     console.printf("  status             Prints the changelog from the database if the changelog table exists.%n");
-    console.printf(
-        "  script <v1> <v2>   Generates a delta migration script from version v1 to v2 (undo if v1 > v2).%n");
+    console
+        .printf("  script <v1> <v2>   Generates a delta migration script from version v1 to v2 (undo if v1 > v2).%n");
     console.printf("%n");
     console.printf("  * Shortcuts are accepted by using the first few (unambiguous) letters of each command..%n");
     console.printf("%n");

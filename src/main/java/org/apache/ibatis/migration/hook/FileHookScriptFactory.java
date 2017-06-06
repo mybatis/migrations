@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2016 the original author or authors.
+ *    Copyright 2010-2017 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -30,8 +30,7 @@ public class FileHookScriptFactory implements HookScriptFactory {
   protected final Environment environment;
   protected final PrintStream printStream;
 
-  public FileHookScriptFactory(SelectedPaths paths, Environment environment,
-      PrintStream printStream) {
+  public FileHookScriptFactory(SelectedPaths paths, Environment environment, PrintStream printStream) {
     this.paths = paths;
     this.environment = environment;
     this.printStream = printStream;
@@ -69,8 +68,7 @@ public class FileHookScriptFactory implements HookScriptFactory {
       return new SqlHookScript(scriptFile, charset, hookOptions, variables, printStream);
     } else {
       // Assuming it's JSR-223.
-      return new Jsr223HookScript(scriptLang, scriptFile, charset, hookOptions, paths,
-          variables, printStream);
+      return new Jsr223HookScript(scriptLang, scriptFile, charset, hookOptions, paths, variables, printStream);
     }
   }
 }

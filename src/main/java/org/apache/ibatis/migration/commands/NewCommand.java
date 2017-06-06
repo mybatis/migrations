@@ -53,8 +53,8 @@ public final class NewCommand extends BaseCommand {
           copyDefaultTemplate(variables, filename);
         }
       } catch (FileNotFoundException e) {
-        printStream.append(
-            "Your migrations configuration did not find your custom template.  Using the default template.");
+        printStream
+            .append("Your migrations configuration did not find your custom template.  Using the default template.");
         copyDefaultTemplate(variables, filename);
       }
     }
@@ -63,9 +63,7 @@ public final class NewCommand extends BaseCommand {
   }
 
   private void copyDefaultTemplate(Properties variables, String filename) {
-    copyResourceTo(
-        "org/apache/ibatis/migration/template_migration.sql",
-        Util.file(paths.getScriptPath(), filename),
+    copyResourceTo("org/apache/ibatis/migration/template_migration.sql", Util.file(paths.getScriptPath(), filename),
         variables);
   }
 }

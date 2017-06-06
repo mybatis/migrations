@@ -51,8 +51,7 @@ public class MigratorTest {
   @BeforeClass
   public static void setup() throws Exception {
     dir = Resources.getResourceAsFile("org/apache/ibatis/migration/example");
-    env = Resources.getResourceAsProperties(
-        "org/apache/ibatis/migration/example/environments/development.properties");
+    env = Resources.getResourceAsProperties("org/apache/ibatis/migration/example/environments/development.properties");
   }
 
   @Test
@@ -95,8 +94,7 @@ public class MigratorTest {
 
   private void testBootstrapCommand() throws Exception {
     out.clearLog();
-    Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "bootstrap",
-        "--env=development"));
+    Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "bootstrap", "--env=development"));
     String output = out.getLog();
     assertFalse(output.toString().contains("FAILURE"));
     assertTrue(output.toString().contains("--  Bootstrap.sql"));
@@ -121,8 +119,7 @@ public class MigratorTest {
     final Connection conn = TestUtil.getConnection(env);
     try {
       final SqlRunner executor = new SqlRunner(conn);
-      final Map<String, Object> author = executor.selectOne("select * from author where id = ?",
-          1);
+      final Map<String, Object> author = executor.selectOne("select * from author where id = ?", 1);
       assertNotNull(author);
       assertNotNull(author.get("EMAIL"));
       assertEquals("jim@${url}", author.get("EMAIL"));
@@ -140,16 +137,14 @@ public class MigratorTest {
 
   private void testDoPendingScriptCommand() throws Exception {
     out.clearLog();
-    Migrator
-        .main(TestUtil.args("--path=" + dir.getAbsolutePath(), "script", "pending"));
+    Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "script", "pending"));
     String output = out.getLog();
     assertTrue(output.toString().contains("INSERT"));
     assertTrue(output.toString().contains("CHANGELOG"));
     assertFalse(output.toString().contains("-- @UNDO"));
 
     out.clearLog();
-    Migrator.main(
-        TestUtil.args("--path=" + dir.getAbsolutePath(), "script", "pending_undo"));
+    Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "script", "pending_undo"));
     output = out.getLog();
     assertTrue(output.toString().contains("DELETE"));
     assertTrue(output.toString().contains("CHANGELOG"));
@@ -158,8 +153,7 @@ public class MigratorTest {
 
   private void testVersionCommand() throws Exception {
     out.clearLog();
-    Migrator.main(
-        TestUtil.args("--path=" + dir.getAbsolutePath(), "version", "20080827200216"));
+    Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "version", "20080827200216"));
     String output = out.getLog();
     assertFalse(output.toString().contains("FAILURE"));
   }
@@ -204,8 +198,7 @@ public class MigratorTest {
 
   private void testDoScriptCommand() throws Exception {
     out.clearLog();
-    Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "script",
-        "20080827200212", "20080827200214"));
+    Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "script", "20080827200212", "20080827200214"));
     String output = out.getLog();
     assertFalse(output.toString().contains("FAILURE"));
     assertFalse(output.toString().contains("20080827200210"));
@@ -217,8 +210,7 @@ public class MigratorTest {
     assertFalse(output.toString().contains("-- @UNDO"));
 
     out.clearLog();
-    Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "script", "0",
-        "20080827200211"));
+    Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "script", "0", "20080827200211"));
     output = out.getLog();
     assertFalse(output.toString().contains("FAILURE"));
     assertTrue(output.toString().contains("20080827200210"));
@@ -232,8 +224,7 @@ public class MigratorTest {
 
   private void testUndoScriptCommand() throws Exception {
     out.clearLog();
-    Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "script",
-        "20080827200215", "20080827200213"));
+    Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "script", "20080827200215", "20080827200213"));
     String output = out.getLog();
     assertFalse(output.toString().contains("FAILURE"));
     assertFalse(output.toString().contains("20080827200210"));
@@ -245,8 +236,7 @@ public class MigratorTest {
     assertTrue(output.toString().contains("-- @UNDO"));
     out.clearLog();
 
-    Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "script",
-        "20080827200211", "0"));
+    Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "script", "20080827200211", "0"));
     output = out.getLog();
     assertFalse(output.toString().contains("FAILURE"));
     assertTrue(output.toString().contains("20080827200210"));
@@ -268,8 +258,7 @@ public class MigratorTest {
       }
     });
     out.clearLog();
-    Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "script",
-        "20080827200211", "20080827200211"));
+    Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "script", "20080827200211", "20080827200211"));
   }
 
   @Test
@@ -280,8 +269,7 @@ public class MigratorTest {
     assertEquals(4, basePath.list().length);
     File scriptPath = new File(basePath.getCanonicalPath() + File.separator + "scripts");
     assertEquals(3, scriptPath.list().length);
-    Migrator.main(TestUtil.args("--path=" + basePath.getAbsolutePath(), "new",
-        "test new migration"));
+    Migrator.main(TestUtil.args("--path=" + basePath.getAbsolutePath(), "new", "test new migration"));
     assertEquals(4, scriptPath.list().length);
   }
 
@@ -289,15 +277,14 @@ public class MigratorTest {
   public void shouldRespectIdPattern() throws Exception {
     String idPattern = "000";
     File basePath = getTempDir();
-    Migrator.main(TestUtil.args("--path=" + basePath.getAbsolutePath(),
-        "--idpattern=" + idPattern, "init"));
-    File changelog = new File(basePath.getCanonicalPath() + File.separator + "scripts"
-        + File.separator + "001_create_changelog.sql");
+    Migrator.main(TestUtil.args("--path=" + basePath.getAbsolutePath(), "--idpattern=" + idPattern, "init"));
+    File changelog = new File(
+        basePath.getCanonicalPath() + File.separator + "scripts" + File.separator + "001_create_changelog.sql");
     assertTrue(changelog.exists());
-    Migrator.main(TestUtil.args("--path=" + basePath.getAbsolutePath(),
-        "--idpattern=" + idPattern, "new", "new migration"));
-    File newMigration = new File(basePath.getCanonicalPath() + File.separator + "scripts"
-        + File.separator + "003_new_migration.sql");
+    Migrator.main(
+        TestUtil.args("--path=" + basePath.getAbsolutePath(), "--idpattern=" + idPattern, "new", "new migration"));
+    File newMigration = new File(
+        basePath.getCanonicalPath() + File.separator + "scripts" + File.separator + "003_new_migration.sql");
     assertTrue(newMigration.exists());
   }
 
@@ -315,8 +302,8 @@ public class MigratorTest {
     PrintWriter writer = new PrintWriter(templatePath);
     writer.println("// ${description}");
     writer.close();
-    Migrator.main(TestUtil.args("--path=" + basePath.getAbsolutePath(), "new",
-        desc, "--template=" + templatePath.getAbsolutePath()));
+    Migrator.main(TestUtil.args("--path=" + basePath.getAbsolutePath(), "new", desc,
+        "--template=" + templatePath.getAbsolutePath()));
     String[] scripts = scriptPath.list();
     Arrays.sort(scripts);
     assertEquals(4, scripts.length);
@@ -339,8 +326,7 @@ public class MigratorTest {
 
     File templatePath = File.createTempFile("customTemplate", "sql");
     templatePath.createNewFile();
-    Migrator.main(TestUtil.args("--path=" + basePath.getAbsolutePath(), "new",
-        "test new migration", "--template="));
+    Migrator.main(TestUtil.args("--path=" + basePath.getAbsolutePath(), "new", "test new migration", "--template="));
     assertEquals(4, scriptPath.list().length);
     templatePath.delete();
   }
@@ -356,12 +342,11 @@ public class MigratorTest {
     assertEquals(3, scriptPath.list().length);
 
     out.clearLog();
-    Migrator.main(TestUtil.args("--path=" + basePath.getAbsolutePath(), "new",
-        "test new migration"));
+    Migrator.main(TestUtil.args("--path=" + basePath.getAbsolutePath(), "new", "test new migration"));
     String output = out.getLog();
     assertEquals(4, scriptPath.list().length);
-    assertTrue(output.toString().contains(
-        "Your migrations configuration did not find your custom template.  Using the default template."));
+    assertTrue(output.toString()
+        .contains("Your migrations configuration did not find your custom template.  Using the default template."));
   }
 
   private File getTempDir() throws IOException {

@@ -45,8 +45,7 @@ public class ExternalResourcesTest {
       try {
         fileWriter.append("new_command.template=templates/col_new_template_migration.sql");
         fileWriter.flush();
-        templateName = ExternalResources.getConfiguredTemplate(tempFile.getAbsolutePath(),
-            "new_command.template");
+        templateName = ExternalResources.getConfiguredTemplate(tempFile.getAbsolutePath(), "new_command.template");
         assertEquals("templates/col_new_template_migration.sql", templateName);
       } finally {
         fileWriter.close();

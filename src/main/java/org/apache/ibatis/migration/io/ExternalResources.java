@@ -28,7 +28,8 @@ public class ExternalResources {
     // do nothing
   }
 
-  public static String getConfiguredTemplate(String templatePath, String templateProperty) throws FileNotFoundException {
+  public static String getConfiguredTemplate(String templatePath, String templateProperty)
+      throws FileNotFoundException {
     String templateName = "";
     Properties migrationProperties = new Properties();
 

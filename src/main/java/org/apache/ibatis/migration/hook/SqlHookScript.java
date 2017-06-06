@@ -65,8 +65,7 @@ public class SqlHookScript implements HookScript {
       while ((length = inputStream.read(buffer)) != -1) {
         outputStream.write(buffer, 0, length);
       }
-      context.executeSql(
-          new StringReader(PropertyParser.parse(outputStream.toString(charset), variables)));
+      context.executeSql(new StringReader(PropertyParser.parse(outputStream.toString(charset), variables)));
     } catch (IOException e) {
       throw new MigrationException("Error occurred while running SQL hook script.", e);
     } finally {

@@ -45,15 +45,13 @@ public final class DownOperation extends DatabaseOperation {
     this.steps = steps;
   }
 
-  public DownOperation operate(ConnectionProvider connectionProvider,
-      MigrationLoader migrationsLoader, DatabaseOperationOption option,
-      PrintStream printStream) {
+  public DownOperation operate(ConnectionProvider connectionProvider, MigrationLoader migrationsLoader,
+      DatabaseOperationOption option, PrintStream printStream) {
     return operate(connectionProvider, migrationsLoader, option, printStream, null);
   }
 
-  public DownOperation operate(ConnectionProvider connectionProvider,
-      MigrationLoader migrationsLoader, DatabaseOperationOption option, PrintStream printStream,
-      MigrationHook hook) {
+  public DownOperation operate(ConnectionProvider connectionProvider, MigrationLoader migrationsLoader,
+      DatabaseOperationOption option, PrintStream printStream, MigrationHook hook) {
     try {
       if (option == null) {
         option = new DatabaseOperationOption();
@@ -74,8 +72,7 @@ public final class DownOperation extends DatabaseOperation {
           for (Change change : migrations) {
             if (change.getId().equals(lastChange.getId())) {
               if (stepCount == 0 && hook != null) {
-                hookBindings.put(MigrationHook.HOOK_CONTEXT,
-                    new HookContext(connectionProvider, runner, null));
+                hookBindings.put(MigrationHook.HOOK_CONTEXT, new HookContext(connectionProvider, runner, null));
                 hook.before(hookBindings);
               }
               if (hook != null) {
@@ -106,8 +103,7 @@ public final class DownOperation extends DatabaseOperation {
             }
           }
           if (stepCount > 0 && hook != null) {
-            hookBindings.put(MigrationHook.HOOK_CONTEXT,
-                new HookContext(connectionProvider, runner, null));
+            hookBindings.put(MigrationHook.HOOK_CONTEXT, new HookContext(connectionProvider, runner, null));
             hook.after(hookBindings);
           }
         } finally {
@@ -123,12 +119,10 @@ public final class DownOperation extends DatabaseOperation {
     }
   }
 
-  protected void deleteChange(ConnectionProvider connectionProvider, Change change,
-      DatabaseOperationOption option) {
+  protected void deleteChange(ConnectionProvider connectionProvider, Change change, DatabaseOperationOption option) {
     SqlRunner runner = getSqlRunner(connectionProvider);
     try {
-      runner.delete("delete from " + option.getChangelogTable() + " where ID = ?",
-          change.getId());
+      runner.delete("delete from " + option.getChangelogTable() + " where ID = ?", change.getId());
     } catch (SQLException e) {
       throw new MigrationException("Error querying last applied migration.  Cause: " + e, e);
     } finally {

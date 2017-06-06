@@ -29,8 +29,7 @@ public class HookContext {
   private ScriptRunner scriptRunner;
   private Change change;
 
-  public HookContext(ConnectionProvider connectionProvider, ScriptRunner scriptRunner,
-      Change change) {
+  public HookContext(ConnectionProvider connectionProvider, ScriptRunner scriptRunner, Change change) {
     super();
     this.connectionProvider = connectionProvider;
     this.scriptRunner = scriptRunner;

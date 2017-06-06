@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2016 the original author or authors.
+ *    Copyright 2010-2017 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -37,7 +37,8 @@ public abstract class DatabaseOperation {
     SqlRunner runner = getSqlRunner(connectionProvider);
     change.setAppliedTimestamp(generateAppliedTimeStampAsString());
     try {
-      runner.insert("insert into " + option.getChangelogTable() + " (ID, APPLIED_AT, DESCRIPTION) values (?,?,?)", change.getId(), change.getAppliedTimestamp(), change.getDescription());
+      runner.insert("insert into " + option.getChangelogTable() + " (ID, APPLIED_AT, DESCRIPTION) values (?,?,?)",
+          change.getId(), change.getAppliedTimestamp(), change.getDescription());
     } catch (SQLException e) {
       throw new MigrationException("Error querying last applied migration.  Cause: " + e, e);
     } finally {
@@ -53,7 +54,8 @@ public abstract class DatabaseOperation {
   protected List<Change> getChangelog(ConnectionProvider connectionProvider, DatabaseOperationOption option) {
     SqlRunner runner = getSqlRunner(connectionProvider);
     try {
-      List<Map<String, Object>> changelog = runner.selectAll("select ID, APPLIED_AT, DESCRIPTION from " + option.getChangelogTable() + " order by ID");
+      List<Map<String, Object>> changelog = runner
+          .selectAll("select ID, APPLIED_AT, DESCRIPTION from " + option.getChangelogTable() + " order by ID");
       List<Change> changes = new ArrayList<Change>();
       for (Map<String, Object> change : changelog) {
         String id = change.get("ID") == null ? null : change.get("ID").toString();
@@ -89,7 +91,8 @@ public abstract class DatabaseOperation {
     }
   }
 
-  protected ScriptRunner getScriptRunner(ConnectionProvider connectionProvider, DatabaseOperationOption option, PrintStream printStream) {
+  protected ScriptRunner getScriptRunner(ConnectionProvider connectionProvider, DatabaseOperationOption option,
+      PrintStream printStream) {
     try {
       PrintWriter outWriter = printStream == null ? null : new PrintWriter(printStream);
       ScriptRunner scriptRunner = new ScriptRunner(connectionProvider.getConnection());

@@ -65,8 +65,7 @@ public class BaseCommandTest {
 
   @Test
   public void testCopyResource() throws Exception {
-    File src = Resources
-        .getResourceAsFile("org/apache/ibatis/migration/commands/TestTemplate.sql");
+    File src = Resources.getResourceAsFile("org/apache/ibatis/migration/commands/TestTemplate.sql");
     File dest = File.createTempFile("Out", ".sql");
     try {
       BaseCommand.copyTemplate(src, dest, null);
@@ -78,8 +77,7 @@ public class BaseCommandTest {
 
   @Test
   public void testCopyResourceWithVariables() throws Exception {
-    File src = Resources
-        .getResourceAsFile("org/apache/ibatis/migration/commands/TestTemplate.sql");
+    File src = Resources.getResourceAsFile("org/apache/ibatis/migration/commands/TestTemplate.sql");
     File dest = File.createTempFile("Out", ".sql");
     Properties variables = new Properties();
     variables.put("var", "Some description");

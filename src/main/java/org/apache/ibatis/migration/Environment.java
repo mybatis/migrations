@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2016 the original author or authors.
+ *    Copyright 2010-2017 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -32,10 +32,7 @@ public class Environment {
   public static final String CHANGELOG = "changelog";
 
   private enum SETTING_KEY {
-    time_zone, delimiter, script_char_set, full_line_delimiter, send_full_script, auto_commit,
-    remove_crs, driver_path, driver, url, username, password, hook_before_up,
-    hook_before_each_up, hook_after_each_up, hook_after_up, hook_before_down,
-    hook_before_each_down, hook_after_each_down, hook_after_down
+    time_zone, delimiter, script_char_set, full_line_delimiter, send_full_script, auto_commit, remove_crs, driver_path, driver, url, username, password, hook_before_up, hook_before_each_up, hook_after_each_up, hook_after_up, hook_before_down, hook_before_each_down, hook_after_each_down, hook_after_down
   }
 
   private static final List<String> SETTING_KEYS;
@@ -82,10 +79,8 @@ public class Environment {
 
       this.timeZone = prop.getProperty(SETTING_KEY.time_zone.name(), "GMT+0:00");
       this.delimiter = prop.getProperty(SETTING_KEY.delimiter.name(), ";");
-      this.scriptCharset = prop.getProperty(SETTING_KEY.script_char_set.name(),
-          Charset.defaultCharset().name());
-      this.fullLineDelimiter = Boolean
-          .valueOf(prop.getProperty(SETTING_KEY.full_line_delimiter.name()));
+      this.scriptCharset = prop.getProperty(SETTING_KEY.script_char_set.name(), Charset.defaultCharset().name());
+      this.fullLineDelimiter = Boolean.valueOf(prop.getProperty(SETTING_KEY.full_line_delimiter.name()));
       this.sendFullScript = Boolean.valueOf(prop.getProperty(SETTING_KEY.send_full_script.name()));
       this.autoCommit = Boolean.valueOf(prop.getProperty(SETTING_KEY.auto_commit.name()));
       this.removeCrs = Boolean.valueOf(prop.getProperty(SETTING_KEY.remove_crs.name()));
