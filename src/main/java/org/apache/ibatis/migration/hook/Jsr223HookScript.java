@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2016 the original author or authors.
+ *    Copyright 2010-2017 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -61,8 +61,8 @@ public class Jsr223HookScript implements HookScript {
   protected List<String> args = new ArrayList<String>();
   protected Map<String, String> localVars = new HashMap<String, String>();
 
-  public Jsr223HookScript(String language, File scriptFile, String charset, String[] options,
-      SelectedPaths paths, Properties variables, PrintStream printStream) {
+  public Jsr223HookScript(String language, File scriptFile, String charset, String[] options, SelectedPaths paths,
+      Properties variables, PrintStream printStream) {
     super();
     this.language = language;
     this.scriptFile = scriptFile;
@@ -101,8 +101,7 @@ public class Jsr223HookScript implements HookScript {
     bindings.put(MIGRATION_PATHS, paths);
     bindings.putAll(bindingMap);
     try {
-      printStream
-          .println(Util.horizontalLine("Applying JSR-223 hook : " + scriptFile.getName(), 80));
+      printStream.println(Util.horizontalLine("Applying JSR-223 hook : " + scriptFile.getName(), 80));
       engine.eval(new InputStreamReader(new FileInputStream(scriptFile), charset));
       if (functionName != null || (objectName != null && methodName != null)) {
         Invocable invocable = (Invocable) engine;
@@ -118,15 +117,14 @@ public class Jsr223HookScript implements HookScript {
       // store vars in bindings to the per-operation map
       bindVariables(bindingMap, bindings.entrySet());
     } catch (ClassCastException e) {
-      throw new MigrationException("Script engine '" + engine.getClass().getName()
-          + "' does not support function/method invocation.", e);
+      throw new MigrationException(
+          "Script engine '" + engine.getClass().getName() + "' does not support function/method invocation.", e);
     } catch (IOException e) {
       throw new MigrationException("Failed to read JSR-223 hook script file.", e);
     } catch (ScriptException e) {
       throw new MigrationException("Failed to execute JSR-223 hook script.", e);
     } catch (NoSuchMethodException e) {
-      throw new MigrationException(
-          "Method or function not found in JSR-223 hook script: " + functionName, e);
+      throw new MigrationException("Method or function not found in JSR-223 hook script: " + functionName, e);
     }
   }
 

@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2016 the original author or authors.
+ *    Copyright 2010-2017 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -27,8 +27,8 @@ public final class DownCommand extends BaseCommand {
   @Override
   public void execute(String... params) {
     DownOperation operation = new DownOperation(getStepCountParameter(1, params));
-    operation.operate(getConnectionProvider(), getMigrationLoader(),
-        getDatabaseOperationOption(), printStream, createHook());
+    operation.operate(getConnectionProvider(), getMigrationLoader(), getDatabaseOperationOption(), printStream,
+        createHook());
   }
 
   private MigrationHook createHook() {

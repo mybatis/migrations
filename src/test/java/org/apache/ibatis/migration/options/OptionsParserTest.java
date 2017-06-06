@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2016 the original author or authors.
+ *    Copyright 2010-2017 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ import static org.junit.Assert.assertTrue;
 public class OptionsParserTest {
   @Test
   public void testOptions() {
-    final SelectedOptions options = parse(new String[]{option(FORCE), option(TRACE), option(HELP)});
+    final SelectedOptions options = parse(new String[] { option(FORCE), option(TRACE), option(HELP) });
 
     assertTrue(options.isForce());
     assertTrue(options.isTrace());
@@ -39,7 +39,8 @@ public class OptionsParserTest {
   @Test
   public void testEnvAndTemplate() {
     final String testValue = "test";
-    final String[] args = {valuedOption(ENV, testValue), valuedOption(TEMPLATE, testValue), valuedOption(Options.IDPATTERN, testValue)};
+    final String[] args = { valuedOption(ENV, testValue), valuedOption(TEMPLATE, testValue),
+        valuedOption(Options.IDPATTERN, testValue) };
     final SelectedOptions options = parse(args);
 
     assertThat(options.getEnvironment(), equalTo(testValue));
@@ -60,13 +61,9 @@ public class OptionsParserTest {
     paths.setDriverPath(testFile);
     paths.setHookPath(testFile);
 
-    final String[] args = {
-        valuedOption(PATH, testFile.getAbsolutePath()),
-        valuedOption(ENVPATH, testFile.getAbsolutePath()),
-        valuedOption(SCRIPTPATH, testFile.getAbsolutePath()),
-        valuedOption(DRIVERPATH, testFile.getAbsolutePath()),
-        valuedOption(HOOKPATH, testFile.getAbsolutePath())
-    };
+    final String[] args = { valuedOption(PATH, testFile.getAbsolutePath()),
+        valuedOption(ENVPATH, testFile.getAbsolutePath()), valuedOption(SCRIPTPATH, testFile.getAbsolutePath()),
+        valuedOption(DRIVERPATH, testFile.getAbsolutePath()), valuedOption(HOOKPATH, testFile.getAbsolutePath()) };
 
     final SelectedOptions pathOptions = parse(args);
     checkFileOptionSet(pathOptions.getPaths().getBasePath(), testFileName);
@@ -86,7 +83,7 @@ public class OptionsParserTest {
     final String ignoredCommand = "ignoredCommand";
     final String anotherIgnored = "anotherIgnored";
 
-    final SelectedOptions options = parse(new String[]{command, ignoredCommand, anotherIgnored});
+    final SelectedOptions options = parse(new String[] { command, ignoredCommand, anotherIgnored });
 
     assertThat(options.getCommand(), equalTo(command));
     assertThat(options.getParams(), StringContains.containsString(ignoredCommand));

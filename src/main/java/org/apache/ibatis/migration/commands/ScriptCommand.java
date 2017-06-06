@@ -63,14 +63,15 @@ public final class ScriptCommand extends BaseCommand {
       if (!scriptPending && !scriptPendingUndo) {
         int comparison = v1.compareTo(v2);
         if (comparison == 0) {
-          throw new MigrationException("The script command requires two different versions. Use 0 to include the first version.");
+          throw new MigrationException(
+              "The script command requires two different versions. Use 0 to include the first version.");
         }
         undo = comparison > 0;
       }
 
-      List<Change> migrations =  (scriptPending || scriptPendingUndo) ?
-              new StatusOperation().operate(getConnectionProvider(), getMigrationLoader(), getDatabaseOperationOption(), null).getCurrentStatus() :
-              getMigrationLoader().getMigrations();
+      List<Change> migrations = (scriptPending || scriptPendingUndo) ? new StatusOperation()
+          .operate(getConnectionProvider(), getMigrationLoader(), getDatabaseOperationOption(), null).getCurrentStatus()
+          : getMigrationLoader().getMigrations();
       Collections.sort(migrations);
       if (undo) {
         Collections.reverse(migrations);
@@ -100,9 +101,9 @@ public final class ScriptCommand extends BaseCommand {
   }
 
   private String generateVersionInsert(Change change) {
-    return "INSERT INTO " + changelogTable() + " (ID, APPLIED_AT, DESCRIPTION) " +
-        "VALUES (" + change.getId() + ", '" + DatabaseOperation.generateAppliedTimeStampAsString() + "', '"
-        + change.getDescription().replace('\'', ' ') + "')" + getDelimiter();
+    return "INSERT INTO " + changelogTable() + " (ID, APPLIED_AT, DESCRIPTION) " + "VALUES (" + change.getId() + ", '"
+        + DatabaseOperation.generateAppliedTimeStampAsString() + "', '" + change.getDescription().replace('\'', ' ')
+        + "')" + getDelimiter();
   }
 
   private String generateVersionDelete(Change change) {
@@ -117,8 +118,7 @@ public final class ScriptCommand extends BaseCommand {
       } else {
         return (id.compareTo(v1) > 0 && id.compareTo(v2) <= 0);
       }
-    }
-    else {
+    } else {
       return change.getAppliedTimestamp() == null;
     }
   }

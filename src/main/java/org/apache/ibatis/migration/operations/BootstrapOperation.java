@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2016 the original author or authors.
+ *    Copyright 2010-2017 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -37,13 +37,15 @@ public final class BootstrapOperation extends DatabaseOperation {
     this.force = force;
   }
 
-  public BootstrapOperation operate(ConnectionProvider connectionProvider, MigrationLoader migrationsLoader, DatabaseOperationOption option, PrintStream printStream) {
+  public BootstrapOperation operate(ConnectionProvider connectionProvider, MigrationLoader migrationsLoader,
+      DatabaseOperationOption option, PrintStream printStream) {
     try {
       if (option == null) {
         option = new DatabaseOperationOption();
       }
       if (changelogExists(connectionProvider, option) && !force) {
-        println(printStream, "For your safety, the bootstrap SQL script will only run before migrations are applied (i.e. before the changelog exists).  If you're certain, you can run it using the --force option.");
+        println(printStream,
+            "For your safety, the bootstrap SQL script will only run before migrations are applied (i.e. before the changelog exists).  If you're certain, you can run it using the --force option.");
       } else {
         Reader bootstrapReader = migrationsLoader.getBootstrapReader();
         if (bootstrapReader != null) {

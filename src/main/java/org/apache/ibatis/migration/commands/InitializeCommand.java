@@ -48,8 +48,7 @@ public final class InitializeCommand extends BaseCommand {
     copyResourceTo("org/apache/ibatis/migration/template_changelog.sql",
         Util.file(scriptPath, getNextIDAsString() + "_create_changelog.sql"));
     copyResourceTo("org/apache/ibatis/migration/template_migration.sql",
-        Util.file(scriptPath, getNextIDAsString() + "_first_migration.sql"),
-        new Properties() {
+        Util.file(scriptPath, getNextIDAsString() + "_first_migration.sql"), new Properties() {
           {
             setProperty("description", "First migration.");
           }
@@ -63,8 +62,7 @@ public final class InitializeCommand extends BaseCommand {
     if (list.length != 0) {
       for (String entry : list) {
         if (!entry.startsWith(".")) {
-          throw new MigrationException(
-              "Directory must be empty (.svn etc allowed): " + path.getAbsolutePath());
+          throw new MigrationException("Directory must be empty (.svn etc allowed): " + path.getAbsolutePath());
         }
       }
     }
@@ -79,6 +77,5 @@ public final class InitializeCommand extends BaseCommand {
       }
     }
   }
-
 
 }

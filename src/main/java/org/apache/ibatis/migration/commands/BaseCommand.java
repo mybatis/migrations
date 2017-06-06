@@ -133,7 +133,8 @@ public abstract class BaseCommand implements Command {
       long lastId = (Long) fmt.parse(lastChange.getId().toString());
       return fmt.format(++lastId);
     } catch (ParseException e) {
-      throw new MigrationException("Failed to parse last id '" + lastChange.getId() + "' using the specified idPattern '" + pattern + "'");
+      throw new MigrationException(
+          "Failed to parse last id '" + lastChange.getId() + "' using the specified idPattern '" + pattern + "'");
     }
   }
 
@@ -151,18 +152,15 @@ public abstract class BaseCommand implements Command {
   protected void copyResourceTo(String resource, File toFile, Properties variables) {
     printStream.println("Creating: " + toFile.getName());
     try {
-      copyTemplate(
-          Resources.getResourceAsReader(this.getClass().getClassLoader(), resource), toFile,
-          variables);
+      copyTemplate(Resources.getResourceAsReader(this.getClass().getClassLoader(), resource), toFile, variables);
     } catch (IOException e) {
-      throw new MigrationException(
-          "Error copying " + resource + " to " + toFile.getAbsolutePath() + ".  Cause: " + e,
+      throw new MigrationException("Error copying " + resource + " to " + toFile.getAbsolutePath() + ".  Cause: " + e,
           e);
     }
   }
 
   protected String migrationsHome() {
-    String migrationsHome =  System.getenv(MIGRATIONS_HOME);
+    String migrationsHome = System.getenv(MIGRATIONS_HOME);
     // Check if there is a system property
     if (migrationsHome == null) {
       migrationsHome = System.getProperty(MIGRATIONS_HOME_PROPERTY);
@@ -179,17 +177,16 @@ public abstract class BaseCommand implements Command {
       File sourceFile = new File(resource);
       copyTemplate(sourceFile, toFile, variables);
     } catch (Exception e) {
-      throw new MigrationException("Error copying " + resource + " to " + toFile.getAbsolutePath() + ".  Cause: " + e, e);
+      throw new MigrationException("Error copying " + resource + " to " + toFile.getAbsolutePath() + ".  Cause: " + e,
+          e);
     }
   }
 
-  protected static void copyTemplate(File templateFile, File toFile, Properties variables)
-      throws IOException {
+  protected static void copyTemplate(File templateFile, File toFile, Properties variables) throws IOException {
     copyTemplate(new FileReader(templateFile), toFile, variables);
   }
 
-  protected static void copyTemplate(Reader templateReader, File toFile, Properties variables)
-      throws IOException {
+  protected static void copyTemplate(Reader templateReader, File toFile, Properties variables) throws IOException {
     LineNumberReader reader = new LineNumberReader(templateReader);
     try {
       PrintWriter writer = new PrintWriter(new FileWriter(toFile));
@@ -250,9 +247,8 @@ public abstract class BaseCommand implements Command {
 
   protected ConnectionProvider getConnectionProvider() {
     try {
-      UnpooledDataSource dataSource = new UnpooledDataSource(getDriverClassLoader(),
-          environment().getDriver(), environment().getUrl(), environment().getUsername(),
-          environment().getPassword());
+      UnpooledDataSource dataSource = new UnpooledDataSource(getDriverClassLoader(), environment().getDriver(),
+          environment().getUrl(), environment().getUsername(), environment().getPassword());
       return new DataSourceConnectionProvider(dataSource);
     } catch (Exception e) {
       throw new MigrationException("Error creating ScriptRunner.  Cause: " + e, e);
@@ -293,17 +289,14 @@ public abstract class BaseCommand implements Command {
   }
 
   protected MigrationLoader getMigrationLoader() {
-    return new FileMigrationLoader(paths.getScriptPath(),
-        environment().getScriptCharset(),
+    return new FileMigrationLoader(paths.getScriptPath(), environment().getScriptCharset(),
         environment().getVariables());
   }
 
-  protected MigrationHook createFileMigrationHook(String before, String beforeEach,
-      String afterEach, String after) {
-    HookScriptFactory factory = new FileHookScriptFactory(options.getPaths(), environment(),
-        printStream);
-    return new FileMigrationHook(factory.create(before), factory.create(beforeEach),
-        factory.create(afterEach), factory.create(after));
+  protected MigrationHook createFileMigrationHook(String before, String beforeEach, String afterEach, String after) {
+    HookScriptFactory factory = new FileHookScriptFactory(options.getPaths(), environment(), printStream);
+    return new FileMigrationHook(factory.create(before), factory.create(beforeEach), factory.create(afterEach),
+        factory.create(after));
   }
 
   protected DatabaseOperationOption getDatabaseOperationOption() {
@@ -313,8 +306,7 @@ public abstract class BaseCommand implements Command {
     option.setThrowWarning(!options.isForce());
     option.setEscapeProcessing(false);
     option.setAutoCommit(environment().isAutoCommit());
-    option.setFullLineDelimiter(
-        environment().isFullLineDelimiter());
+    option.setFullLineDelimiter(environment().isFullLineDelimiter());
     option.setSendFullScript(environment().isSendFullScript());
     option.setRemoveCRs(environment().isRemoveCrs());
     option.setDelimiter(environment().getDelimiter());

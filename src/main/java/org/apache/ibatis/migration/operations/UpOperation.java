@@ -49,11 +49,13 @@ public final class UpOperation extends DatabaseOperation {
     }
   }
 
-  public UpOperation operate(ConnectionProvider connectionProvider, MigrationLoader migrationsLoader, DatabaseOperationOption option, PrintStream printStream) {
+  public UpOperation operate(ConnectionProvider connectionProvider, MigrationLoader migrationsLoader,
+      DatabaseOperationOption option, PrintStream printStream) {
     return operate(connectionProvider, migrationsLoader, option, printStream, null);
   }
 
-  public UpOperation operate(ConnectionProvider connectionProvider, MigrationLoader migrationsLoader, DatabaseOperationOption option, PrintStream printStream, MigrationHook hook) {
+  public UpOperation operate(ConnectionProvider connectionProvider, MigrationLoader migrationsLoader,
+      DatabaseOperationOption option, PrintStream printStream, MigrationHook hook) {
     try {
       if (option == null) {
         option = new DatabaseOperationOption();
@@ -77,13 +79,11 @@ public final class UpOperation extends DatabaseOperation {
         for (Change change : migrations) {
           if (lastChange == null || change.getId().compareTo(lastChange.getId()) > 0) {
             if (stepCount == 0 && hook != null) {
-              hookBindings.put(MigrationHook.HOOK_CONTEXT,
-                  new HookContext(connectionProvider, runner, null));
+              hookBindings.put(MigrationHook.HOOK_CONTEXT, new HookContext(connectionProvider, runner, null));
               hook.before(hookBindings);
             }
             if (hook != null) {
-              hookBindings.put(MigrationHook.HOOK_CONTEXT,
-                  new HookContext(connectionProvider, runner, change.clone()));
+              hookBindings.put(MigrationHook.HOOK_CONTEXT, new HookContext(connectionProvider, runner, change.clone()));
               hook.beforeEach(hookBindings);
             }
             println(printStream, Util.horizontalLine("Applying: " + change.getFilename(), 80));
@@ -92,8 +92,7 @@ public final class UpOperation extends DatabaseOperation {
             insertChangelog(change, connectionProvider, option);
             println(printStream);
             if (hook != null) {
-              hookBindings.put(MigrationHook.HOOK_CONTEXT,
-                  new HookContext(connectionProvider, runner, change.clone()));
+              hookBindings.put(MigrationHook.HOOK_CONTEXT, new HookContext(connectionProvider, runner, change.clone()));
               hook.afterEach(hookBindings);
             }
             stepCount++;
@@ -103,8 +102,7 @@ public final class UpOperation extends DatabaseOperation {
           }
         }
         if (stepCount > 0 && hook != null) {
-          hookBindings.put(MigrationHook.HOOK_CONTEXT,
-              new HookContext(connectionProvider, runner, null));
+          hookBindings.put(MigrationHook.HOOK_CONTEXT, new HookContext(connectionProvider, runner, null));
           hook.after(hookBindings);
         }
         return this;

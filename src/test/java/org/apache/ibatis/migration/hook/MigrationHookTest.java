@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2016 the original author or authors.
+ *    Copyright 2010-2017 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -48,8 +48,8 @@ public class MigrationHookTest {
   @BeforeClass
   public static void init() throws Exception {
     dir = Resources.getResourceAsFile("org/apache/ibatis/migration/hook/testdir");
-    env = Resources.getResourceAsProperties(
-        "org/apache/ibatis/migration/hook/testdir/environments/development.properties");
+    env = Resources
+        .getResourceAsProperties("org/apache/ibatis/migration/hook/testdir/environments/development.properties");
   }
 
   @Test
@@ -85,17 +85,14 @@ public class MigrationHookTest {
     assertTrue(out.getLog().contains("SUCCESS"));
     // before
     assertEquals(1, TestUtil.countStr(output, "HELLO_1"));
-    assertTrue(
-        output.indexOf("HELLO_1") < output.indexOf("Applying: 001_create_changelog.sql"));
+    assertTrue(output.indexOf("HELLO_1") < output.indexOf("Applying: 001_create_changelog.sql"));
     // before each
-    assertEquals(3,
-        TestUtil.countStr(output, "FUNCTION_GLOBALVAR_LOCALVAR1_LOCALVAR2_ARG1_ARG2"));
+    assertEquals(3, TestUtil.countStr(output, "FUNCTION_GLOBALVAR_LOCALVAR1_LOCALVAR2_ARG1_ARG2"));
     // after each
     assertEquals(3, TestUtil.countStr(output,
         "insert into worklog (str1, str2, str3) values ('GLOBALVAR', 'LOCALVAR1', 'LOCALVAR2')"));
     // after
-    assertEquals(1,
-        TestUtil.countStr(output, "METHOD_GLOBALVAR_LOCALVAR1_LOCALVAR2_ARG1_ARG2"));
+    assertEquals(1, TestUtil.countStr(output, "METHOD_GLOBALVAR_LOCALVAR1_LOCALVAR2_ARG1_ARG2"));
     // assert the global variable defined and incremented in scripts
     assertEquals(1, TestUtil.countStr(output, "SCRIPT_VAR=1"));
     assertEquals(1, TestUtil.countStr(output, "SCRIPT_VAR=5"));
@@ -111,8 +108,7 @@ public class MigrationHookTest {
     assertEquals(1, TestUtil.countStr(output, "insert into worklog (str1) values ('3')"));
   }
 
-  private void assertWorklogRowCount(int expectedRows)
-      throws SQLException, ClassNotFoundException {
+  private void assertWorklogRowCount(int expectedRows) throws SQLException, ClassNotFoundException {
     Connection con = TestUtil.getConnection(env);
     SqlRunner sqlRunner = new SqlRunner(con);
     Map<String, Object> result = sqlRunner.selectOne("select count(*) as c from worklog");

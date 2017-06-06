@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2016 the original author or authors.
+ *    Copyright 2010-2017 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -77,8 +77,7 @@ public class JavaMigrationLoader implements MigrationLoader {
       resolver.find(new Test() {
         @Override
         public boolean matches(Class<?> type) {
-          return type != null && MigrationScript.class.isAssignableFrom(type)
-              && type.getName().equals(className);
+          return type != null && MigrationScript.class.isAssignableFrom(type) && type.getName().equals(className);
         }
       }, pkg);
     }

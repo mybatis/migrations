@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2016 the original author or authors.
+ *    Copyright 2010-2017 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -39,7 +39,8 @@ public class MigrationReader extends Reader {
     this(new FileInputStream(file), charset, undo, variables);
   }
 
-  public MigrationReader(InputStream inputStream, String charset, boolean undo, Properties variables) throws IOException {
+  public MigrationReader(InputStream inputStream, String charset, boolean undo, Properties variables)
+      throws IOException {
     final Reader source = scriptFileReader(inputStream, charset);
     try {
       BufferedReader reader = new BufferedReader(source);
@@ -77,7 +78,8 @@ public class MigrationReader extends Reader {
     target.close();
   }
 
-  protected Reader scriptFileReader(InputStream inputStream, String charset) throws FileNotFoundException, UnsupportedEncodingException {
+  protected Reader scriptFileReader(InputStream inputStream, String charset)
+      throws FileNotFoundException, UnsupportedEncodingException {
     if (charset == null || charset.length() == 0) {
       return new InputStreamReader(inputStream);
     } else {
@@ -85,4 +87,3 @@ public class MigrationReader extends Reader {
     }
   }
 }
-

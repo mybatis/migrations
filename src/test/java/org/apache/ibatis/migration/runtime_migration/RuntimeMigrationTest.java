@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2016 the original author or authors.
+ *    Copyright 2010-2017 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -71,7 +71,8 @@ public class RuntimeMigrationTest {
 
   @Test
   public void testInitialStatus() throws Exception {
-    StatusOperation status = new StatusOperation().operate(connectionProvider, migrationsLoader, dbOption, new PrintStream(out));
+    StatusOperation status = new StatusOperation().operate(connectionProvider, migrationsLoader, dbOption,
+        new PrintStream(out));
     assertEquals(0, status.getAppliedCount());
     assertEquals(3, status.getPendingCount());
     assertEquals(3, status.getCurrentStatus().size());
@@ -98,7 +99,8 @@ public class RuntimeMigrationTest {
     assertEquals("0", runQuery(connectionProvider, "select count(*) from first_table"));
     assertEquals("0", runQuery(connectionProvider, "select count(*) from second_table"));
 
-    StatusOperation status = new StatusOperation().operate(connectionProvider, migrationsLoader, dbOption, new PrintStream(out));
+    StatusOperation status = new StatusOperation().operate(connectionProvider, migrationsLoader, dbOption,
+        new PrintStream(out));
     assertEquals(3, status.getAppliedCount());
     assertEquals(0, status.getPendingCount());
     assertEquals(3, status.getCurrentStatus().size());
@@ -136,16 +138,14 @@ public class RuntimeMigrationTest {
         printStream.println("<AFTER>");
       }
     };
-    new UpOperation(3).operate(connectionProvider, migrationsLoader, dbOption, printStream,
-        hook);
+    new UpOperation(3).operate(connectionProvider, migrationsLoader, dbOption, printStream, hook);
     String output = out.toString("utf-8");
     assertEquals(1, TestUtil.countStr(output, "<BEFORE>"));
     assertEquals(3, TestUtil.countStr(output, "<BEFORE_EACH>"));
     assertEquals(3, TestUtil.countStr(output, "<AFTER_EACH>"));
     assertEquals(1, TestUtil.countStr(output, "<AFTER>"));
     out.reset();
-    new DownOperation(2).operate(connectionProvider, migrationsLoader, dbOption, printStream,
-        hook);
+    new DownOperation(2).operate(connectionProvider, migrationsLoader, dbOption, printStream, hook);
     output = out.toString("utf-8");
     assertEquals(1, TestUtil.countStr(output, "<BEFORE>"));
     assertEquals(2, TestUtil.countStr(output, "<BEFORE_EACH>"));
@@ -190,7 +190,8 @@ public class RuntimeMigrationTest {
     // Need changelog.
     new UpOperation(1).operate(connectionProvider, migrationsLoader, dbOption, new PrintStream(out));
 
-    new VersionOperation(new BigDecimal("20130707120738")).operate(connectionProvider, migrationsLoader, dbOption, new PrintStream(out));
+    new VersionOperation(new BigDecimal("20130707120738")).operate(connectionProvider, migrationsLoader, dbOption,
+        new PrintStream(out));
     assertEquals("2", runQuery(connectionProvider, "select count(*) from changelog"));
     assertEquals("0", runQuery(connectionProvider, "select count(*) from first_table"));
     assertTableDoesNotExist(connectionProvider, "second_table");
@@ -200,7 +201,8 @@ public class RuntimeMigrationTest {
   public void testVersionDown() throws Exception {
     new UpOperation().operate(connectionProvider, migrationsLoader, dbOption, new PrintStream(out));
 
-    new VersionOperation(new BigDecimal("20130707120738")).operate(connectionProvider, migrationsLoader, dbOption, new PrintStream(out));
+    new VersionOperation(new BigDecimal("20130707120738")).operate(connectionProvider, migrationsLoader, dbOption,
+        new PrintStream(out));
     assertEquals("2", runQuery(connectionProvider, "select count(*) from changelog"));
     assertEquals("0", runQuery(connectionProvider, "select count(*) from first_table"));
     assertTableDoesNotExist(connectionProvider, "second_table");

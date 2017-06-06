@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2016 the original author or authors.
+ *    Copyright 2010-2017 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -21,11 +21,10 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 public class TestUtil {
-  public static Connection getConnection(Properties envProperties)
-      throws SQLException, ClassNotFoundException {
+  public static Connection getConnection(Properties envProperties) throws SQLException, ClassNotFoundException {
     Class.forName(envProperties.getProperty("driver"));
-    return DriverManager.getConnection(envProperties.getProperty("url"),
-        envProperties.getProperty("username"), envProperties.getProperty("password"));
+    return DriverManager.getConnection(envProperties.getProperty("url"), envProperties.getProperty("username"),
+        envProperties.getProperty("password"));
   }
 
   public static String[] args(String... args) {

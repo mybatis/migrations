@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2016 the original author or authors.
+ *    Copyright 2010-2017 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -30,7 +30,8 @@ import org.apache.ibatis.migration.utils.Util;
 
 public final class PendingOperation extends DatabaseOperation {
 
-  public PendingOperation operate(ConnectionProvider connectionProvider, MigrationLoader migrationsLoader, DatabaseOperationOption option, PrintStream printStream) {
+  public PendingOperation operate(ConnectionProvider connectionProvider, MigrationLoader migrationsLoader,
+      DatabaseOperationOption option, PrintStream printStream) {
     try {
       if (option == null) {
         option = new DatabaseOperationOption();
@@ -57,7 +58,8 @@ public final class PendingOperation extends DatabaseOperation {
     }
   }
 
-  private List<Change> getPendingChanges(ConnectionProvider connectionProvider, MigrationLoader migrationsLoader, DatabaseOperationOption option) {
+  private List<Change> getPendingChanges(ConnectionProvider connectionProvider, MigrationLoader migrationsLoader,
+      DatabaseOperationOption option) {
     List<Change> pending = new ArrayList<Change>();
     List<Change> migrations = migrationsLoader.getMigrations();
     List<Change> changelog = getChangelog(connectionProvider, option);
