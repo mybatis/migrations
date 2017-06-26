@@ -66,6 +66,10 @@ public class MigrationHookTest {
     assertWorklogRowCount(3);
     down();
     assertWorklogRowCount(4);
+    versionDown();
+    assertWorklogRowCount(5);
+    versionUp();
+    assertWorklogRowCount(6);
 
     out.clearLog();
     System.exit(0);
@@ -104,8 +108,38 @@ public class MigrationHookTest {
     Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "down"));
     String output = out.getLog();
     assertTrue(out.getLog().contains("SUCCESS"));
+    assertEquals(1, TestUtil.countStr(output, "Undoing: 003_create_pet.sql"));
     // before
     assertEquals(1, TestUtil.countStr(output, "insert into worklog (str1) values ('3')"));
+  }
+
+  private void versionDown() throws Exception {
+    out.clearLog();
+    Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "version", "1"));
+    String output = out.getLog();
+    assertTrue(out.getLog().contains("SUCCESS"));
+    assertEquals(1, TestUtil.countStr(output, "Downgrading to: 1"));
+    assertEquals(1, TestUtil.countStr(output, "Undoing: 002_create_person.sql"));
+    // before
+    assertEquals(1, TestUtil.countStr(output, "insert into worklog (str1) values ('2')"));
+  }
+
+  private void versionUp() throws Exception {
+    out.clearLog();
+    Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "version", "2"));
+    String output = out.getLog();
+    assertTrue(out.getLog().contains("SUCCESS"));
+    assertEquals(1, TestUtil.countStr(output, "Upgrading to: 2"));
+    // before
+    assertEquals(1, TestUtil.countStr(output, "HELLO_1"));
+    assertEquals(1, TestUtil.countStr(output, "Applying: 002_create_person.sql"));
+    // before each
+    assertEquals(1, TestUtil.countStr(output, "FUNCTION_GLOBALVAR_LOCALVAR1_LOCALVAR2_ARG1_ARG2"));
+    // after each
+    assertEquals(1, TestUtil.countStr(output,
+        "insert into worklog (str1, str2, str3) values ('GLOBALVAR', 'LOCALVAR1', 'LOCALVAR2')"));
+    // after
+    assertEquals(1, TestUtil.countStr(output, "METHOD_GLOBALVAR_LOCALVAR1_LOCALVAR2_ARG1_ARG2"));
   }
 
   private void assertWorklogRowCount(int expectedRows) throws SQLException, ClassNotFoundException {

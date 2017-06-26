@@ -293,6 +293,28 @@ public abstract class BaseCommand implements Command {
         environment().getVariables());
   }
 
+  protected MigrationHook createUpHook() {
+    String before = environment().getHookBeforeUp();
+    String beforeEach = environment().getHookBeforeEachUp();
+    String afterEach = environment().getHookAfterEachUp();
+    String after = environment().getHookAfterUp();
+    if (before == null && beforeEach == null && afterEach == null && after == null) {
+      return null;
+    }
+    return createFileMigrationHook(before, beforeEach, afterEach, after);
+  }
+
+  protected MigrationHook createDownHook() {
+    String before = environment().getHookBeforeDown();
+    String beforeEach = environment().getHookBeforeEachDown();
+    String afterEach = environment().getHookAfterEachDown();
+    String after = environment().getHookAfterDown();
+    if (before == null && beforeEach == null && afterEach == null && after == null) {
+      return null;
+    }
+    return createFileMigrationHook(before, beforeEach, afterEach, after);
+  }
+
   protected MigrationHook createFileMigrationHook(String before, String beforeEach, String afterEach, String after) {
     HookScriptFactory factory = new FileHookScriptFactory(options.getPaths(), environment(), printStream);
     return new FileMigrationHook(factory.create(before), factory.create(beforeEach), factory.create(afterEach),

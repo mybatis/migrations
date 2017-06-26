@@ -15,7 +15,6 @@
  */
 package org.apache.ibatis.migration.commands;
 
-import org.apache.ibatis.migration.hook.MigrationHook;
 import org.apache.ibatis.migration.operations.DownOperation;
 import org.apache.ibatis.migration.options.SelectedOptions;
 
@@ -28,17 +27,6 @@ public final class DownCommand extends BaseCommand {
   public void execute(String... params) {
     DownOperation operation = new DownOperation(getStepCountParameter(1, params));
     operation.operate(getConnectionProvider(), getMigrationLoader(), getDatabaseOperationOption(), printStream,
-        createHook());
-  }
-
-  private MigrationHook createHook() {
-    String before = environment().getHookBeforeDown();
-    String beforeEach = environment().getHookBeforeEachDown();
-    String afterEach = environment().getHookAfterEachDown();
-    String after = environment().getHookAfterDown();
-    if (before == null && beforeEach == null && afterEach == null && after == null) {
-      return null;
-    }
-    return createFileMigrationHook(before, beforeEach, afterEach, after);
+        createDownHook());
   }
 }
