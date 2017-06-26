@@ -23,6 +23,7 @@ import org.apache.ibatis.migration.Change;
 import org.apache.ibatis.migration.ConnectionProvider;
 import org.apache.ibatis.migration.MigrationException;
 import org.apache.ibatis.migration.MigrationLoader;
+import org.apache.ibatis.migration.hook.MigrationHook;
 import org.apache.ibatis.migration.options.DatabaseOperationOption;
 
 public final class VersionOperation extends DatabaseOperation {
@@ -38,6 +39,11 @@ public final class VersionOperation extends DatabaseOperation {
 
   public VersionOperation operate(ConnectionProvider connectionProvider, MigrationLoader migrationsLoader,
       DatabaseOperationOption option, PrintStream printStream) {
+    return operate(connectionProvider, migrationsLoader, option, printStream, null, null);
+  }
+
+  public VersionOperation operate(ConnectionProvider connectionProvider, MigrationLoader migrationsLoader,
+      DatabaseOperationOption option, PrintStream printStream, MigrationHook upHook, MigrationHook downHook) {
     if (option == null) {
       option = new DatabaseOperationOption();
     }
@@ -47,14 +53,14 @@ public final class VersionOperation extends DatabaseOperation {
       println(printStream, "Upgrading to: " + version);
       UpOperation up = new UpOperation(1);
       while (!version.equals(change.getId())) {
-        up.operate(connectionProvider, migrationsLoader, option, printStream);
+        up.operate(connectionProvider, migrationsLoader, option, printStream, upHook);
         change = getLastAppliedChange(connectionProvider, option);
       }
     } else if (version.compareTo(change.getId()) < 0) {
       println(printStream, "Downgrading to: " + version);
       DownOperation down = new DownOperation(1);
       while (!version.equals(change.getId())) {
-        down.operate(connectionProvider, migrationsLoader, option, printStream);
+        down.operate(connectionProvider, migrationsLoader, option, printStream, downHook);
         change = getLastAppliedChange(connectionProvider, option);
       }
     } else {

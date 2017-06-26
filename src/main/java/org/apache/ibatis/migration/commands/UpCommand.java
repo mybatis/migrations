@@ -15,7 +15,6 @@
  */
 package org.apache.ibatis.migration.commands;
 
-import org.apache.ibatis.migration.hook.MigrationHook;
 import org.apache.ibatis.migration.operations.UpOperation;
 import org.apache.ibatis.migration.options.SelectedOptions;
 
@@ -36,17 +35,6 @@ public final class UpCommand extends BaseCommand {
     final int limit = getStepCountParameter(Integer.MAX_VALUE, params);
     UpOperation operation = new UpOperation(runOneStepOnly ? 1 : limit);
     operation.operate(getConnectionProvider(), getMigrationLoader(), getDatabaseOperationOption(), printStream,
-        createHook());
-  }
-
-  private MigrationHook createHook() {
-    String before = environment().getHookBeforeUp();
-    String beforeEach = environment().getHookBeforeEachUp();
-    String afterEach = environment().getHookAfterEachUp();
-    String after = environment().getHookAfterUp();
-    if (before == null && beforeEach == null && afterEach == null && after == null) {
-      return null;
-    }
-    return createFileMigrationHook(before, beforeEach, afterEach, after);
+        createUpHook());
   }
 }
