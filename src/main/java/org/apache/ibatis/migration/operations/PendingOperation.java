@@ -16,15 +16,20 @@
 package org.apache.ibatis.migration.operations;
 
 import java.io.PrintStream;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.jdbc.ScriptRunner;
 import org.apache.ibatis.migration.Change;
 import org.apache.ibatis.migration.ConnectionProvider;
 import org.apache.ibatis.migration.MigrationException;
 import org.apache.ibatis.migration.MigrationLoader;
+import org.apache.ibatis.migration.hook.HookContext;
+import org.apache.ibatis.migration.hook.MigrationHook;
 import org.apache.ibatis.migration.options.DatabaseOperationOption;
 import org.apache.ibatis.migration.utils.Util;
 
@@ -32,6 +37,11 @@ public final class PendingOperation extends DatabaseOperation {
 
   public PendingOperation operate(ConnectionProvider connectionProvider, MigrationLoader migrationsLoader,
       DatabaseOperationOption option, PrintStream printStream) {
+    return operate(connectionProvider, migrationsLoader, option, printStream, null);
+  }
+
+  public PendingOperation operate(ConnectionProvider connectionProvider, MigrationLoader migrationsLoader,
+      DatabaseOperationOption option, PrintStream printStream, MigrationHook hook) {
     try {
       if (option == null) {
         option = new DatabaseOperationOption();
@@ -40,20 +50,49 @@ public final class PendingOperation extends DatabaseOperation {
         throw new MigrationException("Change log doesn't exist, no migrations applied.  Try running 'up' instead.");
       }
       List<Change> pending = getPendingChanges(connectionProvider, migrationsLoader, option);
+      int stepCount = 0;
+      Map<String, Object> hookBindings = new HashMap<String, Object>();
       println(printStream, "WARNING: Running pending migrations out of order can create unexpected results.");
-      for (Change change : pending) {
-        println(printStream, Util.horizontalLine("Applying: " + change.getFilename(), 80));
-        ScriptRunner runner = getScriptRunner(connectionProvider, option, printStream);
-        try {
-          runner.runScript(migrationsLoader.getScriptReader(change, false));
-        } finally {
-          runner.closeConnection();
+      ScriptRunner runner = getScriptRunner(connectionProvider, option, printStream);
+      Reader scriptReader = null;
+      try {
+        for (Change change : pending) {
+          if (stepCount == 0 && hook != null) {
+            hookBindings.put(MigrationHook.HOOK_CONTEXT, new HookContext(connectionProvider, runner, null));
+            hook.before(hookBindings);
+          }
+          if (hook != null) {
+            hookBindings.put(MigrationHook.HOOK_CONTEXT, new HookContext(connectionProvider, runner, change.clone()));
+            hook.beforeEach(hookBindings);
+          }
+          println(printStream, Util.horizontalLine("Applying: " + change.getFilename(), 80));
+          scriptReader = migrationsLoader.getScriptReader(change, false);
+          runner.runScript(scriptReader);
+          insertChangelog(change, connectionProvider, option);
+          println(printStream);
+          if (hook != null) {
+            hookBindings.put(MigrationHook.HOOK_CONTEXT, new HookContext(connectionProvider, runner, change.clone()));
+            hook.afterEach(hookBindings);
+          }
+          stepCount++;
         }
-        insertChangelog(change, connectionProvider, option);
-        println(printStream);
+        if (stepCount > 0 && hook != null) {
+          hookBindings.put(MigrationHook.HOOK_CONTEXT, new HookContext(connectionProvider, runner, null));
+          hook.after(hookBindings);
+        }
+        return this;
+      } catch (Exception e) {
+        throw new MigrationException("Error executing command.  Cause: " + e, e);
+      } finally {
+        if (scriptReader != null) {
+          scriptReader.close();
+        }
+        runner.closeConnection();
       }
-      return this;
-    } catch (Exception e) {
+    } catch (Throwable e) {
+      while (e instanceof MigrationException) {
+        e = e.getCause();
+      }
       throw new MigrationException("Error executing command.  Cause: " + e, e);
     }
   }
