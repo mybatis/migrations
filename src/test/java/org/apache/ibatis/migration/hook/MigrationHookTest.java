@@ -60,16 +60,19 @@ public class MigrationHookTest {
         assertEquals("", out.getLog());
       }
     });
+    int worklogCounter = 0;
     bootstrap();
     up();
     assertChangelogIntact();
-    assertWorklogRowCount(3);
+    assertWorklogRowCount(worklogCounter += 3);
+    pending();
+    assertWorklogRowCount(++worklogCounter);
     down();
-    assertWorklogRowCount(4);
+    assertWorklogRowCount(++worklogCounter);
     versionDown();
-    assertWorklogRowCount(5);
+    assertWorklogRowCount(++worklogCounter);
     versionUp();
-    assertWorklogRowCount(6);
+    assertWorklogRowCount(++worklogCounter);
 
     out.clearLog();
     System.exit(0);
@@ -101,6 +104,29 @@ public class MigrationHookTest {
     assertEquals(1, TestUtil.countStr(output, "SCRIPT_VAR=1"));
     assertEquals(1, TestUtil.countStr(output, "SCRIPT_VAR=5"));
     assertEquals(0, TestUtil.countStr(output, "SCRIPT_VAR=6"));
+  }
+
+  private void pending() throws Exception {
+    out.clearLog();
+    // Create 'pending' situation intentionally.
+    Connection con = TestUtil.getConnection(env);
+    SqlRunner sqlRunner = new SqlRunner(con);
+    sqlRunner.delete("delete from changes where id = 2");
+    sqlRunner.run("drop table person");
+
+    Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "pending"));
+    String output = out.getLog();
+    assertTrue(out.getLog().contains("SUCCESS"));
+    // before
+    assertEquals(1, TestUtil.countStr(output, "HELLO_1"));
+    assertEquals(1, TestUtil.countStr(output, "Applying: 002_create_person.sql"));
+    // before each
+    assertEquals(1, TestUtil.countStr(output, "FUNCTION_GLOBALVAR_LOCALVAR1_LOCALVAR2_ARG1_ARG2"));
+    // after each
+    assertEquals(1, TestUtil.countStr(output,
+        "insert into worklog (str1, str2, str3) values ('GLOBALVAR', 'LOCALVAR1', 'LOCALVAR2')"));
+    // after
+    assertEquals(1, TestUtil.countStr(output, "METHOD_GLOBALVAR_LOCALVAR1_LOCALVAR2_ARG1_ARG2"));
   }
 
   private void down() throws Exception {
