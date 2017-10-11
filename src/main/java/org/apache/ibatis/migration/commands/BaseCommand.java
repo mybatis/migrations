@@ -325,7 +325,7 @@ public abstract class BaseCommand implements Command {
     DatabaseOperationOption option = new DatabaseOperationOption();
     option.setChangelogTable(changelogTable());
     option.setStopOnError(!options.isForce());
-    option.setThrowWarning(!options.isForce());
+    option.setThrowWarning(!options.isForce() && !environment().isIgnoreWarnings());
     option.setEscapeProcessing(false);
     option.setAutoCommit(environment().isAutoCommit());
     option.setFullLineDelimiter(environment().isFullLineDelimiter());
