@@ -32,7 +32,7 @@ public class Environment {
   public static final String CHANGELOG = "changelog";
 
   private enum SETTING_KEY {
-    time_zone, delimiter, script_char_set, full_line_delimiter, send_full_script, auto_commit, remove_crs, driver_path, driver, url, username, password, hook_before_up, hook_before_each_up, hook_after_each_up, hook_after_up, hook_before_down, hook_before_each_down, hook_after_each_down, hook_after_down
+    time_zone, delimiter, script_char_set, full_line_delimiter, send_full_script, auto_commit, remove_crs, ignore_warnings, driver_path, driver, url, username, password, hook_before_up, hook_before_each_up, hook_after_each_up, hook_after_up, hook_before_down, hook_before_each_down, hook_after_each_down, hook_after_down
   }
 
   private static final List<String> SETTING_KEYS;
@@ -53,6 +53,7 @@ public class Environment {
   private final boolean sendFullScript;
   private final boolean autoCommit;
   private final boolean removeCrs;
+  private final boolean ignoreWarnings;
   private final String driverPath;
   private final String driver;
   private final String url;
@@ -84,6 +85,7 @@ public class Environment {
       this.sendFullScript = Boolean.valueOf(prop.getProperty(SETTING_KEY.send_full_script.name()));
       this.autoCommit = Boolean.valueOf(prop.getProperty(SETTING_KEY.auto_commit.name()));
       this.removeCrs = Boolean.valueOf(prop.getProperty(SETTING_KEY.remove_crs.name()));
+      this.ignoreWarnings = Boolean.valueOf(prop.getProperty(SETTING_KEY.ignore_warnings.name()));
 
       this.driverPath = prop.getProperty(SETTING_KEY.driver_path.name());
       this.driver = prop.getProperty(SETTING_KEY.driver.name());
@@ -149,6 +151,10 @@ public class Environment {
 
   public boolean isRemoveCrs() {
     return removeCrs;
+  }
+
+  public boolean isIgnoreWarnings() {
+    return ignoreWarnings;
   }
 
   public String getDriverPath() {

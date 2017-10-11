@@ -91,6 +91,9 @@ full_line_delimiter=false
 # Use with JDBC drivers that can accept large
 # blocks of delimited text at once.
 send_full_script=false
+# If set to true, warnings from the database
+# do not interrupt migrations.
+ignore_warnings=false
 # Custom driver path to avoid copying your drivers
 # driver_path=]]></source>
       </subsection>
