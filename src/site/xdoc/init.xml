@@ -99,7 +99,7 @@ ignore_warnings=false
         <h4>Database specific information</h4>
         <h5>MySQL</h5>
         <ul>
-          <li><code>send_full_script</code> must be set to <code>true</code> to execute a script with multiple statements.</li>
+          <li><code>send_full_script</code> must be set to <code>false</code> to execute a script with multiple statements.</li>
         </ul>
         <h5>PostgreSQL</h5>
         <ul>
