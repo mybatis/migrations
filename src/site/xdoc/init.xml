@@ -90,12 +90,21 @@ full_line_delimiter=false
 # simply sends the entire script at once.
 # Use with JDBC drivers that can accept large
 # blocks of delimited text at once.
-send_full_script=false
+send_full_script=true
 # If set to true, warnings from the database
 # do not interrupt migrations.
 ignore_warnings=false
 # Custom driver path to avoid copying your drivers
 # driver_path=]]></source>
+        <h4>Database specific information</h4>
+        <h5>MySQL</h5>
+        <ul>
+          <li><code>send_full_script</code> must be set to <code>true</code> to execute a script with multiple statements.</li>
+        </ul>
+        <h5>PostgreSQL</h5>
+        <ul>
+          <li><code>ignore_warnings</code> should be set to <code>true</code> to prevent migrations from being interrupted unexpectedly. See <a href="https://github.com/mybatis/migrations/issues/84">#84</a> for the details.</li>
+        </ul>
       </subsection>
 
       <subsection name="./scripts">
