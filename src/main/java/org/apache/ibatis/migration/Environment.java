@@ -85,7 +85,7 @@ public class Environment {
       this.sendFullScript = Boolean.valueOf(prop.getProperty(SETTING_KEY.send_full_script.name()));
       this.autoCommit = Boolean.valueOf(prop.getProperty(SETTING_KEY.auto_commit.name()));
       this.removeCrs = Boolean.valueOf(prop.getProperty(SETTING_KEY.remove_crs.name()));
-      this.ignoreWarnings = Boolean.valueOf(prop.getProperty(SETTING_KEY.ignore_warnings.name()));
+      this.ignoreWarnings = Boolean.valueOf(prop.getProperty(SETTING_KEY.ignore_warnings.name(), "true"));
 
       this.driverPath = prop.getProperty(SETTING_KEY.driver_path.name());
       this.driver = prop.getProperty(SETTING_KEY.driver.name());

@@ -90,12 +90,17 @@ full_line_delimiter=false
 # simply sends the entire script at once.
 # Use with JDBC drivers that can accept large
 # blocks of delimited text at once.
-send_full_script=false
-# If set to true, warnings from the database
-# do not interrupt migrations.
-ignore_warnings=false
+send_full_script=true
+# If set to false, warnings from the database
+# will interrupt migrations.
+ignore_warnings=true
 # Custom driver path to avoid copying your drivers
 # driver_path=]]></source>
+        <h4>Database specific information</h4>
+        <h5>MySQL</h5>
+        <ul>
+          <li><code>send_full_script</code> must be set to <code>false</code> to execute a script with multiple statements.</li>
+        </ul>
       </subsection>
 
       <subsection name="./scripts">
