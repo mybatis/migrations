@@ -15,6 +15,7 @@
  */
 package org.apache.ibatis.migration.options;
 
+// This could just be a Set<Option> selectedOptions = new EnumSet<Option>(Option.class);
 public class SelectedOptions {
   private SelectedPaths paths = new SelectedPaths();
   private String environment = "development";
@@ -25,6 +26,16 @@ public class SelectedOptions {
   private String command;
   private String params;
   private boolean help;
+
+  private boolean quiet;
+
+  public boolean isQuiet() {
+    return quiet;
+  }
+
+  public void setQuiet(boolean quiet) {
+    this.quiet = quiet;
+  }
 
   public SelectedPaths getPaths() {
     return paths;

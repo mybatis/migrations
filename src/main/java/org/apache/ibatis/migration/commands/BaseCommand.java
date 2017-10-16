@@ -23,6 +23,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.LineNumberReader;
+import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.Reader;
@@ -82,6 +83,15 @@ public abstract class BaseCommand implements Command {
   protected BaseCommand(SelectedOptions selectedOptions) {
     this.options = selectedOptions;
     this.paths = selectedOptions.getPaths();
+    if (options.isQuiet()) {
+
+      this.printStream = new PrintStream(new OutputStream() {
+        @Override
+        public void write(int b) throws IOException {
+          // throw away output
+        }
+      });
+    }
   }
 
   public void setDriverClassLoader(ClassLoader aDriverClassLoader) {
