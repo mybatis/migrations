@@ -53,7 +53,44 @@ public enum OptionsParser {
       final String[] argParts = arg.substring(2).split("=");
       final Options option = Options.valueOf(argParts[0].toUpperCase());
 
-      option.accept(options, argParts.length > 1 ? argParts[1] : null);
+      switch (option) {
+        case PATH:
+          options.getPaths().setBasePath(new File(argParts[1]));
+          break;
+        case ENVPATH:
+          options.getPaths().setEnvPath(new File(argParts[1]));
+          break;
+        case SCRIPTPATH:
+          options.getPaths().setScriptPath(new File(argParts[1]));
+          break;
+        case DRIVERPATH:
+          options.getPaths().setDriverPath(new File(argParts[1]));
+          break;
+        case HOOKPATH:
+          options.getPaths().setHookPath(new File(argParts[1]));
+          break;
+        case ENV:
+          options.setEnvironment(argParts[1]);
+          break;
+        case FORCE:
+          options.setForce(true);
+          break;
+        case TRACE:
+          options.setTrace(true);
+          break;
+        case HELP:
+          options.setHelp(true);
+          break;
+        case TEMPLATE:
+          options.setTemplate(argParts[1]);
+          break;
+        case IDPATTERN:
+          options.setIdPattern(argParts[1]);
+          break;
+        case QUIET:
+          options.setQuiet(true);
+          break;
+      }
     }
 
     return isOption;
