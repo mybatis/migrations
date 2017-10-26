@@ -15,7 +15,6 @@
  */
 package org.apache.ibatis.migration.options;
 
-// This could just be a Set<Option> selectedOptions = new EnumSet<Option>(Option.class);
 public class SelectedOptions {
   private SelectedPaths paths = new SelectedPaths();
   private String environment = "development";
