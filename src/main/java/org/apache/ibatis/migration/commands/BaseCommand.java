@@ -84,7 +84,6 @@ public abstract class BaseCommand implements Command {
     this.options = selectedOptions;
     this.paths = selectedOptions.getPaths();
     if (options.isQuiet()) {
-
       this.printStream = new PrintStream(new OutputStream() {
         @Override
         public void write(int b) {
@@ -99,6 +98,9 @@ public abstract class BaseCommand implements Command {
   }
 
   public void setPrintStream(PrintStream aPrintStream) {
+    if(options.isQuiet()) {
+        aPrintStream.println("You selected to suppress output but a PrintStream is being set");
+    }
     printStream = aPrintStream;
   }
 
