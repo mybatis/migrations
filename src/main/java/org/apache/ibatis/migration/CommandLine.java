@@ -117,6 +117,7 @@ public class CommandLine {
     console.printf("--force              Forces script to continue even if SQL errors are encountered.%n");
     console.printf("--help               Displays this usage message.%n");
     console.printf("--trace              Shows additional error details (if any).%n");
+    console.printf("--quiet              Suppresses output.%n");
     console.printf("%n");
     console.printf("Commands:%n");
     console.printf("  info               Display build version informations.%n");

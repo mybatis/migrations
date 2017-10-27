@@ -26,6 +26,16 @@ public class SelectedOptions {
   private String params;
   private boolean help;
 
+  private boolean quiet;
+
+  public boolean isQuiet() {
+    return quiet;
+  }
+
+  public void setQuiet(boolean quiet) {
+    this.quiet = quiet;
+  }
+
   public SelectedPaths getPaths() {
     return paths;
   }

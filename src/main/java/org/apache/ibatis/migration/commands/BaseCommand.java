@@ -23,6 +23,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.LineNumberReader;
+import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.Reader;
@@ -82,6 +83,14 @@ public abstract class BaseCommand implements Command {
   protected BaseCommand(SelectedOptions selectedOptions) {
     this.options = selectedOptions;
     this.paths = selectedOptions.getPaths();
+    if (options.isQuiet()) {
+      this.printStream = new PrintStream(new OutputStream() {
+        @Override
+        public void write(int b) {
+          // throw away output
+        }
+      });
+    }
   }
 
   public void setDriverClassLoader(ClassLoader aDriverClassLoader) {
@@ -89,6 +98,9 @@ public abstract class BaseCommand implements Command {
   }
 
   public void setPrintStream(PrintStream aPrintStream) {
+    if(options.isQuiet()) {
+        aPrintStream.println("You selected to suppress output but a PrintStream is being set");
+    }
     printStream = aPrintStream;
   }
 

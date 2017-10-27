@@ -87,6 +87,9 @@ public enum OptionsParser {
         case IDPATTERN:
           options.setIdPattern(argParts[1]);
           break;
+        case QUIET:
+          options.setQuiet(true);
+          break;
       }
     }
 
