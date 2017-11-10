@@ -25,11 +25,19 @@ public class SelectedOptions {
   private String command;
   private String params;
   private boolean help;
-
   private boolean quiet;
+  private boolean color;
 
   public boolean isQuiet() {
     return quiet;
+  }
+
+  public boolean isColor() {
+    return color;
+  }
+
+  public void setColor(boolean color) {
+    this.color = color;
   }
 
   public void setQuiet(boolean quiet) {

@@ -90,6 +90,9 @@ public enum OptionsParser {
         case QUIET:
           options.setQuiet(true);
           break;
+        case COLOR:
+          options.setColor(true);
+          break;
       }
     }
 
