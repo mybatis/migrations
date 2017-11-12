@@ -48,6 +48,7 @@ public class MigrationReaderTest {
 
   @Test
   public void shouldReturnDoPart() throws Exception {
+    // @formatter:off
     String script = "-- comment\n"
         + "do part\n"
         + "--//@UNDO\n"
@@ -55,10 +56,12 @@ public class MigrationReaderTest {
     String result = readAsString(new MigrationReader(strToInputStream(script, charset), charset, false, null));
     assertEquals("-- comment\n"
         + "do part\n", result);
+    // @formatter:on
   }
 
   @Test
   public void shouldReturnUndoPart() throws Exception {
+    // @formatter:off
     String script = "-- comment\n"
         + "do part\n"
         + "--//@UNDO\n"
@@ -66,10 +69,12 @@ public class MigrationReaderTest {
     String result = readAsString(new MigrationReader(strToInputStream(script, charset), charset, true, null));
     assertEquals("-- @UNDO\n"
         + "undo part\n", result);
+    // @formatter:on
   }
 
   @Test
   public void shouldUndoCommentBeLenient() throws Exception {
+    // @formatter:off
     String script = "-- comment\n"
         + "do part\n"
         + " \t --  \t //  \t@UNDO  a \n"
@@ -77,11 +82,13 @@ public class MigrationReaderTest {
     String result = readAsString(new MigrationReader(strToInputStream(script, charset), charset, true, null));
     assertEquals(" \t --   \t@UNDO  a \n"
         + "undo part\n", result);
+    // @formatter:on
   }
 
   @Ignore("This won't work since 3.2.2 for performance reason.")
   @Test
   public void shouldUndoCommentAllowAnyCharBeforeAtMark() throws Exception {
+    // @formatter:off
     String script = "-- comment\n"
         + "do part\n"
         + "-- // b @UNDO\n"
@@ -89,25 +96,30 @@ public class MigrationReaderTest {
     String result = readAsString(new MigrationReader(strToInputStream(script, charset), charset, true, null));
     assertEquals("--  b @UNDO\n"
         + "undo part\n", result);
+    // @formatter:on
   }
 
   @Test
   public void shouldRequireDoubleSlashInUndoComment() throws Exception {
+    // @formatter:off
     String script = "-- comment\n"
         + "do part\n"
         + "-- @UNDO\n"
         + "undo part\n";
+    // @formatter:on
     String result = readAsString(new MigrationReader(strToInputStream(script, charset), charset, true, null));
     assertEquals("", result);
   }
 
   @Test
   public void shouldReturnAllAsDoIfUndoCommentNotFound() throws Exception {
+    // @formatter:off
     String script = "-- comment\n"
         + "do part\n";
     String result = readAsString(new MigrationReader(strToInputStream(script, charset), charset, false, null));
     assertEquals("-- comment\n"
         + "do part\n", result);
+    // @formatter:on
   }
 
   @Test
@@ -119,8 +131,10 @@ public class MigrationReaderTest {
 
   @Test
   public void shouldReturnEmptyUndoIfUndoCommentNotFound() throws Exception {
+    // @formatter:off
     String script = "-- comment\n"
         + "do part\n";
+    // @formatter:on
     String result = readAsString(new MigrationReader(strToInputStream(script, charset), charset, true, null));
     assertEquals("", result);
   }
@@ -135,6 +149,7 @@ public class MigrationReaderTest {
   @Ignore("This won't work since 3.2.2 mainly for performance reason.")
   @Test
   public void shouldRemoveFirstDoubleSlashInEveryComment_Do() throws Exception {
+    // @formatter:off
     String script = "--  //  comment\n"
         + "do part\n"
         + "--//@UNDO\n"
@@ -143,11 +158,13 @@ public class MigrationReaderTest {
     String result = readAsString(new MigrationReader(strToInputStream(script, charset), charset, false, null));
     assertEquals("--   comment\n"
         + "do part\n", result);
+    // @formatter:on
   }
 
   @Ignore("This won't work since 3.2.2 mainly for performance reason.")
   @Test
   public void shouldRemoveFirstDoubleSlashInEveryComment_Undo() throws Exception {
+    // @formatter:off
     String script = "--  //  comment\n"
         + "do part\n"
         + "--//@UNDO\n"
@@ -157,10 +174,12 @@ public class MigrationReaderTest {
     assertEquals("-- @UNDO\n"
         + "-- some comment\n"
         + "undo part\n", result);
+    // @formatter:on
   }
 
   @Test
   public void shouldSecondUndoMarkerHaveNoEffect() throws Exception {
+    // @formatter:off
     String script = "--  //  comment\n"
         + "do part\n"
         + "--//@UNDO\n"
@@ -172,10 +191,12 @@ public class MigrationReaderTest {
         + "first undo part\n"
         + "--//@UNDO\n"
         + "second undo part\n", result);
+    // @formatter:on
   }
 
   @Test
   public void shouldReplaceVariables_Do() throws Exception {
+    // @formatter:off
     String script = "do ${a} part${b} \n"
         + "-- ${a}\n"
         + "${c} \\${b}\n"
@@ -189,10 +210,12 @@ public class MigrationReaderTest {
     assertEquals("do AAA partBBB \n"
         + "-- AAA\n"
         + "CCC ${b}\n", result);
+    // @formatter:on
   }
 
   @Test
   public void shouldReplaceVariables_Undo() throws Exception {
+    // @formatter:off
     String script = "do part\n"
         + "--//@UNDO ${c}\n"
         + "undo ${a} part${b} \n"
@@ -207,6 +230,7 @@ public class MigrationReaderTest {
         + "undo AAA partBBB \n"
         + "-- AAA\n"
         + "CCC ${b}\n", result);
+    // @formatter:on
   }
 
   @Test
@@ -216,6 +240,7 @@ public class MigrationReaderTest {
     String originalSeparator = System.getProperty("line.separator");
     System.setProperty("line.separator", "\r\n");
     try {
+      // @formatter:off
       String script = "do part 1\n"
           + "do part 2\n"
           + "--//@UNDO ${c}\n"
@@ -224,6 +249,7 @@ public class MigrationReaderTest {
       String result = readAsString(new MigrationReader(strToInputStream(script, charset), charset, false, null));
       assertEquals("do part 1\r\n"
           + "do part 2\r\n", result);
+      // @formatter:on
     } finally {
       System.setProperty("line.separator", originalSeparator);
     }
@@ -236,6 +262,7 @@ public class MigrationReaderTest {
     String originalSeparator = System.getProperty("line.separator");
     try {
       System.setProperty("line.separator", "\r");
+      // @formatter:off
       String script = "do part 1\r\n"
           + "do part 2\r\n"
           + "--//@UNDO\r\n"
@@ -245,6 +272,7 @@ public class MigrationReaderTest {
       assertEquals("-- @UNDO\r"
           + "undo part 1\r"
           + "undo part 2\r", result);
+      // @formatter:on
     } finally {
       System.setProperty("line.separator", originalSeparator);
     }
