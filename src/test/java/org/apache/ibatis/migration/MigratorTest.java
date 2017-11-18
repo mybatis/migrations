@@ -97,7 +97,7 @@ public class MigratorTest {
     Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "bootstrap", "--env=development"));
     String output = out.getLog();
     assertFalse(output.toString().contains("FAILURE"));
-    assertTrue(output.toString().contains("--  Bootstrap.sql"));
+    assertTrue(output.toString().contains("-- // Bootstrap.sql"));
   }
 
   private void testStatusContainsNoPendingEntriesUsingStatusShorthand() throws Exception {
