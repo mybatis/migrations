@@ -153,7 +153,7 @@ public class MigratorTest {
 
   private void testVersionCommand() throws Exception {
     out.clearLog();
-    Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "version", "20080827200216"));
+    Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "version", "20090827200210"));
     String output = out.getLog();
     assertFalse(output.toString().contains("FAILURE"));
   }
@@ -207,6 +207,20 @@ public class MigratorTest {
     assertTrue(output.toString().contains("20080827200213"));
     assertTrue(output.toString().contains("20080827200214"));
     assertFalse(output.toString().contains("20080827200215"));
+    assertFalse(output.toString().contains("20090827200210"));
+    assertFalse(output.toString().contains("-- @UNDO"));
+
+    out.clearLog();
+    Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "script", "20080827200212", "20090827200210"));
+    output = out.getLog();
+    assertFalse(output.toString().contains("FAILURE"));
+    assertFalse(output.toString().contains("20080827200210"));
+    assertFalse(output.toString().contains("20080827200211"));
+    assertFalse(output.toString().contains("20080827200212"));
+    assertTrue(output.toString().contains("20080827200213"));
+    assertTrue(output.toString().contains("20080827200214"));
+    assertTrue(output.toString().contains("20080827200215"));
+    assertTrue(output.toString().contains("20090827200210"));
     assertFalse(output.toString().contains("-- @UNDO"));
 
     out.clearLog();
