@@ -23,6 +23,7 @@ public class Change implements Comparable<Change>, Cloneable {
   private String description;
   private String appliedTimestamp;
   private String filename;
+  private String path = "";
 
   public Change() {
   }
@@ -67,6 +68,18 @@ public class Change implements Comparable<Change>, Cloneable {
 
   public void setFilename(String filename) {
     this.filename = filename;
+  }
+
+  public String getPath() {
+    return path;
+  }
+
+  public void setPath(String path) {
+    this.path = path;
+  }
+
+  public String getFullName() {
+    return getPath() + getFilename();
   }
 
   @Override
