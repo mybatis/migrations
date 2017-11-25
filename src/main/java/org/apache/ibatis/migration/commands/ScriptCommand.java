@@ -78,7 +78,7 @@ public final class ScriptCommand extends BaseCommand {
       }
       for (Change change : migrations) {
         if (shouldRun(change, v1, v2, scriptPending || scriptPendingUndo)) {
-          printStream.println("-- " + change.getFilename());
+          printStream.println("-- " + change.getFullName());
           Reader migrationReader = getMigrationLoader().getScriptReader(change, undo);
           char[] cbuf = new char[1024];
           int l;
