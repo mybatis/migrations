@@ -32,7 +32,7 @@ public class SelectedOptions {
     return quiet;
   }
 
-  public boolean isColor() {
+  public boolean hasColor() {
     return color;
   }
 

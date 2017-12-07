@@ -45,7 +45,7 @@ public class CommandLine {
     } catch (Exception e) {
       String errorMessage = e.getMessage();
 
-      if (selectedOptions.isColor()) {
+      if (selectedOptions.hasColor()) {
         console.printf(ConsoleColors.RED + "\nERROR: %s%n", errorMessage + ConsoleColors.RESET);
       } else {
         console.printf("\nERROR: %s%n", errorMessage);
@@ -81,7 +81,7 @@ public class CommandLine {
     } finally {
       console.printf("------------------------------------------------------------------------%n");
 
-      if (selectedOptions.isColor()) {
+      if (selectedOptions.hasColor()) {
         console.printf("-- MyBatis Migrations %s%s%s%n", (exceptionCaught) ? ConsoleColors.RED : ConsoleColors.GREEN,
             (exceptionCaught) ? "FAILURE" : "SUCCESS", ConsoleColors.RESET);
       } else {
