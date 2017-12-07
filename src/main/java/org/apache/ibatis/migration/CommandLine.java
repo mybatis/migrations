@@ -24,29 +24,11 @@ import java.util.Date;
 
 import org.apache.ibatis.migration.commands.Command;
 import org.apache.ibatis.migration.options.SelectedOptions;
+import org.apache.ibatis.migration.ConsoleColors;
 
 public class CommandLine {
   private final PrintStream console = System.out;
   private final String[] args;
-
-  public static final String ANSI_RESET = "\u001B[0m";
-  public static final String ANSI_BLACK = "\u001B[30m";
-  public static final String ANSI_RED = "\u001B[31m";
-  public static final String ANSI_GREEN = "\u001B[32m";
-  public static final String ANSI_YELLOW = "\u001B[33m";
-  public static final String ANSI_BLUE = "\u001B[34m";
-  public static final String ANSI_PURPLE = "\u001B[35m";
-  public static final String ANSI_CYAN = "\u001B[36m";
-  public static final String ANSI_WHITE = "\u001B[37m";
-
-  public static final String ANSI_BLACK_BACKGROUND = "\u001B[40m";
-  public static final String ANSI_RED_BACKGROUND = "\u001B[41m";
-  public static final String ANSI_GREEN_BACKGROUND = "\u001B[42m";
-  public static final String ANSI_YELLOW_BACKGROUND = "\u001B[43m";
-  public static final String ANSI_BLUE_BACKGROUND = "\u001B[44m";
-  public static final String ANSI_PURPLE_BACKGROUND = "\u001B[45m";
-  public static final String ANSI_CYAN_BACKGROUND = "\u001B[46m";
-  public static final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
 
   public CommandLine(String[] args) {
     this.args = args;
@@ -64,7 +46,7 @@ public class CommandLine {
       String errorMessage = e.getMessage();
 
       if (selectedOptions.isColor()) {
-        console.printf(ANSI_RED + "\nERROR: %s%n", errorMessage + ANSI_RESET);
+        console.printf(ConsoleColors.RED + "\nERROR: %s%n", errorMessage + ConsoleColors.RESET);
       } else {
         console.printf("\nERROR: %s%n", errorMessage);
       }
@@ -100,8 +82,8 @@ public class CommandLine {
       console.printf("------------------------------------------------------------------------%n");
 
       if (selectedOptions.isColor()) {
-        console.printf("-- MyBatis Migrations %s%s%s%n", (exceptionCaught) ? ANSI_RED : ANSI_GREEN,
-            (exceptionCaught) ? "FAILURE" : "SUCCESS", ANSI_RESET);
+        console.printf("-- MyBatis Migrations %s%s%s%n", (exceptionCaught) ? ConsoleColors.RED : ConsoleColors.GREEN,
+            (exceptionCaught) ? "FAILURE" : "SUCCESS", ConsoleColors.RESET);
       } else {
         console.printf("-- MyBatis Migrations %s%n", (exceptionCaught) ? "FAILURE" : "SUCCESS");
       }
