@@ -36,6 +36,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
+import java.util.ServiceLoader;
 import java.util.TimeZone;
 
 import org.apache.ibatis.datasource.unpooled.UnpooledDataSource;
@@ -45,6 +46,7 @@ import org.apache.ibatis.migration.ConnectionProvider;
 import org.apache.ibatis.migration.DataSourceConnectionProvider;
 import org.apache.ibatis.migration.Environment;
 import org.apache.ibatis.migration.FileMigrationLoader;
+import org.apache.ibatis.migration.FileMigrationLoaderFactory;
 import org.apache.ibatis.migration.MigrationException;
 import org.apache.ibatis.migration.MigrationLoader;
 import org.apache.ibatis.migration.hook.FileHookScriptFactory;
@@ -301,8 +303,17 @@ public abstract class BaseCommand implements Command {
   }
 
   protected MigrationLoader getMigrationLoader() {
-    return new FileMigrationLoader(paths.getScriptPath(), environment().getScriptCharset(),
-        environment().getVariables());
+    File scriptPath = paths.getScriptPath();
+    String scriptCharset = environment().getScriptCharset();
+    Properties variables = environment().getVariables();
+    MigrationLoader migrationLoader = null;
+    for (FileMigrationLoaderFactory factory : ServiceLoader.load(FileMigrationLoaderFactory.class)) {
+      if (migrationLoader != null) {
+        throw new MigrationException("Found multiple implementations of FileMigrationLoaderFactory via SPI.");
+      }
+      migrationLoader = factory.create(scriptPath, scriptCharset, variables);
+    }
+    return migrationLoader != null ? migrationLoader : new FileMigrationLoader(scriptPath, scriptCharset, variables);
   }
 
   protected MigrationHook createUpHook() {
