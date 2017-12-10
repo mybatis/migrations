@@ -98,8 +98,8 @@ public abstract class BaseCommand implements Command {
   }
 
   public void setPrintStream(PrintStream aPrintStream) {
-    if(options.isQuiet()) {
-        aPrintStream.println("You selected to suppress output but a PrintStream is being set");
+    if (options.isQuiet()) {
+      aPrintStream.println("You selected to suppress output but a PrintStream is being set");
     }
     printStream = aPrintStream;
   }

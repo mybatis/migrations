@@ -19,7 +19,16 @@ import org.apache.ibatis.migration.MigrationException;
 import org.apache.ibatis.migration.options.SelectedOptions;
 
 public enum Commands {
-  INFO, INIT, BOOTSTRAP, NEW, UP, DOWN, PENDING, SCRIPT, VERSION, STATUS;
+  INFO,
+  INIT,
+  BOOTSTRAP,
+  NEW,
+  UP,
+  DOWN,
+  PENDING,
+  SCRIPT,
+  VERSION,
+  STATUS;
 
   public static Command resolveCommand(String commandString, SelectedOptions selectedOptions) {
     for (Commands command : values()) {

@@ -16,5 +16,16 @@
 package org.apache.ibatis.migration.options;
 
 public enum Options {
-  PATH, ENVPATH, SCRIPTPATH, DRIVERPATH, HOOKPATH, ENV, FORCE, TRACE, HELP, TEMPLATE, IDPATTERN, QUIET
+  PATH,
+  ENVPATH,
+  SCRIPTPATH,
+  DRIVERPATH,
+  HOOKPATH,
+  ENV,
+  FORCE,
+  TRACE,
+  HELP,
+  TEMPLATE,
+  IDPATTERN,
+  QUIET
 }

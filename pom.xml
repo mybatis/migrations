@@ -177,6 +177,17 @@
           </execution>
         </executions>
       </plugin>
+      <plugin>
+        <groupId>net.revelc.code.formatter</groupId>
+        <artifactId>formatter-maven-plugin</artifactId>
+        <dependencies>
+          <dependency>
+            <groupId>com.github.hazendaz</groupId>
+            <artifactId>build-tools</artifactId>
+            <version>1.1.6</version>
+          </dependency>
+        </dependencies>
+      </plugin>
     </plugins>
   </build>
 
