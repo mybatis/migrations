@@ -80,7 +80,7 @@ public final class DownOperation extends DatabaseOperation {
                     new HookContext(connectionProvider, runner, change.clone()));
                 hook.beforeEach(hookBindings);
               }
-              println(printStream, Util.horizontalLine("Undoing: " + change.getFilename(), 80));
+              println(printStream, Util.horizontalLine("Undoing: " + change.getFullName(), 80));
               runner.runScript(migrationsLoader.getScriptReader(change, true));
               if (changelogExists(connectionProvider, option)) {
                 deleteChange(connectionProvider, change, option);

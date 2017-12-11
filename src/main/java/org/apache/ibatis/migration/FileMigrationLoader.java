@@ -20,7 +20,8 @@ import java.io.IOException;
 import java.io.Reader;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Properties;
 
@@ -44,14 +45,14 @@ public class FileMigrationLoader implements MigrationLoader {
   public List<Change> getMigrations() {
     List<Change> migrations = new ArrayList<Change>();
     if (scriptsDir.isDirectory()) {
-      String[] filenames = scriptsDir.list();
-      if (filenames == null) {
+      List<String> relativePaths = listRelativePaths(scriptsDir, "", new ArrayList<String>());
+      if (relativePaths == null) {
         throw new MigrationException(scriptsDir + " does not exist.");
       }
-      Arrays.sort(filenames);
-      for (String filename : filenames) {
-        if (filename.endsWith(".sql") && !isSpecialFile(filename)) {
-          Change change = parseChangeFromFilename(filename);
+      Collections.sort(relativePaths, getRelativePathByFilenameComparator());
+      for (String relativePath : relativePaths) {
+        if (relativePath.endsWith(".sql") && !isSpecialFile(relativePath)) {
+          Change change = parseChangeFromFilename(relativePath);
           migrations.add(change);
         }
       }
@@ -59,13 +60,47 @@ public class FileMigrationLoader implements MigrationLoader {
     return migrations;
   }
 
+  private Comparator<String> getRelativePathByFilenameComparator() {
+    return new Comparator<String>() {
+      @Override
+      public int compare(String relativePath1, String relativePath2) {
+        return extractFilename(relativePath1).compareTo(extractFilename(relativePath2));
+      }
+    };
+  }
+
+  private int getLastIndexOfSlash(String relativePath) {
+    return relativePath.lastIndexOf("/") + 1;
+  }
+
+  private String extractFilename(String relativePath) {
+    return relativePath.substring(getLastIndexOfSlash(relativePath));
+  }
+
+  private String extractPath(String relativePath) {
+    return relativePath.substring(0, getLastIndexOfSlash(relativePath));
+  }
+
+  private List<String> listRelativePaths(File scriptsDir, String path, List<String> relativePathsAccumulator) {
+    File[] files = scriptsDir.listFiles();
+    for (File file : files) {
+      if (file.isFile()) {
+        relativePathsAccumulator.add(path + file.getName());
+      } else {
+        listRelativePaths(file, path + file.getName() + "/", relativePathsAccumulator);
+      }
+    }
+    return relativePathsAccumulator;
+  }
+
   private boolean isSpecialFile(String filename) {
     return "bootstrap.sql".equals(filename) || "onabort.sql".equals(filename);
   }
 
-  private Change parseChangeFromFilename(String filename) {
+  private Change parseChangeFromFilename(String filePath) {
     try {
       Change change = new Change();
+      String filename = extractFilename(filePath);
       int lastIndexOfDot = filename.lastIndexOf(".");
       String[] parts = filename.substring(0, lastIndexOfDot).split("_");
       change.setId(new BigDecimal(parts[0]));
@@ -78,6 +113,7 @@ public class FileMigrationLoader implements MigrationLoader {
       }
       change.setDescription(builder.toString());
       change.setFilename(filename);
+      change.setPath(extractPath(filePath));
       return change;
     } catch (Exception e) {
       throw new MigrationException("Error parsing change from file.  Cause: " + e, e);
@@ -87,9 +123,9 @@ public class FileMigrationLoader implements MigrationLoader {
   @Override
   public Reader getScriptReader(Change change, boolean undo) {
     try {
-      return new MigrationReader(Util.file(scriptsDir, change.getFilename()), charset, undo, variables);
+      return new MigrationReader(Util.file(scriptsDir, change.getFullName()), charset, undo, variables);
     } catch (IOException e) {
-      throw new MigrationException("Error reading " + change.getFilename(), e);
+      throw new MigrationException("Error reading " + change.getFullName(), e);
     }
   }
 

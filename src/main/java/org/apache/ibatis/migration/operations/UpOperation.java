@@ -86,7 +86,7 @@ public final class UpOperation extends DatabaseOperation {
               hookBindings.put(MigrationHook.HOOK_CONTEXT, new HookContext(connectionProvider, runner, change.clone()));
               hook.beforeEach(hookBindings);
             }
-            println(printStream, Util.horizontalLine("Applying: " + change.getFilename(), 80));
+            println(printStream, Util.horizontalLine("Applying: " + change.getFullName(), 80));
             scriptReader = migrationsLoader.getScriptReader(change, false);
             runner.runScript(scriptReader);
             insertChangelog(change, connectionProvider, option);
