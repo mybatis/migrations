@@ -27,11 +27,11 @@ import java.util.Properties;
 import org.apache.ibatis.migration.utils.Util;
 
 public class FileMigrationLoader implements MigrationLoader {
-  private final File scriptsDir;
+  protected final File scriptsDir;
 
-  private final String charset;
+  protected final String charset;
 
-  private final Properties variables;
+  protected final Properties variables;
 
   public FileMigrationLoader(File scriptsDir, String charset, Properties variables) {
     super();
@@ -59,11 +59,11 @@ public class FileMigrationLoader implements MigrationLoader {
     return migrations;
   }
 
-  private boolean isSpecialFile(String filename) {
+  protected boolean isSpecialFile(String filename) {
     return "bootstrap.sql".equals(filename) || "onabort.sql".equals(filename);
   }
 
-  private Change parseChangeFromFilename(String filename) {
+  protected Change parseChangeFromFilename(String filename) {
     try {
       Change change = new Change();
       int lastIndexOfDot = filename.lastIndexOf(".");
@@ -105,7 +105,7 @@ public class FileMigrationLoader implements MigrationLoader {
     return getSoleScriptReader(fileName);
   }
 
-  private Reader getSoleScriptReader(String fileName) {
+  protected Reader getSoleScriptReader(String fileName) {
     try {
       File scriptFile = Util.file(scriptsDir, fileName);
       if (scriptFile.exists()) {
