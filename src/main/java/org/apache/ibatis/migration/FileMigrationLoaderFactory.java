@@ -15,9 +15,8 @@
  */
 package org.apache.ibatis.migration;
 
-import java.io.File;
-import java.util.Properties;
+import org.apache.ibatis.migration.options.SelectedPaths;
 
 public interface FileMigrationLoaderFactory {
-  MigrationLoader create(File scriptsDir, String charset, Properties variables);
+  MigrationLoader create(SelectedPaths paths, Environment environment);
 }

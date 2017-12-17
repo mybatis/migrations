@@ -303,17 +303,16 @@ public abstract class BaseCommand implements Command {
   }
 
   protected MigrationLoader getMigrationLoader() {
-    File scriptPath = paths.getScriptPath();
-    String scriptCharset = environment().getScriptCharset();
-    Properties variables = environment().getVariables();
+    Environment env = environment();
     MigrationLoader migrationLoader = null;
     for (FileMigrationLoaderFactory factory : ServiceLoader.load(FileMigrationLoaderFactory.class)) {
       if (migrationLoader != null) {
         throw new MigrationException("Found multiple implementations of FileMigrationLoaderFactory via SPI.");
       }
-      migrationLoader = factory.create(scriptPath, scriptCharset, variables);
+      migrationLoader = factory.create(paths, env);
     }
-    return migrationLoader != null ? migrationLoader : new FileMigrationLoader(scriptPath, scriptCharset, variables);
+    return migrationLoader != null ? migrationLoader
+        : new FileMigrationLoader(paths.getScriptPath(), env.getScriptCharset(), env.getVariables());
   }
 
   protected MigrationHook createUpHook() {
