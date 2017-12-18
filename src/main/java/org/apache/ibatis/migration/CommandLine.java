@@ -26,7 +26,7 @@ import org.apache.ibatis.migration.commands.Command;
 import org.apache.ibatis.migration.options.SelectedOptions;
 import org.apache.ibatis.migration.ConsoleColors;
 
-public class CommandLine implements ConsoleColors {
+public class CommandLine {
   private final PrintStream console = System.out;
   private final String[] args;
 
@@ -46,7 +46,7 @@ public class CommandLine implements ConsoleColors {
       String errorMessage = e.getMessage();
 
       if (selectedOptions.hasColor()) {
-        console.printf(RED + "\nERROR: %s%n", errorMessage + RESET);
+        console.printf(ConsoleColors.RED + "\nERROR: %s%n", errorMessage + ConsoleColors.RESET);
       } else {
         console.printf("\nERROR: %s%n", errorMessage);
       }
@@ -82,8 +82,8 @@ public class CommandLine implements ConsoleColors {
       console.printf("------------------------------------------------------------------------%n");
 
       if (selectedOptions.hasColor()) {
-        console.printf("-- MyBatis Migrations %s%s%s%n", (exceptionCaught) ? RED : GREEN,
-            (exceptionCaught) ? "FAILURE" : "SUCCESS", RESET);
+        console.printf("-- MyBatis Migrations %s%s%s%n", (exceptionCaught) ? ConsoleColors.RED : ConsoleColors.GREEN,
+            (exceptionCaught) ? "FAILURE" : "SUCCESS", ConsoleColors.RESET);
       } else {
         console.printf("-- MyBatis Migrations %s%n", (exceptionCaught) ? "FAILURE" : "SUCCESS");
       }
