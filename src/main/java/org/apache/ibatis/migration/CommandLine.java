@@ -24,6 +24,7 @@ import java.util.Date;
 
 import org.apache.ibatis.migration.commands.Command;
 import org.apache.ibatis.migration.options.SelectedOptions;
+import org.apache.ibatis.migration.ConsoleColors;
 
 public class CommandLine {
   private final PrintStream console = System.out;
@@ -42,7 +43,14 @@ public class CommandLine {
         runCommand(selectedOptions);
       }
     } catch (Exception e) {
-      console.printf("\nERROR: %s", e.getMessage());
+      String errorMessage = e.getMessage();
+
+      if (selectedOptions.hasColor()) {
+        console.printf(ConsoleColors.RED + "\nERROR: %s%n", errorMessage + ConsoleColors.RESET);
+      } else {
+        console.printf("\nERROR: %s%n", errorMessage);
+      }
+
       if (selectedOptions.isTrace()) {
         e.printStackTrace();
       }
@@ -72,7 +80,14 @@ public class CommandLine {
       }
     } finally {
       console.printf("------------------------------------------------------------------------%n");
-      console.printf("-- MyBatis Migrations %s%n", (exceptionCaught) ? "FAILURE" : "SUCCESS");
+
+      if (selectedOptions.hasColor()) {
+        console.printf("-- MyBatis Migrations %s%s%s%n", (exceptionCaught) ? ConsoleColors.RED : ConsoleColors.GREEN,
+            (exceptionCaught) ? "FAILURE" : "SUCCESS", ConsoleColors.RESET);
+      } else {
+        console.printf("-- MyBatis Migrations %s%n", (exceptionCaught) ? "FAILURE" : "SUCCESS");
+      }
+
       console.printf("-- Total time: %ss%n", ((System.currentTimeMillis() - start) / 1000));
       console.printf("-- Finished at: %s%n", new Date());
       printMemoryUsage();
@@ -118,6 +133,7 @@ public class CommandLine {
     console.printf("--help               Displays this usage message.%n");
     console.printf("--trace              Shows additional error details (if any).%n");
     console.printf("--quiet              Suppresses output.%n");
+    console.printf("--color              Colorize output.%n");
     console.printf("%n");
     console.printf("Commands:%n");
     console.printf("  info               Display build version informations.%n");

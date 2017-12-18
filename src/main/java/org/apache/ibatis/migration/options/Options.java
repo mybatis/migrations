@@ -27,5 +27,6 @@ public enum Options {
   HELP,
   TEMPLATE,
   IDPATTERN,
-  QUIET
+  QUIET,
+  COLOR
 }
