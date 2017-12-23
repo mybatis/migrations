@@ -52,7 +52,9 @@ public class Environment {
     hook_before_down,
     hook_before_each_down,
     hook_after_each_down,
-    hook_after_down
+    hook_after_down,
+    hook_before_new,
+    hook_after_new
   }
 
   private static final List<String> SETTING_KEYS;
@@ -88,6 +90,8 @@ public class Environment {
   private final String hookBeforeEachDown;
   private final String hookAfterEachDown;
   private final String hookAfterDown;
+  private final String hookBeforeNew;
+  private final String hookAfterNew;
 
   private final Properties variables = new Properties();
 
@@ -113,7 +117,9 @@ public class Environment {
       this.username = prop.getProperty(SETTING_KEY.username.name());
       this.password = prop.getProperty(SETTING_KEY.password.name());
 
-      this.hookBeforeUp = prop.getProperty(SETTING_KEY.hook_before_up.name());
+      this.hookBeforeNew = prop.getProperty(SETTING_KEY.hook_before_new.name());
+      this.hookAfterNew = prop.getProperty(SETTING_KEY.hook_after_new.name());
+
       this.hookBeforeEachUp = prop.getProperty(SETTING_KEY.hook_before_each_up.name());
       this.hookAfterEachUp = prop.getProperty(SETTING_KEY.hook_after_each_up.name());
       this.hookAfterUp = prop.getProperty(SETTING_KEY.hook_after_up.name());
@@ -122,6 +128,7 @@ public class Environment {
       this.hookAfterEachDown = prop.getProperty(SETTING_KEY.hook_after_each_down.name());
       this.hookAfterDown = prop.getProperty(SETTING_KEY.hook_after_down.name());
 
+      this.hookBeforeUp = prop.getProperty(SETTING_KEY.hook_before_up.name());
       // User defined variables.
       Set<Entry<Object, Object>> entries = prop.entrySet();
       for (Entry<Object, Object> entry : entries) {
@@ -195,6 +202,14 @@ public class Environment {
 
   public String getPassword() {
     return password;
+  }
+
+  public String getBeforeNewHook() {
+    return hookBeforeNew;
+  }
+
+  public String getAfterNewHook() {
+    return hookAfterNew;
   }
 
   public String getHookBeforeUp() {

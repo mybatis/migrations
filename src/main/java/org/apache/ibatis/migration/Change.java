@@ -37,6 +37,13 @@ public class Change implements Comparable<Change>, Cloneable {
     this.description = description;
   }
 
+  public Change(BigDecimal id, String appliedTimestamp, String description, String filename) {
+    this.id = id;
+    this.appliedTimestamp = appliedTimestamp;
+    this.description = description;
+    this.filename = filename;
+  }
+
   public BigDecimal getId() {
     return id;
   }

@@ -32,6 +32,10 @@ public class FileMigrationHook implements MigrationHook {
     this.afterScript = afterScript;
   }
 
+  public FileMigrationHook(HookScript beforeScript, HookScript afterScript) {
+    this(beforeScript, null, null, afterScript);
+  }
+
   @Override
   public void before(Map<String, Object> bindingMap) {
     if (beforeScript != null) {

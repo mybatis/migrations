@@ -35,6 +35,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.ServiceLoader;
 import java.util.TimeZone;
@@ -315,6 +316,39 @@ public abstract class BaseCommand implements Command {
         : new FileMigrationLoader(paths.getScriptPath(), env.getScriptCharset(), env.getVariables());
   }
 
+  protected MigrationHook createNewHook() {
+    String before = environment().getBeforeNewHook();
+    String after = environment().getAfterNewHook();
+    if (before == null && after == null) {
+      return createNullHook();
+    }
+    return createFileMigrationHook(before, after);
+  }
+
+  protected MigrationHook createNullHook() {
+    return new MigrationHook() {
+      @Override
+      public void before(Map<String, Object> bindingMap) {
+
+      }
+
+      @Override
+      public void beforeEach(Map<String, Object> bindingMap) {
+
+      }
+
+      @Override
+      public void afterEach(Map<String, Object> bindingMap) {
+
+      }
+
+      @Override
+      public void after(Map<String, Object> bindingMap) {
+
+      }
+    };
+  }
+
   protected MigrationHook createUpHook() {
     String before = environment().getHookBeforeUp();
     String beforeEach = environment().getHookBeforeEachUp();
@@ -341,6 +375,11 @@ public abstract class BaseCommand implements Command {
     HookScriptFactory factory = new FileHookScriptFactory(options.getPaths(), environment(), printStream);
     return new FileMigrationHook(factory.create(before), factory.create(beforeEach), factory.create(afterEach),
         factory.create(after));
+  }
+
+  protected MigrationHook createFileMigrationHook(String before, String after) {
+    HookScriptFactory factory = new FileHookScriptFactory(options.getPaths(), environment(), printStream);
+    return new FileMigrationHook(factory.create(before), factory.create(after));
   }
 
   protected DatabaseOperationOption getDatabaseOperationOption() {

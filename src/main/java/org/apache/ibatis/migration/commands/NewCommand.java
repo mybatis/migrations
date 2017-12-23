@@ -15,10 +15,23 @@
  */
 package org.apache.ibatis.migration.commands;
 
-import java.io.FileNotFoundException;
-import java.util.Properties;
+import static org.apache.ibatis.migration.hook.MigrationHook.HOOK_CONTEXT;
+import static org.apache.ibatis.migration.operations.DatabaseOperation.getScriptRunner;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
+import org.apache.ibatis.jdbc.ScriptRunner;
+import org.apache.ibatis.migration.Change;
+import org.apache.ibatis.migration.ConnectionProvider;
 import org.apache.ibatis.migration.MigrationException;
+import org.apache.ibatis.migration.hook.HookContext;
+import org.apache.ibatis.migration.hook.MigrationHook;
+import org.apache.ibatis.migration.options.DatabaseOperationOption;
 import org.apache.ibatis.migration.options.SelectedOptions;
 import org.apache.ibatis.migration.utils.Util;
 
@@ -39,17 +52,33 @@ public final class NewCommand extends BaseCommand {
     Properties variables = new Properties();
     variables.setProperty("description", description);
     existingEnvironmentFile();
-    String filename = getNextIDAsString() + "_" + description.replace(' ', '_') + ".sql";
+    String nextId = getNextIDAsString();
+    String filename = nextId + "_" + description.replace(' ', '_') + ".sql";
+
+    File templateCopy = Util.file(paths.getScriptPath(), filename);
+    ConnectionProvider connectionProvider = getConnectionProvider();
+    DatabaseOperationOption option = getDatabaseOperationOption();
+    ScriptRunner runner = getScriptRunner(connectionProvider, option, printStream);
+
+    MigrationHook hook = createNewHook();
+    Map<String, Object> hookBindings = new HashMap<String, Object>();
+    Change change = new Change(new BigDecimal(nextId), new Date().toString(), description,
+        templateCopy.getAbsolutePath());
+
+    hookBindings.put(HOOK_CONTEXT, new HookContext(connectionProvider, runner, change));
 
     if (options.getTemplate() != null) {
-      copyExternalResourceTo(options.getTemplate(), Util.file(paths.getScriptPath(), filename), variables);
+      hook.before(hookBindings);
+      copyExternalResourceTo(options.getTemplate(), templateCopy, variables);
     } else {
       try {
         String customConfiguredTemplate = getPropertyOption(CUSTOM_NEW_COMMAND_TEMPLATE_PROPERTY);
         if (customConfiguredTemplate != null) {
-          copyExternalResourceTo(migrationsHome() + "/" + customConfiguredTemplate,
-              Util.file(paths.getScriptPath(), filename), variables);
+          hook.before(hookBindings);
+          copyExternalResourceTo(migrationsHome() + "/" + customConfiguredTemplate, templateCopy, variables);
         } else {
+          change.setFilename(filename);
+          hook.before(hookBindings);
           copyDefaultTemplate(variables, filename);
         }
       } catch (FileNotFoundException e) {
@@ -58,8 +87,12 @@ public final class NewCommand extends BaseCommand {
         copyDefaultTemplate(variables, filename);
       }
     }
+
+    hook.after(hookBindings);
+
     printStream.println("Done!");
     printStream.println();
+
   }
 
   private void copyDefaultTemplate(Properties variables, String filename) {

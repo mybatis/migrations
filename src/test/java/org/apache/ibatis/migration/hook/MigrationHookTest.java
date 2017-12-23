@@ -23,6 +23,7 @@ import java.sql.SQLException;
 import java.util.Map;
 import java.util.Properties;
 
+import java.util.UUID;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.jdbc.SqlRunner;
 import org.apache.ibatis.migration.Migrator;
@@ -73,9 +74,21 @@ public class MigrationHookTest {
     assertWorklogRowCount(++worklogCounter);
     versionUp();
     assertWorklogRowCount(++worklogCounter);
+    newHook();
+    assertWorklogRowCount(++worklogCounter);
 
     out.clearLog();
     System.exit(0);
+  }
+
+  private void newHook() throws Exception {
+    out.clearLog();
+    String description = UUID.randomUUID().toString();
+    Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "new", description));
+    assertTrue(out.getLog().contains("SUCCESS"));
+    assertTrue(out.getLog().contains("before new " + description));
+    assertTrue(out.getLog().contains("after new " + description));
+    // before
   }
 
   private void bootstrap() throws Exception {

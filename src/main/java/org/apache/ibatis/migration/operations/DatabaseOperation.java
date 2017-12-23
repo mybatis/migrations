@@ -91,7 +91,7 @@ public abstract class DatabaseOperation {
     }
   }
 
-  protected ScriptRunner getScriptRunner(ConnectionProvider connectionProvider, DatabaseOperationOption option,
+  public static ScriptRunner getScriptRunner(ConnectionProvider connectionProvider, DatabaseOperationOption option,
       PrintStream printStream) {
     try {
       PrintWriter outWriter = printStream == null ? null : new PrintWriter(printStream);
