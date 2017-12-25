@@ -349,6 +349,17 @@ public class MigratorTest {
         .contains("Your migrations configuration did not find your custom template.  Using the default template."));
   }
 
+  @Test
+  public void shouldSuppressOutputIfQuietOptionEnabled() throws Throwable {
+    System.setProperty("migrationsHome", "/tmp");
+    File basePath = getTempDir();
+    out.clearLog();
+    Migrator.main(TestUtil.args("--path=" + basePath.getAbsolutePath(), "--quiet", "init"));
+    String output = out.getLog();
+    assertFalse(output.toString().contains("Initializing:"));
+    assertNotNull(basePath.list());
+  }
+
   private File getTempDir() throws IOException {
     File f = File.createTempFile("migration", "test");
     assertTrue(f.delete());
