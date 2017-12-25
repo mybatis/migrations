@@ -360,6 +360,32 @@ public class MigratorTest {
     assertNotNull(basePath.list());
   }
 
+  @Test
+  public void shouldColorizeSuccessOutputIfColorOptionEnabled() throws Throwable {
+    System.setProperty("migrationsHome", "/tmp");
+    File basePath = getTempDir();
+    out.clearLog();
+    Migrator.main(TestUtil.args("--path=" + basePath.getAbsolutePath(), "--color", "init"));
+    String output = out.getLog();
+    assertTrue(output.toString().contains(ConsoleColors.GREEN + "SUCCESS"));
+    assertNotNull(basePath.list());
+  }
+
+  @Test
+  public void shouldColorizeFailureOutputIfColorOptionEnabled() throws Throwable {
+    exit.expectSystemExitWithStatus(1);
+    exit.checkAssertionAfterwards(new Assertion() {
+      public void checkAssertion() {
+        String output = out.getLog();
+        assertTrue(output.toString().contains(ConsoleColors.RED + "FAILURE"));
+      }
+    });
+    System.setProperty("migrationsHome", "/tmp");
+    File basePath = getTempDir();
+    out.clearLog();
+    Migrator.main(TestUtil.args("--path=" + basePath.getAbsolutePath(), "--color", "new"));
+  }
+
   private File getTempDir() throws IOException {
     File f = File.createTempFile("migration", "test");
     assertTrue(f.delete());

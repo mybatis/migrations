@@ -39,6 +39,7 @@
 --trace              Shows additional error details (if any).
 --template           (Optional) Specify template to be used with ‘new'command
 --quiet              Suppresses output.
+--color              Colorize output.
 Commands:
   init               Creates (if necessary) and initializes a migration path.
   bootstrap          Runs the bootstrap SQL script (see scripts/bootstrap.sql for more).
