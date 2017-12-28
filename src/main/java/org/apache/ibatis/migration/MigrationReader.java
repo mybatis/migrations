@@ -17,7 +17,6 @@ package org.apache.ibatis.migration;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FilterReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,7 +29,7 @@ import org.apache.ibatis.parsing.PropertyParser;
 
 public class MigrationReader extends FilterReader {
 
-  private final String LINE_SEPARATOR = System.getProperty("line.separator", "\n");
+  private final String lineSeparator = System.getProperty("line.separator", "\n");
 
   private static final String UNDO_TAG = "@UNDO";
 
@@ -97,7 +96,7 @@ public class MigrationReader extends FilterReader {
       int result = in.read(cbuf, off, len);
       if (result == -1) {
         if (lineBuffer.length() > 0 && !undo && !inUndo) {
-          buffer.append(lineBuffer).append(LINE_SEPARATOR);
+          buffer.append(lineBuffer).append(lineSeparator);
           lineBuffer.setLength(0);
         }
         if (buffer.length() > 0) {
@@ -118,7 +117,7 @@ public class MigrationReader extends FilterReader {
               if (undo) {
                 replaceVariables();
                 buffer.append(lineBuffer.delete(afterCommentPrefixIndex, afterDoubleSlashIndex)
-                    .insert(afterCommentPrefixIndex, ' ')).append(LINE_SEPARATOR);
+                    .insert(afterCommentPrefixIndex, ' ')).append(lineSeparator);
                 lineBuffer.setLength(0);
                 inUndo = true;
               } else {
@@ -135,7 +134,7 @@ public class MigrationReader extends FilterReader {
             case NOT_UNDO_LINE:
               if (!undo || (undo && inUndo)) {
                 replaceVariables();
-                buffer.append(lineBuffer).append(LINE_SEPARATOR);
+                buffer.append(lineBuffer).append(lineSeparator);
               }
               lineBuffer.setLength(0);
               break;
@@ -225,10 +224,8 @@ public class MigrationReader extends FilterReader {
         }
         break;
       case UNDO_TAG:
-        if (c == UNDO_TAG.charAt(undoIndex)) {
-          if (++undoIndex >= UNDO_TAG.length()) {
-            part = Part.AFTER_UNDO_TAG;
-          }
+        if (c == UNDO_TAG.charAt(undoIndex) && ++undoIndex >= UNDO_TAG.length()) {
+          part = Part.AFTER_UNDO_TAG;
         }
         break;
       default:
@@ -265,7 +262,7 @@ public class MigrationReader extends FilterReader {
   }
 
   protected static Reader scriptFileReader(InputStream inputStream, String charset)
-      throws FileNotFoundException, UnsupportedEncodingException {
+      throws UnsupportedEncodingException {
     if (charset == null || charset.length() == 0) {
       return new InputStreamReader(inputStream);
     } else {
