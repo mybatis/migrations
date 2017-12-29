@@ -78,7 +78,8 @@ public class Change implements Comparable<Change>, Cloneable {
 
   @Override
   public String toString() {
-    return id + " " + (appliedTimestamp == null ? "   ...pending...   " : appliedTimestamp) + " " + description;
+    String ts = appliedTimestamp == null ? "   ...pending...   " : appliedTimestamp;
+    return String.format("%s %s %s %s", id, ts, description, filename);
   }
 
   @Override

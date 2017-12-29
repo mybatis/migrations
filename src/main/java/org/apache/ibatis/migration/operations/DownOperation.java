@@ -81,7 +81,8 @@ public final class DownOperation extends DatabaseOperation {
                 hook.beforeEach(hookBindings);
               }
               println(printStream, Util.horizontalLine("Undoing: " + change.getFilename(), 80));
-              runner.runScript(migrationsLoader.getScriptReader(change, true));
+              runner.runScript(migrationsLoader.getScriptReader(change, true), connectionProvider.getConnection());
+
               if (changelogExists(connectionProvider, option)) {
                 deleteChange(connectionProvider, change, option);
               } else {
@@ -107,7 +108,11 @@ public final class DownOperation extends DatabaseOperation {
             hook.after(hookBindings);
           }
         } finally {
-          runner.closeConnection();
+          try {
+            connectionProvider.getConnection().close();
+          } catch (Exception e) {
+            // ignore as original code did
+          }
         }
       }
       return this;

@@ -18,7 +18,9 @@ package org.apache.ibatis.migration.operations;
 import java.io.PrintStream;
 import java.io.Reader;
 
+import java.sql.Connection;
 import org.apache.ibatis.jdbc.ScriptRunner;
+import org.apache.ibatis.jdbc.ScriptRunnerFactory;
 import org.apache.ibatis.migration.ConnectionProvider;
 import org.apache.ibatis.migration.MigrationException;
 import org.apache.ibatis.migration.MigrationLoader;
@@ -50,11 +52,12 @@ public final class BootstrapOperation extends DatabaseOperation {
         Reader bootstrapReader = migrationsLoader.getBootstrapReader();
         if (bootstrapReader != null) {
           println(printStream, Util.horizontalLine("Applying: bootstrap.sql", 80));
+          Connection connection = connectionProvider.getConnection();
           ScriptRunner runner = getScriptRunner(connectionProvider, option, printStream);
           try {
-            runner.runScript(bootstrapReader);
+            runner.runScript(bootstrapReader, connection, option.toProperties());
           } finally {
-            runner.closeConnection();
+            connection.close();
           }
           println(printStream);
         } else {

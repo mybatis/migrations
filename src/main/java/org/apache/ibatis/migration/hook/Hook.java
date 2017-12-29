@@ -17,12 +17,11 @@ package org.apache.ibatis.migration.hook;
 
 import java.util.Map;
 
-public interface MigrationHook extends Hook {
+/**
+ * @author cbongiorno on 12/28/17.
+ */
+public interface Hook {
+  void before(Map<String, Object> bindingMap);
 
-  public static final String HOOK_CONTEXT = "hookContext";
-
-  void beforeEach(Map<String, Object> bindingMap);
-
-  void afterEach(Map<String, Object> bindingMap);
-
+  void after(Map<String, Object> bindingMap);
 }

@@ -15,25 +15,23 @@
  */
 package org.apache.ibatis.migration.commands;
 
-import static org.apache.ibatis.migration.hook.MigrationHook.HOOK_CONTEXT;
-import static org.apache.ibatis.migration.operations.DatabaseOperation.getScriptRunner;
-
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
 import java.math.BigDecimal;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
-import org.apache.ibatis.jdbc.ScriptRunner;
+import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.migration.Change;
-import org.apache.ibatis.migration.ConnectionProvider;
 import org.apache.ibatis.migration.MigrationException;
-import org.apache.ibatis.migration.hook.HookContext;
+import org.apache.ibatis.migration.hook.Hook;
 import org.apache.ibatis.migration.hook.MigrationHook;
-import org.apache.ibatis.migration.options.DatabaseOperationOption;
 import org.apache.ibatis.migration.options.SelectedOptions;
-import org.apache.ibatis.migration.utils.Util;
 
 public final class NewCommand extends BaseCommand {
 
@@ -49,54 +47,88 @@ public final class NewCommand extends BaseCommand {
       throw new MigrationException("No description specified for new migration.");
     }
     String description = params[0];
-    Properties variables = new Properties();
-    variables.setProperty("description", description);
-    existingEnvironmentFile();
+
+    Properties variables = getVariables(description);
+
+    Hook hook = createNewMigrationHook();
+
     String nextId = getNextIDAsString();
     String filename = nextId + "_" + description.replace(' ', '_') + ".sql";
 
-    File templateCopy = Util.file(paths.getScriptPath(), filename);
-    ConnectionProvider connectionProvider = getConnectionProvider();
-    DatabaseOperationOption option = getDatabaseOperationOption();
-    ScriptRunner runner = getScriptRunner(connectionProvider, option, printStream);
+    Map<String, Object> hookBindings = createBinding(nextId, description, new File(filename));
+    {
 
-    MigrationHook hook = createNewHook();
-    Map<String, Object> hookBindings = new HashMap<String, Object>();
-    Change change = new Change(new BigDecimal(nextId), new Date().toString(), description,
-        templateCopy.getAbsolutePath());
-
-    hookBindings.put(HOOK_CONTEXT, new HookContext(connectionProvider, runner, change));
-
-    if (options.getTemplate() != null) {
+      Reader templateReader = getTemplateReader();
+      Change change = (Change) hookBindings.get("change");
       hook.before(hookBindings);
-      copyExternalResourceTo(options.getTemplate(), templateCopy, variables);
-    } else {
+      File changeFile = new File(change.getFilename());
       try {
-        String customConfiguredTemplate = getPropertyOption(CUSTOM_NEW_COMMAND_TEMPLATE_PROPERTY);
-        if (customConfiguredTemplate != null) {
-          hook.before(hookBindings);
-          copyExternalResourceTo(migrationsHome() + "/" + customConfiguredTemplate, templateCopy, variables);
-        } else {
-          change.setFilename(filename);
-          hook.before(hookBindings);
-          copyDefaultTemplate(variables, filename);
-        }
-      } catch (FileNotFoundException e) {
-        printStream
-            .append("Your migrations configuration did not find your custom template.  Using the default template.");
-        copyDefaultTemplate(variables, filename);
+        copyTemplate(templateReader, changeFile, variables);
+      } catch (IOException e) {
+        throw new MigrationException("Unable to create template file " + changeFile.getAbsolutePath());
       }
+
+      hook.after(hookBindings);
     }
-
-    hook.after(hookBindings);
-
     printStream.println("Done!");
     printStream.println();
 
   }
 
-  private void copyDefaultTemplate(Properties variables, String filename) {
-    copyResourceTo("org/apache/ibatis/migration/template_migration.sql", Util.file(paths.getScriptPath(), filename),
-        variables);
+  private Properties getVariables(String description) {
+    Properties variables = environmentProperties();
+    variables.setProperty("description", description);
+    for (Entry<Object, Object> sys : System.getProperties().entrySet()) {
+      variables.put("sys." + sys.getKey(), "" + sys.getValue());
+    }
+    for (Entry<String, String> sys : System.getenv().entrySet()) {
+      variables.put("env." + sys.getKey(), sys.getValue());
+    }
+    return variables;
   }
+
+  private Reader getTemplateReader() {
+    String def = "org/apache/ibatis/migration/template_migration.sql";
+    Reader templateReader = null;
+    try {
+      templateReader = Resources.getResourceAsReader(def);
+    } catch (IOException e) {
+      throw new MigrationException(String.format("Default template %s can't be found?! ", def), e);
+    }
+    try {
+      String template = getTemplateFile();
+      templateReader = new FileReader(template);
+    } catch (FileNotFoundException e) {
+      String msg = String.format(
+          "Your migrations configuration did not find your custom template: %s.  " + "Using the default template.",
+          e.getMessage());
+      printStream.append(msg);
+    }
+    return templateReader;
+  }
+
+  private String getTemplateFile() throws FileNotFoundException {
+    String template = null;
+    if (options.getTemplate() != null) {
+      template = options.getTemplate();
+    } else {
+      String customConfiguredTemplate = getPropertyOption(CUSTOM_NEW_COMMAND_TEMPLATE_PROPERTY);
+      if (customConfiguredTemplate != null) {
+        template = migrationsHome() + "/" + customConfiguredTemplate;
+      }
+    }
+    return template;
+  }
+
+  private Map<String, Object> createBinding(String nextId, String description, File proposedFile) {
+    Map<String, Object> hookBindings = new HashMap<String, Object>();
+    BigDecimal id = new BigDecimal(nextId);
+    Change change = new Change(id, null, description, proposedFile.getAbsolutePath());
+    Properties props = environmentProperties();
+
+    hookBindings.put("change", change);
+    hookBindings.put("environment", props);
+    return hookBindings;
+  }
+
 }
