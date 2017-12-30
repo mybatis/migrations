@@ -13,4 +13,5 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-print("after new " + hookContext.change.description)
+print("change supplied " + (change !== null))
+print("environment supplied" + (environment !== null)

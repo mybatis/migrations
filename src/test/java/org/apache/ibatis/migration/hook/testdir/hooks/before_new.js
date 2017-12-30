@@ -13,4 +13,6 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-print("before new " + hookContext.change.description)
+print("change supplied " + (change !== null))
+print("environment supplied" + (environment !== null)
+change.filename = "foo.sql"

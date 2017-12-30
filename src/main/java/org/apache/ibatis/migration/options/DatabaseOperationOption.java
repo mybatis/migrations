@@ -112,16 +112,4 @@ public class DatabaseOperationOption {
     this.delimiter = delimiter;
   }
 
-  public Properties toProperties() {
-    Properties properties = new Properties();
-    properties.put("stopOnError", this.isStopOnError());
-    properties.put("throwWarning", this.isThrowWarning());
-    properties.put("escapeProcessing", false);
-    properties.put("autoCommit", this.isAutoCommit());
-    properties.put("delimiter", this.getDelimiter());
-    properties.put("fullLineDelimiter", this.isFullLineDelimiter());
-    properties.put("sendFullScript", this.isSendFullScript());
-    properties.put("removeCRs", this.isRemoveCRs());
-    return properties;
-  }
 }
