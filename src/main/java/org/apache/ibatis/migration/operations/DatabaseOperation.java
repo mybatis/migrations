@@ -17,29 +17,18 @@ package org.apache.ibatis.migration.operations;
 
 import java.io.PrintStream;
 import java.io.PrintWriter;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.math.BigDecimal;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import java.util.Properties;
-import java.util.ServiceLoader;
 import org.apache.ibatis.jdbc.ScriptRunner;
-import org.apache.ibatis.jdbc.ScriptRunnerFactory;
 import org.apache.ibatis.jdbc.SqlRunner;
 import org.apache.ibatis.migration.Change;
 import org.apache.ibatis.migration.ConnectionProvider;
-import org.apache.ibatis.migration.FileMigrationLoader;
-import org.apache.ibatis.migration.FileMigrationLoaderFactory;
 import org.apache.ibatis.migration.MigrationException;
 import org.apache.ibatis.migration.options.DatabaseOperationOption;
-import sun.font.ScriptRun;
 
 public abstract class DatabaseOperation {
 
@@ -101,18 +90,22 @@ public abstract class DatabaseOperation {
     }
   }
 
-  public static ScriptRunner getScriptRunner(ConnectionProvider connectionProvider, DatabaseOperationOption option,
+  protected ScriptRunner getScriptRunner(ConnectionProvider connectionProvider, DatabaseOperationOption option,
       PrintStream printStream) {
     try {
-
-      Map<Object, Object> properties = new HashMap<Object, Object>();
-      if (printStream != null) {
-        PrintWriter outWriter = new PrintWriter(printStream);
-        properties.put("logWriter", outWriter);
-        properties.put("errorLogWriter", outWriter);
-      }
-      properties.putAll(option.toProperties());
-      return ScriptRunnerFactory.getInstance(connectionProvider.getConnection(), properties);
+      PrintWriter outWriter = printStream == null ? null : new PrintWriter(printStream);
+      ScriptRunner scriptRunner = new ScriptRunner(connectionProvider.getConnection());
+      scriptRunner.setLogWriter(outWriter);
+      scriptRunner.setErrorLogWriter(outWriter);
+      scriptRunner.setStopOnError(option.isStopOnError());
+      scriptRunner.setThrowWarning(option.isThrowWarning());
+      scriptRunner.setEscapeProcessing(false);
+      scriptRunner.setAutoCommit(option.isAutoCommit());
+      scriptRunner.setDelimiter(option.getDelimiter());
+      scriptRunner.setFullLineDelimiter(option.isFullLineDelimiter());
+      scriptRunner.setSendFullScript(option.isSendFullScript());
+      scriptRunner.setRemoveCRs(option.isRemoveCRs());
+      return scriptRunner;
     } catch (Exception e) {
       throw new MigrationException("Error creating ScriptRunner.  Cause: " + e, e);
     }

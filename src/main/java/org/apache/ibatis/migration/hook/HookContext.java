@@ -23,7 +23,6 @@ import java.sql.SQLException;
 import org.apache.ibatis.jdbc.ScriptRunner;
 import org.apache.ibatis.migration.Change;
 import org.apache.ibatis.migration.ConnectionProvider;
-import org.apache.ibatis.migration.MigrationException;
 
 public class HookContext {
   private ConnectionProvider connectionProvider;
@@ -51,11 +50,7 @@ public class HookContext {
    *          Source of the SQL to execute.
    */
   public void executeSql(Reader reader) {
-    try {
-      scriptRunner.runScript(reader, connectionProvider.getConnection());
-    } catch (SQLException e) {
-      throw new MigrationException(e);
-    }
+    scriptRunner.runScript(reader);
   }
 
   /**

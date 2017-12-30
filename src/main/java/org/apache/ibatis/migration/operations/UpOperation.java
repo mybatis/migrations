@@ -17,7 +17,6 @@ package org.apache.ibatis.migration.operations;
 
 import java.io.PrintStream;
 import java.io.Reader;
-import java.sql.SQLException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -89,7 +88,7 @@ public final class UpOperation extends DatabaseOperation {
             }
             println(printStream, Util.horizontalLine("Applying: " + change.getFilename(), 80));
             scriptReader = migrationsLoader.getScriptReader(change, false);
-            runner.runScript(scriptReader, connectionProvider.getConnection());
+            runner.runScript(scriptReader);
             insertChangelog(change, connectionProvider, option);
             println(printStream);
             if (hook != null) {
@@ -112,7 +111,7 @@ public final class UpOperation extends DatabaseOperation {
         if (onAbortScriptReader != null) {
           println(printStream);
           println(printStream, Util.horizontalLine("Executing onabort.sql script.", 80));
-          runner.runScript(onAbortScriptReader, connectionProvider.getConnection());
+          runner.runScript(onAbortScriptReader);
           println(printStream);
         }
         throw e;
@@ -123,11 +122,7 @@ public final class UpOperation extends DatabaseOperation {
         if (onAbortScriptReader != null) {
           onAbortScriptReader.close();
         }
-        try {
-          connectionProvider.getConnection().close();
-        } catch (Exception e) {
-          // ignore as original code did
-        }
+        runner.closeConnection();
       }
     } catch (Throwable e) {
       while (e instanceof MigrationException) {
