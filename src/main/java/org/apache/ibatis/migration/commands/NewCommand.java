@@ -79,10 +79,12 @@ public final class NewCommand extends BaseCommand {
     Properties variables = environmentProperties();
     variables.setProperty("description", description);
     for (Entry<Object, Object> sys : System.getProperties().entrySet()) {
-      variables.put("sys." + sys.getKey(), "" + sys.getValue());
+      if(sys.getValue() != null)
+        variables.put("sys." + sys.getKey(), sys.getValue());
     }
-    for (Entry<String, String> sys : System.getenv().entrySet()) {
-      variables.put("env." + sys.getKey(), sys.getValue());
+    for (Entry<String, String> env : System.getenv().entrySet()) {
+      if(env.getValue() != null)
+        variables.put("env." + env.getKey(), env.getValue());
     }
     return variables;
   }
@@ -100,7 +102,7 @@ public final class NewCommand extends BaseCommand {
       templateReader = new FileReader(template);
     } catch (FileNotFoundException e) {
       String msg = String.format(
-          "Your migrations configuration did not find your custom template: %s.  " + "Using the default template.",
+          "Your migrations configuration did not find your custom template: %s.  Using the default template.",
           e.getMessage());
       printStream.append(msg);
     }
