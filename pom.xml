@@ -22,7 +22,7 @@
   <parent>
     <groupId>org.mybatis</groupId>
     <artifactId>mybatis-parent</artifactId>
-    <version>29</version>
+    <version>30</version>
     <relativePath />
   </parent>
 
@@ -73,15 +73,15 @@
       <version>3.4.6-SNAPSHOT</version>
     </dependency>
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.12</version>
+      <groupId>org.junit.vintage</groupId>
+      <artifactId>junit-vintage-engine</artifactId>
+      <version>4.12.2</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>com.github.stefanbirkner</groupId>
       <artifactId>system-rules</artifactId>
-      <version>1.16.1</version>
+      <version>1.17.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -176,17 +176,6 @@
             </configuration>
           </execution>
         </executions>
-      </plugin>
-      <plugin>
-        <groupId>net.revelc.code.formatter</groupId>
-        <artifactId>formatter-maven-plugin</artifactId>
-        <dependencies>
-          <dependency>
-            <groupId>com.github.hazendaz</groupId>
-            <artifactId>build-tools</artifactId>
-            <version>1.1.6</version>
-          </dependency>
-        </dependencies>
       </plugin>
     </plugins>
   </build>
