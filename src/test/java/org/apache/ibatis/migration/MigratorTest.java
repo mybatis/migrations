@@ -345,8 +345,8 @@ public class MigratorTest {
     Migrator.main(TestUtil.args("--path=" + basePath.getAbsolutePath(), "new", "test new migration"));
     String output = out.getLog();
     assertEquals(4, scriptPath.list().length);
-    assertTrue(output.toString()
-        .contains("Your migrations configuration did not find your custom template.  Using the default template."));
+    assertTrue(output.contains("Your migrations configuration did not find your custom template"));
+    assertTrue(output.contains("Using the default template"));
   }
 
   @Test

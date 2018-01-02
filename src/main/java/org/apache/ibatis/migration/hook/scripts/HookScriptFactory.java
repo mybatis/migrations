@@ -13,16 +13,10 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package org.apache.ibatis.migration.hook;
+package org.apache.ibatis.migration.hook.scripts;
 
-import java.util.Map;
+public interface HookScriptFactory {
 
-public interface MigrationHook extends Hook {
-
-  public static final String HOOK_CONTEXT = "hookContext";
-
-  void beforeEach(Map<String, Object> bindingMap);
-
-  void afterEach(Map<String, Object> bindingMap);
+  HookScript create(String hookSetting);
 
 }

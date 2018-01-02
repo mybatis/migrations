@@ -18,6 +18,7 @@ package org.apache.ibatis.migration.commands;
 import static org.apache.ibatis.migration.utils.Util.file;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -35,6 +36,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.ServiceLoader;
 import java.util.TimeZone;
@@ -49,10 +51,13 @@ import org.apache.ibatis.migration.FileMigrationLoader;
 import org.apache.ibatis.migration.FileMigrationLoaderFactory;
 import org.apache.ibatis.migration.MigrationException;
 import org.apache.ibatis.migration.MigrationLoader;
-import org.apache.ibatis.migration.hook.FileHookScriptFactory;
+import org.apache.ibatis.migration.hook.BasicHook;
+import org.apache.ibatis.migration.hook.Hook;
+import org.apache.ibatis.migration.hook.scripts.FileHookScriptFactory;
 import org.apache.ibatis.migration.hook.FileMigrationHook;
-import org.apache.ibatis.migration.hook.HookScriptFactory;
+import org.apache.ibatis.migration.hook.scripts.HookScriptFactory;
 import org.apache.ibatis.migration.hook.MigrationHook;
+import org.apache.ibatis.migration.hook.NoOpHook;
 import org.apache.ibatis.migration.io.ExternalResources;
 import org.apache.ibatis.migration.options.DatabaseOperationOption;
 import org.apache.ibatis.migration.options.Options;
@@ -106,6 +111,23 @@ public abstract class BaseCommand implements Command {
     printStream = aPrintStream;
   }
 
+  /**
+   * Use this to define template variables
+   * @return combined properties of system/environment with 'sys.' and 'env.' appended respectively
+   */
+  protected Properties getVariables() {
+    Properties variables = environmentProperties();
+    for (Entry<Object, Object> sys : System.getProperties().entrySet()) {
+      if (sys.getValue() != null)
+        variables.put("sys." + sys.getKey(), sys.getValue());
+    }
+    for (Entry<String, String> env : System.getenv().entrySet()) {
+      if (env.getValue() != null)
+        variables.put("env." + env.getKey(), env.getValue());
+    }
+    return variables;
+  }
+
   protected boolean paramsEmpty(String... params) {
     return params == null || params.length < 1 || params[0] == null || params[0].length() < 1;
   }
@@ -152,7 +174,7 @@ public abstract class BaseCommand implements Command {
     }
   }
 
-  private String generateTimestampId() {
+  protected String generateTimestampId() {
     final SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
     final Date now = new Date();
     dateFormat.setTimeZone(TimeZone.getTimeZone(environment().getTimeZone()));
@@ -238,6 +260,17 @@ public abstract class BaseCommand implements Command {
     return envFile;
   }
 
+  protected Properties environmentProperties() {
+    File envFile = existingEnvironmentFile();
+    Properties props = new Properties();
+    try {
+      props.load(new FileInputStream(envFile));
+    } catch (IOException e) {
+      throw new MigrationException("Failed to load environment file " + envFile.getAbsolutePath(), e);
+    }
+    return props;
+  }
+
   protected Environment environment() {
     if (environment != null) {
       return environment;
@@ -315,6 +348,15 @@ public abstract class BaseCommand implements Command {
         : new FileMigrationLoader(paths.getScriptPath(), env.getScriptCharset(), env.getVariables());
   }
 
+  protected Hook createNewMigrationHook() {
+    String before = environment().getBeforeNewHook();
+    String after = environment().getAfterNewHook();
+    if (before == null && after == null) {
+      return NoOpHook.getInstance();
+    }
+    return createBasicHook(before, after);
+  }
+
   protected MigrationHook createUpHook() {
     String before = environment().getHookBeforeUp();
     String beforeEach = environment().getHookBeforeEachUp();
@@ -343,6 +385,11 @@ public abstract class BaseCommand implements Command {
         factory.create(after));
   }
 
+  protected BasicHook createBasicHook(String before, String after) {
+    HookScriptFactory factory = new FileHookScriptFactory(options.getPaths(), environment(), printStream);
+    return new BasicHook(factory.create(before), factory.create(after));
+  }
+
   protected DatabaseOperationOption getDatabaseOperationOption() {
     DatabaseOperationOption option = new DatabaseOperationOption();
     option.setChangelogTable(changelogTable());
@@ -356,4 +403,5 @@ public abstract class BaseCommand implements Command {
     option.setDelimiter(environment().getDelimiter());
     return option;
   }
+
 }

@@ -37,6 +37,13 @@ public class Change implements Comparable<Change>, Cloneable {
     this.description = description;
   }
 
+  public Change(BigDecimal id, String appliedTimestamp, String description, String filename) {
+    this.id = id;
+    this.appliedTimestamp = appliedTimestamp;
+    this.description = description;
+    this.filename = filename;
+  }
+
   public BigDecimal getId() {
     return id;
   }
@@ -71,7 +78,8 @@ public class Change implements Comparable<Change>, Cloneable {
 
   @Override
   public String toString() {
-    return id + " " + (appliedTimestamp == null ? "   ...pending...   " : appliedTimestamp) + " " + description;
+    String ts = appliedTimestamp == null ? "   ...pending...   " : appliedTimestamp;
+    return String.format("%s %s %s %s", id, ts, description, filename);
   }
 
   @Override

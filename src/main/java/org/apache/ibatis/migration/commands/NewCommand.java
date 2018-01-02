@@ -15,12 +15,20 @@
  */
 package org.apache.ibatis.migration.commands;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
+import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
-
+import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.migration.Change;
 import org.apache.ibatis.migration.MigrationException;
+import org.apache.ibatis.migration.hook.Hook;
 import org.apache.ibatis.migration.options.SelectedOptions;
-import org.apache.ibatis.migration.utils.Util;
 
 public final class NewCommand extends BaseCommand {
 
@@ -36,34 +44,81 @@ public final class NewCommand extends BaseCommand {
       throw new MigrationException("No description specified for new migration.");
     }
     String description = params[0];
-    Properties variables = new Properties();
-    variables.setProperty("description", description);
-    existingEnvironmentFile();
-    String filename = getNextIDAsString() + "_" + description.replace(' ', '_') + ".sql";
 
-    if (options.getTemplate() != null) {
-      copyExternalResourceTo(options.getTemplate(), Util.file(paths.getScriptPath(), filename), variables);
-    } else {
+    Properties variables = getVariables();
+    variables.setProperty("description", description);
+
+    Hook hook = createNewMigrationHook();
+
+    String nextId = getNextIDAsString();
+    String filename = nextId + "_" + description.replace(' ', '_') + ".sql";
+    Map<String, Object> hookBindings = createBinding(nextId, description, filename);
+    {
+
+      Reader templateReader = getTemplateReader();
+      Change change = (Change) hookBindings.get("change");
+      hook.before(hookBindings);
+      File changeFile = new File(change.getFilename());
       try {
-        String customConfiguredTemplate = getPropertyOption(CUSTOM_NEW_COMMAND_TEMPLATE_PROPERTY);
-        if (customConfiguredTemplate != null) {
-          copyExternalResourceTo(migrationsHome() + "/" + customConfiguredTemplate,
-              Util.file(paths.getScriptPath(), filename), variables);
-        } else {
-          copyDefaultTemplate(variables, filename);
-        }
-      } catch (FileNotFoundException e) {
-        printStream
-            .append("Your migrations configuration did not find your custom template.  Using the default template.");
-        copyDefaultTemplate(variables, filename);
+        copyTemplate(templateReader, changeFile, variables);
+      } catch (IOException e) {
+        throw new MigrationException("Unable to create template file " + changeFile.getAbsolutePath());
       }
+
+      hook.after(hookBindings);
     }
     printStream.println("Done!");
     printStream.println();
+
   }
 
-  private void copyDefaultTemplate(Properties variables, String filename) {
-    copyResourceTo("org/apache/ibatis/migration/template_migration.sql", Util.file(paths.getScriptPath(), filename),
-        variables);
+  private Reader getTemplateReader() {
+    String def = "org/apache/ibatis/migration/template_migration.sql";
+    Reader templateReader = null;
+    try {
+      templateReader = Resources.getResourceAsReader(def);
+    } catch (IOException e) {
+      throw new MigrationException(String.format("Default template %s can't be found?! ", def), e);
+    }
+    try {
+      String template = getTemplateFile();
+      if (template != null)
+        templateReader = new FileReader(template);
+
+    } catch (FileNotFoundException e) {
+      String msg = String.format(
+          "Your migrations configuration did not find your custom template: %s.  Using the default template.",
+          e.getMessage());
+      printStream.append(msg);
+    }
+    return templateReader;
   }
+
+  private String getTemplateFile() throws FileNotFoundException {
+    String template = null;
+    if (options.getTemplate() != null) {
+      template = options.getTemplate();
+    } else {
+      String customConfiguredTemplate = getPropertyOption(CUSTOM_NEW_COMMAND_TEMPLATE_PROPERTY);
+      if (customConfiguredTemplate != null) {
+        template = migrationsHome() + "/" + customConfiguredTemplate;
+      }
+    }
+    return template;
+  }
+
+  private Map<String, Object> createBinding(String nextId, String description, String proposedFile) {
+    Map<String, Object> hookBindings = new HashMap<String, Object>();
+    BigDecimal id = new BigDecimal(nextId);
+
+    File f = new File(String.format("%s%s%s", paths.getScriptPath(), File.separator, proposedFile));
+    Change change = new Change(id, null, description, f.getAbsolutePath());
+    Properties props = environmentProperties();
+
+    hookBindings.put("change", change);
+    hookBindings.put("paths", paths);
+    hookBindings.put("environment", props);
+    return hookBindings;
+  }
+
 }

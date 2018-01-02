@@ -13,16 +13,26 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package org.apache.ibatis.migration.hook;
+package org.apache.ibatis.migration.hook.scripts;
 
 import java.util.Map;
 
-public interface MigrationHook extends Hook {
+/**
+ * @author cbongiorno on 12/29/17.
+ */
+public class NoOpHookScript implements HookScript {
 
-  public static final String HOOK_CONTEXT = "hookContext";
+  private static NoOpHookScript instance = new NoOpHookScript();
 
-  void beforeEach(Map<String, Object> bindingMap);
+  public static NoOpHookScript getInstance() {
+    return instance;
+  }
 
-  void afterEach(Map<String, Object> bindingMap);
+  private NoOpHookScript() {
+  }
 
+  @Override
+  public void execute(Map<String, Object> bindingMap) {
+
+  }
 }
