@@ -36,6 +36,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.ServiceLoader;
 import java.util.TimeZone;
@@ -108,6 +109,23 @@ public abstract class BaseCommand implements Command {
       aPrintStream.println("You selected to suppress output but a PrintStream is being set");
     }
     printStream = aPrintStream;
+  }
+
+  /**
+   * Use this to define template variables
+   * @return combined properties of system/environment with 'sys.' and 'env.' appended respectively
+   */
+  protected Properties getVariables() {
+    Properties variables = environmentProperties();
+    for (Entry<Object, Object> sys : System.getProperties().entrySet()) {
+      if (sys.getValue() != null)
+        variables.put("sys." + sys.getKey(), sys.getValue());
+    }
+    for (Entry<String, String> env : System.getenv().entrySet()) {
+      if (env.getValue() != null)
+        variables.put("env." + env.getKey(), env.getValue());
+    }
+    return variables;
   }
 
   protected boolean paramsEmpty(String... params) {

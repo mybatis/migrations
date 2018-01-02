@@ -1,5 +1,5 @@
 /*
- *    Copyright 2010-2017 the original author or authors.
+ *    Copyright 2010-2018 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -13,6 +13,8 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-print("change supplied " + (change !== null))
-print("environment supplied" + (environment !== null)
-change.filename = "foo.sql"
+if (typeof println == 'undefined')
+  this.println = print;
+println("before new change supplied " + (change !== null))
+println("before new environment supplied " + (environment !== null))
+change.filename = paths.basePath + '/' + change.description+'.sql'

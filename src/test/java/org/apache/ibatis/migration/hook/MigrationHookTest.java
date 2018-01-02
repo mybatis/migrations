@@ -75,7 +75,6 @@ public class MigrationHookTest {
     versionUp();
     assertWorklogRowCount(++worklogCounter);
     newHook();
-    assertWorklogRowCount(++worklogCounter);
 
     out.clearLog();
     System.exit(0);
@@ -86,8 +85,14 @@ public class MigrationHookTest {
     String description = UUID.randomUUID().toString();
     Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "new", description));
     assertTrue(out.getLog().contains("SUCCESS"));
-    assertTrue(out.getLog().contains("before new " + description));
-    assertTrue(out.getLog().contains("after new " + description));
+    assertTrue(out.getLog().contains("before new change supplied true"));
+    assertTrue(out.getLog().contains("before new environment supplied true"));
+
+    String path = String.format("%s%s%s.sql", dir.getCanonicalPath(), File.separator, description);
+    assertTrue(new File(path).exists());
+
+    assertTrue(out.getLog().contains("after new change supplied true"));
+    assertTrue(out.getLog().contains("after new environment supplied true"));
     // before
   }
 

@@ -108,7 +108,7 @@ public class Jsr223HookScript implements HookScript {
         if (functionName != null) {
           printStream.println(Util.horizontalLine("Invoking function : " + functionName, 80));
           invocable.invokeFunction(functionName, args.toArray());
-        } else if (objectName != null && methodName != null) {
+        } else {
           printStream.println(Util.horizontalLine("Invoking method : " + methodName, 80));
           Object targetObject = engine.get(objectName);
           invocable.invokeMethod(targetObject, methodName, args.toArray());

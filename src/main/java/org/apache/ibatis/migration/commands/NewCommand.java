@@ -16,7 +16,6 @@
 package org.apache.ibatis.migration.commands;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -24,13 +23,11 @@ import java.io.Reader;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Properties;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.migration.Change;
 import org.apache.ibatis.migration.MigrationException;
 import org.apache.ibatis.migration.hook.Hook;
-import org.apache.ibatis.migration.hook.MigrationHook;
 import org.apache.ibatis.migration.options.SelectedOptions;
 
 public final class NewCommand extends BaseCommand {
@@ -48,14 +45,14 @@ public final class NewCommand extends BaseCommand {
     }
     String description = params[0];
 
-    Properties variables = getVariables(description);
+    Properties variables = getVariables();
+    variables.setProperty("description", description);
 
     Hook hook = createNewMigrationHook();
 
     String nextId = getNextIDAsString();
     String filename = nextId + "_" + description.replace(' ', '_') + ".sql";
-
-    Map<String, Object> hookBindings = createBinding(nextId, description, new File(filename));
+    Map<String, Object> hookBindings = createBinding(nextId, description, filename);
     {
 
       Reader templateReader = getTemplateReader();
@@ -75,20 +72,6 @@ public final class NewCommand extends BaseCommand {
 
   }
 
-  private Properties getVariables(String description) {
-    Properties variables = environmentProperties();
-    variables.setProperty("description", description);
-    for (Entry<Object, Object> sys : System.getProperties().entrySet()) {
-      if(sys.getValue() != null)
-        variables.put("sys." + sys.getKey(), sys.getValue());
-    }
-    for (Entry<String, String> env : System.getenv().entrySet()) {
-      if(env.getValue() != null)
-        variables.put("env." + env.getKey(), env.getValue());
-    }
-    return variables;
-  }
-
   private Reader getTemplateReader() {
     String def = "org/apache/ibatis/migration/template_migration.sql";
     Reader templateReader = null;
@@ -99,7 +82,9 @@ public final class NewCommand extends BaseCommand {
     }
     try {
       String template = getTemplateFile();
-      templateReader = new FileReader(template);
+      if (template != null)
+        templateReader = new FileReader(template);
+
     } catch (FileNotFoundException e) {
       String msg = String.format(
           "Your migrations configuration did not find your custom template: %s.  Using the default template.",
@@ -122,13 +107,16 @@ public final class NewCommand extends BaseCommand {
     return template;
   }
 
-  private Map<String, Object> createBinding(String nextId, String description, File proposedFile) {
+  private Map<String, Object> createBinding(String nextId, String description, String proposedFile) {
     Map<String, Object> hookBindings = new HashMap<String, Object>();
     BigDecimal id = new BigDecimal(nextId);
-    Change change = new Change(id, null, description, proposedFile.getAbsolutePath());
+
+    File f = new File(String.format("%s%s%s", paths.getScriptPath(), File.separator, proposedFile));
+    Change change = new Change(id, null, description, f.getAbsolutePath());
     Properties props = environmentProperties();
 
     hookBindings.put("change", change);
+    hookBindings.put("paths", paths);
     hookBindings.put("environment", props);
     return hookBindings;
   }
