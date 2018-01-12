@@ -21,6 +21,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -43,16 +44,15 @@ public final class NewCommand extends BaseCommand {
     if (paramsEmpty(params)) {
       throw new MigrationException("No description specified for new migration.");
     }
-    String description = params[0];
 
-    Properties variables = getVariables();
-    variables.setProperty("description", description);
 
     Hook hook = createNewMigrationHook();
 
-    String nextId = getNextIDAsString();
-    String filename = nextId + "_" + description.replace(' ', '_') + ".sql";
-    Map<String, Object> hookBindings = createBinding(nextId, description, filename);
+    Properties variables = getVariables();
+    variables.setProperty("description", params[0]);
+
+
+    Map<String, Object> hookBindings = createBinding(params);
     {
 
       Reader templateReader = getTemplateReader();
@@ -107,7 +107,12 @@ public final class NewCommand extends BaseCommand {
     return template;
   }
 
-  private Map<String, Object> createBinding(String nextId, String description, String proposedFile) {
+  private Map<String, Object> createBinding(String[] params) {
+    String nextId = getNextIDAsString();
+    String description = params[0];
+
+    String proposedFile = nextId + "_" + description.replace(' ', '_') + ".sql";
+
     Map<String, Object> hookBindings = new HashMap<String, Object>();
     BigDecimal id = new BigDecimal(nextId);
 
@@ -118,6 +123,7 @@ public final class NewCommand extends BaseCommand {
     hookBindings.put("change", change);
     hookBindings.put("paths", paths);
     hookBindings.put("environment", props);
+    hookBindings.put("args", Arrays.asList(params));
     return hookBindings;
   }
 
