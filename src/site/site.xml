@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-       Copyright 2010-2016 the original author or authors.
+       Copyright 2010-2018 the original author or authors.
 
        Licensed under the Apache License, Version 2.0 (the "License");
        you may not use this file except in compliance with the License.
@@ -35,6 +35,7 @@
         <item name="pending" href="pending.html"/>
         <item name="script" href="script.html"/>
         <item name="Command Shortcuts" href="shortcuts.html"/>
+        <item name="Custom MigrationLoader" href="custom-loader.html"/>
       </item>
       <item name="Migration Hooks" href="hooks.html"/>
       <item name="Runtime Schema Migration" href="runtime-migration.html"/>

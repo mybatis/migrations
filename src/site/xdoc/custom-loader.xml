@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+       Copyright 2010-2018 the original author or authors.
+
+       Licensed under the Apache License, Version 2.0 (the "License");
+       you may not use this file except in compliance with the License.
+       You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+       Unless required by applicable law or agreed to in writing, software
+       distributed under the License is distributed on an "AS IS" BASIS,
+       WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+       See the License for the specific language governing permissions and
+       limitations under the License.
+
+-->
+<document xmlns="http://maven.apache.org/XDOC/2.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+
+  <properties>
+    <title>MyBatis Migrations | Migrate > Custom MigrationLoader</title>
+    <author email="mybatis-dev@googlegroups.com">The MyBatis Team</author>
+  </properties>
+
+  <body>
+    <section name="Custom MigrationLoader">
+      <p>
+        Sometimes, you want or need to organize your migration scripts differently than the default way.<br />
+        Since version 3.3.2, you can let Migrations use a custom <code>MigrationLoader</code> to customize how migration scripts are loaded.
+      </p>
+
+      <subsection name="Overview">
+        <p>
+          To let Migrations use a custom <code>MigrationLoader</code>, you need to...
+        </p>
+        <ul>
+          <li>Create a class that implements <code>MigrationLoader</code>.</li>
+          <li>Create a class that implements <code>FileMigrationLoaderFactory</code>.</li>
+          <li>Create a text file that contains the fully qualified name of the <code>FileMigrationLoaderFactory</code> implementation class.</li>
+          <li>Create a JAR archive that contains the above files.</li>
+          <li>Put the JAR archive in <code>$MIGRATIONS_HOME/lib</code> directory.</li>
+        </ul>
+      </subsection>
+
+      <subsection name="MigrationLoader">
+        <p>
+          Here is the declaration of <code>MigrationLoader</code> interface.<br />
+          Instead of implementing the interface from scratch, you can create a subclass of the default <code>FileMigrationLoader</code> if it is easier.
+        </p>
+        <source><![CDATA[
+package org.apache.ibatis.migration;
+
+import java.io.Reader;
+import java.util.List;
+
+public interface MigrationLoader {
+  /**
+   * @return A list of migrations (bootstrap should NOT be included).
+   */
+  List<Change> getMigrations();
+
+  /**
+   * @param change identifies the migration to read.
+   * @param undo whether the caller requests UNDO SQL script or not.
+   * @return A {@link Reader} of the specified SQL script.
+   */
+  Reader getScriptReader(Change change, boolean undo);
+
+  /**
+   * @return A {@link Reader} of the bootstrap SQL script.
+   */
+  Reader getBootstrapReader();
+
+  /**
+   * @return A {@link Reader} of the onabort SQL script.
+   */
+  Reader getOnAbortReader();
+}]]></source>
+      </subsection>
+
+      <subsection name="FileMigrationLoaderFactory">
+        <p><code>FileMigrationLoaderFactory</code> interface has only one method. Your implementation should return the custom <code>MigrationLoader</code> that you wrote.</p>
+        <source><![CDATA[
+package org.apache.ibatis.migration;
+
+public interface FileMigrationLoaderFactory {
+  MigrationLoader create(SelectedPaths paths, Environment environment);
+}]]></source>
+      </subsection>
+
+      <subsection name="Mapping file for Java SPI">
+        <p>
+          This text file is used by Java Service Provider Interface (SPI), so it must contain the fully qualified name of your custom <code>FileMigrationLoaderFactory</code> class.<br />
+          In the JAR archive, its file path must be <code>/META-INF/services/org.apache.ibatis.migration.FileMigrationLoaderFactory</code>.
+        </p>
+      </subsection>
+
+    </section>
+  </body>
+
+</document>
