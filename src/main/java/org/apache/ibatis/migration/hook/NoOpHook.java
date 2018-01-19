@@ -17,8 +17,37 @@ package org.apache.ibatis.migration.hook;
 
 import java.util.Map;
 
-public interface HookScript {
+/**
+ * @author cbongiorno on 12/29/17.
+ */
+public final class NoOpHook implements MigrationHook {
 
-  void execute(Map<String, Object> bindingMap);
+  private static final NoOpHook instance = new NoOpHook();
 
+  public static NoOpHook getInstance() {
+    return instance;
+  }
+
+  private NoOpHook() {
+  }
+
+  @Override
+  public void before(Map<String, Object> bindingMap) {
+
+  }
+
+  @Override
+  public void beforeEach(Map<String, Object> bindingMap) {
+
+  }
+
+  @Override
+  public void afterEach(Map<String, Object> bindingMap) {
+
+  }
+
+  @Override
+  public void after(Map<String, Object> bindingMap) {
+
+  }
 }

@@ -1,5 +1,5 @@
-/**
- *    Copyright 2010-2017 the original author or authors.
+/*
+ *    Copyright 2010-2018 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -13,16 +13,8 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package org.apache.ibatis.migration.hook;
-
-import java.util.Map;
-
-public interface MigrationHook extends Hook {
-
-  public static final String HOOK_CONTEXT = "hookContext";
-
-  void beforeEach(Map<String, Object> bindingMap);
-
-  void afterEach(Map<String, Object> bindingMap);
-
-}
+if (typeof println == 'undefined')
+  this.println = print;
+println("before new change supplied " + (change !== null))
+println("before new environment supplied " + (environment !== null))
+change.filename = paths.basePath + '/' + change.description+'.sql'

@@ -13,7 +13,7 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package org.apache.ibatis.migration.hook;
+package org.apache.ibatis.migration.hook.scripts;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -25,6 +25,8 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.apache.ibatis.migration.MigrationException;
+import org.apache.ibatis.migration.hook.HookContext;
+import org.apache.ibatis.migration.hook.MigrationHook;
 import org.apache.ibatis.migration.utils.Util;
 import org.apache.ibatis.parsing.PropertyParser;
 

@@ -15,6 +15,8 @@
  */
 package org.apache.ibatis.migration.options;
 
+import java.util.Properties;
+
 public class DatabaseOperationOption {
   private static final String DEFAULT_CHANGELOG_TABLE = "CHANGELOG";
 
@@ -109,4 +111,5 @@ public class DatabaseOperationOption {
   public void setDelimiter(String delimiter) {
     this.delimiter = delimiter;
   }
+
 }

@@ -16,47 +16,39 @@
 package org.apache.ibatis.migration.hook;
 
 import java.util.Map;
+import org.apache.ibatis.migration.hook.scripts.HookScript;
 
-public class FileMigrationHook implements MigrationHook {
+public class FileMigrationHook extends BasicHook implements MigrationHook {
 
-  protected final HookScript beforeScript;
-  protected final HookScript beforeEachScript;
-  protected final HookScript afterEachScript;
-  protected final HookScript afterScript;
+  private final HookScript beforeEachScript;
+  private final HookScript afterEachScript;
 
   public FileMigrationHook(HookScript beforeScript, HookScript beforeEachScript, HookScript afterEachScript,
       HookScript afterScript) {
-    this.beforeScript = beforeScript;
-    this.beforeEachScript = beforeEachScript;
-    this.afterEachScript = afterEachScript;
-    this.afterScript = afterScript;
+    super(beforeScript, afterScript);
+    this.beforeEachScript = beforeEachScript == null ? NO_OP : beforeEachScript;
+    this.afterEachScript = afterEachScript == null ? NO_OP : afterEachScript;
   }
 
-  @Override
-  public void before(Map<String, Object> bindingMap) {
-    if (beforeScript != null) {
-      beforeScript.execute(bindingMap);
-    }
+  public FileMigrationHook(HookScript beforeScript, HookScript afterScript) {
+    this(beforeScript, NO_OP, NO_OP, afterScript);
   }
 
   @Override
   public void beforeEach(Map<String, Object> bindingMap) {
-    if (beforeEachScript != null) {
-      beforeEachScript.execute(bindingMap);
-    }
+    beforeEachScript.execute(bindingMap);
   }
 
   @Override
   public void afterEach(Map<String, Object> bindingMap) {
-    if (afterEachScript != null) {
-      afterEachScript.execute(bindingMap);
-    }
+    afterEachScript.execute(bindingMap);
   }
 
-  @Override
-  public void after(Map<String, Object> bindingMap) {
-    if (afterScript != null) {
-      afterScript.execute(bindingMap);
-    }
+  public HookScript getBeforeEachScript() {
+    return beforeEachScript;
+  }
+
+  public HookScript getAfterEachScript() {
+    return afterEachScript;
   }
 }
