@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-       Copyright 2010-2016 the original author or authors.
+       Copyright 2010-2018 the original author or authors.
 
        Licensed under the Apache License, Version 2.0 (the "License");
        you may not use this file except in compliance with the License.
@@ -127,6 +127,8 @@ Hello, World!]]></source>
           <li>hook_before_each_down</li>
           <li>hook_after_each_down</li>
           <li>hook_after_down</li>
+          <li>hook_before_new (since 3.3.5)</li>
+          <li>hook_after_new (since 3.3.5)</li>
         </ul>
 
         <h4>Minimum setting : language and file name</h4>
@@ -200,6 +202,17 @@ print(migrationPaths.getScriptPath());
 print(migrationPaths.getDriverPath());
 print(migrationPaths.getHookPath());]]></source>
 
+        <h4>About <i>hookContext</i></h4>
+
+        <p>
+          A global variable <code>hookContext</code> is passed to each hook script, but the object bound to this variable depends on the hook.
+        </p>
+
+        <ul>
+          <li>For hooks except before_new and after_new, it is an instance of <a href="/migrations/apidocs/org/apache/ibatis/migration/hook/HookContext.html" target="_blank">HookContext</a>.</li>
+          <li>For before_new and after_new hooks, it will be <a href="/migrations/apidocs/org/apache/ibatis/migration/hook/NewHookContext.html" target="_blank">NewHookContext</a>.</li>
+        </ul>
+
         <h4>Accessing <i>Change</i> object (in each hook only)</h4>
 
         <p>
@@ -212,6 +225,11 @@ print(hookContext.getChange().getFilename());]]></source>
         <p>
           <span class="label important">NOTE</span>
           The Change instance is a clone and will be discarded after each exection, so modifying it would be meaningless.
+        </p>
+
+        <p>
+          <span class="label important">NOTE</span>
+          Change is not available to before_new and after_new hooks.
         </p>
 
         <h4>Execute SQL statement</h4>
@@ -240,6 +258,10 @@ try {
   stmt = null;
 }]]></source>
 
+        <p>
+          <span class="label important">NOTE</span>
+          These methods are not available to before_new and after_new hooks.
+        </p>
 
         <h4>Invoking function</h4>
 
