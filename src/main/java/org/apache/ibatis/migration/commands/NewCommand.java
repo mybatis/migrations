@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2017 the original author or authors.
+ *    Copyright 2010-2018 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 package org.apache.ibatis.migration.commands;
 
-import java.io.FileNotFoundException;
+import java.io.File;
 import java.util.Properties;
 
 import org.apache.ibatis.migration.MigrationException;
@@ -44,15 +44,11 @@ public final class NewCommand extends BaseCommand {
     if (options.getTemplate() != null) {
       copyExternalResourceTo(options.getTemplate(), Util.file(paths.getScriptPath(), filename), variables);
     } else {
-      try {
-        String customConfiguredTemplate = getPropertyOption(CUSTOM_NEW_COMMAND_TEMPLATE_PROPERTY);
-        if (customConfiguredTemplate != null) {
-          copyExternalResourceTo(migrationsHome() + "/" + customConfiguredTemplate,
-              Util.file(paths.getScriptPath(), filename), variables);
-        } else {
-          copyDefaultTemplate(variables, filename);
-        }
-      } catch (FileNotFoundException e) {
+      String customConfiguredTemplate = Util.getPropertyOption(CUSTOM_NEW_COMMAND_TEMPLATE_PROPERTY);
+      if (customConfiguredTemplate != null && !customConfiguredTemplate.isEmpty()) {
+        copyExternalResourceTo(Util.migrationsHome() + File.separator + customConfiguredTemplate,
+            Util.file(paths.getScriptPath(), filename), variables);
+      } else {
         printStream
             .append("Your migrations configuration did not find your custom template.  Using the default template.");
         copyDefaultTemplate(variables, filename);

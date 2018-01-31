@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2017 the original author or authors.
+ *    Copyright 2010-2018 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -16,9 +16,57 @@
 package org.apache.ibatis.migration.utils;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.Properties;
 
 public enum Util {
   ;
+
+  private static final String MIGRATIONS_HOME = "MIGRATIONS_HOME";
+
+  /* TODO: remove in the next major release */
+  private static final String MIGRATIONS_HOME_PROPERTY_DEPRECATED = "migrationHome";
+
+  private static final String MIGRATIONS_HOME_PROPERTY = "migrationsHome";
+
+  private static final String MIGRATIONS_PROPERTIES = "migration.properties";
+
+  public static String migrationsHome() {
+    String migrationsHome = System.getenv(MIGRATIONS_HOME);
+    // Check if there is a system property
+    if (migrationsHome == null) {
+      migrationsHome = System.getProperty(MIGRATIONS_HOME_PROPERTY);
+      if (migrationsHome == null) {
+        migrationsHome = System.getProperty(MIGRATIONS_HOME_PROPERTY_DEPRECATED);
+      }
+    }
+    return migrationsHome;
+  }
+
+  public static boolean getPropertyOptionAsBoolean(String key) {
+    return Boolean.valueOf(getPropertyOption(key));
+  }
+
+  /**
+   * @param key
+   * @return The value <code>null</code> if the property file does not exist or the <code>key</code> does not exist.
+   * @throws FileNotFoundException
+   */
+  public static String getPropertyOption(String key) {
+    String migrationsHome = migrationsHome();
+    if (migrationsHome == null || migrationsHome.isEmpty()) {
+      return null;
+    }
+    try {
+      String path = migrationsHome + File.separator + MIGRATIONS_PROPERTIES;
+      Properties properties = new Properties();
+      properties.load(new FileInputStream(path));
+      return properties.getProperty(key);
+    } catch (Exception e) {
+      return null;
+    }
+  }
 
   public static boolean isOption(String arg) {
     return arg.startsWith("--") && !arg.trim().endsWith("=");

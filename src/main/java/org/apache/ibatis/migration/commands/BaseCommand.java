@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2017 the original author or authors.
+ *    Copyright 2010-2018 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@ package org.apache.ibatis.migration.commands;
 import static org.apache.ibatis.migration.utils.Util.file;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -53,24 +52,15 @@ import org.apache.ibatis.migration.hook.FileHookScriptFactory;
 import org.apache.ibatis.migration.hook.FileMigrationHook;
 import org.apache.ibatis.migration.hook.HookScriptFactory;
 import org.apache.ibatis.migration.hook.MigrationHook;
-import org.apache.ibatis.migration.io.ExternalResources;
 import org.apache.ibatis.migration.options.DatabaseOperationOption;
 import org.apache.ibatis.migration.options.Options;
 import org.apache.ibatis.migration.options.SelectedOptions;
 import org.apache.ibatis.migration.options.SelectedPaths;
+import org.apache.ibatis.migration.utils.Util;
 import org.apache.ibatis.parsing.PropertyParser;
 
 public abstract class BaseCommand implements Command {
   private static final String DATE_FORMAT = "yyyyMMddHHmmss";
-
-  private static final String MIGRATIONS_HOME = "MIGRATIONS_HOME";
-
-  /* TODO: remove in the next major release */
-  private static final String MIGRATIONS_HOME_PROPERTY_DEPRECATED = "migrationHome";
-
-  private static final String MIGRATIONS_HOME_PROPERTY = "migrationsHome";
-
-  private static final String MIGRATIONS_PROPERTIES = "migration.properties";
 
   private ClassLoader driverClassLoader;
 
@@ -123,13 +113,9 @@ public abstract class BaseCommand implements Command {
     }
     String idPattern = options.getIdPattern();
     if (idPattern == null) {
-      try {
-        idPattern = getPropertyOption(Options.IDPATTERN.toString().toLowerCase());
-      } catch (FileNotFoundException e) {
-        // ignore
-      }
+      idPattern = Util.getPropertyOption(Options.IDPATTERN.toString().toLowerCase());
     }
-    if (idPattern != null) {
+    if (idPattern != null && !idPattern.isEmpty()) {
       return generatePatternedId(idPattern);
     } else {
       return generateTimestampId();
@@ -173,18 +159,6 @@ public abstract class BaseCommand implements Command {
     }
   }
 
-  protected String migrationsHome() {
-    String migrationsHome = System.getenv(MIGRATIONS_HOME);
-    // Check if there is a system property
-    if (migrationsHome == null) {
-      migrationsHome = System.getProperty(MIGRATIONS_HOME_PROPERTY);
-      if (migrationsHome == null) {
-        migrationsHome = System.getProperty(MIGRATIONS_HOME_PROPERTY_DEPRECATED);
-      }
-    }
-    return migrationsHome;
-  }
-
   protected void copyExternalResourceTo(String resource, File toFile, Properties variables) {
     printStream.println("Creating: " + toFile.getName());
     try {
@@ -216,14 +190,6 @@ public abstract class BaseCommand implements Command {
     } finally {
       reader.close();
     }
-  }
-
-  protected String getPropertyOption(String key) throws FileNotFoundException {
-    String migrationsHome = migrationsHome();
-    if (migrationsHome == null || migrationsHome.isEmpty()) {
-      return null;
-    }
-    return ExternalResources.getConfiguredTemplate(migrationsHome + "/" + MIGRATIONS_PROPERTIES, key);
   }
 
   protected File environmentFile() {

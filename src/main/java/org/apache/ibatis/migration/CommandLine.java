@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2017 the original author or authors.
+ *    Copyright 2010-2018 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -23,7 +23,9 @@ import java.io.PrintStream;
 import java.util.Date;
 
 import org.apache.ibatis.migration.commands.Command;
+import org.apache.ibatis.migration.options.Options;
 import org.apache.ibatis.migration.options.SelectedOptions;
+import org.apache.ibatis.migration.utils.Util;
 import org.apache.ibatis.migration.ConsoleColors;
 
 public class CommandLine {
@@ -45,7 +47,7 @@ public class CommandLine {
     } catch (Exception e) {
       String errorMessage = e.getMessage();
 
-      if (selectedOptions.hasColor()) {
+      if (hasColor(selectedOptions)) {
         console.printf(ConsoleColors.RED + "\nERROR: %s%n", errorMessage + ConsoleColors.RESET);
       } else {
         console.printf("\nERROR: %s%n", errorMessage);
@@ -81,7 +83,7 @@ public class CommandLine {
     } finally {
       console.printf("------------------------------------------------------------------------%n");
 
-      if (selectedOptions.hasColor()) {
+      if (hasColor(selectedOptions)) {
         console.printf("-- MyBatis Migrations %s%s%s%n", (exceptionCaught) ? ConsoleColors.RED : ConsoleColors.GREEN,
             (exceptionCaught) ? "FAILURE" : "SUCCESS", ConsoleColors.RESET);
       } else {
@@ -93,6 +95,10 @@ public class CommandLine {
       printMemoryUsage();
       console.printf("------------------------------------------------------------------------%n");
     }
+  }
+
+  protected boolean hasColor(SelectedOptions selectedOptions) {
+    return selectedOptions.hasColor() || Util.getPropertyOptionAsBoolean(Options.COLOR.toString().toLowerCase());
   }
 
   private void printMemoryUsage() {
