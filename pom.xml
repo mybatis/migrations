@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-       Copyright 2010-2017 the original author or authors.
+       Copyright 2010-2018 the original author or authors.
 
        Licensed under the Apache License, Version 2.0 (the "License");
        you may not use this file except in compliance with the License.
@@ -176,6 +176,29 @@
             </configuration>
           </execution>
         </executions>
+      </plugin>
+      <plugin>
+        <groupId>com.mycila</groupId>
+        <artifactId>license-maven-plugin</artifactId>
+        <configuration>
+          <excludes>
+            <exclude>**/*.ctrl</exclude>
+            <exclude>**/*.dat</exclude>
+            <exclude>**/*.lck</exclude>
+            <exclude>**/*.log</exclude>
+            <exclude>**/*maven-wrapper.properties</exclude>
+            <exclude>.factorypath</exclude>
+            <exclude>.gitattributes</exclude>
+            <exclude>mvnw</exclude>
+            <exclude>mvnw.cmd</exclude>
+            <exclude>ICLA</exclude>
+            <exclude>LICENSE</exclude>
+            <exclude>KEYS</exclude>
+            <exclude>NOTICE</exclude>
+            <!-- Migrations-specific -->
+            <exclude>**/template_*</exclude>
+          </excludes>
+        </configuration>
       </plugin>
     </plugins>
   </build>
