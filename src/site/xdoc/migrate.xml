@@ -26,7 +26,7 @@
   </properties>
 
   <body>
-    <section name="Introdution">
+    <section name="Introduction">
       <p>The entire Migrations system can be accessed through this one simple command. You can access the built-in help by typing: <code>migrate --help</code>.</p>
       <p>Calling the migrate command with no options or invalid options also produces the help message. Here's the output of the help command:</p>
 
