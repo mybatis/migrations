@@ -7,7 +7,7 @@
 <body>
 <div id="overview"><a href="../../../../../apidocs/org/apache/ibatis/migration/FileMigrationLoader.html">View Javadoc</a></div><pre>
 <a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_javadoccomment"> *    Copyright 2010-2016 the original author or authors.</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_javadoccomment"> *    Copyright 2010-2017 the original author or authors.</em>
 <a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_javadoccomment"> *    Licensed under the Apache License, Version 2.0 (the "License");</em>
 <a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_javadoccomment"> *    you may not use this file except in compliance with the License.</em>
@@ -35,11 +35,11 @@
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.ibatis.migration.utils.Util;
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../org/apache/ibatis/migration/FileMigrationLoader.html">FileMigrationLoader</a> <strong class="jxr_keyword">implements</strong> <a href="../../../../org/apache/ibatis/migration/MigrationLoader.html">MigrationLoader</a> {
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> File scriptsDir;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>    <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> File scriptsDir;
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> String charset;
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>    <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> String charset;
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Properties variables;
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>    <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> Properties variables;
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>    <strong class="jxr_keyword">public</strong> <a href="../../../../org/apache/ibatis/migration/FileMigrationLoader.html">FileMigrationLoader</a>(File scriptsDir, String charset, Properties variables) {
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>      <strong class="jxr_keyword">super</strong>();
@@ -67,11 +67,11 @@
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>      <strong class="jxr_keyword">return</strong> migrations;
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>    }
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> isSpecialFile(String filename) {
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>    <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">boolean</strong> isSpecialFile(String filename) {
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>      <strong class="jxr_keyword">return</strong> <span class="jxr_string">"bootstrap.sql"</span>.equals(filename) || <span class="jxr_string">"onabort.sql"</span>.equals(filename);
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>    }
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>    <strong class="jxr_keyword">private</strong> <a href="../../../../org/apache/ibatis/migration/Change.html">Change</a> parseChangeFromFilename(String filename) {
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>    <strong class="jxr_keyword">protected</strong> <a href="../../../../org/apache/ibatis/migration/Change.html">Change</a> parseChangeFromFilename(String filename) {
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>      <strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>        <a href="../../../../org/apache/ibatis/migration/Change.html">Change</a> change = <strong class="jxr_keyword">new</strong> <a href="../../../../org/apache/ibatis/migration/Change.html">Change</a>();
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>        <strong class="jxr_keyword">int</strong> lastIndexOfDot = filename.lastIndexOf(<span class="jxr_string">"."</span>);
@@ -113,7 +113,7 @@
 <a class="jxr_linenumber" name="L105" href="#L105">105</a>     <strong class="jxr_keyword">return</strong> getSoleScriptReader(fileName);
 <a class="jxr_linenumber" name="L106" href="#L106">106</a>   }
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> 
-<a class="jxr_linenumber" name="L108" href="#L108">108</a>   <strong class="jxr_keyword">private</strong> Reader getSoleScriptReader(String fileName) {
+<a class="jxr_linenumber" name="L108" href="#L108">108</a>   <strong class="jxr_keyword">protected</strong> Reader getSoleScriptReader(String fileName) {
 <a class="jxr_linenumber" name="L109" href="#L109">109</a>     <strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L110" href="#L110">110</a>       File scriptFile = Util.file(scriptsDir, fileName);
 <a class="jxr_linenumber" name="L111" href="#L111">111</a>       <strong class="jxr_keyword">if</strong> (scriptFile.exists()) {
@@ -127,6 +127,6 @@
 <a class="jxr_linenumber" name="L119" href="#L119">119</a> }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2010&#x2013;2016 <a href="http://www.mybatis.org/">MyBatis.org</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2010&#x2013;2018 <a href="http://www.mybatis.org/">MyBatis.org</a>. All rights reserved.</div>
 </body>
 </html>

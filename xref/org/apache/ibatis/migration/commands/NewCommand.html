@@ -7,7 +7,7 @@
 <body>
 <div id="overview"><a href="../../../../../../apidocs/org/apache/ibatis/migration/commands/NewCommand.html">View Javadoc</a></div><pre>
 <a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_javadoccomment"> *    Copyright 2010-2016 the original author or authors.</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_javadoccomment"> *    Copyright 2010-2018 the original author or authors.</em>
 <a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_javadoccomment"> *    Licensed under the Apache License, Version 2.0 (the "License");</em>
 <a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_javadoccomment"> *    you may not use this file except in compliance with the License.</em>
@@ -23,12 +23,12 @@
 <a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  <strong class="jxr_keyword">package</strong> org.apache.ibatis.migration.commands;
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  
-<a class="jxr_linenumber" name="L18" href="#L18">18</a>  <strong class="jxr_keyword">import</strong> org.apache.ibatis.migration.MigrationException;
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> org.apache.ibatis.migration.options.SelectedOptions;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> org.apache.ibatis.migration.utils.Util;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.io.FileNotFoundException;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.util.Properties;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  <strong class="jxr_keyword">import</strong> java.io.File;
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> java.util.Properties;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> org.apache.ibatis.migration.MigrationException;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.apache.ibatis.migration.options.SelectedOptions;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.apache.ibatis.migration.utils.Util;
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../org/apache/ibatis/migration/commands/NewCommand.html">NewCommand</a> <strong class="jxr_keyword">extends</strong> <a href="../../../../../org/apache/ibatis/migration/commands/BaseCommand.html">BaseCommand</a> {
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  
@@ -50,34 +50,29 @@
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>      String filename = getNextIDAsString() + <span class="jxr_string">"_"</span> + description.replace(' ', '_') + <span class="jxr_string">".sql"</span>;
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>      <strong class="jxr_keyword">if</strong> (options.getTemplate() != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>        copyExternalResourceTo(options.getTemplate(), Util.file(paths.getScriptPath(), filename));
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>        copyExternalResourceTo(options.getTemplate(), Util.file(paths.getScriptPath(), filename), variables);
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>      } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>        <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>          String customConfiguredTemplate = getPropertyOption(CUSTOM_NEW_COMMAND_TEMPLATE_PROPERTY);
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>          <strong class="jxr_keyword">if</strong> (customConfiguredTemplate != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>            copyExternalResourceTo(migrationsHome() + <span class="jxr_string">"/"</span> + customConfiguredTemplate,
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>                Util.file(paths.getScriptPath(), filename));
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>          } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>            copyDefaultTemplate(variables, filename);
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>          }
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>        } <strong class="jxr_keyword">catch</strong> (FileNotFoundException e) {
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>          printStream.append(
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>              <span class="jxr_string">"Your migrations configuration did not find your custom template.  Using the default template."</span>);
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>          copyDefaultTemplate(variables, filename);
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>        }
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>      }
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>      printStream.println(<span class="jxr_string">"Done!"</span>);
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>      printStream.println();
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>    }
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> copyDefaultTemplate(Properties variables, String filename) {
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>      copyResourceTo(<span class="jxr_string">"org/apache/ibatis/migration/template_migration.sql"</span>,
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>          Util.file(paths.getScriptPath(), filename),
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>          variables);
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>    }
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  }
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>        String customConfiguredTemplate = Util.getPropertyOption(CUSTOM_NEW_COMMAND_TEMPLATE_PROPERTY);
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>        <strong class="jxr_keyword">if</strong> (customConfiguredTemplate != <strong class="jxr_keyword">null</strong> &amp;&amp; !customConfiguredTemplate.isEmpty()) {
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>          copyExternalResourceTo(Util.migrationsHome() + File.separator + customConfiguredTemplate,
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>              Util.file(paths.getScriptPath(), filename), variables);
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>        } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>          printStream
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>              .append(<span class="jxr_string">"Your migrations configuration did not find your custom template.  Using the default template."</span>);
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>          copyDefaultTemplate(variables, filename);
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>        }
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>      }
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>      printStream.println(<span class="jxr_string">"Done!"</span>);
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>      printStream.println();
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>    }
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> copyDefaultTemplate(Properties variables, String filename) {
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>      copyResourceTo(<span class="jxr_string">"org/apache/ibatis/migration/template_migration.sql"</span>, Util.file(paths.getScriptPath(), filename),
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>          variables);
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>    }
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2010&#x2013;2016 <a href="http://www.mybatis.org/">MyBatis.org</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2010&#x2013;2018 <a href="http://www.mybatis.org/">MyBatis.org</a>. All rights reserved.</div>
 </body>
 </html>

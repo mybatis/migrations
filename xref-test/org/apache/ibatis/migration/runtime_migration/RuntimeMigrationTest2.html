@@ -44,90 +44,93 @@
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> org.apache.ibatis.migration.operations.UpOperation;
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">import</strong> org.apache.ibatis.migration.options.DatabaseOperationOption;
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  <strong class="jxr_keyword">import</strong> org.junit.Before;
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <strong class="jxr_keyword">import</strong> org.junit.Test;
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../org/apache/ibatis/migration/runtime_migration/RuntimeMigrationTest2.html">RuntimeMigrationTest2</a> {
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>    <strong class="jxr_keyword">private</strong> JdbcConnectionProvider connectionProvider;
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <strong class="jxr_keyword">import</strong> org.junit.Ignore;
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <strong class="jxr_keyword">import</strong> org.junit.Test;
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  @Ignore
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../org/apache/ibatis/migration/runtime_migration/RuntimeMigrationTest2.html">RuntimeMigrationTest2</a> {
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>    <strong class="jxr_keyword">private</strong> DatabaseOperationOption dbOption;
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>    <strong class="jxr_keyword">private</strong> JdbcConnectionProvider connectionProvider;
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>    <strong class="jxr_keyword">private</strong> ByteArrayOutputStream out;
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>    <strong class="jxr_keyword">private</strong> DatabaseOperationOption dbOption;
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>    <strong class="jxr_keyword">private</strong> MigrationLoader migrationsLoader;
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>    <strong class="jxr_keyword">private</strong> ByteArrayOutputStream out;
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>    <strong class="jxr_keyword">private</strong> String scriptDirPath = <span class="jxr_string">"/Users/ave/repo/mybatis-migrations/test/scripts"</span>;
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>    <strong class="jxr_keyword">private</strong> MigrationLoader migrationsLoader;
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>    @Before
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setup() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>      connectionProvider = <strong class="jxr_keyword">new</strong> JdbcConnectionProvider(<span class="jxr_string">"org.postgresql.Driver"</span>, <span class="jxr_string">"jdbc:postgresql:test"</span>, <span class="jxr_string">"ave"</span>, <span class="jxr_string">""</span>);
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>  <em class="jxr_comment">//    connectionProvider = new JdbcConnectionProvider("oracle.jdbc.driver.OracleDriver", "jdbc:oracle:thin:@192.168.57.101:1521:ORCL", "bulkinsert", "bulkinsert");</em>
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>      dbOption = <strong class="jxr_keyword">new</strong> DatabaseOperationOption();
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>      dbOption.setAutoCommit(false);
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>      out = <strong class="jxr_keyword">new</strong> ByteArrayOutputStream();
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>      migrationsLoader = createMigrationsLoader();
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>    }
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>    @Test
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testInitialStatus() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>      StatusOperation status = <strong class="jxr_keyword">new</strong> StatusOperation().operate(connectionProvider, migrationsLoader, dbOption, <strong class="jxr_keyword">new</strong> PrintStream(out));
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>      assertEquals(1, status.getAppliedCount());
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>      assertEquals(2, status.getPendingCount());
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>      assertEquals(3, status.getCurrentStatus().size());
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>    }
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>    @Test
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testUpWithStep() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>      <strong class="jxr_keyword">new</strong> UpOperation(1).operate(connectionProvider, migrationsLoader, dbOption, <strong class="jxr_keyword">new</strong> PrintStream(out));
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>      assertEquals(<span class="jxr_string">"2"</span>, runQuery(connectionProvider, <span class="jxr_string">"select count(*) from changelog"</span>));
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>    }
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>    @Test
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testDown() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>      <strong class="jxr_keyword">new</strong> UpOperation().operate(connectionProvider, migrationsLoader, dbOption, <strong class="jxr_keyword">new</strong> PrintStream(out));
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>      <strong class="jxr_keyword">new</strong> DownOperation().operate(connectionProvider, migrationsLoader, dbOption, <strong class="jxr_keyword">new</strong> PrintStream(out));
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>      assertEquals(<span class="jxr_string">"2"</span>, runQuery(connectionProvider, <span class="jxr_string">"select count(*) from changelog"</span>));
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>      assertEquals(<span class="jxr_string">"0"</span>, runQuery(connectionProvider, <span class="jxr_string">"select count(*) from first_table"</span>));
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>    }
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>    <strong class="jxr_keyword">protected</strong> FileMigrationLoader createMigrationsLoader() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>      URL url =  <strong class="jxr_keyword">new</strong> File(scriptDirPath).toURI().toURL();
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>      File scriptsDir = <strong class="jxr_keyword">new</strong> File(url.getFile());
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>      Properties properties = <strong class="jxr_keyword">new</strong> Properties();
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>      properties.setProperty(<span class="jxr_string">"changelog"</span>, <span class="jxr_string">"CHANGELOG"</span>);
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>      FileMigrationLoader migrationsLoader = <strong class="jxr_keyword">new</strong> FileMigrationLoader(scriptsDir, <span class="jxr_string">"utf-8"</span>, properties);
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>      <strong class="jxr_keyword">return</strong> migrationsLoader;
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>    }
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>    <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> runSql(ConnectionProvider provider, String sql) <strong class="jxr_keyword">throws</strong> SQLException {
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>      Connection connection = provider.getConnection();
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>      <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>        Statement statement = connection.createStatement();
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>        statement.execute(sql);
-<a class="jxr_linenumber" name="L100" href="#L100">100</a>     } <strong class="jxr_keyword">finally</strong> {
-<a class="jxr_linenumber" name="L101" href="#L101">101</a>       connection.close();
-<a class="jxr_linenumber" name="L102" href="#L102">102</a>     }
-<a class="jxr_linenumber" name="L103" href="#L103">103</a>   }
-<a class="jxr_linenumber" name="L104" href="#L104">104</a> 
-<a class="jxr_linenumber" name="L105" href="#L105">105</a>   <strong class="jxr_keyword">protected</strong> String runQuery(ConnectionProvider provider, String query) <strong class="jxr_keyword">throws</strong> SQLException {
-<a class="jxr_linenumber" name="L106" href="#L106">106</a>     Connection connection = provider.getConnection();
-<a class="jxr_linenumber" name="L107" href="#L107">107</a>     <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L108" href="#L108">108</a>       Statement statement = connection.createStatement();
-<a class="jxr_linenumber" name="L109" href="#L109">109</a>       ResultSet rs = statement.executeQuery(query);
-<a class="jxr_linenumber" name="L110" href="#L110">110</a>       String result = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L111" href="#L111">111</a>       <strong class="jxr_keyword">if</strong> (rs.next()) {
-<a class="jxr_linenumber" name="L112" href="#L112">112</a>         result = rs.getString(1);
-<a class="jxr_linenumber" name="L113" href="#L113">113</a>       }
-<a class="jxr_linenumber" name="L114" href="#L114">114</a>       <strong class="jxr_keyword">return</strong> result;
-<a class="jxr_linenumber" name="L115" href="#L115">115</a>     } <strong class="jxr_keyword">finally</strong> {
-<a class="jxr_linenumber" name="L116" href="#L116">116</a>       connection.close();
-<a class="jxr_linenumber" name="L117" href="#L117">117</a>     }
-<a class="jxr_linenumber" name="L118" href="#L118">118</a>   }
-<a class="jxr_linenumber" name="L119" href="#L119">119</a> 
-<a class="jxr_linenumber" name="L120" href="#L120">120</a> }
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>    <strong class="jxr_keyword">private</strong> String scriptDirPath = <span class="jxr_string">"/Users/ave/repo/mybatis-migrations/test/scripts"</span>;
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>    @Before
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setup() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>      connectionProvider = <strong class="jxr_keyword">new</strong> JdbcConnectionProvider(<span class="jxr_string">"org.postgresql.Driver"</span>, <span class="jxr_string">"jdbc:postgresql:test"</span>, <span class="jxr_string">"ave"</span>, <span class="jxr_string">""</span>);
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>      <em class="jxr_comment">//    connectionProvider = new JdbcConnectionProvider("oracle.jdbc.driver.OracleDriver", "jdbc:oracle:thin:@192.168.57.101:1521:ORCL", "bulkinsert", "bulkinsert");</em>
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>      dbOption = <strong class="jxr_keyword">new</strong> DatabaseOperationOption();
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>      dbOption.setAutoCommit(false);
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>      out = <strong class="jxr_keyword">new</strong> ByteArrayOutputStream();
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>      migrationsLoader = createMigrationsLoader();
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>    }
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>    @Test
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testInitialStatus() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>      StatusOperation status = <strong class="jxr_keyword">new</strong> StatusOperation().operate(connectionProvider, migrationsLoader, dbOption,
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>          <strong class="jxr_keyword">new</strong> PrintStream(out));
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>      assertEquals(1, status.getAppliedCount());
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>      assertEquals(2, status.getPendingCount());
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>      assertEquals(3, status.getCurrentStatus().size());
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>    }
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>    @Test
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testUpWithStep() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>      <strong class="jxr_keyword">new</strong> UpOperation(1).operate(connectionProvider, migrationsLoader, dbOption, <strong class="jxr_keyword">new</strong> PrintStream(out));
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>      assertEquals(<span class="jxr_string">"2"</span>, runQuery(connectionProvider, <span class="jxr_string">"select count(*) from changelog"</span>));
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>    }
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>    @Test
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testDown() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>      <strong class="jxr_keyword">new</strong> UpOperation().operate(connectionProvider, migrationsLoader, dbOption, <strong class="jxr_keyword">new</strong> PrintStream(out));
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>      <strong class="jxr_keyword">new</strong> DownOperation().operate(connectionProvider, migrationsLoader, dbOption, <strong class="jxr_keyword">new</strong> PrintStream(out));
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>      assertEquals(<span class="jxr_string">"2"</span>, runQuery(connectionProvider, <span class="jxr_string">"select count(*) from changelog"</span>));
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>      assertEquals(<span class="jxr_string">"0"</span>, runQuery(connectionProvider, <span class="jxr_string">"select count(*) from first_table"</span>));
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>    }
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>    <strong class="jxr_keyword">protected</strong> FileMigrationLoader createMigrationsLoader() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>      URL url = <strong class="jxr_keyword">new</strong> File(scriptDirPath).toURI().toURL();
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>      File scriptsDir = <strong class="jxr_keyword">new</strong> File(url.getFile());
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>      Properties properties = <strong class="jxr_keyword">new</strong> Properties();
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>      properties.setProperty(<span class="jxr_string">"changelog"</span>, <span class="jxr_string">"CHANGELOG"</span>);
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>      FileMigrationLoader migrationsLoader = <strong class="jxr_keyword">new</strong> FileMigrationLoader(scriptsDir, <span class="jxr_string">"utf-8"</span>, properties);
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>      <strong class="jxr_keyword">return</strong> migrationsLoader;
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>    }
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>    <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> runSql(ConnectionProvider provider, String sql) <strong class="jxr_keyword">throws</strong> SQLException {
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>      Connection connection = provider.getConnection();
+<a class="jxr_linenumber" name="L100" href="#L100">100</a>     <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L101" href="#L101">101</a>       Statement statement = connection.createStatement();
+<a class="jxr_linenumber" name="L102" href="#L102">102</a>       statement.execute(sql);
+<a class="jxr_linenumber" name="L103" href="#L103">103</a>     } <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L104" href="#L104">104</a>       connection.close();
+<a class="jxr_linenumber" name="L105" href="#L105">105</a>     }
+<a class="jxr_linenumber" name="L106" href="#L106">106</a>   }
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 
+<a class="jxr_linenumber" name="L108" href="#L108">108</a>   <strong class="jxr_keyword">protected</strong> String runQuery(ConnectionProvider provider, String query) <strong class="jxr_keyword">throws</strong> SQLException {
+<a class="jxr_linenumber" name="L109" href="#L109">109</a>     Connection connection = provider.getConnection();
+<a class="jxr_linenumber" name="L110" href="#L110">110</a>     <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L111" href="#L111">111</a>       Statement statement = connection.createStatement();
+<a class="jxr_linenumber" name="L112" href="#L112">112</a>       ResultSet rs = statement.executeQuery(query);
+<a class="jxr_linenumber" name="L113" href="#L113">113</a>       String result = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L114" href="#L114">114</a>       <strong class="jxr_keyword">if</strong> (rs.next()) {
+<a class="jxr_linenumber" name="L115" href="#L115">115</a>         result = rs.getString(1);
+<a class="jxr_linenumber" name="L116" href="#L116">116</a>       }
+<a class="jxr_linenumber" name="L117" href="#L117">117</a>       <strong class="jxr_keyword">return</strong> result;
+<a class="jxr_linenumber" name="L118" href="#L118">118</a>     } <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L119" href="#L119">119</a>       connection.close();
+<a class="jxr_linenumber" name="L120" href="#L120">120</a>     }
+<a class="jxr_linenumber" name="L121" href="#L121">121</a>   }
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2010&#x2013;2016 <a href="http://www.mybatis.org/">MyBatis.org</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2010&#x2013;2018 <a href="http://www.mybatis.org/">MyBatis.org</a>. All rights reserved.</div>
 </body>
 </html>
