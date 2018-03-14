@@ -49,9 +49,8 @@ public enum Util {
   }
 
   /**
-   * @param key
+   * @param key of the property.
    * @return The value <code>null</code> if the property file does not exist or the <code>key</code> does not exist.
-   * @throws FileNotFoundException
    */
   public static String getPropertyOption(String key) {
     String migrationsHome = migrationsHome();
