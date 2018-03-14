@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-       Copyright 2010-2017 the original author or authors.
+       Copyright 2010-2018 the original author or authors.
 
        Licensed under the Apache License, Version 2.0 (the "License");
        you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@
   </parent>
 
   <artifactId>mybatis-migrations</artifactId>
-  <version>3.3.2-SNAPSHOT</version>
+  <version>3.3.2</version>
 
   <name>MyBatis Migrations</name>
   <url>http://www.mybatis.org/migrations/</url>
@@ -43,7 +43,7 @@
     <url>http://github.com/mybatis/migrations</url>
     <connection>scm:git:ssh://github.com/mybatis/migrations.git</connection>
     <developerConnection>scm:git:ssh://git@github.com/mybatis/migrations.git</developerConnection>
-    <tag>HEAD</tag>
+    <tag>mybatis-migrations-3.3.2</tag>
   </scm>
   <issueManagement>
     <system>GitHub Issue Management</system>
@@ -70,7 +70,7 @@
     <dependency>
       <groupId>org.mybatis</groupId>
       <artifactId>mybatis</artifactId>
-      <version>3.4.6-SNAPSHOT</version>
+      <version>3.4.6</version>
     </dependency>
     <dependency>
       <groupId>org.junit.vintage</groupId>
