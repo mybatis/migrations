@@ -9,3 +9,4 @@ atlassian-ide-plugin.xml
 .classpath
 .project
 .settings
+.mvn/wrapper/maven-wrapper.jar
