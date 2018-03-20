@@ -73,6 +73,19 @@ public class MigrationReaderTest {
   }
 
   @Test
+  public void shouldReturnUndoPart_NoEndBreak() throws Exception {
+    // @formatter:off
+    String script = "-- comment\n"
+        + "do part\n"
+        + "--//@UNDO\n"
+        + "undo part";
+    String result = readAsString(new MigrationReader(strToInputStream(script, charset), charset, true, null));
+    assertEquals("-- @UNDO\n"
+        + "undo part\n", result);
+    // @formatter:on
+  }
+
+  @Test
   public void shouldUndoCommentBeLenient() throws Exception {
     // @formatter:off
     String script = "-- comment\n"

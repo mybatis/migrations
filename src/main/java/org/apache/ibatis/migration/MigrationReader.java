@@ -95,7 +95,7 @@ public class MigrationReader extends FilterReader {
     while (buffer.length() == 0) {
       int result = in.read(cbuf, off, len);
       if (result == -1) {
-        if (lineBuffer.length() > 0 && !undo && !inUndo) {
+        if (lineBuffer.length() > 0 && (!undo || inUndo)) {
           buffer.append(lineBuffer).append(lineSeparator);
           lineBuffer.setLength(0);
         }
