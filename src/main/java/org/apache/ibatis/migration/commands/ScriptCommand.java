@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2017 the original author or authors.
+ *    Copyright 2010-2018 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package org.apache.ibatis.migration.commands;
 import java.io.IOException;
 import java.io.Reader;
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -82,12 +83,8 @@ public final class ScriptCommand extends BaseCommand {
           Reader migrationReader = getMigrationLoader().getScriptReader(change, undo);
           char[] cbuf = new char[1024];
           int l;
-          while ((l = migrationReader.read(cbuf)) == cbuf.length) {
-            printStream.print(new String(cbuf, 0, l));
-          }
-
-          if (l > 0) {
-            printStream.print(new String(cbuf, 0, l - 1));
+          while ((l = migrationReader.read(cbuf)) > -1) {
+            printStream.print(l == cbuf.length ? cbuf : Arrays.copyOf(cbuf, l));
           }
           printStream.println();
           printStream.println();
