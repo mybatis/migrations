@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2017 the original author or authors.
+ *    Copyright 2010-2018 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -80,6 +80,8 @@ public class MigratorTest {
 
     testVersionCommand();
     testStatusContainsNoPendingMigrations();
+    testSkippedScript();
+    testMissingScript();
     testDownCommand();
     testStatusContainsPendingMigrations();
     testPendingCommand();
@@ -153,9 +155,41 @@ public class MigratorTest {
 
   private void testVersionCommand() throws Exception {
     out.clearLog();
-    Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "version", "20080827200216"));
+    Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "version", "20080827200217"));
     String output = out.getLog();
     assertFalse(output.toString().contains("FAILURE"));
+  }
+
+  private void testSkippedScript() throws Exception {
+    out.clearLog();
+    File skipped = new File(dir + File.separator + "scripts", "20080827200215_skipped_migration.sql");
+    assertTrue(skipped.createNewFile());
+    try {
+      Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "up"));
+      String output = out.getLog();
+      assertFalse(output.toString().contains("FAILURE"));
+      assertEquals(1, TestUtil.countStr(output, "WARNING"));
+      assertTrue(output.toString().contains(
+          "WARNING: Migration script '20080827200215_skipped_migration.sql' was not applied to the database."));
+    } finally {
+      skipped.delete();
+    }
+  }
+
+  private void testMissingScript() throws Exception {
+    out.clearLog();
+    File original = new File(dir + File.separator + "scripts", "20080827200216_create_procs.sql");
+    File renamed = new File(dir + File.separator + "scripts", "20080827200216_create_procs._sql");
+    assertTrue(original.renameTo(renamed));
+    try {
+      Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "up"));
+      String output = out.getLog();
+      assertFalse(output.toString().contains("FAILURE"));
+      assertTrue(output.toString()
+          .contains("WARNING: Missing migration script. id='20080827200216', description='create procs'."));
+    } finally {
+      assertTrue(renamed.renameTo(original));
+    }
   }
 
   private void testDownCommand() throws Exception {
@@ -206,7 +240,7 @@ public class MigratorTest {
     assertFalse(output.toString().contains("20080827200212"));
     assertTrue(output.toString().contains("20080827200213"));
     assertTrue(output.toString().contains("20080827200214"));
-    assertFalse(output.toString().contains("20080827200215"));
+    assertFalse(output.toString().contains("20080827200216"));
     assertFalse(output.toString().contains("-- @UNDO"));
 
     out.clearLog();
@@ -218,13 +252,13 @@ public class MigratorTest {
     assertFalse(output.toString().contains("20080827200212"));
     assertFalse(output.toString().contains("20080827200213"));
     assertFalse(output.toString().contains("20080827200214"));
-    assertFalse(output.toString().contains("20080827200215"));
+    assertFalse(output.toString().contains("20080827200216"));
     assertFalse(output.toString().contains("-- @UNDO"));
   }
 
   private void testUndoScriptCommand() throws Exception {
     out.clearLog();
-    Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "script", "20080827200215", "20080827200213"));
+    Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "script", "20080827200216", "20080827200213"));
     String output = out.getLog();
     assertFalse(output.toString().contains("FAILURE"));
     assertFalse(output.toString().contains("20080827200210"));
@@ -232,7 +266,7 @@ public class MigratorTest {
     assertFalse(output.toString().contains("20080827200212"));
     assertFalse(output.toString().contains("20080827200213"));
     assertTrue(output.toString().contains("20080827200214"));
-    assertTrue(output.toString().contains("20080827200215"));
+    assertTrue(output.toString().contains("20080827200216"));
     assertTrue(output.toString().contains("-- @UNDO"));
     out.clearLog();
 
@@ -244,7 +278,7 @@ public class MigratorTest {
     assertFalse(output.toString().contains("20080827200212"));
     assertFalse(output.toString().contains("20080827200213"));
     assertFalse(output.toString().contains("20080827200214"));
-    assertFalse(output.toString().contains("20080827200215"));
+    assertFalse(output.toString().contains("20080827200216"));
     assertTrue(output.toString().contains("-- @UNDO"));
   }
 

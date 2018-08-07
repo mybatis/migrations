@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2017 the original author or authors.
+ *    Copyright 2010-2018 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -56,12 +56,16 @@ public final class DownOperation extends DatabaseOperation {
       if (option == null) {
         option = new DatabaseOperationOption();
       }
-      Change lastChange = getLastAppliedChange(connectionProvider, option);
-      if (lastChange == null) {
+      List<Change> changesInDb = Collections.emptyList();
+      if (changelogExists(connectionProvider, option)) {
+        changesInDb = getChangelog(connectionProvider, option);
+      }
+      if (changesInDb.isEmpty()) {
         println(printStream, "Changelog exist, but no migration found.");
       } else {
         List<Change> migrations = migrationsLoader.getMigrations();
         Collections.sort(migrations);
+        checkSkippedOrMissing(changesInDb, migrations, printStream);
         Collections.reverse(migrations);
         int stepCount = 0;
         ScriptRunner runner = getScriptRunner(connectionProvider, option, printStream);
@@ -70,7 +74,7 @@ public final class DownOperation extends DatabaseOperation {
 
         try {
           for (Change change : migrations) {
-            if (change.getId().equals(lastChange.getId())) {
+            if (change.equals(changesInDb.get(changesInDb.size() - 1))) {
               if (stepCount == 0 && hook != null) {
                 hookBindings.put(MigrationHook.HOOK_CONTEXT, new HookContext(connectionProvider, runner, null));
                 hook.before(hookBindings);
@@ -99,7 +103,7 @@ public final class DownOperation extends DatabaseOperation {
               if (steps == null || stepCount >= steps) {
                 break;
               }
-              lastChange = getLastAppliedChange(connectionProvider, option);
+              changesInDb.remove(changesInDb.size() - 1);
             }
           }
           if (stepCount > 0 && hook != null) {
