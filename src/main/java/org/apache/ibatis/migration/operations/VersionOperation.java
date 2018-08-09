@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2017 the original author or authors.
+ *    Copyright 2010-2018 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -47,33 +47,35 @@ public final class VersionOperation extends DatabaseOperation {
     if (option == null) {
       option = new DatabaseOperationOption();
     }
-    ensureVersionExists(migrationsLoader);
-    Change change = getLastAppliedChange(connectionProvider, option);
-    if (change == null || version.compareTo(change.getId()) > 0) {
+    List<Change> changesInDb = getChangelog(connectionProvider, option);
+    List<Change> migrations = migrationsLoader.getMigrations();
+    Change specified = new Change(version);
+    if (!migrations.contains(specified)) {
+      throw new MigrationException("A migration for the specified version number does not exist.");
+    }
+    Change lastChangeInDb = changesInDb.isEmpty() ? null : changesInDb.get(changesInDb.size() - 1);
+    if (lastChangeInDb == null || specified.compareTo(lastChangeInDb) > 0) {
       println(printStream, "Upgrading to: " + version);
-      UpOperation up = new UpOperation(1);
-      while (!version.equals(change.getId())) {
-        up.operate(connectionProvider, migrationsLoader, option, printStream, upHook);
-        change = getLastAppliedChange(connectionProvider, option);
+      int steps = 0;
+      for (Change change : migrations) {
+        if (change.compareTo(lastChangeInDb) > 0 && change.compareTo(specified) < 1) {
+          steps++;
+        }
       }
-    } else if (version.compareTo(change.getId()) < 0) {
+      new UpOperation(steps).operate(connectionProvider, migrationsLoader, option, printStream, upHook);
+    } else if (specified.compareTo(lastChangeInDb) < 0) {
       println(printStream, "Downgrading to: " + version);
-      DownOperation down = new DownOperation(1);
-      while (!version.equals(change.getId())) {
-        down.operate(connectionProvider, migrationsLoader, option, printStream, downHook);
-        change = getLastAppliedChange(connectionProvider, option);
+      int steps = 0;
+      for (Change change : migrations) {
+        if (change.compareTo(specified) > -1 && change.compareTo(lastChangeInDb) < 0) {
+          steps++;
+        }
       }
+      new DownOperation(steps).operate(connectionProvider, migrationsLoader, option, printStream, downHook);
     } else {
       println(printStream, "Already at version: " + version);
     }
     println(printStream);
     return this;
-  }
-
-  private void ensureVersionExists(MigrationLoader migrationsLoader) {
-    List<Change> migrations = migrationsLoader.getMigrations();
-    if (!migrations.contains(new Change(version))) {
-      throw new MigrationException("A migration for the specified version number does not exist.");
-    }
   }
 }
