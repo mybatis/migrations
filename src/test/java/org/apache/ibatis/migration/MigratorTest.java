@@ -297,7 +297,7 @@ public class MigratorTest {
 
   @Test
   public void shouldInitTempDirectory() throws Exception {
-    File basePath = getTempDir();
+    File basePath = TestUtil.getTempDir();
     Migrator.main(TestUtil.args("--path=" + basePath.getAbsolutePath(), "init"));
     assertNotNull(basePath.list());
     assertEquals(4, basePath.list().length);
@@ -310,7 +310,7 @@ public class MigratorTest {
   @Test
   public void shouldRespectIdPattern() throws Exception {
     String idPattern = "000";
-    File basePath = getTempDir();
+    File basePath = TestUtil.getTempDir();
     Migrator.main(TestUtil.args("--path=" + basePath.getAbsolutePath(), "--idpattern=" + idPattern, "init"));
     File changelog = new File(
         basePath.getCanonicalPath() + File.separator + "scripts" + File.separator + "001_create_changelog.sql");
@@ -325,7 +325,7 @@ public class MigratorTest {
   @Test
   public void useCustomTemplate() throws Exception {
     String desc = "test new migration";
-    File basePath = getTempDir();
+    File basePath = TestUtil.getTempDir();
     Migrator.main(TestUtil.args("--path=" + basePath.getAbsolutePath(), "init"));
     assertNotNull(basePath.list());
     assertEquals(4, basePath.list().length);
@@ -351,7 +351,7 @@ public class MigratorTest {
 
   @Test
   public void useCustomTemplateWithNoValue() throws Exception {
-    File basePath = getTempDir();
+    File basePath = TestUtil.getTempDir();
     Migrator.main(TestUtil.args("--path=" + basePath.getAbsolutePath(), "init"));
     assertNotNull(basePath.list());
     assertEquals(4, basePath.list().length);
@@ -368,7 +368,7 @@ public class MigratorTest {
   @Test
   public void useCustomTemplateWithBadPath() throws Exception {
     System.setProperty("migrationsHome", "/tmp");
-    File basePath = getTempDir();
+    File basePath = TestUtil.getTempDir();
     Migrator.main(TestUtil.args("--path=" + basePath.getAbsolutePath(), "init"));
     assertNotNull(basePath.list());
     assertEquals(4, basePath.list().length);
@@ -386,7 +386,7 @@ public class MigratorTest {
   @Test
   public void shouldSuppressOutputIfQuietOptionEnabled() throws Throwable {
     System.setProperty("migrationsHome", "/tmp");
-    File basePath = getTempDir();
+    File basePath = TestUtil.getTempDir();
     out.clearLog();
     Migrator.main(TestUtil.args("--path=" + basePath.getAbsolutePath(), "--quiet", "init"));
     String output = out.getLog();
@@ -397,7 +397,7 @@ public class MigratorTest {
   @Test
   public void shouldColorizeSuccessOutputIfColorOptionEnabled() throws Throwable {
     System.setProperty("migrationsHome", "/tmp");
-    File basePath = getTempDir();
+    File basePath = TestUtil.getTempDir();
     out.clearLog();
     Migrator.main(TestUtil.args("--path=" + basePath.getAbsolutePath(), "--color", "init"));
     String output = out.getLog();
@@ -415,18 +415,8 @@ public class MigratorTest {
       }
     });
     System.setProperty("migrationsHome", "/tmp");
-    File basePath = getTempDir();
+    File basePath = TestUtil.getTempDir();
     out.clearLog();
     Migrator.main(TestUtil.args("--path=" + basePath.getAbsolutePath(), "--color", "new"));
-  }
-
-  private File getTempDir() throws IOException {
-    File f = File.createTempFile("migration", "test");
-    assertTrue(f.delete());
-    assertTrue(f.mkdir());
-    assertTrue(f.exists());
-    assertTrue(f.isDirectory());
-    f.deleteOnExit();
-    return f;
   }
 }

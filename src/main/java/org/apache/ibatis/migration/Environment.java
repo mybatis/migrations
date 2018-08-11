@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2017 the original author or authors.
+ *    Copyright 2010-2018 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -52,7 +52,9 @@ public class Environment {
     hook_before_down,
     hook_before_each_down,
     hook_after_each_down,
-    hook_after_down
+    hook_after_down,
+    hook_before_new,
+    hook_after_new
   }
 
   private static final List<String> SETTING_KEYS;
@@ -89,6 +91,9 @@ public class Environment {
   private final String hookAfterEachDown;
   private final String hookAfterDown;
 
+  private final String hookBeforeNew;
+  private final String hookAfterNew;
+
   private final Properties variables = new Properties();
 
   public Environment(File file) {
@@ -121,6 +126,9 @@ public class Environment {
       this.hookBeforeEachDown = prop.getProperty(SETTING_KEY.hook_before_each_down.name());
       this.hookAfterEachDown = prop.getProperty(SETTING_KEY.hook_after_each_down.name());
       this.hookAfterDown = prop.getProperty(SETTING_KEY.hook_after_down.name());
+
+      this.hookBeforeNew = prop.getProperty(SETTING_KEY.hook_before_new.name());
+      this.hookAfterNew = prop.getProperty(SETTING_KEY.hook_after_new.name());
 
       // User defined variables.
       Set<Entry<Object, Object>> entries = prop.entrySet();
@@ -227,6 +235,14 @@ public class Environment {
 
   public String getHookAfterDown() {
     return hookAfterDown;
+  }
+
+  public String getHookBeforeNew() {
+    return hookBeforeNew;
+  }
+
+  public String getHookAfterNew() {
+    return hookAfterNew;
   }
 
   public Properties getVariables() {

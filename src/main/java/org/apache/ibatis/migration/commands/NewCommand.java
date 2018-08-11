@@ -16,9 +16,13 @@
 package org.apache.ibatis.migration.commands;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 import org.apache.ibatis.migration.MigrationException;
+import org.apache.ibatis.migration.hook.MigrationHook;
+import org.apache.ibatis.migration.hook.NewHookContext;
 import org.apache.ibatis.migration.options.SelectedOptions;
 import org.apache.ibatis.migration.utils.Util;
 
@@ -41,6 +45,13 @@ public final class NewCommand extends BaseCommand {
     existingEnvironmentFile();
     String filename = getNextIDAsString() + "_" + description.replace(' ', '_') + ".sql";
 
+    Map<String, Object> hookBindings = new HashMap<String, Object>();
+    MigrationHook hook = createNewHook();
+    if (hook != null) {
+      hookBindings.put(MigrationHook.HOOK_CONTEXT, new NewHookContext(description, filename));
+      hook.before(hookBindings);
+    }
+
     if (options.getTemplate() != null) {
       copyExternalResourceTo(options.getTemplate(), Util.file(paths.getScriptPath(), filename), variables);
     } else {
@@ -53,6 +64,10 @@ public final class NewCommand extends BaseCommand {
             .append("Your migrations configuration did not find your custom template.  Using the default template.");
         copyDefaultTemplate(variables, filename);
       }
+      if (hook != null) {
+        hookBindings.put(MigrationHook.HOOK_CONTEXT, new NewHookContext(description, filename));
+        hook.after(hookBindings);
+      }
     }
     printStream.println("Done!");
     printStream.println();
@@ -61,5 +76,14 @@ public final class NewCommand extends BaseCommand {
   private void copyDefaultTemplate(Properties variables, String filename) {
     copyResourceTo("org/apache/ibatis/migration/template_migration.sql", Util.file(paths.getScriptPath(), filename),
         variables);
+  }
+
+  private MigrationHook createNewHook() {
+    String before = environment().getHookBeforeNew();
+    String after = environment().getHookAfterNew();
+    if (before == null && after == null) {
+      return null;
+    }
+    return createFileMigrationHook(before, null, null, after);
   }
 }
