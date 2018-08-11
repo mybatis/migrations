@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2017 the original author or authors.
+ *    Copyright 2010-2018 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -108,7 +108,7 @@ public class Jsr223HookScript implements HookScript {
         if (functionName != null) {
           printStream.println(Util.horizontalLine("Invoking function : " + functionName, 80));
           invocable.invokeFunction(functionName, args.toArray());
-        } else if (objectName != null && methodName != null) {
+        } else {
           printStream.println(Util.horizontalLine("Invoking method : " + methodName, 80));
           Object targetObject = engine.get(objectName);
           invocable.invokeMethod(targetObject, methodName, args.toArray());
