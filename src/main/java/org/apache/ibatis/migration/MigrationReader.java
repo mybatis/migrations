@@ -124,7 +124,7 @@ public class MigrationReader extends FilterReader {
                 if (bufferLen == 0) {
                   return -1;
                 } else {
-                  return readFromBuffer(cbuf, off, bufferLen);
+                  return readFromBuffer(cbuf, off, len);
                 }
               }
               break;

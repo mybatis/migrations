@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
 import java.util.Properties;
 
 import org.junit.After;
@@ -300,6 +301,27 @@ public class MigrationReaderTest {
       int read = reader.read(cbuf, 1, 3);
       assertEquals(read, 3);
       assertArrayEquals(new char[] { 0, 'a', 'b', 'c', 0 }, cbuf);
+    } finally {
+      reader.close();
+    }
+  }
+
+  @Test
+  public void testReadWithBuffer() throws Exception {
+    // @formatter:off
+    String script = "long do part 123456789012345678901234567890\n"
+        + "--//@UNDO\n"
+        + "undo part\n";
+    // @formatter:on
+    MigrationReader reader = new MigrationReader(strToInputStream(script, charset), charset, false, null);
+    try {
+      StringBuilder buffer = new StringBuilder();
+      char[] cbuf = new char[30];
+      int res;
+      while ((res = reader.read(cbuf)) != -1) {
+        buffer.append(res == cbuf.length ? cbuf : Arrays.copyOf(cbuf, res));
+      }
+      assertEquals("long do part 123456789012345678901234567890\n", buffer.toString());
     } finally {
       reader.close();
     }
