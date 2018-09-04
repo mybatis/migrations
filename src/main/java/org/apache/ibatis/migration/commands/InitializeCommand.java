@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2017 the original author or authors.
+ *    Copyright 2010-2018 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -43,7 +43,8 @@ public final class InitializeCommand extends BaseCommand {
     createDirectoryIfNecessary(paths.getDriverPath());
 
     copyResourceTo("org/apache/ibatis/migration/template_README", Util.file(basePath, "README"));
-    copyResourceTo("org/apache/ibatis/migration/template_environment.properties", environmentFile());
+    copyResourceTo("org/apache/ibatis/migration/template_environment.properties",
+        new File(paths.getEnvPath(), options.getEnvironment() + ".properties"));
     copyResourceTo("org/apache/ibatis/migration/template_bootstrap.sql", Util.file(scriptPath, "bootstrap.sql"));
     copyResourceTo("org/apache/ibatis/migration/template_changelog.sql",
         Util.file(scriptPath, getNextIDAsString() + "_create_changelog.sql"));

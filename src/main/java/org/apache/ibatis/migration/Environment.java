@@ -15,58 +15,12 @@
  */
 package org.apache.ibatis.migration;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map.Entry;
 import java.util.Properties;
-import java.util.Set;
 
 public class Environment {
 
   public static final String CHANGELOG = "changelog";
-
-  private enum SETTING_KEY {
-    time_zone,
-    delimiter,
-    script_char_set,
-    full_line_delimiter,
-    send_full_script,
-    auto_commit,
-    remove_crs,
-    ignore_warnings,
-    driver_path,
-    driver,
-    url,
-    username,
-    password,
-    hook_before_up,
-    hook_before_each_up,
-    hook_after_each_up,
-    hook_after_up,
-    hook_before_down,
-    hook_before_each_down,
-    hook_after_each_down,
-    hook_after_down,
-    hook_before_new,
-    hook_after_new
-  }
-
-  private static final List<String> SETTING_KEYS;
-
-  static {
-    ArrayList<String> list = new ArrayList<String>();
-    SETTING_KEY[] keys = SETTING_KEY.values();
-    for (SETTING_KEY key : keys) {
-      list.add(key.name());
-    }
-    SETTING_KEYS = Collections.unmodifiableList(list);
-  }
 
   private final String timeZone;
   private final String delimiter;
@@ -94,62 +48,197 @@ public class Environment {
   private final String hookBeforeNew;
   private final String hookAfterNew;
 
-  private final Properties variables = new Properties();
+  private final Properties variables;
 
-  public Environment(File file) {
-    FileInputStream inputStream = null;
-    try {
-      inputStream = new FileInputStream(file);
-      Properties prop = new Properties();
-      prop.load(inputStream);
+  protected Environment(Builder builder) {
+    this.timeZone = builder.timeZone;
+    this.delimiter = builder.delimiter;
+    this.scriptCharset = builder.scriptCharset;
+    this.fullLineDelimiter = builder.fullLineDelimiter;
+    this.sendFullScript = builder.sendFullScript;
+    this.autoCommit = builder.autoCommit;
+    this.removeCrs = builder.removeCrs;
+    this.ignoreWarnings = builder.ignoreWarnings;
+    this.driverPath = builder.driverPath;
+    this.driver = builder.driver;
+    this.url = builder.url;
+    this.username = builder.username;
+    this.password = builder.password;
+    this.hookBeforeUp = builder.hookBeforeUp;
+    this.hookBeforeEachUp = builder.hookBeforeEachUp;
+    this.hookAfterEachUp = builder.hookAfterEachUp;
+    this.hookAfterUp = builder.hookAfterUp;
+    this.hookBeforeDown = builder.hookBeforeDown;
+    this.hookBeforeEachDown = builder.hookBeforeEachDown;
+    this.hookAfterEachDown = builder.hookAfterEachDown;
+    this.hookAfterDown = builder.hookAfterDown;
+    this.hookBeforeNew = builder.hookBeforeNew;
+    this.hookAfterNew = builder.hookAfterNew;
+    this.variables = builder.variables;
+  }
 
-      this.timeZone = prop.getProperty(SETTING_KEY.time_zone.name(), "GMT+0:00");
-      this.delimiter = prop.getProperty(SETTING_KEY.delimiter.name(), ";");
-      this.scriptCharset = prop.getProperty(SETTING_KEY.script_char_set.name(), Charset.defaultCharset().name());
-      this.fullLineDelimiter = Boolean.valueOf(prop.getProperty(SETTING_KEY.full_line_delimiter.name()));
-      this.sendFullScript = Boolean.valueOf(prop.getProperty(SETTING_KEY.send_full_script.name()));
-      this.autoCommit = Boolean.valueOf(prop.getProperty(SETTING_KEY.auto_commit.name()));
-      this.removeCrs = Boolean.valueOf(prop.getProperty(SETTING_KEY.remove_crs.name()));
-      this.ignoreWarnings = Boolean.valueOf(prop.getProperty(SETTING_KEY.ignore_warnings.name(), "true"));
+  public static class Builder {
+    protected String timeZone = "GMT+0:00";
+    protected String delimiter = ";";
+    protected String scriptCharset = Charset.defaultCharset().name();
+    protected boolean fullLineDelimiter;
+    protected boolean sendFullScript;
+    protected boolean autoCommit;
+    protected boolean removeCrs;
+    protected boolean ignoreWarnings = true;
+    protected String driverPath;
+    protected String driver;
+    protected String url;
+    protected String username;
+    protected String password;
 
-      this.driverPath = prop.getProperty(SETTING_KEY.driver_path.name());
-      this.driver = prop.getProperty(SETTING_KEY.driver.name());
-      this.url = prop.getProperty(SETTING_KEY.url.name());
-      this.username = prop.getProperty(SETTING_KEY.username.name());
-      this.password = prop.getProperty(SETTING_KEY.password.name());
+    protected String hookBeforeUp;
+    protected String hookBeforeEachUp;
+    protected String hookAfterEachUp;
+    protected String hookAfterUp;
+    protected String hookBeforeDown;
+    protected String hookBeforeEachDown;
+    protected String hookAfterEachDown;
+    protected String hookAfterDown;
 
-      this.hookBeforeUp = prop.getProperty(SETTING_KEY.hook_before_up.name());
-      this.hookBeforeEachUp = prop.getProperty(SETTING_KEY.hook_before_each_up.name());
-      this.hookAfterEachUp = prop.getProperty(SETTING_KEY.hook_after_each_up.name());
-      this.hookAfterUp = prop.getProperty(SETTING_KEY.hook_after_up.name());
-      this.hookBeforeDown = prop.getProperty(SETTING_KEY.hook_before_down.name());
-      this.hookBeforeEachDown = prop.getProperty(SETTING_KEY.hook_before_each_down.name());
-      this.hookAfterEachDown = prop.getProperty(SETTING_KEY.hook_after_each_down.name());
-      this.hookAfterDown = prop.getProperty(SETTING_KEY.hook_after_down.name());
+    protected String hookBeforeNew;
+    protected String hookAfterNew;
 
-      this.hookBeforeNew = prop.getProperty(SETTING_KEY.hook_before_new.name());
-      this.hookAfterNew = prop.getProperty(SETTING_KEY.hook_after_new.name());
+    protected Properties variables = new Properties();
 
-      // User defined variables.
-      Set<Entry<Object, Object>> entries = prop.entrySet();
-      for (Entry<Object, Object> entry : entries) {
-        String key = (String) entry.getKey();
-        if (!SETTING_KEYS.contains(key)) {
-          variables.put(key, entry.getValue());
-        }
+    public Builder() {
+      super();
+    }
+
+    public Builder timeZone(String timeZone) {
+      if (timeZone != null) {
+        this.timeZone = timeZone;
       }
-    } catch (FileNotFoundException e) {
-      throw new MigrationException("Environment file missing: " + file.getAbsolutePath());
-    } catch (IOException e) {
-      throw new MigrationException("Error loading environment properties.  Cause: " + e, e);
-    } finally {
-      if (inputStream != null) {
-        try {
-          inputStream.close();
-        } catch (IOException e) {
-          // ignore
-        }
+      return this;
+    }
+
+    public Builder delimiter(String delimiter) {
+      if (delimiter != null)
+        this.delimiter = delimiter;
+      return this;
+    }
+
+    public Builder scriptCharset(String scriptCharset) {
+      if (scriptCharset != null) {
+        this.scriptCharset = scriptCharset;
       }
+      return this;
+    }
+
+    public Builder fullLineDelimiter(boolean fullLineDelimiter) {
+      this.fullLineDelimiter = fullLineDelimiter;
+      return this;
+    }
+
+    public Builder sendFullScript(boolean sendFullScript) {
+      this.sendFullScript = sendFullScript;
+      return this;
+    }
+
+    public Builder autoCommit(boolean autoCommit) {
+      this.autoCommit = autoCommit;
+      return this;
+    }
+
+    public Builder removeCrs(boolean removeCrs) {
+      this.removeCrs = removeCrs;
+      return this;
+    }
+
+    public Builder ignoreWarnings(boolean ignoreWarnings) {
+      this.ignoreWarnings = ignoreWarnings;
+      return this;
+    }
+
+    public Builder driverPath(String driverPath) {
+      this.driverPath = driverPath;
+      return this;
+    }
+
+    public Builder driver(String driver) {
+      this.driver = driver;
+      return this;
+    }
+
+    public Builder url(String url) {
+      this.url = url;
+      return this;
+    }
+
+    public Builder username(String username) {
+      this.username = username;
+      return this;
+    }
+
+    public Builder password(String password) {
+      this.password = password;
+      return this;
+    }
+
+    public Builder hookBeforeUp(String hookBeforeUp) {
+      this.hookBeforeUp = hookBeforeUp;
+      return this;
+    }
+
+    public Builder hookBeforeEachUp(String hookBeforeEachUp) {
+      this.hookBeforeEachUp = hookBeforeEachUp;
+      return this;
+    }
+
+    public Builder hookAfterEachUp(String hookAfterEachUp) {
+      this.hookAfterEachUp = hookAfterEachUp;
+      return this;
+    }
+
+    public Builder hookAfterUp(String hookAfterUp) {
+      this.hookAfterUp = hookAfterUp;
+      return this;
+    }
+
+    public Builder hookBeforeDown(String hookBeforeDown) {
+      this.hookBeforeDown = hookBeforeDown;
+      return this;
+    }
+
+    public Builder hookBeforeEachDown(String hookBeforeEachDown) {
+      this.hookBeforeEachDown = hookBeforeEachDown;
+      return this;
+    }
+
+    public Builder hookAfterEachDown(String hookAfterEachDown) {
+      this.hookAfterEachDown = hookAfterEachDown;
+      return this;
+    }
+
+    public Builder hookAfterDown(String hookAfterDown) {
+      this.hookAfterDown = hookAfterDown;
+      return this;
+    }
+
+    public Builder hookBeforeNew(String hookBeforeNew) {
+      this.hookBeforeNew = hookBeforeNew;
+      return this;
+    }
+
+    public Builder hookAfterNew(String hookAfterNew) {
+      this.hookAfterNew = hookAfterNew;
+      return this;
+    }
+
+    public Builder variables(Properties variables) {
+      if (variables != null) {
+        this.variables = variables;
+      }
+      return this;
+    }
+
+    public Environment build() {
+      return new Environment(this);
     }
   }
 

@@ -44,10 +44,12 @@ import org.apache.ibatis.migration.Change;
 import org.apache.ibatis.migration.ConnectionProvider;
 import org.apache.ibatis.migration.DataSourceConnectionProvider;
 import org.apache.ibatis.migration.Environment;
+import org.apache.ibatis.migration.EnvironmentLoader;
 import org.apache.ibatis.migration.FileMigrationLoader;
 import org.apache.ibatis.migration.FileMigrationLoaderFactory;
 import org.apache.ibatis.migration.MigrationException;
 import org.apache.ibatis.migration.MigrationLoader;
+import org.apache.ibatis.migration.PropertiesEnvironmentLoader;
 import org.apache.ibatis.migration.hook.FileHookScriptFactory;
 import org.apache.ibatis.migration.hook.FileMigrationHook;
 import org.apache.ibatis.migration.hook.HookScriptFactory;
@@ -208,7 +210,17 @@ public abstract class BaseCommand implements Command {
     if (environment != null) {
       return environment;
     }
-    environment = new Environment(existingEnvironmentFile());
+    EnvironmentLoader envLoader = null;
+    for (EnvironmentLoader found : ServiceLoader.load(EnvironmentLoader.class)) {
+      if (envLoader != null) {
+        throw new MigrationException("Found multiple implementations of EnvironmentLoader via SPI.");
+      }
+      envLoader = found;
+    }
+    if (envLoader == null) {
+      envLoader = new PropertiesEnvironmentLoader();
+    }
+    environment = envLoader.load(options.getEnvironment(), paths);
     return environment;
   }
 
