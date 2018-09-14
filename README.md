@@ -38,13 +38,13 @@ See the [reference documentation](http://mybatis.github.io/migrations)
 Download and extract migrations to any directory.
 ```sh
 cd $HOME/opt
-wget https://oss.sonatype.org/content/repositories/releases/org/mybatis/mybatis-migrations/3.3.1/mybatis-migrations-3.3.1-bundle.zip
-unzip mybatis-migrations-3.3.1-bundle.zip
+wget https://oss.sonatype.org/content/repositories/releases/org/mybatis/mybatis-migrations/3.3.4/mybatis-migrations-3.3.4-bundle.zip
+unzip mybatis-migrations-3.3.4-bundle.zip
 ```
 
 In your ~/.bashrc or ~/.zshrc or equivalent add
 ```
-export MIGRATIONS=$HOME/opt/mybatis-migrations-3.3.1 # replace with path you extracted to
+export MIGRATIONS=$HOME/opt/mybatis-migrations-3.3.4 # replace with path you extracted to
 export PATH=$MIGRATIONS/bin:$PATH
 ```
 
