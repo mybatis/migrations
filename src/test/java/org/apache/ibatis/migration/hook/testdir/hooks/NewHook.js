@@ -16,25 +16,25 @@
 // Rhino has println(), but Nashorn does not.
 // Both has print(), but Nashorn's outputs newline.
 if (typeof println == 'undefined')
-	this.println = print;
+    this.println = print;
 
 function validateDesc() {
-  if (hookContext.getDescription().matches('.*JIRA-[0-9]+.*')) {
-    println('Description is valid.');
-    println('');
-  } else {
-    throw 'Description must contain JIRA ticket number.';
-  }
+    if (hookContext.getDescription().matches('.*JIRA-[0-9]+.*')) {
+        println('Description is valid.');
+        println('');
+    } else {
+        throw 'Description must contain JIRA ticket number.';
+    }
 }
 
 function renameFile() {
-  var oldName = hookContext.getFilename();
-  var newName = oldName.replace("JIRA-", "JIRA");
-  var scriptsDir = migrationPaths.getScriptPath();
-  var src = new java.io.File(scriptsDir, oldName);
-  var dest = new java.io.File(scriptsDir, newName);
-  if (src.renameTo(dest)) {
-    println('Renamed ' + oldName + ' to ' + newName);
-    println('');
-  }
+    var oldName = hookContext.getFilename();
+    var newName = oldName.replace("JIRA-", "JIRA");
+    var scriptsDir = migrationPaths.getScriptPath();
+    var src = new java.io.File(scriptsDir, oldName);
+    var dest = new java.io.File(scriptsDir, newName);
+    if (src.renameTo(dest)) {
+        println('Renamed ' + oldName + ' to ' + newName);
+        println('');
+    }
 }
