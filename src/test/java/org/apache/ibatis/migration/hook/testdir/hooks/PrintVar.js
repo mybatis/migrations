@@ -1,5 +1,5 @@
 /*
- *    Copyright 2010-2016 the original author or authors.
+ *    Copyright 2010-2018 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -13,27 +13,25 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-
 // Rhino has println(), but Nashorn does not.
 // Both has print(), but Nashorn's outputs newline.
 if (typeof println == 'undefined')
-	this.println = print;
+    this.println = print;
 
 function printVars(arg1, arg2) {
-  println('FUNCTION_' + global_var + '_' + local_var1 + '_' + local_var2 + '_' + arg1 + '_' + arg2);
-  println('SCRIPT_VAR=' + ++SCRIPT_VAR);
-  println('');
+    println('FUNCTION_' + global_var + '_' + local_var1 + '_' + local_var2 + '_' + arg1 + '_' + arg2);
+    println('SCRIPT_VAR=' + ++SCRIPT_VAR);
+    println('');
 
-  // to verify 'change' object is just a clone
-  hookContext.getChange().setDescription('bogus description');
+    // to verify 'change' object is just a clone
+    hookContext.getChange().setDescription('bogus description');
 
-  local_var1 = 'This overwrites the variable defined in env file, '
-    + 'but should be reset on next invocation.'
+    local_var1 = 'This overwrites the variable defined in env file, ' + 'but should be reset on next invocation.'
 }
 
 var dog = new Object();
 dog.bark = function(arg1, arg2) {
-  println('METHOD_' + global_var + '_' + local_var1 + '_' + local_var2 + '_' + arg1 + '_' + arg2);
-  println('SCRIPT_VAR=' + ++SCRIPT_VAR);
-  println('');
+    println('METHOD_' + global_var + '_' + local_var1 + '_' + local_var2 + '_' + arg1 + '_' + arg2);
+    println('SCRIPT_VAR=' + ++SCRIPT_VAR);
+    println('');
 }
