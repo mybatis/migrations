@@ -22,7 +22,7 @@
   <parent>
     <groupId>org.mybatis</groupId>
     <artifactId>mybatis-parent</artifactId>
-    <version>30</version>
+    <version>31-SNAPSHOT</version>
     <relativePath />
   </parent>
 
@@ -75,7 +75,7 @@
     <dependency>
       <groupId>org.junit.vintage</groupId>
       <artifactId>junit-vintage-engine</artifactId>
-      <version>4.12.2</version>
+      <version>5.3.2</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -87,7 +87,7 @@
     <dependency>
       <groupId>org.hsqldb</groupId>
       <artifactId>hsqldb</artifactId>
-      <version>2.3.5</version> <!-- Version 2.4.0 requires jdk8 -->
+      <version>2.4.0</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
