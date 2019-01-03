@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2017 the original author or authors.
+ *    Copyright 2010-2018 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -61,13 +61,14 @@ public final class UpOperation extends DatabaseOperation {
         option = new DatabaseOperationOption();
       }
 
-      Change lastChange = null;
+      List<Change> changesInDb = Collections.emptyList();
       if (changelogExists(connectionProvider, option)) {
-        lastChange = getLastAppliedChange(connectionProvider, option);
+        changesInDb = getChangelog(connectionProvider, option);
       }
 
       List<Change> migrations = migrationsLoader.getMigrations();
       Collections.sort(migrations);
+      checkSkippedOrMissing(changesInDb, migrations, printStream);
       int stepCount = 0;
       ScriptRunner runner = getScriptRunner(connectionProvider, option, printStream);
 
@@ -77,7 +78,7 @@ public final class UpOperation extends DatabaseOperation {
       Reader onAbortScriptReader = null;
       try {
         for (Change change : migrations) {
-          if (lastChange == null || change.getId().compareTo(lastChange.getId()) > 0) {
+          if (changesInDb.isEmpty() || change.compareTo(changesInDb.get(changesInDb.size() - 1)) > 0) {
             if (stepCount == 0 && hook != null) {
               hookBindings.put(MigrationHook.HOOK_CONTEXT, new HookContext(connectionProvider, runner, null));
               hook.before(hookBindings);

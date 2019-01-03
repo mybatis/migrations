@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2017 the original author or authors.
+ *    Copyright 2010-2018 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -95,9 +95,8 @@ public class MigrationReader extends FilterReader {
     while (buffer.length() == 0) {
       int result = in.read(cbuf, off, len);
       if (result == -1) {
-        if (lineBuffer.length() > 0 && !undo && !inUndo) {
-          buffer.append(lineBuffer).append(lineSeparator);
-          lineBuffer.setLength(0);
+        if (lineBuffer.length() > 0 && (!undo || inUndo)) {
+          addToBuffer(lineBuffer);
         }
         if (buffer.length() > 0) {
           break;
@@ -115,10 +114,8 @@ public class MigrationReader extends FilterReader {
           switch (part) {
             case AFTER_UNDO_TAG:
               if (undo) {
-                replaceVariables();
-                buffer.append(lineBuffer.delete(afterCommentPrefixIndex, afterDoubleSlashIndex)
-                    .insert(afterCommentPrefixIndex, ' ')).append(lineSeparator);
-                lineBuffer.setLength(0);
+                addToBuffer(lineBuffer.delete(afterCommentPrefixIndex, afterDoubleSlashIndex)
+                    .insert(afterCommentPrefixIndex, ' '));
                 inUndo = true;
               } else {
                 // Won't read from the file anymore.
@@ -127,16 +124,16 @@ public class MigrationReader extends FilterReader {
                 if (bufferLen == 0) {
                   return -1;
                 } else {
-                  return readFromBuffer(cbuf, off, bufferLen);
+                  return readFromBuffer(cbuf, off, len);
                 }
               }
               break;
             case NOT_UNDO_LINE:
-              if (!undo || (undo && inUndo)) {
-                replaceVariables();
-                buffer.append(lineBuffer).append(lineSeparator);
+              if (!undo || inUndo) {
+                addToBuffer(lineBuffer);
+              } else {
+                lineBuffer.setLength(0);
               }
-              lineBuffer.setLength(0);
               break;
             default:
               break;
@@ -154,13 +151,19 @@ public class MigrationReader extends FilterReader {
     return readFromBuffer(cbuf, off, len);
   }
 
-  private void replaceVariables() {
+  private void addToBuffer(StringBuilder line) {
+    replaceVariables(line);
+    buffer.append(line).append(lineSeparator);
+    lineBuffer.setLength(0);
+  }
+
+  private void replaceVariables(StringBuilder line) {
     if (variableStatus == VariableStatus.FOUND_POSSIBLE_VARIABLE) {
-      String lineBufferStr = lineBuffer.toString();
+      String lineBufferStr = line.toString();
       String processed = PropertyParser.parse(lineBufferStr, variables);
       if (!lineBufferStr.equals(processed)) {
-        lineBuffer.setLength(0);
-        lineBuffer.append(processed);
+        line.setLength(0);
+        line.append(processed);
       }
     }
     variableStatus = VariableStatus.NOTHING;

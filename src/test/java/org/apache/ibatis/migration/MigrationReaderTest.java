@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2017 the original author or authors.
+ *    Copyright 2010-2018 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
 import java.util.Properties;
 
 import org.junit.After;
@@ -66,6 +67,19 @@ public class MigrationReaderTest {
         + "do part\n"
         + "--//@UNDO\n"
         + "undo part\n";
+    String result = readAsString(new MigrationReader(strToInputStream(script, charset), charset, true, null));
+    assertEquals("-- @UNDO\n"
+        + "undo part\n", result);
+    // @formatter:on
+  }
+
+  @Test
+  public void shouldReturnUndoPart_NoEndBreak() throws Exception {
+    // @formatter:off
+    String script = "-- comment\n"
+        + "do part\n"
+        + "--//@UNDO\n"
+        + "undo part";
     String result = readAsString(new MigrationReader(strToInputStream(script, charset), charset, true, null));
     assertEquals("-- @UNDO\n"
         + "undo part\n", result);
@@ -220,7 +234,7 @@ public class MigrationReaderTest {
         + "--//@UNDO ${c}\n"
         + "undo ${a} part${b} \n"
         + "-- ${a}\n"
-        + "${c} \\${b}\n";
+        + "${c} \\${b}";
     Properties vars = new Properties();
     vars.put("a", "AAA");
     vars.put("b", "BBB");
@@ -287,6 +301,27 @@ public class MigrationReaderTest {
       int read = reader.read(cbuf, 1, 3);
       assertEquals(read, 3);
       assertArrayEquals(new char[] { 0, 'a', 'b', 'c', 0 }, cbuf);
+    } finally {
+      reader.close();
+    }
+  }
+
+  @Test
+  public void testReadWithBuffer() throws Exception {
+    // @formatter:off
+    String script = "long do part 123456789012345678901234567890\n"
+        + "--//@UNDO\n"
+        + "undo part\n";
+    // @formatter:on
+    MigrationReader reader = new MigrationReader(strToInputStream(script, charset), charset, false, null);
+    try {
+      StringBuilder buffer = new StringBuilder();
+      char[] cbuf = new char[30];
+      int res;
+      while ((res = reader.read(cbuf)) != -1) {
+        buffer.append(res == cbuf.length ? cbuf : Arrays.copyOf(cbuf, res));
+      }
+      assertEquals("long do part 123456789012345678901234567890\n", buffer.toString());
     } finally {
       reader.close();
     }

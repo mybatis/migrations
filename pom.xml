@@ -22,12 +22,12 @@
   <parent>
     <groupId>org.mybatis</groupId>
     <artifactId>mybatis-parent</artifactId>
-    <version>30</version>
+    <version>31-SNAPSHOT</version>
     <relativePath />
   </parent>
 
   <artifactId>mybatis-migrations</artifactId>
-  <version>3.3.2-SNAPSHOT</version>
+  <version>3.3.6-SNAPSHOT</version>
 
   <name>MyBatis Migrations</name>
   <url>http://www.mybatis.org/migrations/</url>
@@ -64,30 +64,31 @@
   <properties>
     <findbugs.onlyAnalyze>org.apache.ibatis.migration</findbugs.onlyAnalyze>
     <clirr.comparisonVersion>3.2.0</clirr.comparisonVersion>
+    <module.name>org.mybatis.migrations</module.name>
   </properties>
 
   <dependencies>
     <dependency>
       <groupId>org.mybatis</groupId>
       <artifactId>mybatis</artifactId>
-      <version>3.4.6-SNAPSHOT</version>
+      <version>3.4.6</version>
     </dependency>
     <dependency>
       <groupId>org.junit.vintage</groupId>
       <artifactId>junit-vintage-engine</artifactId>
-      <version>4.12.2</version>
+      <version>5.3.2</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>com.github.stefanbirkner</groupId>
       <artifactId>system-rules</artifactId>
-      <version>1.17.0</version>
+      <version>1.19.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.hsqldb</groupId>
       <artifactId>hsqldb</artifactId>
-      <version>2.3.5</version> <!-- Version 2.4.0 requires jdk8 -->
+      <version>2.4.1</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

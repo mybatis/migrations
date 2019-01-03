@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-       Copyright 2010-2017 the original author or authors.
+       Copyright 2010-2018 the original author or authors.
 
        Licensed under the Apache License, Version 2.0 (the "License");
        you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@
   </properties>
 
   <body>
-    <section name="Introdution">
+    <section name="Introduction">
       <p>The entire Migrations system can be accessed through this one simple command. You can access the built-in help by typing: <code>migrate --help</code>.</p>
       <p>Calling the migrate command with no options or invalid options also produces the help message. Here's the output of the help command:</p>
 

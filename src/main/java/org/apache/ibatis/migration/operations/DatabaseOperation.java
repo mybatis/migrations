@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2017 the original author or authors.
+ *    Copyright 2010-2018 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -46,11 +46,6 @@ public abstract class DatabaseOperation {
     }
   }
 
-  protected Change getLastAppliedChange(ConnectionProvider connectionProvider, DatabaseOperationOption option) {
-    List<Change> changelog = getChangelog(connectionProvider, option);
-    return changelog.isEmpty() ? null : changelog.get(changelog.size() - 1);
-  }
-
   protected List<Change> getChangelog(ConnectionProvider connectionProvider, DatabaseOperationOption option) {
     SqlRunner runner = getSqlRunner(connectionProvider);
     try {
@@ -80,6 +75,27 @@ public abstract class DatabaseOperation {
       return false;
     } finally {
       runner.closeConnection();
+    }
+  }
+
+  protected void checkSkippedOrMissing(List<Change> changesInDb, List<Change> migrations, PrintStream printStream) {
+    int adjust = 0;
+    for (int i = 0; i < changesInDb.size(); i++) {
+      Change changeInDb = changesInDb.get(i);
+      int migrationIndex = migrations.indexOf(changeInDb);
+      if (migrationIndex == -1) {
+        // no corresponding migration script.
+        println(printStream, "WARNING: Missing migration script. id='" + changeInDb.getId() + "', description='"
+            + changeInDb.getDescription() + "'.");
+        adjust++;
+      } else if (migrationIndex != (i - adjust)) {
+        // Unapplied migration script(s).
+        for (int j = i - adjust; j < migrationIndex; j++) {
+          adjust--;
+          println(printStream,
+              "WARNING: Migration script '" + migrations.get(j).getFilename() + "' was not applied to the database.");
+        }
+      }
     }
   }
 

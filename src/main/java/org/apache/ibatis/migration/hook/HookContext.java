@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2017 the original author or authors.
+ *    Copyright 2010-2018 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -62,8 +62,7 @@ public class HookContext {
   }
 
   /**
-   * @return Returns an instance of {@link Change} object for an each hook; <code>null</code>
-   *         otherwise.
+   * @return Returns an instance of {@link Change} object for an each hook; <code>null</code> otherwise.
    */
   public Change getChange() {
     return change;

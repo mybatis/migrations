@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2017 the original author or authors.
+ *    Copyright 2010-2018 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -66,7 +66,7 @@ public class FileMigrationLoader implements MigrationLoader {
   protected Change parseChangeFromFilename(String filename) {
     try {
       Change change = new Change();
-      int lastIndexOfDot = filename.lastIndexOf(".");
+      int lastIndexOfDot = filename.lastIndexOf('.');
       String[] parts = filename.substring(0, lastIndexOfDot).split("_");
       change.setId(new BigDecimal(parts[0]));
       StringBuilder builder = new StringBuilder();
