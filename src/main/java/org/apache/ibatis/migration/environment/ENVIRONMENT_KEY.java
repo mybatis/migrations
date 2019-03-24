@@ -13,11 +13,30 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package org.apache.ibatis.migration;
+package org.apache.ibatis.migration.environment;
 
-import org.apache.ibatis.migration.environment.Environment;
-import org.apache.ibatis.migration.options.SelectedPaths;
-
-public interface FileMigrationLoaderFactory {
-  MigrationLoader create(SelectedPaths paths, Environment environment);
+enum ENVIRONMENT_KEY {
+  time_zone,
+  delimiter,
+  script_char_set,
+  full_line_delimiter,
+  send_full_script,
+  auto_commit,
+  remove_crs,
+  ignore_warnings,
+  driver_path,
+  driver,
+  url,
+  username,
+  password,
+  hook_before_up,
+  hook_before_each_up,
+  hook_after_each_up,
+  hook_after_up,
+  hook_before_down,
+  hook_before_each_down,
+  hook_after_each_down,
+  hook_after_down,
+  hook_before_new,
+  hook_after_new
 }

@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2018 the original author or authors.
+ *    Copyright 2010-2019 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -43,7 +43,7 @@ import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.migration.Change;
 import org.apache.ibatis.migration.ConnectionProvider;
 import org.apache.ibatis.migration.DataSourceConnectionProvider;
-import org.apache.ibatis.migration.Environment;
+import org.apache.ibatis.migration.environment.Environment;
 import org.apache.ibatis.migration.FileMigrationLoader;
 import org.apache.ibatis.migration.FileMigrationLoaderFactory;
 import org.apache.ibatis.migration.MigrationException;

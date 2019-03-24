@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2018 the original author or authors.
+ *    Copyright 2010-2019 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -60,11 +60,7 @@ public class MigratorTest {
     // which is why they're executed from this single test. Perhaps there's a better way.
 
     exit.expectSystemExit();
-    exit.checkAssertionAfterwards(new Assertion() {
-      public void checkAssertion() {
-        assertEquals("", out.getLog());
-      }
-    });
+    exit.checkAssertionAfterwards(() -> assertEquals("", out.getLog()));
 
     testBootstrapCommand();
     testStatusContainsNoPendingEntriesUsingStatusShorthand();
