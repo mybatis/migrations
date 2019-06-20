@@ -22,6 +22,7 @@ public class Change implements Comparable<Change>, Cloneable {
   private BigDecimal id;
   private String description;
   private String appliedTimestamp;
+  private boolean missing;
   private String filename;
 
   public Change() {
@@ -61,6 +62,14 @@ public class Change implements Comparable<Change>, Cloneable {
     this.appliedTimestamp = appliedTimestamp;
   }
 
+  public boolean isApplied() {
+    return getAppliedTimestamp() != null;
+  }
+
+  public void setMissing(boolean missing) {
+    this.missing = missing;
+  }
+
   public String getFilename() {
     return filename;
   }
@@ -71,7 +80,18 @@ public class Change implements Comparable<Change>, Cloneable {
 
   @Override
   public String toString() {
-    return id + " " + (appliedTimestamp == null ? "   ...pending...   " : appliedTimestamp) + " " + description;
+    StringBuilder sb = new StringBuilder();
+    sb.append(id).append(" ");
+    if (missing) {
+      sb.append("   ...missing...   ");
+    } else if (appliedTimestamp == null) {
+      sb.append("   ...pending...   ");
+    } else {
+      sb.append(appliedTimestamp);
+    }
+    sb.append(" ").append(description);
+
+    return sb.toString();
   }
 
   @Override

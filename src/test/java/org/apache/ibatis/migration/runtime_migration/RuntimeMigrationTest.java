@@ -56,12 +56,16 @@ public class RuntimeMigrationTest {
 
   private MigrationLoader migrationsLoader;
 
+  private MigrationLoader migrationsLoaderFromOtherBranch;
+
   @Before
   public void setup() throws Exception {
     connectionProvider = new JdbcConnectionProvider("org.hsqldb.jdbcDriver", "jdbc:hsqldb:mem:javaapitest", "sa", "");
     dbOption = new DatabaseOperationOption();
     out = new ByteArrayOutputStream();
-    migrationsLoader = createMigrationsLoader();
+    migrationsLoader = createMigrationsLoader("org/apache/ibatis/migration/runtime_migration/scripts");
+    migrationsLoaderFromOtherBranch = createMigrationsLoader(
+        "org/apache/ibatis/migration/runtime_migration/scripts_from_other_branch");
   }
 
   @After
@@ -104,6 +108,23 @@ public class RuntimeMigrationTest {
     assertEquals(3, status.getAppliedCount());
     assertEquals(0, status.getPendingCount());
     assertEquals(3, status.getCurrentStatus().size());
+  }
+
+  @Test
+  public void testUpFromDifferentBranches() throws Exception {
+    new UpOperation().operate(connectionProvider, migrationsLoader, dbOption, new PrintStream(out));
+    new UpOperation().operate(connectionProvider, migrationsLoaderFromOtherBranch, dbOption, new PrintStream(out));
+    assertEquals("4", runQuery(connectionProvider, "select count(*) from changelog"));
+    assertEquals("0", runQuery(connectionProvider, "select count(*) from first_table"));
+    assertEquals("0", runQuery(connectionProvider, "select count(*) from second_table"));
+    assertEquals("0", runQuery(connectionProvider, "select count(*) from third_table"));
+
+    StatusOperation status = new StatusOperation().operate(connectionProvider, migrationsLoader, dbOption,
+        new PrintStream(out));
+    assertEquals(3, status.getAppliedCount());
+    assertEquals(0, status.getPendingCount());
+    assertEquals(1, status.getMissingCount());
+    assertEquals(4, status.getCurrentStatus().size());
   }
 
   @Test
@@ -217,8 +238,8 @@ public class RuntimeMigrationTest {
     }
   }
 
-  protected FileMigrationLoader createMigrationsLoader() {
-    URL url = getClass().getClassLoader().getResource("org/apache/ibatis/migration/runtime_migration/scripts");
+  protected FileMigrationLoader createMigrationsLoader(String resource) {
+    URL url = getClass().getClassLoader().getResource(resource);
     File scriptsDir = new File(url.getFile());
     Properties properties = new Properties();
     properties.setProperty("changelog", "CHANGELOG");

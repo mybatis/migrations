@@ -16,9 +16,7 @@
 package org.apache.ibatis.migration.operations;
 
 import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import org.apache.ibatis.migration.Change;
 import org.apache.ibatis.migration.ConnectionProvider;
@@ -27,9 +25,10 @@ import org.apache.ibatis.migration.options.DatabaseOperationOption;
 import org.apache.ibatis.migration.utils.Util;
 
 public final class StatusOperation extends DatabaseOperation {
-  private int applied;
 
+  private int applied;
   private int pending;
+  private int missing;
 
   private List<Change> changes;
 
@@ -44,13 +43,19 @@ public final class StatusOperation extends DatabaseOperation {
     List<Change> migrations = migrationsLoader.getMigrations();
     if (changelogExists(connectionProvider, option)) {
       List<Change> changelog = getChangelog(connectionProvider, option);
-      for (Change change : migrations) {
-        int index = changelog.indexOf(change);
-        if (index > -1) {
-          changes.add(changelog.get(index));
+
+      Set<Change> changelogAndMigrations = new HashSet<Change>();
+      changelogAndMigrations.addAll(changelog);
+      changelogAndMigrations.addAll(migrations);
+
+      for (Change change : changelogAndMigrations) {
+        changes.add(change);
+        if (!migrations.contains(change)) {
+          change.setMissing(true);
+          missing++;
+        } else if (change.isApplied()) {
           applied++;
         } else {
-          changes.add(change);
           pending++;
         }
       }
@@ -72,6 +77,10 @@ public final class StatusOperation extends DatabaseOperation {
 
   public int getPendingCount() {
     return pending;
+  }
+
+  public int getMissingCount() {
+    return missing;
   }
 
   public List<Change> getCurrentStatus() {
