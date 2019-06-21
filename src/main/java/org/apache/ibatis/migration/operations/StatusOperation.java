@@ -25,7 +25,6 @@ import java.util.Set;
 import org.apache.ibatis.migration.Change;
 import org.apache.ibatis.migration.ConnectionProvider;
 import org.apache.ibatis.migration.MigrationLoader;
-import org.apache.ibatis.migration.MissingScript;
 import org.apache.ibatis.migration.options.DatabaseOperationOption;
 import org.apache.ibatis.migration.utils.Util;
 
@@ -97,5 +96,16 @@ public final class StatusOperation extends DatabaseOperation {
 
   public List<Change> getCurrentStatus() {
     return changes;
+  }
+
+  class MissingScript extends Change {
+    public MissingScript(Change change) {
+      super(change);
+    }
+
+    @Override
+    public String toString() {
+      return super.toString() + " <=== MISSING!";
+    }
   }
 }
