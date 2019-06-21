@@ -21,6 +21,7 @@ import java.util.*;
 import org.apache.ibatis.migration.Change;
 import org.apache.ibatis.migration.ConnectionProvider;
 import org.apache.ibatis.migration.MigrationLoader;
+import org.apache.ibatis.migration.MissingScript;
 import org.apache.ibatis.migration.options.DatabaseOperationOption;
 import org.apache.ibatis.migration.utils.Util;
 
@@ -41,33 +42,40 @@ public final class StatusOperation extends DatabaseOperation {
     println(printStream, Util.horizontalLine("", 80));
     changes = new ArrayList<Change>();
     List<Change> migrations = migrationsLoader.getMigrations();
+    List<Change> changelog = null;
     if (changelogExists(connectionProvider, option)) {
-      List<Change> changelog = getChangelog(connectionProvider, option);
+      changelog = getChangelog(connectionProvider, option);
 
       Set<Change> changelogAndMigrations = new HashSet<Change>();
       changelogAndMigrations.addAll(changelog);
       changelogAndMigrations.addAll(migrations);
 
       for (Change change : changelogAndMigrations) {
-        changes.add(change);
         if (!migrations.contains(change)) {
-          change.setMissing(true);
+          change = new MissingScript(change);
           missing++;
-        } else if (change.isApplied()) {
+        } else if (change.getAppliedTimestamp() != null) {
           applied++;
         } else {
           pending++;
         }
+        changes.add(change);
       }
     } else {
       changes.addAll(migrations);
       pending = migrations.size();
     }
+
     Collections.sort(changes);
     for (Change change : changes) {
       println(printStream, change.toString());
     }
     println(printStream);
+
+    if (changelog != null) {
+      checkSkippedOrMissing(changelog, migrations, printStream);
+    }
+
     return this;
   }
 
