@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2018 the original author or authors.
+ *    Copyright 2010-2019 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -78,25 +78,28 @@ public abstract class DatabaseOperation {
     }
   }
 
-  protected void checkSkippedOrMissing(List<Change> changesInDb, List<Change> migrations, PrintStream printStream) {
+  protected String checkSkippedOrMissing(List<Change> changesInDb, List<Change> migrations) {
+    StringBuilder warnings = new StringBuilder();
+    String separator = System.getProperty("line.separator");
     int adjust = 0;
     for (int i = 0; i < changesInDb.size(); i++) {
       Change changeInDb = changesInDb.get(i);
       int migrationIndex = migrations.indexOf(changeInDb);
       if (migrationIndex == -1) {
         // no corresponding migration script.
-        println(printStream, "WARNING: Missing migration script. id='" + changeInDb.getId() + "', description='"
-            + changeInDb.getDescription() + "'.");
+        warnings.append("WARNING: Missing migration script. id='").append(changeInDb.getId()).append("', description='")
+            .append(changeInDb.getDescription()).append("'.").append(separator);
         adjust++;
       } else if (migrationIndex != (i - adjust)) {
         // Unapplied migration script(s).
         for (int j = i - adjust; j < migrationIndex; j++) {
           adjust--;
-          println(printStream,
-              "WARNING: Migration script '" + migrations.get(j).getFilename() + "' was not applied to the database.");
+          warnings.append("WARNING: Migration script '").append(migrations.get(j).getFilename())
+              .append("' was not applied to the database.").append(separator);
         }
       }
     }
+    return warnings.toString();
   }
 
   protected SqlRunner getSqlRunner(ConnectionProvider connectionProvider) {

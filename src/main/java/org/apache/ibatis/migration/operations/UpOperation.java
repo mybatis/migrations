@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2018 the original author or authors.
+ *    Copyright 2010-2019 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -68,7 +68,7 @@ public final class UpOperation extends DatabaseOperation {
 
       List<Change> migrations = migrationsLoader.getMigrations();
       Collections.sort(migrations);
-      checkSkippedOrMissing(changesInDb, migrations, printStream);
+      String skippedOrMissing = checkSkippedOrMissing(changesInDb, migrations);
       int stepCount = 0;
       ScriptRunner runner = getScriptRunner(connectionProvider, option, printStream);
 
@@ -106,6 +106,7 @@ public final class UpOperation extends DatabaseOperation {
           hookBindings.put(MigrationHook.HOOK_CONTEXT, new HookContext(connectionProvider, runner, null));
           hook.after(hookBindings);
         }
+        println(printStream, skippedOrMissing);
         return this;
       } catch (RuntimeSqlException e) {
         onAbortScriptReader = migrationsLoader.getOnAbortReader();

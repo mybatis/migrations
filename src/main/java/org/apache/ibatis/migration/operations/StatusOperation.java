@@ -45,9 +45,10 @@ public final class StatusOperation extends DatabaseOperation {
     println(printStream, Util.horizontalLine("", 80));
     changes = new ArrayList<Change>();
     List<Change> migrations = migrationsLoader.getMigrations();
-    List<Change> changelog = null;
+    String skippedOrMissing = null;
     if (changelogExists(connectionProvider, option)) {
-      changelog = getChangelog(connectionProvider, option);
+      List<Change> changelog = getChangelog(connectionProvider, option);
+      skippedOrMissing = checkSkippedOrMissing(changelog, migrations);
 
       Set<Change> changelogAndMigrations = new HashSet<Change>();
       changelogAndMigrations.addAll(changelog);
@@ -75,8 +76,8 @@ public final class StatusOperation extends DatabaseOperation {
     }
     println(printStream);
 
-    if (changelog != null) {
-      checkSkippedOrMissing(changelog, migrations, printStream);
+    if (skippedOrMissing != null && !skippedOrMissing.isEmpty()) {
+      println(printStream, skippedOrMissing);
     }
 
     return this;
