@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2018 the original author or authors.
+ *    Copyright 2010-2019 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.nio.channels.FileChannel;
+import java.nio.charset.Charset;
 
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.migration.Migrator;
@@ -93,7 +94,7 @@ public class NewHookTest {
     // Add hook settings
     File envFile = new File(basePath.getCanonicalPath() + File.separator + "environments", "development.properties");
     PrintWriter writer = new PrintWriter(
-        new BufferedWriter(new OutputStreamWriter(new FileOutputStream(envFile, true), "utf-8")));
+        new BufferedWriter(new OutputStreamWriter(new FileOutputStream(envFile, true), Charset.forName("utf-8"))));
     try {
       writer.println("hook_before_new=js:NewHook.js:_function=validateDesc");
       writer.println("hook_after_new=js:NewHook.js:_function=renameFile");

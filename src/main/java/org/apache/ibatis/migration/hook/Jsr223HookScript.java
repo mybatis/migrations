@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2018 the original author or authors.
+ *    Copyright 2010-2019 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -102,7 +103,7 @@ public class Jsr223HookScript implements HookScript {
     bindings.putAll(bindingMap);
     try {
       printStream.println(Util.horizontalLine("Applying JSR-223 hook : " + scriptFile.getName(), 80));
-      engine.eval(new InputStreamReader(new FileInputStream(scriptFile), charset));
+      engine.eval(new InputStreamReader(new FileInputStream(scriptFile), Charset.forName(charset)));
       if (functionName != null || (objectName != null && methodName != null)) {
         Invocable invocable = (Invocable) engine;
         if (functionName != null) {

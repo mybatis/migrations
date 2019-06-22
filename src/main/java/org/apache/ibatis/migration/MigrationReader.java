@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2018 the original author or authors.
+ *    Copyright 2010-2019 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 import java.util.Properties;
 
 import org.apache.ibatis.parsing.PropertyParser;
@@ -269,7 +270,7 @@ public class MigrationReader extends FilterReader {
     if (charset == null || charset.length() == 0) {
       return new InputStreamReader(inputStream);
     } else {
-      return new InputStreamReader(inputStream, charset);
+      return new InputStreamReader(inputStream, Charset.forName(charset));
     }
   }
 }

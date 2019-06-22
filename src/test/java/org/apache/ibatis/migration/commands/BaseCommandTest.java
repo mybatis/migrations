@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2017 the original author or authors.
+ *    Copyright 2010-2019 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -126,7 +126,9 @@ public class BaseCommandTest {
   }
 
   protected static String contentOf(File file) throws FileNotFoundException {
-    String destContent = new Scanner(file).useDelimiter("\\Z").next();
-    return destContent;
+    try (Scanner scanner = new Scanner(file)) {
+      String destContent = scanner.useDelimiter("\\Z").next();
+      return destContent;
+    }
   }
 }

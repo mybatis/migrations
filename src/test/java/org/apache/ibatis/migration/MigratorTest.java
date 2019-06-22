@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2018 the original author or authors.
+ *    Copyright 2010-2019 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@ package org.apache.ibatis.migration;
 import static org.junit.Assert.*;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.util.Arrays;
@@ -341,9 +340,10 @@ public class MigratorTest {
     String[] scripts = scriptPath.list();
     Arrays.sort(scripts);
     assertEquals(4, scripts.length);
-    Scanner scanner = new Scanner(new File(scriptPath, scripts[scripts.length - 2]));
-    if (scanner.hasNextLine()) {
-      assertEquals("// " + desc, scanner.nextLine());
+    try (Scanner scanner = new Scanner(new File(scriptPath, scripts[scripts.length - 2]))) {
+      if (scanner.hasNextLine()) {
+        assertEquals("// " + desc, scanner.nextLine());
+      }
     }
 
     templatePath.delete();
