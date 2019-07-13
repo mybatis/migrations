@@ -35,6 +35,10 @@ ALTER TABLE ${changelog}
 ADD CONSTRAINT PK_${changelog}
 PRIMARY KEY (id);
 
+SELECT 'username: ' || USER_NAME FROM INFORMATION_SCHEMA.SYSTEM_USERS;
+SELECT 'var1: ' || '${var1}' FROM (VALUES(0));
+SELECT 'var2: ' || '${var2}' FROM (VALUES(0));
+
 
 -- //@UNDO
 

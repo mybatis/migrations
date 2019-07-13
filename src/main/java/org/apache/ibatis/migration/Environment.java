@@ -27,6 +27,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 
+import org.apache.ibatis.parsing.GenericTokenParser;
+
 public class Environment {
 
   public static final String CHANGELOG = "changelog";
@@ -102,6 +104,17 @@ public class Environment {
   private final Properties sysProps = System.getProperties();
   private final Properties variables = new Properties();
 
+  private final GenericTokenParser parser = new GenericTokenParser("${", "}", key -> {
+    String value = sysProps.getProperty(key);
+    if (value == null) {
+      value = envVars.get(key);
+    }
+    if (value == null) {
+      value = "${" + key + "}";
+    }
+    return value;
+  });
+
   public Environment(File file) {
     try (FileInputStream inputStream = new FileInputStream(file)) {
       Properties prop = new Properties();
@@ -136,7 +149,7 @@ public class Environment {
 
       // User defined variables.
       prop.entrySet().stream().filter(e -> !SETTING_KEYS.contains(e.getKey())).forEach(e -> {
-        variables.put(e.getKey(), e.getValue());
+        variables.put(e.getKey(), parser.parse((String) e.getValue()));
       });
     } catch (FileNotFoundException e) {
       throw new MigrationException("Environment file missing: " + file.getAbsolutePath());
@@ -162,7 +175,7 @@ public class Environment {
     }
     // 3. Read .properties file with variable replacement.
     property = properties.getProperty(propertyKey, defaultValue);
-    return property == null ? null : property;
+    return property == null ? null : parser.parse(property);
   }
 
   public String getTimeZone() {
