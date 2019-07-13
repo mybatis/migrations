@@ -56,11 +56,16 @@ public class SystemPropertyTest {
 
     // Set system properties
     System.setProperty("MIGRATIONS_DRIVER", "org.hsqldb.jdbcDriver");
+    System.setProperty("username", "Pocahontas");
+    System.setProperty("var1", "Variable 1");
 
     Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "up", "1", "--trace"));
 
     String output = out.getLog();
     assertTrue(output.contains("SUCCESS"));
+    assertTrue(output.contains("username: Pocahontas"));
+    assertTrue(output.contains("var1: Variable 1"));
+    assertTrue(output.contains("var2: ${var2}"));
 
     out.clearLog();
     System.exit(0);
