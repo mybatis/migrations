@@ -22,11 +22,15 @@ import java.io.File;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.migration.Migrator;
 import org.apache.ibatis.migration.utils.TestUtil;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.contrib.java.lang.system.Assertion;
+import org.junit.contrib.java.lang.system.EnvironmentVariables;
 import org.junit.contrib.java.lang.system.ExpectedSystemExit;
+import org.junit.contrib.java.lang.system.RestoreSystemProperties;
 import org.junit.contrib.java.lang.system.SystemOutRule;
 
 public class SystemPropertyTest {
@@ -37,6 +41,12 @@ public class SystemPropertyTest {
   @Rule
   public final SystemOutRule out = new SystemOutRule().enableLog();
 
+  @Rule
+  public final RestoreSystemProperties restoreSysProps = new RestoreSystemProperties();
+
+  @Rule
+  public final EnvironmentVariables envVars = new EnvironmentVariables();
+
   private static File dir;
 
   @BeforeClass
@@ -44,8 +54,8 @@ public class SystemPropertyTest {
     dir = Resources.getResourceAsFile("org/apache/ibatis/migration/system_property/testdir");
   }
 
-  @Test
-  public void testSystemProperties() throws Exception {
+  @Before
+  public void beforeEachTest() {
     exit.expectSystemExit();
     exit.checkAssertionAfterwards(new Assertion() {
       public void checkAssertion() {
@@ -53,15 +63,42 @@ public class SystemPropertyTest {
       }
     });
     out.clearLog();
+  }
 
-    // Set system properties
+  @After
+  public void afterEachTest() {
+    out.clearLog();
+    System.exit(0);
+  }
+
+  @Test
+  public void testEnvironmentVariables() throws Exception {
+    envVars.set("MIGRATIONS_DRIVER", "org.hsqldb.jdbcDriver");
+    envVars.set("username", "Pocahontas");
+    envVars.set("var1", "Variable 1");
+    envVars.set("MIGRATIONS_VAR3", "Variable 3");
+    envVars.set("migrations_var4", "Variable 4");
+    envVars.set("MIGRATIONS_VAR5", "Variable 5");
+
+    assertEnvironment();
+  }
+
+  @Test
+  public void testSystemProperties() throws Exception {
     System.setProperty("MIGRATIONS_DRIVER", "org.hsqldb.jdbcDriver");
     System.setProperty("username", "Pocahontas");
     System.setProperty("var1", "Variable 1");
     System.setProperty("MIGRATIONS_VAR3", "Variable 3");
     System.setProperty("migrations_var4", "Variable 4");
     System.setProperty("MIGRATIONS_VAR5", "Variable 5");
+    // Set duplicate env vars to assert priority
+    envVars.set("MIGRATIONS_DRIVER", "bogus_driver");
+    envVars.set("MIGRATIONS_VAR3", "bogus_var3");
 
+    assertEnvironment();
+  }
+
+  private void assertEnvironment() {
     Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "up", "1", "--trace"));
 
     String output = out.getLog();
@@ -74,7 +111,6 @@ public class SystemPropertyTest {
     assertTrue(output.contains("var5: Variable 5"));
     assertTrue(output.contains("Var5: Var5 in properties file"));
 
-    out.clearLog();
-    System.exit(0);
+    Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "down", "1"));
   }
 }
