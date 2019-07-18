@@ -56,6 +56,9 @@ migrate init
 ```
 After that read the ./drivers and ./environments section of [Migrations init](http://mybatis.github.io/migrations/init.html)
 
+## docker
+Docker users can use https://hub.docker.com/r/mybatis/migrations
+
 ## License
 
 Migrations is [Apache Licensed](LICENSE)
