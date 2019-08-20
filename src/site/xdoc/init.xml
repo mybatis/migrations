@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-       Copyright 2010-2017 the original author or authors.
+       Copyright 2010-2019 the original author or authors.
 
        Licensed under the Apache License, Version 2.0 (the "License");
        you may not use this file except in compliance with the License.
@@ -96,6 +96,7 @@ send_full_script=true
 ignore_warnings=true
 # Custom driver path to avoid copying your drivers
 # driver_path=]]></source>
+        <p>Since version 3.3.6, it is possible for users to override environment settings via environment variables or system properties. For example, instead of writing the database password in the environment file, you can declare an environment variable <code>MIGRATIONS_PASSWORD</code>.</p>
         <h4>Database specific information</h4>
         <h5>MySQL</h5>
         <ul>
