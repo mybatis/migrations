@@ -7,7 +7,7 @@ jdk:
   - openjdk11
   - openjdk8
 
-script: mvn test -Djacoco.skip=true -B
+script: ./mvnw test -Djacoco.skip=true -B
 
 after_success:
   - chmod -R 777 ./travis/after_success.sh
