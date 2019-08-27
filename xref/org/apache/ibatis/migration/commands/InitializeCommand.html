@@ -13,7 +13,7 @@
 <a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_javadoccomment"> *    you may not use this file except in compliance with the License.</em>
 <a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_javadoccomment"> *    You may obtain a copy of the License at</em>
 <a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_javadoccomment"> *       <a href="http://www.apache.org/licenses/LICENSE-2." target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.</a>0</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_javadoccomment"> *       <a href="http://www.apache.org/licenses/LICENSE-2.0" target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.0</a></em>
 <a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_javadoccomment"> *    Unless required by applicable law or agreed to in writing, software</em>
 <a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_javadoccomment"> *    distributed under the License is distributed on an "AS IS" BASIS,</em>
@@ -30,8 +30,8 @@
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.apache.ibatis.migration.options.SelectedOptions;
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.apache.ibatis.migration.utils.Util;
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../org/apache/ibatis/migration/commands/InitializeCommand.html">InitializeCommand</a> <strong class="jxr_keyword">extends</strong> <a href="../../../../../org/apache/ibatis/migration/commands/BaseCommand.html">BaseCommand</a> {
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>    <strong class="jxr_keyword">public</strong> <a href="../../../../../org/apache/ibatis/migration/commands/InitializeCommand.html">InitializeCommand</a>(<a href="../../../../../org/apache/ibatis/migration/options/SelectedOptions.html">SelectedOptions</a> selectedOptions) {
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a name="InitializeCommand" href="../../../../../org/apache/ibatis/migration/commands/InitializeCommand.html#InitializeCommand">InitializeCommand</a> <strong class="jxr_keyword">extends</strong> <a name="BaseCommand" href="../../../../../org/apache/ibatis/migration/commands/BaseCommand.html#BaseCommand">BaseCommand</a> {
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>    <strong class="jxr_keyword">public</strong> <a name="InitializeCommand" href="../../../../../org/apache/ibatis/migration/commands/InitializeCommand.html#InitializeCommand">InitializeCommand</a>(<a name="SelectedOptions" href="../../../../../org/apache/ibatis/migration/options/SelectedOptions.html#SelectedOptions">SelectedOptions</a> selectedOptions) {
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>      <strong class="jxr_keyword">super</strong>(selectedOptions);
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>    }
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  
@@ -70,7 +70,7 @@
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>      <strong class="jxr_keyword">if</strong> (list.length != 0) {
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>        <strong class="jxr_keyword">for</strong> (String entry : list) {
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>          <strong class="jxr_keyword">if</strong> (!entry.startsWith(<span class="jxr_string">"."</span>)) {
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>            <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../org/apache/ibatis/migration/MigrationException.html">MigrationException</a>(<span class="jxr_string">"Directory must be empty (.svn etc allowed): "</span> + path.getAbsolutePath());
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>            <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="MigrationException" href="../../../../../org/apache/ibatis/migration/MigrationException.html#MigrationException">MigrationException</a>(<span class="jxr_string">"Directory must be empty (.svn etc allowed): "</span> + path.getAbsolutePath());
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>          }
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>        }
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>      }
@@ -80,7 +80,7 @@
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>      <strong class="jxr_keyword">if</strong> (!path.exists()) {
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>        printStream.println(<span class="jxr_string">"Creating: "</span> + path.getName());
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>        <strong class="jxr_keyword">if</strong> (!path.mkdirs()) {
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>          <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../org/apache/ibatis/migration/MigrationException.html">MigrationException</a>(
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>          <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="MigrationException" href="../../../../../org/apache/ibatis/migration/MigrationException.html#MigrationException">MigrationException</a>(
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>              <span class="jxr_string">"Could not create directory path for an unknown reason. Make sure you have access to the directory."</span>);
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>        }
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>      }
@@ -89,6 +89,6 @@
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2010&#x2013;2018 <a href="http://www.mybatis.org/">MyBatis.org</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2010&#x2013;2019 <a href="http://www.mybatis.org/">MyBatis.org</a>. All rights reserved.</div>
 </body>
 </html>

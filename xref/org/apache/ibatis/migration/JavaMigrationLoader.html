@@ -13,7 +13,7 @@
 <a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_javadoccomment"> *    you may not use this file except in compliance with the License.</em>
 <a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_javadoccomment"> *    You may obtain a copy of the License at</em>
 <a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_javadoccomment"> *       <a href="http://www.apache.org/licenses/LICENSE-2." target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.</a>0</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_javadoccomment"> *       <a href="http://www.apache.org/licenses/LICENSE-2.0" target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.0</a></em>
 <a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_javadoccomment"> *    Unless required by applicable law or agreed to in writing, software</em>
 <a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_javadoccomment"> *    distributed under the License is distributed on an "AS IS" BASIS,</em>
@@ -33,17 +33,17 @@
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.apache.ibatis.io.ResolverUtil;
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.ibatis.io.ResolverUtil.Test;
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../org/apache/ibatis/migration/JavaMigrationLoader.html">JavaMigrationLoader</a> <strong class="jxr_keyword">implements</strong> <a href="../../../../org/apache/ibatis/migration/MigrationLoader.html">MigrationLoader</a> {
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="JavaMigrationLoader" href="../../../../org/apache/ibatis/migration/JavaMigrationLoader.html#JavaMigrationLoader">JavaMigrationLoader</a> <strong class="jxr_keyword">implements</strong> <a name="MigrationLoader" href="../../../../org/apache/ibatis/migration/MigrationLoader.html#MigrationLoader">MigrationLoader</a> {
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>    <strong class="jxr_keyword">private</strong> String[] packageNames;
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>    <strong class="jxr_keyword">private</strong> ClassLoader classLoader;
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>    <strong class="jxr_keyword">public</strong> <a href="../../../../org/apache/ibatis/migration/JavaMigrationLoader.html">JavaMigrationLoader</a>(String... packageNames) {
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>    <strong class="jxr_keyword">public</strong> <a name="JavaMigrationLoader" href="../../../../org/apache/ibatis/migration/JavaMigrationLoader.html#JavaMigrationLoader">JavaMigrationLoader</a>(String... packageNames) {
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>      <strong class="jxr_keyword">this</strong>(<strong class="jxr_keyword">null</strong>, packageNames);
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>    }
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>    <strong class="jxr_keyword">public</strong> <a href="../../../../org/apache/ibatis/migration/JavaMigrationLoader.html">JavaMigrationLoader</a>(ClassLoader classLoader, String... packageNames) {
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>    <strong class="jxr_keyword">public</strong> <a name="JavaMigrationLoader" href="../../../../org/apache/ibatis/migration/JavaMigrationLoader.html#JavaMigrationLoader">JavaMigrationLoader</a>(ClassLoader classLoader, String... packageNames) {
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>      <strong class="jxr_keyword">super</strong>();
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>      <strong class="jxr_keyword">this</strong>.classLoader = classLoader;
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>      <strong class="jxr_keyword">this</strong>.packageNames = packageNames;
@@ -58,19 +58,19 @@
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>      <strong class="jxr_keyword">for</strong> (Class&lt;? <strong class="jxr_keyword">extends</strong> MigrationScript&gt; clazz : classes) {
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>        <strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>          <strong class="jxr_keyword">if</strong> (!Modifier.isAbstract(clazz.getModifiers())) {
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>            <a href="../../../../org/apache/ibatis/migration/MigrationScript.html">MigrationScript</a> script = clazz.newInstance();
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>            <a href="../../../../org/apache/ibatis/migration/Change.html">Change</a> change = parseChangeFromMigrationScript(script);
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>            <a name="MigrationScript" href="../../../../org/apache/ibatis/migration/MigrationScript.html#MigrationScript">MigrationScript</a> script = clazz.newInstance();
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>            <a name="Change" href="../../../../org/apache/ibatis/migration/Change.html#Change">Change</a> change = parseChangeFromMigrationScript(script);
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>            migrations.add(change);
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>          }
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>        } <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>          <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../org/apache/ibatis/migration/MigrationException.html">MigrationException</a>(<span class="jxr_string">"Could not instanciate MigrationScript: "</span> + clazz.getName(), e);
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>          <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="MigrationException" href="../../../../org/apache/ibatis/migration/MigrationException.html#MigrationException">MigrationException</a>(<span class="jxr_string">"Could not instanciate MigrationScript: "</span> + clazz.getName(), e);
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>        }
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>      }
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>      <strong class="jxr_keyword">return</strong> migrations;
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>    }
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>    <strong class="jxr_keyword">private</strong> <a href="../../../../org/apache/ibatis/migration/Change.html">Change</a> parseChangeFromMigrationScript(<a href="../../../../org/apache/ibatis/migration/MigrationScript.html">MigrationScript</a> script) {
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>      <a href="../../../../org/apache/ibatis/migration/Change.html">Change</a> change = <strong class="jxr_keyword">new</strong> <a href="../../../../org/apache/ibatis/migration/Change.html">Change</a>();
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>    <strong class="jxr_keyword">private</strong> <a name="Change" href="../../../../org/apache/ibatis/migration/Change.html#Change">Change</a> parseChangeFromMigrationScript(<a name="MigrationScript" href="../../../../org/apache/ibatis/migration/MigrationScript.html#MigrationScript">MigrationScript</a> script) {
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>      <a name="Change" href="../../../../org/apache/ibatis/migr<a name="Change" href="../../../../org/apache/ibatis/migration/Change.html#Change">Change</a>Change.html#Change">Change</a> change = <strong class="jxr_keyword">new</strong> <a name="Change" href="../../../../org/apache/ibatis/migration/Change.html#Change">Change</a>();
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>      change.setId(script.getId());
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>      change.setDescription(script.getDescription());
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>      change.setFilename(script.getClass().getName());
@@ -78,7 +78,7 @@
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>    }
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>    @Override
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>    <strong class="jxr_keyword">public</strong> Reader getScriptReader(<a href="../../../../org/apache/ibatis/migration/Change.html">Change</a> change, <strong class="jxr_keyword">boolean</strong> undo) {
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>    <strong class="jxr_keyword">public</strong> Reader getScriptReader(<a name="Change" href="../../../../org/apache/ibatis/migration/Change.html#Change">Change</a> change, <strong class="jxr_keyword">boolean</strong> undo) {
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>      ResolverUtil&lt;MigrationScript&gt; resolver = getResolver(MigrationScript.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>      <strong class="jxr_keyword">final</strong> String className = change.getFilename();
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>      <strong class="jxr_keyword">for</strong> (String pkg : packageNames) {
@@ -93,10 +93,10 @@
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>      Set&lt;Class&lt;? <strong class="jxr_keyword">extends</strong> MigrationScript&gt;&gt; classes = resolver.getClasses();
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>      <strong class="jxr_keyword">for</strong> (Class&lt;? <strong class="jxr_keyword">extends</strong> MigrationScript&gt; clazz : classes) {
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>        <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>          <a href="../../../../org/apache/ibatis/migration/MigrationScript.html">MigrationScript</a> script = clazz.newInstance();
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>          <a name="MigrationScript" href="../../../../org/apache/ibatis/migration/MigrationScript.html#MigrationScript">MigrationScript</a> script = clazz.newInstance();
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>          reader = <strong class="jxr_keyword">new</strong> StringReader(undo ? script.getDownScript() : script.getUpScript());
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>        } <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>          <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../org/apache/ibatis/migration/MigrationException.html">MigrationException</a>(<span class="jxr_string">"Could not instanciate MigrationScript: "</span> + clazz.getName(), e);
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>          <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="MigrationException" href="../../../../org/apache/ibatis/migration/MigrationException.html#MigrationException">MigrationException</a>(<span class="jxr_string">"Could not instanciate MigrationScript: "</span> + clazz.getName(), e);
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>        }
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>        <em class="jxr_comment">// There should be only one script.</em>
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>        <strong class="jxr_keyword">break</strong>;
@@ -122,14 +122,14 @@
 <a class="jxr_linenumber" name="L114" href="#L114">114</a>       <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L115" href="#L115">115</a>     }
 <a class="jxr_linenumber" name="L116" href="#L116">116</a>     <strong class="jxr_keyword">if</strong> (classes.size() &gt; 1) {
-<a class="jxr_linenumber" name="L117" href="#L117">117</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../org/apache/ibatis/migration/MigrationException.html">MigrationException</a>(<span class="jxr_string">"There can be only one implementation of "</span> + scriptClass.getName());
+<a class="jxr_linenumber" name="L117" href="#L117">117</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="MigrationException" href="../../../../org/apache/ibatis/migration/MigrationException.html#MigrationException">MigrationException</a>(<span class="jxr_string">"There can be only one implementation of "</span> + scriptClass.getName());
 <a class="jxr_linenumber" name="L118" href="#L118">118</a>     }
 <a class="jxr_linenumber" name="L119" href="#L119">119</a>     Class&lt;? <strong class="jxr_keyword">extends</strong> T&gt; clazz = classes.iterator().next();
 <a class="jxr_linenumber" name="L120" href="#L120">120</a>     <strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L121" href="#L121">121</a>       T script = clazz.newInstance();
 <a class="jxr_linenumber" name="L122" href="#L122">122</a>       <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> StringReader(script.getScript());
 <a class="jxr_linenumber" name="L123" href="#L123">123</a>     } <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L124" href="#L124">124</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../org/apache/ibatis/migration/MigrationException.html">MigrationException</a>(<span class="jxr_string">"Could not instanciate script class: "</span> + clazz.getName(), e);
+<a class="jxr_linenumber" name="L124" href="#L124">124</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="MigrationException" href="../../../../org/apache/ibatis/migration/MigrationException.html#MigrationException">MigrationException</a>(<span class="jxr_string">"Could not instanciate script class: "</span> + clazz.getName(), e);
 <a class="jxr_linenumber" name="L125" href="#L125">125</a>     }
 <a class="jxr_linenumber" name="L126" href="#L126">126</a>   }
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 
@@ -143,6 +143,6 @@
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2010&#x2013;2018 <a href="http://www.mybatis.org/">MyBatis.org</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2010&#x2013;2019 <a href="http://www.mybatis.org/">MyBatis.org</a>. All rights reserved.</div>
 </body>
 </html>

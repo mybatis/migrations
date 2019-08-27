@@ -13,7 +13,7 @@
 <a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_javadoccomment"> *    you may not use this file except in compliance with the License.</em>
 <a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_javadoccomment"> *    You may obtain a copy of the License at</em>
 <a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_javadoccomment"> *       <a href="http://www.apache.org/licenses/LICENSE-2." target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.</a>0</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_javadoccomment"> *       <a href="http://www.apache.org/licenses/LICENSE-2.0" target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.0</a></em>
 <a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_javadoccomment"> *    Unless required by applicable law or agreed to in writing, software</em>
 <a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_javadoccomment"> *    distributed under the License is distributed on an "AS IS" BASIS,</em>
@@ -67,20 +67,20 @@
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  <strong class="jxr_keyword">import</strong> org.apache.ibatis.migration.utils.Util;
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  <strong class="jxr_keyword">import</strong> org.apache.ibatis.parsing.PropertyParser;
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../org/apache/ibatis/migration/commands/BaseCommand.html">BaseCommand</a> <strong class="jxr_keyword">implements</strong> <a href="../../../../../org/apache/ibatis/migration/commands/Command.html">Command</a> {
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">class</strong> <a name="BaseCommand" href="../../../../../org/apache/ibatis/migration/commands/BaseCommand.html#BaseCommand">BaseCommand</a> <strong class="jxr_keyword">implements</strong> <a name="Command" href="../../../../../org/apache/ibatis/migration/commands/Command.html#Command">Command</a> {
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String DATE_FORMAT = <span class="jxr_string">"yyyyMMddHHmmss"</span>;
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>    <strong class="jxr_keyword">private</strong> ClassLoader driverClassLoader;
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>    <strong class="jxr_keyword">private</strong> <a href="../../../../../org/apache/ibatis/migration/Environment.html">Environment</a> environment;
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>    <strong class="jxr_keyword">private</strong> <a name="Environment" href="../../../../../org/apache/ibatis/migration/Environment.html#Environment">Environment</a> environment;
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>    <strong class="jxr_keyword">protected</strong> PrintStream printStream = System.out;
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>    <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../org/apache/ibatis/migration/options/SelectedOptions.html">SelectedOptions</a> options;
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>    <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <a name="SelectedOptions" href="../../../../../org/apache/ibatis/migration/options/SelectedOptions.html#SelectedOptions">SelectedOptions</a> options;
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>    <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../org/apache/ibatis/migration/options/SelectedPaths.html">SelectedPaths</a> paths;
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>    <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <a name="SelectedPaths" href="../../../../../org/apache/ibatis/migration/options/SelectedPaths.html#SelectedPaths">SelectedPaths</a> paths;
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>    <strong class="jxr_keyword">protected</strong> <a href="../../../../../org/apache/ibatis/migration/commands/BaseCommand.html">BaseCommand</a>(<a href="../../../../../org/apache/ibatis/migration/options/SelectedOptions.html">SelectedOptions</a> selectedOptions) {
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>    <strong class="jxr_keyword">protected</strong> <a name="BaseCommand" href="../../../../../org/apache/ibatis/migration/commands/BaseCommand.html#BaseCommand">BaseCommand</a>(<a name="SelectedOptions" href="../../../../../org/apache/ibatis/migration/options/SelectedOptions.html#SelectedOptions">SelectedOptions</a> selectedOptions) {
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>      <strong class="jxr_keyword">this</strong>.options = selectedOptions;
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>      <strong class="jxr_keyword">this</strong>.paths = selectedOptions.getPaths();
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>      <strong class="jxr_keyword">if</strong> (options.isQuiet()) {
@@ -136,12 +136,12 @@
 <a class="jxr_linenumber" name="L128" href="#L128">128</a>     <strong class="jxr_keyword">if</strong> (migrations.size() == 0) {
 <a class="jxr_linenumber" name="L129" href="#L129">129</a>       <strong class="jxr_keyword">return</strong> fmt.format(1);
 <a class="jxr_linenumber" name="L130" href="#L130">130</a>     }
-<a class="jxr_linenumber" name="L131" href="#L131">131</a>     <a href="../../../../../org/apache/ibatis/migration/Change.html">Change</a> lastChange = migrations.get(migrations.size() - 1);
+<a class="jxr_linenumber" name="L131" href="#L131">131</a>     <a name="Change" href="../../../../../org/apache/ibatis/migration/Change.html#Change">Change</a> lastChange = migrations.get(migrations.size() - 1);
 <a class="jxr_linenumber" name="L132" href="#L132">132</a>     <strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L133" href="#L133">133</a>       <strong class="jxr_keyword">long</strong> lastId = (Long) fmt.parse(lastChange.getId().toString());
 <a class="jxr_linenumber" name="L134" href="#L134">134</a>       <strong class="jxr_keyword">return</strong> fmt.format(++lastId);
 <a class="jxr_linenumber" name="L135" href="#L135">135</a>     } <strong class="jxr_keyword">catch</strong> (ParseException e) {
-<a class="jxr_linenumber" name="L136" href="#L136">136</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../org/apache/ibatis/migration/MigrationException.html">MigrationException</a>(
+<a class="jxr_linenumber" name="L136" href="#L136">136</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="MigrationException" href="../../../../../org/apache/ibatis/migration/MigrationException.html#MigrationException">MigrationException</a>(
 <a class="jxr_linenumber" name="L137" href="#L137">137</a>           <span class="jxr_string">"Failed to parse last id '"</span> + lastChange.getId() + <span class="jxr_string">"' using the specified idPattern '"</span> + pattern + <span class="jxr_string">"'"</span>);
 <a class="jxr_linenumber" name="L138" href="#L138">138</a>     }
 <a class="jxr_linenumber" name="L139" href="#L139">139</a>   }
@@ -162,7 +162,7 @@
 <a class="jxr_linenumber" name="L154" href="#L154">154</a>     <strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L155" href="#L155">155</a>       copyTemplate(Resources.getResourceAsReader(<strong class="jxr_keyword">this</strong>.getClass().getClassLoader(), resource), toFile, variables);
 <a class="jxr_linenumber" name="L156" href="#L156">156</a>     } <strong class="jxr_keyword">catch</strong> (IOException e) {
-<a class="jxr_linenumber" name="L157" href="#L157">157</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../org/apache/ibatis/migration/MigrationException.html">MigrationException</a>(<span class="jxr_string">"Error copying "</span> + resource + <span class="jxr_string">" to "</span> + toFile.getAbsolutePath() + <span class="jxr_string">".  Cause: "</span> + e,
+<a class="jxr_linenumber" name="L157" href="#L157">157</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="MigrationException" href="../../../../../org/apache/ibatis/migration/MigrationException.html#MigrationException">MigrationException</a>(<span class="jxr_string">"Error copying "</span> + resource + <span class="jxr_string">" to "</span> + toFile.getAbsolutePath() + <span class="jxr_string">".  Cause: "</span> + e,
 <a class="jxr_linenumber" name="L158" href="#L158">158</a>           e);
 <a class="jxr_linenumber" name="L159" href="#L159">159</a>     }
 <a class="jxr_linenumber" name="L160" href="#L160">160</a>   }
@@ -173,7 +173,7 @@
 <a class="jxr_linenumber" name="L165" href="#L165">165</a>       File sourceFile = <strong class="jxr_keyword">new</strong> File(resource);
 <a class="jxr_linenumber" name="L166" href="#L166">166</a>       copyTemplate(sourceFile, toFile, variables);
 <a class="jxr_linenumber" name="L167" href="#L167">167</a>     } <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L168" href="#L168">168</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../org/apache/ibatis/migration/MigrationException.html">MigrationException</a>(<span class="jxr_string">"Error copying "</span> + resource + <span class="jxr_string">" to "</span> + toFile.getAbsolutePath() + <span class="jxr_string">".  Cause: "</span> + e,
+<a class="jxr_linenumber" name="L168" href="#L168">168</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="MigrationException" href="../../../../../org/apache/ibatis/migration/MigrationException.html#MigrationException">MigrationException</a>(<span class="jxr_string">"Error copying "</span> + resource + <span class="jxr_string">" to "</span> + toFile.getAbsolutePath() + <span class="jxr_string">".  Cause: "</span> + e,
 <a class="jxr_linenumber" name="L169" href="#L169">169</a>           e);
 <a class="jxr_linenumber" name="L170" href="#L170">170</a>     }
 <a class="jxr_linenumber" name="L171" href="#L171">171</a>   }
@@ -207,16 +207,16 @@
 <a class="jxr_linenumber" name="L199" href="#L199">199</a>   <strong class="jxr_keyword">protected</strong> File existingEnvironmentFile() {
 <a class="jxr_linenumber" name="L200" href="#L200">200</a>     File envFile = environmentFile();
 <a class="jxr_linenumber" name="L201" href="#L201">201</a>     <strong class="jxr_keyword">if</strong> (!envFile.exists()) {
-<a class="jxr_linenumber" name="L202" href="#L202">202</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../org/apache/ibatis/migration/MigrationException.html">MigrationException</a>(<span class="jxr_string">"Environment file missing: "</span> + envFile.getAbsolutePath());
+<a class="jxr_linenumber" name="L202" href="#L202">202</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="MigrationException" href="../../../../../org/apache/ibatis/migration/MigrationException.html#MigrationException">MigrationException</a>(<span class="jxr_string">"Environment file missing: "</span> + envFile.getAbsolutePath());
 <a class="jxr_linenumber" name="L203" href="#L203">203</a>     }
 <a class="jxr_linenumber" name="L204" href="#L204">204</a>     <strong class="jxr_keyword">return</strong> envFile;
 <a class="jxr_linenumber" name="L205" href="#L205">205</a>   }
 <a class="jxr_linenumber" name="L206" href="#L206">206</a> 
-<a class="jxr_linenumber" name="L207" href="#L207">207</a>   <strong class="jxr_keyword">protected</strong> <a href="../../../../../org/apache/ibatis/migration/Environment.html">Environment</a> environment() {
+<a class="jxr_linenumber" name="L207" href="#L207">207</a>   <strong class="jxr_keyword">protected</strong> <a name="Environment" href="../../../../../org/apache/ibatis/migration/Environment.html#Environment">Environment</a> environment() {
 <a class="jxr_linenumber" name="L208" href="#L208">208</a>     <strong class="jxr_keyword">if</strong> (environment != <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L209" href="#L209">209</a>       <strong class="jxr_keyword">return</strong> environment;
 <a class="jxr_linenumber" name="L210" href="#L210">210</a>     }
-<a class="jxr_linenumber" name="L211" href="#L211">211</a>     environment = <strong class="jxr_keyword">new</strong> <a href="../../../../../org/apache/ibatis/migration/Environment.html">Environment</a>(existingEnvironmentFile());
+<a class="jxr_linenumber" name="L211" href="#L211">211</a>     environment = <strong class="jxr_keyword">new</strong> <a name="Environment" href="../../../../../org/apache/ibatis/migration/Environment.html#Environment">Environment</a>(existingEnvironmentFile());
 <a class="jxr_linenumber" name="L212" href="#L212">212</a>     <strong class="jxr_keyword">return</strong> environment;
 <a class="jxr_linenumber" name="L213" href="#L213">213</a>   }
 <a class="jxr_linenumber" name="L214" href="#L214">214</a> 
@@ -228,18 +228,18 @@
 <a class="jxr_linenumber" name="L220" href="#L220">220</a>       <strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L221" href="#L221">221</a>         <strong class="jxr_keyword">return</strong> Integer.parseInt(stringParam);
 <a class="jxr_linenumber" name="L222" href="#L222">222</a>       } <strong class="jxr_keyword">catch</strong> (NumberFormatException e) {
-<a class="jxr_linenumber" name="L223" href="#L223">223</a>         <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../org/apache/ibatis/migration/MigrationException.html">MigrationException</a>(<span class="jxr_string">"Invalid parameter passed to command: "</span> + params[0]);
+<a class="jxr_linenumber" name="L223" href="#L223">223</a>         <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="MigrationException" href="../../../../../org/apache/ibatis/migration/MigrationException.html#MigrationException">MigrationException</a>(<span class="jxr_string">"Invalid parameter passed to command: "</span> + params[0]);
 <a class="jxr_linenumber" name="L224" href="#L224">224</a>       }
 <a class="jxr_linenumber" name="L225" href="#L225">225</a>     }
 <a class="jxr_linenumber" name="L226" href="#L226">226</a>   }
 <a class="jxr_linenumber" name="L227" href="#L227">227</a> 
-<a class="jxr_linenumber" name="L228" href="#L228">228</a>   <strong class="jxr_keyword">protected</strong> <a href="../../../../../org/apache/ibatis/migration/ConnectionProvider.html">ConnectionProvider</a> getConnectionProvider() {
+<a class="jxr_linenumber" name="L228" href="#L228">228</a>   <strong class="jxr_keyword">protected</strong> <a name="ConnectionProvider" href="../../../../../org/apache/ibatis/migration/ConnectionProvider.html#ConnectionProvider">ConnectionProvider</a> getConnectionProvider() {
 <a class="jxr_linenumber" name="L229" href="#L229">229</a>     <strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L230" href="#L230">230</a>       UnpooledDataSource dataSource = <strong class="jxr_keyword">new</strong> UnpooledDataSource(getDriverClassLoader(), environment().getDriver(),
 <a class="jxr_linenumber" name="L231" href="#L231">231</a>           environment().getUrl(), environment().getUsername(), environment().getPassword());
-<a class="jxr_linenumber" name="L232" href="#L232">232</a>       <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../org/apache/ibatis/migration/DataSourceConnectionProvider.html">DataSourceConnectionProvider</a>(dataSource);
+<a class="jxr_linenumber" name="L232" href="#L232">232</a>       <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="DataSourceConnectionProvider" href="../../../../../org/apache/ibatis/migration/DataSourceConnectionProvider.html#DataSourceConnectionProvider">DataSourceConnectionProvider</a>(dataSource);
 <a class="jxr_linenumber" name="L233" href="#L233">233</a>     } <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L234" href="#L234">234</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../org/apache/ibatis/migration/MigrationException.html">MigrationException</a>(<span class="jxr_string">"Error creating ScriptRunner.  Cause: "</span> + e, e);
+<a class="jxr_linenumber" name="L234" href="#L234">234</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="MigrationException" href="../../../../../org/apache/ibatis/migration/MigrationException.html#MigrationException">MigrationException</a>(<span class="jxr_string">"Error creating ScriptRunner.  Cause: "</span> + e, e);
 <a class="jxr_linenumber" name="L235" href="#L235">235</a>     }
 <a class="jxr_linenumber" name="L236" href="#L236">236</a>   }
 <a class="jxr_linenumber" name="L237" href="#L237">237</a> 
@@ -261,7 +261,7 @@
 <a class="jxr_linenumber" name="L253" href="#L253">253</a>         URL[] urls = urlList.toArray(<strong class="jxr_keyword">new</strong> URL[urlList.size()]);
 <a class="jxr_linenumber" name="L254" href="#L254">254</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> URLClassLoader(urls);
 <a class="jxr_linenumber" name="L255" href="#L255">255</a>       } <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L256" href="#L256">256</a>         <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../org/apache/ibatis/migration/MigrationException.html">MigrationException</a>(<span class="jxr_string">"Error creating a driver ClassLoader. Cause: "</span> + e, e);
+<a class="jxr_linenumber" name="L256" href="#L256">256</a>         <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="MigrationException" href="../../../../../org/apache/ibatis/migration/MigrationException.html#MigrationException">MigrationException</a>(<span class="jxr_string">"Error creating a driver ClassLoader. Cause: "</span> + e, e);
 <a class="jxr_linenumber" name="L257" href="#L257">257</a>       }
 <a class="jxr_linenumber" name="L258" href="#L258">258</a>     }
 <a class="jxr_linenumber" name="L259" href="#L259">259</a>     <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
@@ -276,20 +276,20 @@
 <a class="jxr_linenumber" name="L268" href="#L268">268</a>     }
 <a class="jxr_linenumber" name="L269" href="#L269">269</a>   }
 <a class="jxr_linenumber" name="L270" href="#L270">270</a> 
-<a class="jxr_linenumber" name="L271" href="#L271">271</a>   <strong class="jxr_keyword">protected</strong> <a href="../../../../../org/apache/ibatis/migration/MigrationLoader.html">MigrationLoader</a> getMigrationLoader() {
-<a class="jxr_linenumber" name="L272" href="#L272">272</a>     <a href="../../../../../org/apache/ibatis/migration/Environment.html">Environment</a> env = environment();
-<a class="jxr_linenumber" name="L273" href="#L273">273</a>     <a href="../../../../../org/apache/ibatis/migration/MigrationLoader.html">MigrationLoader</a> migrationLoader = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L274" href="#L274">274</a>     <strong class="jxr_keyword">for</strong> (FileMigrationLoaderFactory factory : ServiceLoader.load(FileMigrationLoaderFactory.<strong class="jxr_keyword">class</strong>)) {
+<a class="jxr_linenumber" name="L271" href="#L271">271</a>   <strong class="jxr_keyword">protected</strong> <a name="MigrationLoader" href="../../../../../org/apache/ibatis/migration/MigrationLoader.html#MigrationLoader">MigrationLoader</a> getMigrationLoader() {
+<a class="jxr_linenumber" name="L272" href="#L272">272</a>     <a name="Environment" href="../../../../../org/apache/ibatis/migration/Environment.html#Environment">Environment</a> env = environment();
+<a class="jxr_linenumber" name="L273" href="#L273">273</a>     <a name="MigrationLoader" href="../../../../../org/apache/ibatis/migration/MigrationLoader.html#MigrationLoader">MigrationLoader</a> migrationLoader = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L274" href="#L274">274</a>     <strong class="jxr_keyword">for</strong> (<a name="FileMigrationLoaderFactory" href="../../../../../org/apache/ibatis/migration/FileMigrationLoaderFactory.html#FileMigrationLoaderFactory">FileMigrationLoaderFactory</a> factory : ServiceLoader.load(FileMigrationLoaderFactory.<strong class="jxr_keyword">class</strong>)) {
 <a class="jxr_linenumber" name="L275" href="#L275">275</a>       <strong class="jxr_keyword">if</strong> (migrationLoader != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L276" href="#L276">276</a>         <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../org/apache/ibatis/migration/MigrationException.html">MigrationException</a>(<span class="jxr_string">"Found multiple implementations of FileMigrationLoaderFactory via SPI."</span>);
+<a class="jxr_linenumber" name="L276" href="#L276">276</a>         <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="MigrationException" href="../../../../../org/apache/ibatis/migration/MigrationException.html#MigrationException">MigrationException</a>(<span class="jxr_string">"Found multiple implementations of FileMigrationLoaderFactory via SPI."</span>);
 <a class="jxr_linenumber" name="L277" href="#L277">277</a>       }
 <a class="jxr_linenumber" name="L278" href="#L278">278</a>       migrationLoader = factory.create(paths, env);
 <a class="jxr_linenumber" name="L279" href="#L279">279</a>     }
 <a class="jxr_linenumber" name="L280" href="#L280">280</a>     <strong class="jxr_keyword">return</strong> migrationLoader != <strong class="jxr_keyword">null</strong> ? migrationLoader
-<a class="jxr_linenumber" name="L281" href="#L281">281</a>         : <strong class="jxr_keyword">new</strong> <a href="../../../../../org/apache/ibatis/migration/FileMigrationLoader.html">FileMigrationLoader</a>(paths.getScriptPath(), env.getScriptCharset(), env.getVariables());
+<a class="jxr_linenumber" name="L281" href="#L281">281</a>         : <strong class="jxr_keyword">new</strong> <a name="FileMigrationLoader" href="../../../../../org/apache/ibatis/migration/FileMigrationLoader.html#FileMigrationLoader">FileMigrationLoader</a>(paths.getScriptPath(), env.getScriptCharset(), env.getVariables());
 <a class="jxr_linenumber" name="L282" href="#L282">282</a>   }
 <a class="jxr_linenumber" name="L283" href="#L283">283</a> 
-<a class="jxr_linenumber" name="L284" href="#L284">284</a>   <strong class="jxr_keyword">protected</strong> <a href="../../../../../org/apache/ibatis/migration/hook/MigrationHook.html">MigrationHook</a> createUpHook() {
+<a class="jxr_linenumber" name="L284" href="#L284">284</a>   <strong class="jxr_keyword">protected</strong> <a name="MigrationHook" href="../../../../../org/apache/ibatis/migration/hook/MigrationHook.html#MigrationHook">MigrationHook</a> createUpHook() {
 <a class="jxr_linenumber" name="L285" href="#L285">285</a>     String before = environment().getHookBeforeUp();
 <a class="jxr_linenumber" name="L286" href="#L286">286</a>     String beforeEach = environment().getHookBeforeEachUp();
 <a class="jxr_linenumber" name="L287" href="#L287">287</a>     String afterEach = environment().getHookAfterEachUp();
@@ -300,7 +300,7 @@
 <a class="jxr_linenumber" name="L292" href="#L292">292</a>     <strong class="jxr_keyword">return</strong> createFileMigrationHook(before, beforeEach, afterEach, after);
 <a class="jxr_linenumber" name="L293" href="#L293">293</a>   }
 <a class="jxr_linenumber" name="L294" href="#L294">294</a> 
-<a class="jxr_linenumber" name="L295" href="#L295">295</a>   <strong class="jxr_keyword">protected</strong> <a href="../../../../../org/apache/ibatis/migration/hook/MigrationHook.html">MigrationHook</a> createDownHook() {
+<a class="jxr_linenumber" name="L295" href="#L295">295</a>   <strong class="jxr_keyword">protected</strong> <a name="MigrationHook" href="../../../../../org/apache/ibatis/migration/hook/MigrationHook.html#MigrationHook">MigrationHook</a> createDownHook() {
 <a class="jxr_linenumber" name="L296" href="#L296">296</a>     String before = environment().getHookBeforeDown();
 <a class="jxr_linenumber" name="L297" href="#L297">297</a>     String beforeEach = environment().getHookBeforeEachDown();
 <a class="jxr_linenumber" name="L298" href="#L298">298</a>     String afterEach = environment().getHookAfterEachDown();
@@ -311,14 +311,14 @@
 <a class="jxr_linenumber" name="L303" href="#L303">303</a>     <strong class="jxr_keyword">return</strong> createFileMigrationHook(before, beforeEach, afterEach, after);
 <a class="jxr_linenumber" name="L304" href="#L304">304</a>   }
 <a class="jxr_linenumber" name="L305" href="#L305">305</a> 
-<a class="jxr_linenumber" name="L306" href="#L306">306</a>   <strong class="jxr_keyword">protected</strong> <a href="../../../../../org/apache/ibatis/migration/hook/MigrationHook.html">MigrationHook</a> createFileMigrationHook(String before, String beforeEach, String afterEach, String after) {
-<a class="jxr_linenumber" name="L307" href="#L307">307</a>     <a href="../../../../../org/apache/ibatis/migration/hook/HookScriptFactory.html">HookScriptFactory</a> factory = <strong class="jxr_keyword">new</strong> <a href="../../../../../org/apache/ibatis/migration/hook/FileHookScriptFactory.html">FileHookScriptFactory</a>(options.getPaths(), environment(), printStream);
-<a class="jxr_linenumber" name="L308" href="#L308">308</a>     <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../org/apache/ibatis/migration/hook/FileMigrationHook.html">FileMigrationHook</a>(factory.create(before), factory.create(beforeEach), factory.create(afterEach),
+<a class="jxr_linenumber" name="L306" href="#L306">306</a>   <strong class="jxr_keyword">protected</strong> <a name="MigrationHook" href="../../../../../org/apache/ibatis/migration/hook/MigrationHook.html#MigrationHook">MigrationHook</a> createFileMigrationHook(String before, String beforeEach, String afterEach, String after) {
+<a class="jxr_linenumber" name="L307" href="#L307">307</a>     <a name="HookScriptFactory" href="../../../../../org/apache/ibatis/migration/hook/HookScriptFactory.html#HookScriptFactory">HookScriptFactory</a> factory = <strong class="jxr_keyword">new</strong> <a name="FileHookScriptFactory" href="../../../../../org/apache/ibatis/migration/hook/FileHookScriptFactory.html#FileHookScriptFactory">FileHookScriptFactory</a>(options.getPaths(), environment(), printStream);
+<a class="jxr_linenumber" name="L308" href="#L308">308</a>     <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="FileMigrationHook" href="../../../../../org/apache/ibatis/migration/hook/FileMigrationHook.html#FileMigrationHook">FileMigrationHook</a>(factory.create(before), factory.create(beforeEach), factory.create(afterEach),
 <a class="jxr_linenumber" name="L309" href="#L309">309</a>         factory.create(after));
 <a class="jxr_linenumber" name="L310" href="#L310">310</a>   }
 <a class="jxr_linenumber" name="L311" href="#L311">311</a> 
-<a class="jxr_linenumber" name="L312" href="#L312">312</a>   <strong class="jxr_keyword">protected</strong> <a href="../../../../../org/apache/ibatis/migration/options/DatabaseOperationOption.html">DatabaseOperationOption</a> getDatabaseOperationOption() {
-<a class="jxr_linenumber" name="L313" href="#L313">313</a>     <a href="../../../../../org/apache/ibatis/migration/options/DatabaseOperationOption.html">DatabaseOperationOption</a> option = <strong class="jxr_keyword">new</strong> <a href="../../../../../org/apache/ibatis/migration/options/DatabaseOperationOption.html">DatabaseOperationOption</a>();
+<a class="jxr_linenumber" name="L312" href="#L312">312</a>   <strong class="jxr_keyword">protected</strong> <a name="DatabaseOperationOption" href="../../../../../org/apache/ibatis/migration/options/DatabaseOperationOption.html#DatabaseOperationOption">DatabaseOperationOption</a> getDatabaseOperationOption() {
+<a class="jxr_linenumber" name="L313" href="#L313">313</a>     <a name="DatabaseOperationOption" href="../../../../../org/apache/ibatis/m<a name="DatabaseOperationOption" href="../../../../../org/apache/ibatis/migration/options/DatabaseOperationOption.html#DatabaseOperationOption">DatabaseOperationOption</a>seOperationOption.html#DatabaseOperationOption">DatabaseOperationOption</a> option = <strong class="jxr_keyword">new</strong> <a name="DatabaseOperationOption" href="../../../../../org/apache/ibatis/migration/options/DatabaseOperationOption.html#DatabaseOperationOption">DatabaseOperationOption</a>();
 <a class="jxr_linenumber" name="L314" href="#L314">314</a>     option.setChangelogTable(changelogTable());
 <a class="jxr_linenumber" name="L315" href="#L315">315</a>     option.setStopOnError(!options.isForce());
 <a class="jxr_linenumber" name="L316" href="#L316">316</a>     option.setThrowWarning(!options.isForce() &amp;&amp; !environment().isIgnoreWarnings());
@@ -333,6 +333,6 @@
 <a class="jxr_linenumber" name="L325" href="#L325">325</a> }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2010&#x2013;2018 <a href="http://www.mybatis.org/">MyBatis.org</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2010&#x2013;2019 <a href="http://www.mybatis.org/">MyBatis.org</a>. All rights reserved.</div>
 </body>
 </html>

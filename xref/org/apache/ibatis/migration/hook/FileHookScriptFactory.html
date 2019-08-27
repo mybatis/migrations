@@ -13,7 +13,7 @@
 <a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_javadoccomment"> *    you may not use this file except in compliance with the License.</em>
 <a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_javadoccomment"> *    You may obtain a copy of the License at</em>
 <a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_javadoccomment"> *       <a href="http://www.apache.org/licenses/LICENSE-2." target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.</a>0</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_javadoccomment"> *       <a href="http://www.apache.org/licenses/LICENSE-2.0" target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.0</a></em>
 <a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_javadoccomment"> *    Unless required by applicable law or agreed to in writing, software</em>
 <a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_javadoccomment"> *    distributed under the License is distributed on an "AS IS" BASIS,</em>
@@ -32,33 +32,33 @@
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.apache.ibatis.migration.MigrationException;
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.apache.ibatis.migration.options.SelectedPaths;
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../org/apache/ibatis/migration/hook/FileHookScriptFactory.html">FileHookScriptFactory</a> <strong class="jxr_keyword">implements</strong> <a href="../../../../../org/apache/ibatis/migration/hook/HookScriptFactory.html">HookScriptFactory</a> {
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="FileHookScriptFactory" href="../../../../../org/apache/ibatis/migration/hook/FileHookScriptFactory.html#FileHookScriptFactory">FileHookScriptFactory</a> <strong class="jxr_keyword">implements</strong> <a name="HookScriptFactory" href="../../../../../org/apache/ibatis/migration/hook/HookScriptFactory.html#HookScriptFactory">HookScriptFactory</a> {
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>    <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../org/apache/ibatis/migration/options/SelectedPaths.html">SelectedPaths</a> paths;
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>    <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../org/apache/ibatis/migration/Environment.html">Environment</a> environment;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>    <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <a name="SelectedPaths" href="../../../../../org/apache/ibatis/migration/options/SelectedPaths.html#SelectedPaths">SelectedPaths</a> paths;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>    <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <a name="Environment" href="../../../../../org/apache/ibatis/migration/Environment.html#Environment">Environment</a> environment;
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>    <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> PrintStream printStream;
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>    <strong class="jxr_keyword">public</strong> <a href="../../../../../org/apache/ibatis/migration/hook/FileHookScriptFactory.html">FileHookScriptFactory</a>(<a href="../../../../../org/apache/ibatis/migration/options/SelectedPaths.html">SelectedPaths</a> paths, <a href="../../../../../org/apache/ibatis/migration/Environment.html">Environment</a> environment, PrintStream printStream) {
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>    <strong class="jxr_keyword">public</strong> <a name="FileHookScriptFactory" href="../../../../../org/apache/ibatis/migration/hook/FileHookScriptFactory.html#FileHookScriptFactory">FileHookScriptFactory</a>(<a name="SelectedPaths" href="../../../../../org/apache/ibatis/migration/options/SelectedPaths.html#SelectedPaths">SelectedPaths</a> paths, <a name="Environment" href="../../../../../org/apache/ibatis/migration/Environment.html#Environment">Environment</a> environment, PrintStream printStream) {
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>      <strong class="jxr_keyword">this</strong>.paths = paths;
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>      <strong class="jxr_keyword">this</strong>.environment = environment;
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>      <strong class="jxr_keyword">this</strong>.printStream = printStream;
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>    }
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>    @Override
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>    <strong class="jxr_keyword">public</strong> <a href="../../../../../org/apache/ibatis/migration/hook/HookScript.html">HookScript</a> create(String hookSetting) {
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>    <strong class="jxr_keyword">public</strong> <a name="HookScript" href="../../../../../org/apache/ibatis/migration/hook/HookScript.html#HookScript">HookScript</a> create(String hookSetting) {
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>      <strong class="jxr_keyword">if</strong> (hookSetting == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>        <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>      }
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>      File hooksDir = paths.getHookPath();
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>      <strong class="jxr_keyword">if</strong> (hooksDir == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>        <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../org/apache/ibatis/migration/MigrationException.html">MigrationException</a>(<span class="jxr_string">"Hooks directory must not be null."</span>);
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>        <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="MigrationException" href="../../../../../org/apache/ibatis/migration/MigrationException.html#MigrationException">MigrationException</a>(<span class="jxr_string">"Hooks directory must not be null."</span>);
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>      }
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>      <strong class="jxr_keyword">if</strong> (!hooksDir.exists()) {
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>        <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../org/apache/ibatis/migration/MigrationException.html">MigrationException</a>(<span class="jxr_string">"Hooks directory not found : "</span> + hooksDir.getAbsolutePath());
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>        <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="MigrationException" href="../../../../../org/apache/ibatis/migration/MigrationException.html#MigrationException">MigrationException</a>(<span class="jxr_string">"Hooks directory not found : "</span> + hooksDir.getAbsolutePath());
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>      }
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>      String[] segments = hookSetting.split(<span class="jxr_string">":"</span>);
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>      <strong class="jxr_keyword">if</strong> (segments.length &lt; 2) {
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>        <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../org/apache/ibatis/migration/MigrationException.html">MigrationException</a>(
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>        <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="MigrationException" href="../../../../../org/apache/ibatis/migration/MigrationException.html#MigrationException">MigrationException</a>(
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>            <span class="jxr_string">"Error creating a HookScript. Hook setting must contain 'language' and 'file name' separated by ':' (e.g. SQL:post-up.sql)."</span>);
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>      }
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>      String charset = environment.getScriptCharset();
@@ -70,18 +70,18 @@
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>      <em class="jxr_comment">// The rest are script dependent options</em>
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>      String[] hookOptions = Arrays.copyOfRange(segments, 2, segments.length);
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>      <strong class="jxr_keyword">if</strong> (!scriptFile.exists()) {
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>        <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../org/apache/ibatis/migration/MigrationException.html">MigrationException</a>(<span class="jxr_string">"Hook script not found : "</span> + scriptFile.getAbsolutePath());
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>        <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="MigrationException" href="../../../../../org/apache/ibatis/migration/MigrationException.html#MigrationException">MigrationException</a>(<span class="jxr_string">"Hook script not found : "</span> + scriptFile.getAbsolutePath());
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>      }
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>      <strong class="jxr_keyword">if</strong> (<span class="jxr_string">"sql"</span>.equalsIgnoreCase(scriptLang)) {
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>        <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../org/apache/ibatis/migration/hook/SqlHookScript.html">SqlHookScript</a>(scriptFile, charset, hookOptions, variables, printStream);
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>        <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="SqlHookScript" href="../../../../../org/apache/ibatis/migration/hook/SqlHookScript.html#SqlHookScript">SqlHookScript</a>(scriptFile, charset, hookOptions, variables, printStream);
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>      } <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>        <em class="jxr_comment">// Assuming it's JSR-223.</em>
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>        <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../org/apache/ibatis/migration/hook/Jsr223HookScript.html">Jsr223HookScript</a>(scriptLang, scriptFile, charset, hookOptions, paths, variables, printStream);
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>        <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="Jsr223HookScript" href="../../../../../org/apache/ibatis/migration/hook/Jsr223HookScript.html#Jsr223HookScript">Jsr223HookScript</a>(scriptLang, scriptFile, charset, hookOptions, paths, variables, printStream);
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>      }
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>    }
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2010&#x2013;2018 <a href="http://www.mybatis.org/">MyBatis.org</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2010&#x2013;2019 <a href="http://www.mybatis.org/">MyBatis.org</a>. All rights reserved.</div>
 </body>
 </html>

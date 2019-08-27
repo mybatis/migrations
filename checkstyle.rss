@@ -23,11 +23,11 @@ under the License.
     <link>http://www.mybatis.org/migrations/</link>
     <description>MyBatis Migrations - Checkstyle report</description>
     <language>en-us</language>
-    <copyright>&#169;2010 - 2018 MyBatis.org</copyright>
+    <copyright>&#169;2010 - 2019 MyBatis.org</copyright>
     <item>
-      <title>File: 59,
+      <title>File: 61,
              Errors: 0,
-             Warnings: 62,
+             Warnings: 65,
              Infos: 0
       </title>
             <link>http://www.mybatis.org/migrations//checkstyle.html</link>
@@ -172,6 +172,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="http://www.mybatis.org/migrations//checkstyle.html#org.apache.ibatis.migration.hook.NewHookContext.java">org/apache/ibatis/migration/hook/NewHookContext.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  3
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="http://www.mybatis.org/migrations//checkstyle.html#org.apache.ibatis.migration.commands.InfoCommand.java">org/apache/ibatis/migration/commands/InfoCommand.java</a>
                 </td>
                 <td>
@@ -285,6 +299,20 @@ under the License.
                           <tr>
                 <td>
                   <a href="http://www.mybatis.org/migrations//checkstyle.html#org.apache.ibatis.migration.Migrator.java">org/apache/ibatis/migration/Migrator.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.mybatis.org/migrations//checkstyle.html#src.test.java.org.apache.ibatis.migration.system_property.testdir.environments.development.properties">src/test/java/org/apache/ibatis/migration/system_property/testdir/environments/development.properties</a>
                 </td>
                 <td>
                   0
@@ -453,20 +481,6 @@ under the License.
                           <tr>
                 <td>
                   <a href="http://www.mybatis.org/migrations//checkstyle.html#org.apache.ibatis.migration.SimpleScript.java">org/apache/ibatis/migration/SimpleScript.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://www.mybatis.org/migrations//checkstyle.html#target.maven-java-formatter-cache.properties">target/maven-java-formatter-cache.properties</a>
                 </td>
                 <td>
                   0
@@ -747,6 +761,20 @@ under the License.
                           <tr>
                 <td>
                   <a href="http://www.mybatis.org/migrations//checkstyle.html#org.apache.ibatis.migration.commands.PendingCommand.java">org/apache/ibatis/migration/commands/PendingCommand.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.mybatis.org/migrations//checkstyle.html#target.formatter-maven-cache.properties">target/formatter-maven-cache.properties</a>
                 </td>
                 <td>
                   0
