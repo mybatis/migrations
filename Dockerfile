@@ -13,11 +13,16 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 #
+FROM openjdk:8 AS build
+RUN mkdir -p /opt/migrations/build
+WORKDIR /opt/migrations/build
+COPY . .
+RUN ./mvnw package -DskipTests
 
 FROM openjdk:8
 RUN ["mkdir", "-p", "/opt/migrations"]
 
-ADD ./target/appassembler /opt/migrations
+COPY --from=build /opt/migrations/build/target/appassembler /opt/migrations
 
 VOLUME ["/migration"]
 WORKDIR /migration
