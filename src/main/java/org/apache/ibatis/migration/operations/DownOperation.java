@@ -16,6 +16,7 @@
 package org.apache.ibatis.migration.operations;
 
 import java.io.PrintStream;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Collections;
 import java.util.HashMap;
@@ -68,11 +69,11 @@ public final class DownOperation extends DatabaseOperation {
         String skippedOrMissing = checkSkippedOrMissing(changesInDb, migrations);
         Collections.reverse(migrations);
         int stepCount = 0;
-        ScriptRunner runner = getScriptRunner(connectionProvider, option, printStream);
 
-        Map<String, Object> hookBindings = new HashMap<String, Object>();
-
-        try {
+        Map<String, Object> hookBindings = new HashMap<>();
+        
+        try (Connection connection = connectionProvider.getConnection()) {
+          ScriptRunner runner = getScriptRunner(connection, option, printStream);
           for (Change change : migrations) {
             if (change.equals(changesInDb.get(changesInDb.size() - 1))) {
               if (stepCount == 0 && hook != null) {
@@ -110,8 +111,6 @@ public final class DownOperation extends DatabaseOperation {
             hookBindings.put(MigrationHook.HOOK_CONTEXT, new HookContext(connectionProvider, runner, null));
             hook.after(hookBindings);
           }
-        } finally {
-          runner.closeConnection();
         }
         println(printStream, skippedOrMissing);
       }
@@ -125,13 +124,11 @@ public final class DownOperation extends DatabaseOperation {
   }
 
   protected void deleteChange(ConnectionProvider connectionProvider, Change change, DatabaseOperationOption option) {
-    SqlRunner runner = getSqlRunner(connectionProvider);
-    try {
+    try (Connection connection = connectionProvider.getConnection()) {
+      SqlRunner runner = getSqlRunner(connection);
       runner.delete("delete from " + option.getChangelogTable() + " where ID = ?", change.getId());
     } catch (SQLException e) {
       throw new MigrationException("Error querying last applied migration.  Cause: " + e, e);
-    } finally {
-      runner.closeConnection();
     }
   }
 }

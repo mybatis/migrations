@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2017 the original author or authors.
+ *    Copyright 2010-2019 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -109,24 +109,25 @@ public class MigrationHookTest {
   private void pending() throws Exception {
     out.clearLog();
     // Create 'pending' situation intentionally.
-    Connection con = TestUtil.getConnection(env);
-    SqlRunner sqlRunner = new SqlRunner(con);
-    sqlRunner.delete("delete from changes where id = 2");
-    sqlRunner.run("drop table person");
+    try (Connection con = TestUtil.getConnection(env)) {
+      SqlRunner sqlRunner = new SqlRunner(con);
+      sqlRunner.delete("delete from changes where id = 2");
+      sqlRunner.run("drop table person");
 
-    Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "pending"));
-    String output = out.getLog();
-    assertTrue(out.getLog().contains("SUCCESS"));
-    // before
-    assertEquals(1, TestUtil.countStr(output, "HELLO_1"));
-    assertEquals(1, TestUtil.countStr(output, "Applying: 002_create_person.sql"));
-    // before each
-    assertEquals(1, TestUtil.countStr(output, "FUNCTION_GLOBALVAR_LOCALVAR1_LOCALVAR2_ARG1_ARG2"));
-    // after each
-    assertEquals(1, TestUtil.countStr(output,
-        "insert into worklog (str1, str2, str3) values ('GLOBALVAR', 'LOCALVAR1', 'LOCALVAR2')"));
-    // after
-    assertEquals(1, TestUtil.countStr(output, "METHOD_GLOBALVAR_LOCALVAR1_LOCALVAR2_ARG1_ARG2"));
+      Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "pending"));
+      String output = out.getLog();
+      assertTrue(out.getLog().contains("SUCCESS"));
+      // before
+      assertEquals(1, TestUtil.countStr(output, "HELLO_1"));
+      assertEquals(1, TestUtil.countStr(output, "Applying: 002_create_person.sql"));
+      // before each
+      assertEquals(1, TestUtil.countStr(output, "FUNCTION_GLOBALVAR_LOCALVAR1_LOCALVAR2_ARG1_ARG2"));
+      // after each
+      assertEquals(1, TestUtil.countStr(output,
+          "insert into worklog (str1, str2, str3) values ('GLOBALVAR', 'LOCALVAR1', 'LOCALVAR2')"));
+      // after
+      assertEquals(1, TestUtil.countStr(output, "METHOD_GLOBALVAR_LOCALVAR1_LOCALVAR2_ARG1_ARG2"));
+    }
   }
 
   private void down() throws Exception {
@@ -169,19 +170,21 @@ public class MigrationHookTest {
   }
 
   private void assertWorklogRowCount(int expectedRows) throws SQLException, ClassNotFoundException {
-    Connection con = TestUtil.getConnection(env);
-    SqlRunner sqlRunner = new SqlRunner(con);
-    Map<String, Object> result = sqlRunner.selectOne("select count(*) as c from worklog");
-    // compare as strings to avoid Long / Integer mismatch
-    assertEquals(String.valueOf(expectedRows), result.get("C").toString());
+    try (Connection con = TestUtil.getConnection(env)) {
+      SqlRunner sqlRunner = new SqlRunner(con);
+      Map<String, Object> result = sqlRunner.selectOne("select count(*) as c from worklog");
+      // compare as strings to avoid Long / Integer mismatch
+      assertEquals(String.valueOf(expectedRows), result.get("C").toString());
+    }
   }
 
   private void assertChangelogIntact() throws SQLException, ClassNotFoundException {
-    Connection con = TestUtil.getConnection(env);
-    SqlRunner sqlRunner = new SqlRunner(con);
-    Map<String, Object> result = sqlRunner
-        .selectOne("select count(*) as c from changes where description = 'bogus description'");
-    // compare as strings to avoid Long / Integer mismatch
-    assertEquals("0", result.get("C").toString());
+    try (Connection con = TestUtil.getConnection(env)) {
+      SqlRunner sqlRunner = new SqlRunner(con);
+      Map<String, Object> result = sqlRunner
+          .selectOne("select count(*) as c from changes where description = 'bogus description'");
+      // compare as strings to avoid Long / Integer mismatch
+      assertEquals("0", result.get("C").toString());
+    }
   }
 }

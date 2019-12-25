@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2017 the original author or authors.
+ *    Copyright 2010-2019 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@ package org.apache.ibatis.migration.operations;
 
 import java.io.PrintStream;
 import java.io.Reader;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -53,9 +54,9 @@ public final class PendingOperation extends DatabaseOperation {
       int stepCount = 0;
       Map<String, Object> hookBindings = new HashMap<String, Object>();
       println(printStream, "WARNING: Running pending migrations out of order can create unexpected results.");
-      ScriptRunner runner = getScriptRunner(connectionProvider, option, printStream);
       Reader scriptReader = null;
-      try {
+      try (Connection connection = connectionProvider.getConnection()) {
+        ScriptRunner runner = getScriptRunner(connection, option, printStream);
         for (Change change : pending) {
           if (stepCount == 0 && hook != null) {
             hookBindings.put(MigrationHook.HOOK_CONTEXT, new HookContext(connectionProvider, runner, null));
@@ -87,7 +88,6 @@ public final class PendingOperation extends DatabaseOperation {
         if (scriptReader != null) {
           scriptReader.close();
         }
-        runner.closeConnection();
       }
     } catch (Throwable e) {
       while (e instanceof MigrationException) {
