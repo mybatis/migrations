@@ -17,6 +17,7 @@ package org.apache.ibatis.migration.operations;
 
 import java.io.PrintStream;
 import java.io.Reader;
+import java.sql.Connection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -70,13 +71,13 @@ public final class UpOperation extends DatabaseOperation {
       Collections.sort(migrations);
       String skippedOrMissing = checkSkippedOrMissing(changesInDb, migrations);
       int stepCount = 0;
-      ScriptRunner runner = getScriptRunner(connectionProvider, option, printStream);
 
-      Map<String, Object> hookBindings = new HashMap<String, Object>();
-
+      Map<String, Object> hookBindings = new HashMap<>();
+      ScriptRunner runner = null;
       Reader scriptReader = null;
       Reader onAbortScriptReader = null;
-      try {
+      try (Connection connection = connectionProvider.getConnection()) {
+        runner = getScriptRunner(connection, option, printStream);
         for (Change change : migrations) {
           if (changesInDb.isEmpty() || change.compareTo(changesInDb.get(changesInDb.size() - 1)) > 0) {
             if (stepCount == 0 && hook != null) {
@@ -124,7 +125,6 @@ public final class UpOperation extends DatabaseOperation {
         if (onAbortScriptReader != null) {
           onAbortScriptReader.close();
         }
-        runner.closeConnection();
       }
     } catch (Throwable e) {
       while (e instanceof MigrationException) {

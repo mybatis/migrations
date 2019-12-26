@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2017 the original author or authors.
+ *    Copyright 2010-2019 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@ package org.apache.ibatis.migration.operations;
 
 import java.io.PrintStream;
 import java.io.Reader;
+import java.sql.Connection;
 
 import org.apache.ibatis.jdbc.ScriptRunner;
 import org.apache.ibatis.migration.ConnectionProvider;
@@ -50,11 +51,9 @@ public final class BootstrapOperation extends DatabaseOperation {
         Reader bootstrapReader = migrationsLoader.getBootstrapReader();
         if (bootstrapReader != null) {
           println(printStream, Util.horizontalLine("Applying: bootstrap.sql", 80));
-          ScriptRunner runner = getScriptRunner(connectionProvider, option, printStream);
-          try {
+          try (Connection connection = connectionProvider.getConnection()) {
+            ScriptRunner runner = getScriptRunner(connection, option, printStream);
             runner.runScript(bootstrapReader);
-          } finally {
-            runner.closeConnection();
           }
           println(printStream);
         } else {

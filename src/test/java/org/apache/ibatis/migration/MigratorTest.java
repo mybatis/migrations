@@ -117,15 +117,12 @@ public class MigratorTest {
   }
 
   private void assertAuthorEmailContainsPlaceholder() throws Exception {
-    final Connection conn = TestUtil.getConnection(env);
-    try {
+    try (final Connection conn = TestUtil.getConnection(env)) {
       final SqlRunner executor = new SqlRunner(conn);
       final Map<String, Object> author = executor.selectOne("select * from author where id = ?", 1);
       assertNotNull(author);
       assertNotNull(author.get("EMAIL"));
       assertEquals("jim@${url}", author.get("EMAIL"));
-    } finally {
-      conn.close();
     }
   }
 
