@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2018 the original author or authors.
+ *    Copyright 2010-2020 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -17,6 +17,8 @@ package org.apache.ibatis.migration.operations;
 
 import java.io.PrintStream;
 import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 
 import org.apache.ibatis.migration.Change;
@@ -47,35 +49,39 @@ public final class VersionOperation extends DatabaseOperation {
     if (option == null) {
       option = new DatabaseOperationOption();
     }
-    List<Change> changesInDb = getChangelog(connectionProvider, option);
-    List<Change> migrations = migrationsLoader.getMigrations();
-    Change specified = new Change(version);
-    if (!migrations.contains(specified)) {
-      throw new MigrationException("A migration for the specified version number does not exist.");
-    }
-    Change lastChangeInDb = changesInDb.isEmpty() ? null : changesInDb.get(changesInDb.size() - 1);
-    if (lastChangeInDb == null || specified.compareTo(lastChangeInDb) > 0) {
-      println(printStream, "Upgrading to: " + version);
-      int steps = 0;
-      for (Change change : migrations) {
-        if (change.compareTo(lastChangeInDb) > 0 && change.compareTo(specified) < 1) {
-          steps++;
-        }
+    try (Connection con = connectionProvider.getConnection()) {
+      List<Change> changesInDb = getChangelog(con, option);
+      List<Change> migrations = migrationsLoader.getMigrations();
+      Change specified = new Change(version);
+      if (!migrations.contains(specified)) {
+        throw new MigrationException("A migration for the specified version number does not exist.");
       }
-      new UpOperation(steps).operate(connectionProvider, migrationsLoader, option, printStream, upHook);
-    } else if (specified.compareTo(lastChangeInDb) < 0) {
-      println(printStream, "Downgrading to: " + version);
-      int steps = 0;
-      for (Change change : migrations) {
-        if (change.compareTo(specified) > -1 && change.compareTo(lastChangeInDb) < 0) {
-          steps++;
+      Change lastChangeInDb = changesInDb.isEmpty() ? null : changesInDb.get(changesInDb.size() - 1);
+      if (lastChangeInDb == null || specified.compareTo(lastChangeInDb) > 0) {
+        println(printStream, "Upgrading to: " + version);
+        int steps = 0;
+        for (Change change : migrations) {
+          if (change.compareTo(lastChangeInDb) > 0 && change.compareTo(specified) < 1) {
+            steps++;
+          }
         }
+        new UpOperation(steps).operate(connectionProvider, migrationsLoader, option, printStream, upHook);
+      } else if (specified.compareTo(lastChangeInDb) < 0) {
+        println(printStream, "Downgrading to: " + version);
+        int steps = 0;
+        for (Change change : migrations) {
+          if (change.compareTo(specified) > -1 && change.compareTo(lastChangeInDb) < 0) {
+            steps++;
+          }
+        }
+        new DownOperation(steps).operate(connectionProvider, migrationsLoader, option, printStream, downHook);
+      } else {
+        println(printStream, "Already at version: " + version);
       }
-      new DownOperation(steps).operate(connectionProvider, migrationsLoader, option, printStream, downHook);
-    } else {
-      println(printStream, "Already at version: " + version);
+      println(printStream);
+      return this;
+    } catch (SQLException e) {
+      throw new MigrationException("Error creating connection.  Cause: " + e, e);
     }
-    println(printStream);
-    return this;
   }
 }

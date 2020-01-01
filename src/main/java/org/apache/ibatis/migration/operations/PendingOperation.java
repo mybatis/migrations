@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2019 the original author or authors.
+ *    Copyright 2010-2020 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -43,20 +43,20 @@ public final class PendingOperation extends DatabaseOperation {
 
   public PendingOperation operate(ConnectionProvider connectionProvider, MigrationLoader migrationsLoader,
       DatabaseOperationOption option, PrintStream printStream, MigrationHook hook) {
-    try {
+    try (Connection con = connectionProvider.getConnection()) {
       if (option == null) {
         option = new DatabaseOperationOption();
       }
-      if (!changelogExists(connectionProvider, option)) {
+      if (!changelogExists(con, option)) {
         throw new MigrationException("Change log doesn't exist, no migrations applied.  Try running 'up' instead.");
       }
-      List<Change> pending = getPendingChanges(connectionProvider, migrationsLoader, option);
+      List<Change> pending = getPendingChanges(con, migrationsLoader, option);
       int stepCount = 0;
       Map<String, Object> hookBindings = new HashMap<String, Object>();
       println(printStream, "WARNING: Running pending migrations out of order can create unexpected results.");
       Reader scriptReader = null;
-      try (Connection connection = connectionProvider.getConnection()) {
-        ScriptRunner runner = getScriptRunner(connection, option, printStream);
+      try {
+        ScriptRunner runner = getScriptRunner(con, option, printStream);
         for (Change change : pending) {
           if (stepCount == 0 && hook != null) {
             hookBindings.put(MigrationHook.HOOK_CONTEXT, new HookContext(connectionProvider, runner, null));
@@ -69,7 +69,7 @@ public final class PendingOperation extends DatabaseOperation {
           println(printStream, Util.horizontalLine("Applying: " + change.getFilename(), 80));
           scriptReader = migrationsLoader.getScriptReader(change, false);
           runner.runScript(scriptReader);
-          insertChangelog(change, connectionProvider, option);
+          insertChangelog(change, con, option);
           println(printStream);
           if (hook != null) {
             hookBindings.put(MigrationHook.HOOK_CONTEXT, new HookContext(connectionProvider, runner, change.clone()));
@@ -97,11 +97,11 @@ public final class PendingOperation extends DatabaseOperation {
     }
   }
 
-  private List<Change> getPendingChanges(ConnectionProvider connectionProvider, MigrationLoader migrationsLoader,
+  private List<Change> getPendingChanges(Connection con, MigrationLoader migrationsLoader,
       DatabaseOperationOption option) {
     List<Change> pending = new ArrayList<Change>();
     List<Change> migrations = migrationsLoader.getMigrations();
-    List<Change> changelog = getChangelog(connectionProvider, option);
+    List<Change> changelog = getChangelog(con, option);
     for (Change change : migrations) {
       int index = changelog.indexOf(change);
       if (index < 0) {

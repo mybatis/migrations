@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2019 the original author or authors.
+ *    Copyright 2010-2020 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -248,27 +248,20 @@ public class RuntimeMigrationTest {
   }
 
   protected void runSql(ConnectionProvider provider, String sql) throws SQLException {
-    Connection connection = provider.getConnection();
-    try {
-      Statement statement = connection.createStatement();
+    try (Connection connection = provider.getConnection(); Statement statement = connection.createStatement()) {
       statement.execute(sql);
-    } finally {
-      connection.close();
     }
   }
 
   protected String runQuery(ConnectionProvider provider, String query) throws SQLException {
-    Connection connection = provider.getConnection();
-    try {
-      Statement statement = connection.createStatement();
-      ResultSet rs = statement.executeQuery(query);
+    try (Connection connection = provider.getConnection();
+        Statement statement = connection.createStatement();
+        ResultSet rs = statement.executeQuery(query)) {
       String result = null;
       if (rs.next()) {
         result = rs.getString(1);
       }
       return result;
-    } finally {
-      connection.close();
     }
   }
 

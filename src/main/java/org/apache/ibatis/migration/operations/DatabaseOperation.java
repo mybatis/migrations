@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2019 the original author or authors.
+ *    Copyright 2010-2020 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -28,26 +28,26 @@ import java.util.Map;
 import org.apache.ibatis.jdbc.ScriptRunner;
 import org.apache.ibatis.jdbc.SqlRunner;
 import org.apache.ibatis.migration.Change;
-import org.apache.ibatis.migration.ConnectionProvider;
 import org.apache.ibatis.migration.MigrationException;
 import org.apache.ibatis.migration.options.DatabaseOperationOption;
 
 public abstract class DatabaseOperation {
 
-  protected void insertChangelog(Change change, ConnectionProvider connectionProvider, DatabaseOperationOption option) {
-    change.setAppliedTimestamp(generateAppliedTimeStampAsString());
-    try (Connection connection = connectionProvider.getConnection()) {
-      SqlRunner runner = getSqlRunner(connection);
+  protected void insertChangelog(Change change, Connection con, DatabaseOperationOption option) {
+    try {
+      SqlRunner runner = new SqlRunner(con);
+      change.setAppliedTimestamp(generateAppliedTimeStampAsString());
       runner.insert("insert into " + option.getChangelogTable() + " (ID, APPLIED_AT, DESCRIPTION) values (?,?,?)",
           change.getId(), change.getAppliedTimestamp(), change.getDescription());
+      con.commit();
     } catch (SQLException e) {
       throw new MigrationException("Error querying last applied migration.  Cause: " + e, e);
     }
   }
 
-  protected List<Change> getChangelog(ConnectionProvider connectionProvider, DatabaseOperationOption option) {
-    try (Connection connection = connectionProvider.getConnection()) {
-      SqlRunner runner = getSqlRunner(connection);
+  protected List<Change> getChangelog(Connection con, DatabaseOperationOption option) {
+    try {
+      SqlRunner runner = new SqlRunner(con);
       List<Map<String, Object>> changelog = runner
           .selectAll("select ID, APPLIED_AT, DESCRIPTION from " + option.getChangelogTable() + " order by ID");
       List<Change> changes = new ArrayList<Change>();
@@ -63,9 +63,9 @@ public abstract class DatabaseOperation {
     }
   }
 
-  protected boolean changelogExists(ConnectionProvider connectionProvider, DatabaseOperationOption option) {
-    try (Connection connection = connectionProvider.getConnection()) {
-      SqlRunner runner = getSqlRunner(connection);
+  protected boolean changelogExists(Connection con, DatabaseOperationOption option) {
+    try {
+      SqlRunner runner = new SqlRunner(con);
       runner.selectAll("select ID, APPLIED_AT, DESCRIPTION from " + option.getChangelogTable());
       return true;
     } catch (SQLException e) {
@@ -95,10 +95,6 @@ public abstract class DatabaseOperation {
       }
     }
     return warnings.toString();
-  }
-
-  protected SqlRunner getSqlRunner(Connection connection) {
-    return new SqlRunner(connection);
   }
 
   protected ScriptRunner getScriptRunner(Connection connection, DatabaseOperationOption option,

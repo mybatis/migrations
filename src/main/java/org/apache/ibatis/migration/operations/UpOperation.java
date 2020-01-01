@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2019 the original author or authors.
+ *    Copyright 2010-2020 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -57,14 +57,14 @@ public final class UpOperation extends DatabaseOperation {
 
   public UpOperation operate(ConnectionProvider connectionProvider, MigrationLoader migrationsLoader,
       DatabaseOperationOption option, PrintStream printStream, MigrationHook hook) {
-    try {
+    try (Connection con = connectionProvider.getConnection()) {
       if (option == null) {
         option = new DatabaseOperationOption();
       }
 
       List<Change> changesInDb = Collections.emptyList();
-      if (changelogExists(connectionProvider, option)) {
-        changesInDb = getChangelog(connectionProvider, option);
+      if (changelogExists(con, option)) {
+        changesInDb = getChangelog(con, option);
       }
 
       List<Change> migrations = migrationsLoader.getMigrations();
@@ -73,11 +73,10 @@ public final class UpOperation extends DatabaseOperation {
       int stepCount = 0;
 
       Map<String, Object> hookBindings = new HashMap<>();
-      ScriptRunner runner = null;
       Reader scriptReader = null;
       Reader onAbortScriptReader = null;
-      try (Connection connection = connectionProvider.getConnection()) {
-        runner = getScriptRunner(connection, option, printStream);
+      ScriptRunner runner = getScriptRunner(con, option, printStream);
+      try {
         for (Change change : migrations) {
           if (changesInDb.isEmpty() || change.compareTo(changesInDb.get(changesInDb.size() - 1)) > 0) {
             if (stepCount == 0 && hook != null) {
@@ -91,7 +90,7 @@ public final class UpOperation extends DatabaseOperation {
             println(printStream, Util.horizontalLine("Applying: " + change.getFilename(), 80));
             scriptReader = migrationsLoader.getScriptReader(change, false);
             runner.runScript(scriptReader);
-            insertChangelog(change, connectionProvider, option);
+            insertChangelog(change, con, option);
             println(printStream);
             if (hook != null) {
               hookBindings.put(MigrationHook.HOOK_CONTEXT, new HookContext(connectionProvider, runner, change.clone()));

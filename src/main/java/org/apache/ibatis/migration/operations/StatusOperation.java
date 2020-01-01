@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2019 the original author or authors.
+ *    Copyright 2010-2020 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -16,6 +16,8 @@
 package org.apache.ibatis.migration.operations;
 
 import java.io.PrintStream;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -24,6 +26,7 @@ import java.util.Set;
 
 import org.apache.ibatis.migration.Change;
 import org.apache.ibatis.migration.ConnectionProvider;
+import org.apache.ibatis.migration.MigrationException;
 import org.apache.ibatis.migration.MigrationLoader;
 import org.apache.ibatis.migration.options.DatabaseOperationOption;
 import org.apache.ibatis.migration.utils.Util;
@@ -46,28 +49,32 @@ public final class StatusOperation extends DatabaseOperation {
     changes = new ArrayList<Change>();
     List<Change> migrations = migrationsLoader.getMigrations();
     String skippedOrMissing = null;
-    if (changelogExists(connectionProvider, option)) {
-      List<Change> changelog = getChangelog(connectionProvider, option);
-      skippedOrMissing = checkSkippedOrMissing(changelog, migrations);
+    try (Connection con = connectionProvider.getConnection()) {
+      if (changelogExists(con, option)) {
+        List<Change> changelog = getChangelog(con, option);
+        skippedOrMissing = checkSkippedOrMissing(changelog, migrations);
 
-      Set<Change> changelogAndMigrations = new HashSet<Change>();
-      changelogAndMigrations.addAll(changelog);
-      changelogAndMigrations.addAll(migrations);
+        Set<Change> changelogAndMigrations = new HashSet<Change>();
+        changelogAndMigrations.addAll(changelog);
+        changelogAndMigrations.addAll(migrations);
 
-      for (Change change : changelogAndMigrations) {
-        if (!migrations.contains(change)) {
-          change = new MissingScript(change);
-          missing++;
-        } else if (change.getAppliedTimestamp() != null) {
-          applied++;
-        } else {
-          pending++;
+        for (Change change : changelogAndMigrations) {
+          if (!migrations.contains(change)) {
+            change = new MissingScript(change);
+            missing++;
+          } else if (change.getAppliedTimestamp() != null) {
+            applied++;
+          } else {
+            pending++;
+          }
+          changes.add(change);
         }
-        changes.add(change);
+      } else {
+        changes.addAll(migrations);
+        pending = migrations.size();
       }
-    } else {
-      changes.addAll(migrations);
-      pending = migrations.size();
+    } catch (SQLException e) {
+      throw new MigrationException("Error getting conneciton. Cause: " + e, e);
     }
 
     Collections.sort(changes);
