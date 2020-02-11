@@ -19,6 +19,7 @@ import java.io.PrintStream;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.ibatis.migration.Change;
@@ -50,7 +51,7 @@ public final class VersionOperation extends DatabaseOperation {
       option = new DatabaseOperationOption();
     }
     try (Connection con = connectionProvider.getConnection()) {
-      List<Change> changesInDb = getChangelog(con, option);
+      List<Change> changesInDb = changelogExists(con, option) ? getChangelog(con, option) : Collections.emptyList();
       List<Change> migrations = migrationsLoader.getMigrations();
       Change specified = new Change(version);
       if (!migrations.contains(specified)) {
@@ -61,7 +62,7 @@ public final class VersionOperation extends DatabaseOperation {
         println(printStream, "Upgrading to: " + version);
         int steps = 0;
         for (Change change : migrations) {
-          if (change.compareTo(lastChangeInDb) > 0 && change.compareTo(specified) < 1) {
+          if ((lastChangeInDb == null || change.compareTo(lastChangeInDb) > 0) && change.compareTo(specified) < 1) {
             steps++;
           }
         }
