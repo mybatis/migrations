@@ -19,7 +19,6 @@ import java.io.PrintStream;
 import java.io.Reader;
 import java.sql.Connection;
 
-import org.apache.ibatis.jdbc.ScriptRunner;
 import org.apache.ibatis.migration.ConnectionProvider;
 import org.apache.ibatis.migration.MigrationException;
 import org.apache.ibatis.migration.MigrationLoader;
