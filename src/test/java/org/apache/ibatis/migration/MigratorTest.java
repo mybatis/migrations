@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2019 the original author or authors.
+ *    Copyright 2010-2020 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -20,13 +20,13 @@ import static org.junit.Assert.*;
 import java.io.File;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.Arrays;
-import java.util.Map;
 import java.util.Properties;
 import java.util.Scanner;
 
 import org.apache.ibatis.io.Resources;
-import org.apache.ibatis.jdbc.SqlRunner;
 import org.apache.ibatis.migration.utils.TestUtil;
 import org.junit.BeforeClass;
 import org.junit.Rule;
@@ -117,12 +117,11 @@ public class MigratorTest {
   }
 
   private void assertAuthorEmailContainsPlaceholder() throws Exception {
-    try (final Connection conn = TestUtil.getConnection(env)) {
-      final SqlRunner executor = new SqlRunner(conn);
-      final Map<String, Object> author = executor.selectOne("select * from author where id = ?", 1);
-      assertNotNull(author);
-      assertNotNull(author.get("EMAIL"));
-      assertEquals("jim@${url}", author.get("EMAIL"));
+    try (final Connection conn = TestUtil.getConnection(env);
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery("select EMAIL from author where id = 1")) {
+      assertTrue(rs.next());
+      assertEquals("jim@${url}", rs.getString("EMAIL"));
     }
   }
 
