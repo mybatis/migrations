@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2019 the original author or authors.
+ *    Copyright 2010-2020 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -21,13 +21,12 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
-
-import org.apache.ibatis.parsing.GenericTokenParser;
 
 public class Environment {
 
@@ -104,16 +103,7 @@ public class Environment {
   private final Properties sysProps = System.getProperties();
   private final Properties variables = new Properties();
 
-  private final GenericTokenParser parser = new GenericTokenParser("${", "}", key -> {
-    String value = sysProps.getProperty(key);
-    if (value == null) {
-      value = envVars.get(key);
-    }
-    if (value == null) {
-      value = "${" + key + "}";
-    }
-    return value;
-  });
+  private final VariableReplacer parser = new VariableReplacer(Arrays.asList(sysProps, envVars));
 
   public Environment(File file) {
     Properties prop = mergeProperties(file);
@@ -147,7 +137,7 @@ public class Environment {
 
     // User defined variables.
     prop.entrySet().stream().filter(e -> !SETTING_KEYS.contains(e.getKey()))
-        .forEach(e -> variables.put(e.getKey(), parser.parse((String) e.getValue())));
+        .forEach(e -> variables.put(e.getKey(), parser.replace((String) e.getValue())));
   }
 
   private Properties mergeProperties(File file) {
@@ -188,7 +178,7 @@ public class Environment {
 
   private String readProperty(Properties properties, String propertyKey, String defaultValue) {
     String property = properties.getProperty(propertyKey, defaultValue);
-    return property == null ? null : parser.parse(property);
+    return property == null ? null : parser.replace(property);
   }
 
   public String getTimeZone() {

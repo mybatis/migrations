@@ -47,6 +47,7 @@ import org.apache.ibatis.migration.FileMigrationLoaderFactory;
 import org.apache.ibatis.migration.JdbcConnectionProvider;
 import org.apache.ibatis.migration.MigrationException;
 import org.apache.ibatis.migration.MigrationLoader;
+import org.apache.ibatis.migration.VariableReplacer;
 import org.apache.ibatis.migration.hook.FileHookScriptFactory;
 import org.apache.ibatis.migration.hook.FileMigrationHook;
 import org.apache.ibatis.migration.hook.HookScriptFactory;
@@ -56,7 +57,6 @@ import org.apache.ibatis.migration.options.Options;
 import org.apache.ibatis.migration.options.SelectedOptions;
 import org.apache.ibatis.migration.options.SelectedPaths;
 import org.apache.ibatis.migration.utils.Util;
-import org.apache.ibatis.parsing.PropertyParser;
 
 public abstract class BaseCommand implements Command {
   private static final String DATE_FORMAT = "yyyyMMddHHmmss";
@@ -174,13 +174,14 @@ public abstract class BaseCommand implements Command {
   }
 
   protected static void copyTemplate(Reader templateReader, File toFile, Properties variables) throws IOException {
+    VariableReplacer replacer = new VariableReplacer(variables);
     LineNumberReader reader = new LineNumberReader(templateReader);
     try {
       PrintWriter writer = new PrintWriter(new FileWriter(toFile));
       try {
         String line;
         while ((line = reader.readLine()) != null) {
-          line = PropertyParser.parse(line, variables);
+          line = replacer.replace(line);
           writer.println(line);
         }
       } finally {

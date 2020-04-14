@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2017 the original author or authors.
+ *    Copyright 2010-2020 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -25,8 +25,8 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.apache.ibatis.migration.MigrationException;
+import org.apache.ibatis.migration.VariableReplacer;
 import org.apache.ibatis.migration.utils.Util;
-import org.apache.ibatis.parsing.PropertyParser;
 
 public class SqlHookScript implements HookScript {
 
@@ -34,6 +34,7 @@ public class SqlHookScript implements HookScript {
   protected final String charset;
   protected final Properties variables;
   protected final PrintStream printStream;
+  protected final VariableReplacer replacer;
 
   public SqlHookScript(File scriptFile, String charset, String[] options, Properties variables,
       PrintStream printStream) {
@@ -49,6 +50,7 @@ public class SqlHookScript implements HookScript {
         this.variables.put(option.substring(0, sep), option.substring(sep + 1));
       }
     }
+    replacer = new VariableReplacer(this.variables);
   }
 
   @Override
@@ -65,7 +67,7 @@ public class SqlHookScript implements HookScript {
       while ((length = inputStream.read(buffer)) != -1) {
         outputStream.write(buffer, 0, length);
       }
-      context.executeSql(new StringReader(PropertyParser.parse(outputStream.toString(charset), variables)));
+      context.executeSql(new StringReader(replacer.replace(outputStream.toString(charset))));
     } catch (IOException e) {
       throw new MigrationException("Error occurred while running SQL hook script.", e);
     } finally {
