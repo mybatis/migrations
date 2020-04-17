@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2019 the original author or authors.
+ *    Copyright 2010-2020 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -19,12 +19,13 @@ import static org.junit.Assert.*;
 
 import java.io.File;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Map;
 import java.util.Properties;
 
 import org.apache.ibatis.io.Resources;
-import org.apache.ibatis.jdbc.SqlRunner;
 import org.apache.ibatis.migration.Migrator;
 import org.apache.ibatis.migration.utils.TestUtil;
 import org.junit.BeforeClass;
@@ -109,10 +110,9 @@ public class MigrationHookTest {
   private void pending() throws Exception {
     out.clearLog();
     // Create 'pending' situation intentionally.
-    try (Connection con = TestUtil.getConnection(env)) {
-      SqlRunner sqlRunner = new SqlRunner(con);
-      sqlRunner.delete("delete from changes where id = 2");
-      sqlRunner.run("drop table person");
+    try (Connection con = TestUtil.getConnection(env); Statement stmt = con.createStatement()) {
+      stmt.execute("delete from changes where id = 2");
+      stmt.execute("drop table person");
 
       Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "pending"));
       String output = out.getLog();
@@ -170,21 +170,20 @@ public class MigrationHookTest {
   }
 
   private void assertWorklogRowCount(int expectedRows) throws SQLException, ClassNotFoundException {
-    try (Connection con = TestUtil.getConnection(env)) {
-      SqlRunner sqlRunner = new SqlRunner(con);
-      Map<String, Object> result = sqlRunner.selectOne("select count(*) as c from worklog");
-      // compare as strings to avoid Long / Integer mismatch
-      assertEquals(String.valueOf(expectedRows), result.get("C").toString());
+    try (Connection con = TestUtil.getConnection(env);
+        Statement stmt = con.createStatement();
+        ResultSet rs = stmt.executeQuery("select count(*) from worklog")) {
+      assertTrue(rs.next());
+      assertEquals(expectedRows, rs.getInt(1));
     }
   }
 
   private void assertChangelogIntact() throws SQLException, ClassNotFoundException {
-    try (Connection con = TestUtil.getConnection(env)) {
-      SqlRunner sqlRunner = new SqlRunner(con);
-      Map<String, Object> result = sqlRunner
-          .selectOne("select count(*) as c from changes where description = 'bogus description'");
-      // compare as strings to avoid Long / Integer mismatch
-      assertEquals("0", result.get("C").toString());
+    try (Connection con = TestUtil.getConnection(env);
+        Statement stmt = con.createStatement();
+        ResultSet rs = stmt.executeQuery("select count(*) from changes where description = 'bogus description'")) {
+      assertTrue(rs.next());
+      assertEquals(0, rs.getInt(1));
     }
   }
 }

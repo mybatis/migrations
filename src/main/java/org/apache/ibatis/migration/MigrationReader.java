@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2019 the original author or authors.
+ *    Copyright 2010-2020 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -25,8 +25,6 @@ import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.util.Properties;
-
-import org.apache.ibatis.parsing.PropertyParser;
 
 public class MigrationReader extends FilterReader {
 
@@ -56,6 +54,8 @@ public class MigrationReader extends FilterReader {
 
   private final StringBuilder lineBuffer = new StringBuilder();
 
+  private final VariableReplacer replacer;
+
   private enum Part {
     NOT_UNDO_LINE,
     NEW_LINE,
@@ -83,6 +83,7 @@ public class MigrationReader extends FilterReader {
     super(scriptFileReader(inputStream, charset));
     this.undo = undo;
     this.variables = variables;
+    replacer = new VariableReplacer(this.variables);
   }
 
   @Override
@@ -161,7 +162,7 @@ public class MigrationReader extends FilterReader {
   private void replaceVariables(StringBuilder line) {
     if (variableStatus == VariableStatus.FOUND_POSSIBLE_VARIABLE) {
       String lineBufferStr = line.toString();
-      String processed = PropertyParser.parse(lineBufferStr, variables);
+      String processed = replacer.replace(lineBufferStr);
       if (!lineBufferStr.equals(processed)) {
         line.setLength(0);
         line.append(processed);

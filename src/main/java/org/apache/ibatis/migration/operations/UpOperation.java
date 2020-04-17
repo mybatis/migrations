@@ -23,8 +23,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.ibatis.jdbc.RuntimeSqlException;
-import org.apache.ibatis.jdbc.ScriptRunner;
 import org.apache.ibatis.migration.Change;
 import org.apache.ibatis.migration.ConnectionProvider;
 import org.apache.ibatis.migration.MigrationException;
@@ -108,7 +106,7 @@ public final class UpOperation extends DatabaseOperation {
         }
         println(printStream, skippedOrMissing);
         return this;
-      } catch (RuntimeSqlException e) {
+      } catch (Exception e) {
         onAbortScriptReader = migrationsLoader.getOnAbortReader();
         if (onAbortScriptReader != null) {
           println(printStream);

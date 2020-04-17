@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2018 the original author or authors.
+ *    Copyright 2010-2020 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -38,16 +38,16 @@ import java.util.Properties;
 import java.util.ServiceLoader;
 import java.util.TimeZone;
 
-import org.apache.ibatis.datasource.unpooled.UnpooledDataSource;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.migration.Change;
 import org.apache.ibatis.migration.ConnectionProvider;
-import org.apache.ibatis.migration.DataSourceConnectionProvider;
 import org.apache.ibatis.migration.Environment;
 import org.apache.ibatis.migration.FileMigrationLoader;
 import org.apache.ibatis.migration.FileMigrationLoaderFactory;
+import org.apache.ibatis.migration.JdbcConnectionProvider;
 import org.apache.ibatis.migration.MigrationException;
 import org.apache.ibatis.migration.MigrationLoader;
+import org.apache.ibatis.migration.VariableReplacer;
 import org.apache.ibatis.migration.hook.FileHookScriptFactory;
 import org.apache.ibatis.migration.hook.FileMigrationHook;
 import org.apache.ibatis.migration.hook.HookScriptFactory;
@@ -57,7 +57,6 @@ import org.apache.ibatis.migration.options.Options;
 import org.apache.ibatis.migration.options.SelectedOptions;
 import org.apache.ibatis.migration.options.SelectedPaths;
 import org.apache.ibatis.migration.utils.Util;
-import org.apache.ibatis.parsing.PropertyParser;
 
 public abstract class BaseCommand implements Command {
   private static final String DATE_FORMAT = "yyyyMMddHHmmss";
@@ -175,13 +174,14 @@ public abstract class BaseCommand implements Command {
   }
 
   protected static void copyTemplate(Reader templateReader, File toFile, Properties variables) throws IOException {
+    VariableReplacer replacer = new VariableReplacer(variables);
     LineNumberReader reader = new LineNumberReader(templateReader);
     try {
       PrintWriter writer = new PrintWriter(new FileWriter(toFile));
       try {
         String line;
         while ((line = reader.readLine()) != null) {
-          line = PropertyParser.parse(line, variables);
+          line = replacer.replace(line);
           writer.println(line);
         }
       } finally {
@@ -227,9 +227,8 @@ public abstract class BaseCommand implements Command {
 
   protected ConnectionProvider getConnectionProvider() {
     try {
-      UnpooledDataSource dataSource = new UnpooledDataSource(getDriverClassLoader(), environment().getDriver(),
-          environment().getUrl(), environment().getUsername(), environment().getPassword());
-      return new DataSourceConnectionProvider(dataSource);
+      return new JdbcConnectionProvider(environment().getDriver(), environment().getUrl(), environment().getUsername(),
+          environment().getPassword());
     } catch (Exception e) {
       throw new MigrationException("Error creating ScriptRunner.  Cause: " + e, e);
     }

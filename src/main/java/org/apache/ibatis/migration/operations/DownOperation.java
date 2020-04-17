@@ -23,8 +23,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.ibatis.jdbc.ScriptRunner;
-import org.apache.ibatis.jdbc.SqlRunner;
 import org.apache.ibatis.migration.Change;
 import org.apache.ibatis.migration.ConnectionProvider;
 import org.apache.ibatis.migration.MigrationException;
@@ -120,8 +118,7 @@ public final class DownOperation extends DatabaseOperation {
   }
 
   protected void deleteChange(Connection con, Change change, DatabaseOperationOption option) throws SQLException {
-    SqlRunner runner = new SqlRunner(con);
-    runner.delete("delete from " + option.getChangelogTable() + " where ID = ?", change.getId());
-    con.commit();
+    ChangelogOperation operation = new ChangelogOperation(con, option);
+    operation.deleteById(change.getId());
   }
 }

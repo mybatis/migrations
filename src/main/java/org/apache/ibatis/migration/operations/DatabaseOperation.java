@@ -17,16 +17,11 @@ package org.apache.ibatis.migration.operations;
 
 import java.io.PrintStream;
 import java.io.PrintWriter;
-import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import org.apache.ibatis.jdbc.ScriptRunner;
-import org.apache.ibatis.jdbc.SqlRunner;
 import org.apache.ibatis.migration.Change;
 import org.apache.ibatis.migration.MigrationException;
 import org.apache.ibatis.migration.options.DatabaseOperationOption;
@@ -35,11 +30,9 @@ public abstract class DatabaseOperation {
 
   protected void insertChangelog(Change change, Connection con, DatabaseOperationOption option) {
     try {
-      SqlRunner runner = new SqlRunner(con);
+      ChangelogOperation operation = new ChangelogOperation(con, option);
       change.setAppliedTimestamp(generateAppliedTimeStampAsString());
-      runner.insert("insert into " + option.getChangelogTable() + " (ID, APPLIED_AT, DESCRIPTION) values (?,?,?)",
-          change.getId(), change.getAppliedTimestamp(), change.getDescription());
-      con.commit();
+      operation.insert(change);
     } catch (SQLException e) {
       throw new MigrationException("Error querying last applied migration.  Cause: " + e, e);
     }
@@ -47,30 +40,16 @@ public abstract class DatabaseOperation {
 
   protected List<Change> getChangelog(Connection con, DatabaseOperationOption option) {
     try {
-      SqlRunner runner = new SqlRunner(con);
-      List<Map<String, Object>> changelog = runner
-          .selectAll("select ID, APPLIED_AT, DESCRIPTION from " + option.getChangelogTable() + " order by ID");
-      List<Change> changes = new ArrayList<Change>();
-      for (Map<String, Object> change : changelog) {
-        String id = change.get("ID") == null ? null : change.get("ID").toString();
-        String appliedAt = change.get("APPLIED_AT") == null ? null : change.get("APPLIED_AT").toString();
-        String description = change.get("DESCRIPTION") == null ? null : change.get("DESCRIPTION").toString();
-        changes.add(new Change(new BigDecimal(id), appliedAt, description));
-      }
-      return changes;
+      ChangelogOperation operation = new ChangelogOperation(con, option);
+      return operation.selectAll();
     } catch (SQLException e) {
       throw new MigrationException("Error querying last applied migration.  Cause: " + e, e);
     }
   }
 
   protected boolean changelogExists(Connection con, DatabaseOperationOption option) {
-    try {
-      SqlRunner runner = new SqlRunner(con);
-      runner.selectAll("select ID, APPLIED_AT, DESCRIPTION from " + option.getChangelogTable());
-      return true;
-    } catch (SQLException e) {
-      return false;
-    }
+    ChangelogOperation operation = new ChangelogOperation(con, option);
+    return operation.tableExists();
   }
 
   protected String checkSkippedOrMissing(List<Change> changesInDb, List<Change> migrations) {
