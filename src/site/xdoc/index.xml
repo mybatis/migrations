@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-       Copyright 2010-2016 the original author or authors.
+       Copyright 2010-2020 the original author or authors.
 
        Licensed under the Apache License, Version 2.0 (the "License");
        you may not use this file except in compliance with the License.
@@ -52,10 +52,10 @@
           <li>Encourages good, consistent practices</li>
         </ul>
       </subsection>
-      
+
       <subsection name="The Video">
       	<p>To put it in short. Have a look at the video:</p>
-        <iframe width="640" height="480" src="http://www.youtube.com/embed/c45AevIuYGk" frameborder="0"></iframe>      	
+        <iframe width="640" height="480" src="http://www.youtube.com/embed/c45AevIuYGk" frameborder="0"></iframe>
       </subsection>
     </section>
   </body>
