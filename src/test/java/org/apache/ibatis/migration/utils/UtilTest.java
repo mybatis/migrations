@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2017 the original author or authors.
+ *    Copyright 2010-2020 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -15,15 +15,15 @@
  */
 package org.apache.ibatis.migration.utils;
 
-import org.junit.Test;
-
-import java.io.File;
-
 import static org.apache.ibatis.migration.utils.Util.file;
 import static org.apache.ibatis.migration.utils.Util.isOption;
 import static org.hamcrest.core.StringEndsWith.endsWith;
 import static org.hamcrest.core.StringStartsWith.startsWith;
 import static org.junit.Assert.*;
+
+import java.io.File;
+
+import org.junit.Test;
 
 public class UtilTest {
   @Test
