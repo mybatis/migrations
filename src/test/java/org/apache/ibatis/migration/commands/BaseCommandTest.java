@@ -21,10 +21,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.FileSystems;
 import java.util.Properties;
 import java.util.Scanner;
 
 import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.migration.utils.TestUtil;
 import org.junit.jupiter.api.Test;
 
 class BaseCommandTest {
@@ -45,7 +47,8 @@ class BaseCommandTest {
 
   @Test
   void testNonexistentFile() throws Exception {
-    String srcPath = "/tmp/NoSuchFile.sql";
+    String srcPath = TestUtil.getTempDir().getAbsolutePath() + FileSystems.getDefault().getSeparator()
+        + "NoSuchFile.sql";
     FileNotFoundException e = assertThrows(FileNotFoundException.class, () -> {
       File dest = File.createTempFile("Out", ".sql");
       try {
