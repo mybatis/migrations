@@ -45,22 +45,38 @@ import org.apache.ibatis.migration.utils.TestUtil;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
+@RunWith(Parameterized.class)
 public class RuntimeMigrationTest {
-
-  private JdbcConnectionProvider connectionProvider;
-
+  private final JdbcConnectionProvider connectionProvider;
   private DatabaseOperationOption dbOption;
-
   private ByteArrayOutputStream out;
-
   private MigrationLoader migrationsLoader;
-
   private MigrationLoader migrationsLoaderFromOtherBranch;
 
+  @Parameters
+  public static ClassLoader[] testClassLoaders() {
+    return new ClassLoader[] { null, ClassLoader.getSystemClassLoader(), RuntimeMigrationTest.class.getClassLoader() };
+  }
+
+  public RuntimeMigrationTest(final ClassLoader classLoader) throws Exception {
+    final String driver = "org.hsqldb.jdbcDriver";
+    final String url = "jdbc:hsqldb:mem:javaapitest";
+    final String username = "sa";
+    final String password = "";
+
+    if (classLoader == null) {
+      connectionProvider = new JdbcConnectionProvider(driver, url, username, password);
+    } else {
+      connectionProvider = new JdbcConnectionProvider(classLoader, driver, url, username, password);
+    }
+  }
+
   @Before
-  public void setup() throws Exception {
-    connectionProvider = new JdbcConnectionProvider("org.hsqldb.jdbcDriver", "jdbc:hsqldb:mem:javaapitest", "sa", "");
+  public void setup() {
     dbOption = new DatabaseOperationOption();
     out = new ByteArrayOutputStream();
     migrationsLoader = createMigrationsLoader("org/apache/ibatis/migration/runtime_migration/scripts");
@@ -74,7 +90,7 @@ public class RuntimeMigrationTest {
   }
 
   @Test
-  public void testInitialStatus() throws Exception {
+  public void testInitialStatus() {
     StatusOperation status = new StatusOperation().operate(connectionProvider, migrationsLoader, dbOption,
         new PrintStream(out));
     assertEquals(0, status.getAppliedCount());
@@ -89,7 +105,7 @@ public class RuntimeMigrationTest {
   }
 
   @Test
-  public void shouldIgnoreBootstrapIfChangelogExists() throws Exception {
+  public void shouldIgnoreBootstrapIfChangelogExists() {
     new UpOperation(1).operate(connectionProvider, migrationsLoader, dbOption, new PrintStream(out));
 
     new BootstrapOperation().operate(connectionProvider, migrationsLoader, dbOption, new PrintStream(out));
@@ -229,7 +245,7 @@ public class RuntimeMigrationTest {
     assertTableDoesNotExist(connectionProvider, "second_table");
   }
 
-  protected void assertTableDoesNotExist(ConnectionProvider connectionProvider, String table) throws Exception {
+  protected void assertTableDoesNotExist(ConnectionProvider connectionProvider, String table) {
     try {
       runQuery(connectionProvider, "select count(*) from " + table);
       fail();

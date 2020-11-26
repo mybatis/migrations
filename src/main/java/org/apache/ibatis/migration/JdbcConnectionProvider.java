@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2017 the original author or authors.
+ *    Copyright 2010-2020 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -20,19 +20,21 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class JdbcConnectionProvider implements ConnectionProvider {
-
-  private String url;
-
-  private String username;
-
-  private String password;
+  private final String url;
+  private final String username;
+  private final String password;
 
   public JdbcConnectionProvider(String driver, String url, String username, String password) throws Exception {
-    super();
+    this(null, driver, url, username, password);
+  }
+
+  public JdbcConnectionProvider(ClassLoader classLoader, String driver, String url, String username, String password)
+      throws Exception {
     this.url = url;
     this.username = username;
     this.password = password;
-    Class.forName(driver);
+
+    loadDriver(classLoader, driver);
   }
 
   @Override
@@ -40,4 +42,11 @@ public class JdbcConnectionProvider implements ConnectionProvider {
     return DriverManager.getConnection(url, username, password);
   }
 
+  private static void loadDriver(ClassLoader classLoader, String driver) throws ClassNotFoundException {
+    if (classLoader != null) {
+      Class.forName(driver, true, classLoader);
+    } else {
+      Class.forName(driver);
+    }
+  }
 }

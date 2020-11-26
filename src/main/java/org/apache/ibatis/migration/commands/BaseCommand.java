@@ -62,13 +62,11 @@ public abstract class BaseCommand implements Command {
   private static final String DATE_FORMAT = "yyyyMMddHHmmss";
 
   private ClassLoader driverClassLoader;
-
   private Environment environment;
 
   protected PrintStream printStream = System.out;
 
   protected final SelectedOptions options;
-
   protected final SelectedPaths paths;
 
   protected BaseCommand(SelectedOptions selectedOptions) {
@@ -175,20 +173,14 @@ public abstract class BaseCommand implements Command {
 
   protected static void copyTemplate(Reader templateReader, File toFile, Properties variables) throws IOException {
     VariableReplacer replacer = new VariableReplacer(variables);
-    LineNumberReader reader = new LineNumberReader(templateReader);
-    try {
-      PrintWriter writer = new PrintWriter(new FileWriter(toFile));
-      try {
+    try (LineNumberReader reader = new LineNumberReader(templateReader)) {
+      try (PrintWriter writer = new PrintWriter(new FileWriter(toFile))) {
         String line;
         while ((line = reader.readLine()) != null) {
           line = replacer.replace(line);
           writer.println(line);
         }
-      } finally {
-        writer.close();
       }
-    } finally {
-      reader.close();
     }
   }
 
@@ -227,8 +219,8 @@ public abstract class BaseCommand implements Command {
 
   protected ConnectionProvider getConnectionProvider() {
     try {
-      return new JdbcConnectionProvider(environment().getDriver(), environment().getUrl(), environment().getUsername(),
-          environment().getPassword());
+      return new JdbcConnectionProvider(getDriverClassLoader(), environment().getDriver(), environment().getUrl(),
+          environment().getUsername(), environment().getPassword());
     } catch (Exception e) {
       throw new MigrationException("Error creating ScriptRunner.  Cause: " + e, e);
     }
@@ -240,16 +232,19 @@ public abstract class BaseCommand implements Command {
       return driverClassLoader;
     } else if (localDriverPath.exists()) {
       try {
-        List<URL> urlList = new ArrayList<URL>();
-        for (File file : localDriverPath.listFiles()) {
-          String filename = file.getCanonicalPath();
-          if (!filename.startsWith("/")) {
-            filename = "/" + filename;
+        List<URL> urlList = new ArrayList<>();
+        File[] files = localDriverPath.listFiles();
+        if (files != null) {
+          for (File file : files) {
+            String filename = file.getCanonicalPath();
+            if (!filename.startsWith("/")) {
+              filename = "/" + filename;
+            }
+            urlList.add(new URL("jar:file:" + filename + "!/"));
+            urlList.add(new URL("file:" + filename));
           }
-          urlList.add(new URL("jar:file:" + filename + "!/"));
-          urlList.add(new URL("file:" + filename));
         }
-        URL[] urls = urlList.toArray(new URL[urlList.size()]);
+        URL[] urls = urlList.toArray(new URL[0]);
         return new URLClassLoader(urls);
       } catch (Exception e) {
         throw new MigrationException("Error creating a driver ClassLoader. Cause: " + e, e);
