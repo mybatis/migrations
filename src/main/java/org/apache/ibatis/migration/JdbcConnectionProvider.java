@@ -16,25 +16,31 @@
 package org.apache.ibatis.migration;
 
 import java.sql.Connection;
+import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.ibatis.migration.driver.DriverShim;
 
 public class JdbcConnectionProvider implements ConnectionProvider {
+  private static final Map<String, Driver> registeredDrivers = registeredDrivers();
+
   private final String url;
   private final String username;
   private final String password;
 
-  public JdbcConnectionProvider(String driver, String url, String username, String password) throws Exception {
+  public JdbcConnectionProvider(String driver, String url, String username, String password) {
     this(null, driver, url, username, password);
   }
 
-  public JdbcConnectionProvider(ClassLoader classLoader, String driver, String url, String username, String password)
-      throws Exception {
+  public JdbcConnectionProvider(ClassLoader classLoader, String driver, String url, String username, String password) {
     this.url = url;
     this.username = username;
     this.password = password;
-
-    loadDriver(classLoader, driver);
+    registerDriver(classLoader, driver);
   }
 
   @Override
@@ -42,11 +48,30 @@ public class JdbcConnectionProvider implements ConnectionProvider {
     return DriverManager.getConnection(url, username, password);
   }
 
-  private static void loadDriver(ClassLoader classLoader, String driver) throws ClassNotFoundException {
-    if (classLoader != null) {
-      Class.forName(driver, true, classLoader);
-    } else {
-      Class.forName(driver);
+  private void registerDriver(ClassLoader classLoader, String driver) {
+    registeredDrivers.computeIfAbsent(driver, (d) -> createDriverClass(classLoader, d));
+  }
+
+  private Driver createDriverClass(ClassLoader classLoader, String driver) {
+    try {
+      final Class<?> driverClass = classLoader == null ? Class.forName(driver)
+          : Class.forName(driver, true, classLoader);
+      final Driver driverInstance = (Driver) driverClass.getDeclaredConstructor().newInstance();
+      final DriverShim driverShim = new DriverShim(driverInstance);
+      DriverManager.registerDriver(driverShim);
+      return driverShim;
+    } catch (final Exception e) {
+      throw new IllegalStateException("Failed to register driver " + driver, e);
     }
+  }
+
+  private static Map<String, Driver> registeredDrivers() {
+    final Map<String, Driver> registeredDrivers = new HashMap<>();
+    final Enumeration<Driver> drivers = DriverManager.getDrivers();
+    while (drivers.hasMoreElements()) {
+      final Driver driver = drivers.nextElement();
+      registeredDrivers.put(driver.getClass().getName(), driver);
+    }
+    return registeredDrivers;
   }
 }
