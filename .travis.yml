@@ -1,7 +1,6 @@
 language: java
 
 jdk:
-  - openjdk11
   - openjdk8
 
 script: ./mvnw test -Djacoco.skip=true -B
