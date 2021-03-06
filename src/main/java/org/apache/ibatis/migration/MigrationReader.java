@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2020 the original author or authors.
+ *    Copyright 2010-2021 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -229,7 +229,9 @@ public class MigrationReader extends FilterReader {
         }
         break;
       case UNDO_TAG:
-        if (c == UNDO_TAG.charAt(undoIndex) && ++undoIndex >= UNDO_TAG.length()) {
+        if (c != UNDO_TAG.charAt(undoIndex)) {
+          part = Part.NOT_UNDO_LINE;
+        } else if (++undoIndex >= UNDO_TAG.length()) {
           part = Part.AFTER_UNDO_TAG;
         }
         break;

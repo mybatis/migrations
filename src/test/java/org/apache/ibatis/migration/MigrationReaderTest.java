@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2019 the original author or authors.
+ *    Copyright 2010-2021 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -326,6 +326,17 @@ public class MigrationReaderTest {
     } finally {
       reader.close();
     }
+  }
+
+  @Test
+  public void shouldRetainLineBreakAfterDelimiter() throws Exception {
+    // @formatter:off
+    String script = "-- //@DELIMITER ~\n"
+        + "abc\n";
+    String result = readAsString(new MigrationReader(strToInputStream(script, charset), charset, false, null));
+    assertEquals("-- //@DELIMITER ~\n"
+        + "abc\n", result);
+    // @formatter:on
   }
 
   private String readAsString(Reader reader) throws IOException {
