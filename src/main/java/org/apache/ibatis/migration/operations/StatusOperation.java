@@ -74,7 +74,7 @@ public final class StatusOperation extends DatabaseOperation {
         pending = migrations.size();
       }
     } catch (SQLException e) {
-      throw new MigrationException("Error getting conneciton. Cause: " + e, e);
+      throw new MigrationException("Error getting connection. Cause: " + e, e);
     }
 
     Collections.sort(changes);
