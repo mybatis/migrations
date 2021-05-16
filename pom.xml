@@ -65,8 +65,6 @@
     <findbugs.onlyAnalyze>org.apache.ibatis.migration</findbugs.onlyAnalyze>
     <clirr.comparisonVersion>3.2.0</clirr.comparisonVersion>
     <module.name>org.mybatis.migrations</module.name>
-    <!-- Remove after parent 32 (support for jdk 13) -->
-    <jacoco.version>0.8.5</jacoco.version>
   </properties>
 
   <dependencies>
