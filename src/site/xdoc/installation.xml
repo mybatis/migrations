@@ -28,7 +28,7 @@
   <body>
     <section name="Installation">
       <p>MyBatis Migrations is a Java tool, so you must have Java installed in order to proceed. Users need at least the
-  Java Runtime Environment (JRE), the Java Development Kit (JDK) is a plus.</p>
+  Java Runtime Environment (JRE), the Java Development Kit (JDK) is a plus. MyBatis Migration requires Java version 8 or later.</p>
       <p>Additional optional installation steps are listed after the platform specific instructions.</p>
 
       <subsection name="Windows 2000/XP">
