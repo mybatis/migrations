@@ -60,6 +60,7 @@ import org.apache.ibatis.migration.utils.Util;
 
 public abstract class BaseCommand implements Command {
   private static final String DATE_FORMAT = "yyyyMMddHHmmss";
+  protected static final String DESC_CREATE_CHANGELOG = "create changelog";
 
   private ClassLoader driverClassLoader;
   private Environment environment;
