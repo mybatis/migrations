@@ -274,6 +274,7 @@ public class MigratorTest {
     assertFalse(output.contains("20080827200213"));
     assertFalse(output.contains("20080827200214"));
     assertFalse(output.contains("20080827200216"));
+    assertFalse(output.contains("DELETE FROM CHANGELOG WHERE ID = 20080827200210;"));
     assertTrue(output.contains("-- @UNDO"));
   }
 

@@ -77,7 +77,8 @@ public final class ScriptCommand extends BaseCommand {
       if (undo) {
         Collections.reverse(migrations);
       }
-      for (Change change : migrations) {
+      for (int i = 0; i < migrations.size(); i++) {
+        Change change = migrations.get(i);
         if (shouldRun(change, v1, v2, scriptPending || scriptPendingUndo)) {
           printStream.println("-- " + change.getFilename());
           Reader migrationReader = getMigrationLoader().getScriptReader(change, undo);
@@ -88,7 +89,11 @@ public final class ScriptCommand extends BaseCommand {
           }
           printStream.println();
           printStream.println();
-          printStream.println(undo ? generateVersionDelete(change) : generateVersionInsert(change));
+          if (!undo) {
+            printStream.println(generateVersionInsert(change));
+          } else if (i + 1 < migrations.size() || !DESC_CREATE_CHANGELOG.equals(change.getDescription())) {
+            printStream.println(generateVersionDelete(change));
+          }
           printStream.println();
         }
       }
