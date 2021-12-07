@@ -46,7 +46,7 @@ public final class InitializeCommand extends BaseCommand {
     copyResourceTo("org/apache/ibatis/migration/template_environment.properties", environmentFile());
     copyResourceTo("org/apache/ibatis/migration/template_bootstrap.sql", Util.file(scriptPath, "bootstrap.sql"));
     copyResourceTo("org/apache/ibatis/migration/template_changelog.sql",
-        Util.file(scriptPath, getNextIDAsString() + "_" + DESC_CREATE_CHANGELOG.replace(' ', '_') +".sql"));
+        Util.file(scriptPath, getNextIDAsString() + "_" + DESC_CREATE_CHANGELOG.replace(' ', '_') + ".sql"));
     copyResourceTo("org/apache/ibatis/migration/template_migration.sql",
         Util.file(scriptPath, getNextIDAsString() + "_first_migration.sql"), new Properties() {
           {
