@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-       Copyright 2010-2018 the original author or authors.
+       Copyright 2010-2021 the original author or authors.
 
        Licensed under the Apache License, Version 2.0 (the "License");
        you may not use this file except in compliance with the License.
@@ -37,17 +37,6 @@
 
         <p>
           You can write scripts that are executed before or after up/down operation.<br />
-          The following hooks are supported.
-        </p>
-
-        <ul>
-          <li>before up/down : executed before the first migration</li>
-          <li>before each up/down : executed before each migration</li>
-          <li>after each up/down : executed after each migration</li>
-          <li>after up/down : executed after the last migration</li>
-        </ul>
-
-        <p>
           Hook scripts can be written in <b>SQL</b> or <b>JSR-223</b> compliannt script languages.
         </p>
 
@@ -127,9 +116,15 @@ Hello, World!]]></source>
           <li>hook_before_each_down</li>
           <li>hook_after_each_down</li>
           <li>hook_after_down</li>
-          <li>hook_before_new (since 3.3.5)</li>
-          <li>hook_after_new (since 3.3.5)</li>
+          <li>hook_before_new [1] (since 3.3.5)</li>
+          <li>hook_after_new [1] (since 3.3.5)</li>
+          <li>hook_before_script [1] (since 3.3.10)</li>
+          <li>hook_before_each_script [1] (since 3.3.10)</li>
+          <li>hook_after_each_script [1] (since 3.3.10)</li>
+          <li>hook_after_script [1] (since 3.3.10)</li>
         </ul>
+
+        <p>[1] Only JSR-223 script is supported.</p>
 
         <h4>Minimum setting : language and file name</h4>
 
@@ -209,8 +204,9 @@ print(migrationPaths.getHookPath());]]></source>
         </p>
 
         <ul>
-          <li>For hooks except before_new and after_new, it is an instance of <a href="/migrations/apidocs/org/apache/ibatis/migration/hook/HookContext.html" target="_blank">HookContext</a>.</li>
-          <li>For before_new and after_new hooks, it will be <a href="/migrations/apidocs/org/apache/ibatis/migration/hook/NewHookContext.html" target="_blank">NewHookContext</a>.</li>
+          <li>For <code>up</code> and <code>down</code> hooks, <code>hookConte</code> is an instance of <a href="/migrations/apidocs/org/apache/ibatis/migration/hook/HookContext.html" target="_blank">HookContext</a>.</li>
+          <li>For <code>new</code> hooks, <code>hookContext</code> is an instance of <a href="/migrations/apidocs/org/apache/ibatis/migration/hook/NewHookContext.html" target="_blank">NewHookContext</a>.</li>
+          <li>For <code>script</code> hooks, <code>hookContext</code> is an instance of <a href="/migrations/apidocs/org/apache/ibatis/migration/hook/ScriptHookContext.html" target="_blank">ScriptHookContext</a>.</li>
         </ul>
 
         <h4>Accessing <i>Change</i> object (in each hook only)</h4>

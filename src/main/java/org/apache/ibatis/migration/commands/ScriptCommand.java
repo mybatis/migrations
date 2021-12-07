@@ -20,11 +20,15 @@ import java.io.Reader;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.StringTokenizer;
 
 import org.apache.ibatis.migration.Change;
 import org.apache.ibatis.migration.MigrationException;
+import org.apache.ibatis.migration.hook.MigrationHook;
+import org.apache.ibatis.migration.hook.ScriptHookContext;
 import org.apache.ibatis.migration.operations.DatabaseOperation;
 import org.apache.ibatis.migration.operations.StatusOperation;
 import org.apache.ibatis.migration.options.SelectedOptions;
@@ -70,6 +74,8 @@ public final class ScriptCommand extends BaseCommand {
         undo = comparison > 0;
       }
 
+      Map<String, Object> hookBindings = new HashMap<>();
+      MigrationHook hook = createScriptHook();
       List<Change> migrations = (scriptPending || scriptPendingUndo) ? new StatusOperation()
           .operate(getConnectionProvider(), getMigrationLoader(), getDatabaseOperationOption(), null).getCurrentStatus()
           : getMigrationLoader().getMigrations();
@@ -77,9 +83,20 @@ public final class ScriptCommand extends BaseCommand {
       if (undo) {
         Collections.reverse(migrations);
       }
+      int count = 0;
       for (int i = 0; i < migrations.size(); i++) {
         Change change = migrations.get(i);
         if (shouldRun(change, v1, v2, scriptPending || scriptPendingUndo)) {
+          if (count == 0 && hook != null) {
+            hookBindings.put(MigrationHook.HOOK_CONTEXT, new ScriptHookContext(null, undo));
+            hook.before(hookBindings);
+            printStream.println();
+          }
+          if (hook != null) {
+            hookBindings.put(MigrationHook.HOOK_CONTEXT, new ScriptHookContext(change.clone(), undo));
+            hook.beforeEach(hookBindings);
+            printStream.println();
+          }
           printStream.println("-- " + change.getFilename());
           Reader migrationReader = getMigrationLoader().getScriptReader(change, undo);
           char[] cbuf = new char[1024];
@@ -87,6 +104,7 @@ public final class ScriptCommand extends BaseCommand {
           while ((l = migrationReader.read(cbuf)) > -1) {
             printStream.print(l == cbuf.length ? cbuf : Arrays.copyOf(cbuf, l));
           }
+          count++;
           printStream.println();
           printStream.println();
           if (!undo) {
@@ -95,7 +113,17 @@ public final class ScriptCommand extends BaseCommand {
             printStream.println(generateVersionDelete(change));
           }
           printStream.println();
+          if (hook != null) {
+            hookBindings.put(MigrationHook.HOOK_CONTEXT, new ScriptHookContext(change.clone(), undo));
+            hook.afterEach(hookBindings);
+            printStream.println();
+          }
         }
+      }
+      if (count > 0 && hook != null) {
+        hookBindings.put(MigrationHook.HOOK_CONTEXT, new ScriptHookContext(null, undo));
+        hook.after(hookBindings);
+        printStream.println();
       }
     } catch (IOException e) {
       throw new MigrationException("Error generating script. Cause: " + e, e);
@@ -135,4 +163,14 @@ public final class ScriptCommand extends BaseCommand {
     return delimiter.toString();
   }
 
+  private MigrationHook createScriptHook() {
+    String before = environment().getHookBeforeScript();
+    String beforeEach = environment().getHookBeforeEachScript();
+    String afterEach = environment().getHookAfterEachScript();
+    String after = environment().getHookAfterScript();
+    if (before == null && beforeEach == null && afterEach == null && after == null) {
+      return null;
+    }
+    return createFileMigrationHook(before, beforeEach, afterEach, after);
+  }
 }
