@@ -55,7 +55,11 @@ public class Environment {
     hook_after_each_down,
     hook_after_down,
     hook_before_new,
-    hook_after_new
+    hook_after_new,
+    hook_before_script,
+    hook_before_each_script,
+    hook_after_each_script,
+    hook_after_script
   }
 
   private static final List<String> SETTING_KEYS;
@@ -94,6 +98,11 @@ public class Environment {
 
   private final String hookBeforeNew;
   private final String hookAfterNew;
+
+  private final String hookBeforeScript;
+  private final String hookBeforeEachScript;
+  private final String hookAfterEachScript;
+  private final String hookAfterScript;
 
   /**
    * Prefix used to lookup environment variable or system property.
@@ -134,6 +143,11 @@ public class Environment {
 
     this.hookBeforeNew = readProperty(prop, SETTING_KEY.hook_before_new.name());
     this.hookAfterNew = readProperty(prop, SETTING_KEY.hook_after_new.name());
+
+    this.hookBeforeScript = readProperty(prop, SETTING_KEY.hook_before_script.name());
+    this.hookBeforeEachScript = readProperty(prop, SETTING_KEY.hook_before_each_script.name());
+    this.hookAfterEachScript = readProperty(prop, SETTING_KEY.hook_after_each_script.name());
+    this.hookAfterScript = readProperty(prop, SETTING_KEY.hook_after_script.name());
 
     // User defined variables.
     prop.entrySet().stream().filter(e -> !SETTING_KEYS.contains(e.getKey()))
@@ -271,6 +285,22 @@ public class Environment {
 
   public String getHookAfterNew() {
     return hookAfterNew;
+  }
+
+  public String getHookBeforeScript() {
+    return hookBeforeScript;
+  }
+
+  public String getHookBeforeEachScript() {
+    return hookBeforeEachScript;
+  }
+
+  public String getHookAfterEachScript() {
+    return hookAfterEachScript;
+  }
+
+  public String getHookAfterScript() {
+    return hookAfterScript;
   }
 
   public Properties getVariables() {
