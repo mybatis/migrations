@@ -22,9 +22,12 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
 import java.util.Scanner;
+import java.util.TreeSet;
 
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.migration.utils.TestUtil;
@@ -74,6 +77,8 @@ public class MigratorTest {
     testStatusContainsNoPendingMigrations();
     testDownCommandGiven2Steps();
     testStatusContainsPendingMigrations();
+
+    testRedoCommand();
 
     testDoPendingScriptCommand();
 
@@ -192,6 +197,53 @@ public class MigratorTest {
     Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "down"));
     String output = out.getLog();
     assertFalse(output.contains("FAILURE"));
+  }
+
+  private void testRedoCommand() throws Exception {
+    out.clearLog();
+    Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "status"));
+    String output = out.getLog();
+    assertFalse(output.contains("20080827200214    ...pending..."));
+    assertTrue(output.contains("20080827200216    ...pending..."));
+
+    out.clearLog();
+    {
+      Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "redo"));
+      output = out.getLog();
+      assertFalse(output.contains("FAILURE"));
+      assertEquals("Should down be just one step", -1, output.indexOf("DROP TABLE post_tag"));
+      int dropIdx = output.indexOf("DROP TABLE comment");
+      int createIdx = output.indexOf("CREATE TABLE comment (");
+      assertNotEquals(-1, dropIdx);
+      assertNotEquals(-1, createIdx);
+      assertTrue(dropIdx < createIdx);
+    }
+
+    out.clearLog();
+    Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "status"));
+    output = out.getLog();
+    assertFalse(output.contains("20080827200214    ...pending..."));
+    assertTrue(output.contains("20080827200216    ...pending..."));
+
+    out.clearLog();
+    {
+      Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "redo", "2"));
+      output = out.getLog();
+      assertFalse(output.contains("FAILURE"));
+      assertEquals("Should down be two steps", -1, output.indexOf("DROP TABLE blog"));
+      List<Integer> lineNums = new ArrayList<>();
+      lineNums.add(output.indexOf("DROP TABLE comment"));
+      lineNums.add(output.indexOf("DROP TABLE post"));
+      lineNums.add(output.indexOf("CREATE TABLE post ("));
+      lineNums.add(output.indexOf("CREATE TABLE comment ("));
+      assertEquals(new TreeSet<>(lineNums).toString(), lineNums.toString());
+    }
+
+    out.clearLog();
+    Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "status"));
+    output = out.getLog();
+    assertFalse(output.contains("20080827200214    ...pending..."));
+    assertTrue(output.contains("20080827200216    ...pending..."));
   }
 
   private void testStatusContainsPendingMigrations() throws Exception {

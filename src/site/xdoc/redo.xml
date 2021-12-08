@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+       Copyright 2010-2021 the original author or authors.
+
+       Licensed under the Apache License, Version 2.0 (the "License");
+       you may not use this file except in compliance with the License.
+       You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+       Unless required by applicable law or agreed to in writing, software
+       distributed under the License is distributed on an "AS IS" BASIS,
+       WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+       See the License for the specific language governing permissions and
+       limitations under the License.
+
+-->
+<document xmlns="http://maven.apache.org/XDOC/2.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+
+  <properties>
+    <title>MyBatis Migrations | Migrate > redo</title>
+    <author email="mybatis-dev@googlegroups.com">The MyBatis Team</author>
+  </properties>
+
+  <body>
+    <section name="The 'redo' command">
+      <p>The redo command is a shortcut which internally executes a down command and up command. As it executes the same number of steps for both down and up operation, the final migration status does not change.<br />
+      The redo command is useful for testing undo part of scripts or re-applying recent migration scripts after edit.</p>
+
+      <p>The redo command takes an integer parameter which indicates the number of migrations to redo. No parameter means 1.</p>
+
+      <p>The redo command was added in version 3.3.10.</p>
+    </section>
+  </body>
+
+</document>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-       Copyright 2010-2019 the original author or authors.
+       Copyright 2010-2021 the original author or authors.
 
        Licensed under the Apache License, Version 2.0 (the "License");
        you may not use this file except in compliance with the License.
@@ -33,6 +33,7 @@
         <item name="up, down" href="updown.html"/>
         <item name="version" href="version.html"/>
         <item name="pending" href="pending.html"/>
+        <item name="redo" href="redo.html"/>
         <item name="script" href="script.html"/>
         <item name="Command Shortcuts" href="shortcuts.html"/>
         <item name="Custom MigrationLoader" href="custom-loader.html"/>
