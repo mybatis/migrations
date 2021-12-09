@@ -15,7 +15,9 @@
  */
 package org.apache.ibatis.migration.hook;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+
+import com.github.stefanbirkner.systemlambda.SystemLambda;
 
 import java.io.File;
 import java.sql.Connection;
@@ -27,25 +29,15 @@ import java.util.Properties;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.migration.Migrator;
 import org.apache.ibatis.migration.utils.TestUtil;
-import org.junit.BeforeClass;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.contrib.java.lang.system.Assertion;
-import org.junit.contrib.java.lang.system.ExpectedSystemExit;
-import org.junit.contrib.java.lang.system.SystemOutRule;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
-public class MigrationHookTest {
-
-  @Rule
-  public final ExpectedSystemExit exit = ExpectedSystemExit.none();
-
-  @Rule
-  public final SystemOutRule out = new SystemOutRule().enableLog();
+class MigrationHookTest {
 
   private static File dir;
   private static Properties env;
 
-  @BeforeClass
+  @BeforeAll
   public static void init() throws Exception {
     dir = Resources.getResourceAsFile("org/apache/ibatis/migration/hook/testdir");
     env = Resources
@@ -53,13 +45,7 @@ public class MigrationHookTest {
   }
 
   @Test
-  public void testHooks() throws Exception {
-    exit.expectSystemExit();
-    exit.checkAssertionAfterwards(new Assertion() {
-      public void checkAssertion() {
-        assertEquals("", out.getLog());
-      }
-    });
+  void testHooks() throws Exception {
     int worklogCounter = 0;
     bootstrap();
     up();
@@ -73,23 +59,21 @@ public class MigrationHookTest {
     assertWorklogRowCount(++worklogCounter);
     versionUp();
     assertWorklogRowCount(++worklogCounter);
-
-    out.clearLog();
-    System.exit(0);
   }
 
   private void bootstrap() throws Exception {
-    out.clearLog();
-    // bootstrap creates a table used in a hook script later
-    Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "bootstrap"));
-    assertTrue(out.getLog().contains("SUCCESS"));
+    String output = SystemLambda.tapSystemOut(() -> {
+      // bootstrap creates a table used in a hook script later
+      Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "bootstrap"));
+    });
+    assertTrue(output.contains("SUCCESS"));
   }
 
   private void up() throws Exception {
-    out.clearLog();
-    Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "up"));
-    String output = out.getLog();
-    assertTrue(out.getLog().contains("SUCCESS"));
+    String output = SystemLambda.tapSystemOut(() -> {
+      Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "up"));
+    });
+    assertTrue(output.contains("SUCCESS"));
     // before
     assertEquals(1, TestUtil.countStr(output, "HELLO_1"));
     assertTrue(output.indexOf("HELLO_1") < output.indexOf("Applying: 001_create_changelog.sql"));
@@ -107,15 +91,15 @@ public class MigrationHookTest {
   }
 
   private void pending() throws Exception {
-    out.clearLog();
     // Create 'pending' situation intentionally.
     try (Connection con = TestUtil.getConnection(env); Statement stmt = con.createStatement()) {
       stmt.execute("delete from changes where id = 2");
       stmt.execute("drop table person");
 
-      Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "pending"));
-      String output = out.getLog();
-      assertTrue(out.getLog().contains("SUCCESS"));
+      String output = SystemLambda.tapSystemOut(() -> {
+        Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "pending"));
+      });
+      assertTrue(output.contains("SUCCESS"));
       // before
       assertEquals(1, TestUtil.countStr(output, "HELLO_1"));
       assertEquals(1, TestUtil.countStr(output, "Applying: 002_create_person.sql"));
@@ -130,20 +114,20 @@ public class MigrationHookTest {
   }
 
   private void down() throws Exception {
-    out.clearLog();
-    Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "down"));
-    String output = out.getLog();
-    assertTrue(out.getLog().contains("SUCCESS"));
+    String output = SystemLambda.tapSystemOut(() -> {
+      Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "down"));
+    });
+    assertTrue(output.contains("SUCCESS"));
     assertEquals(1, TestUtil.countStr(output, "Undoing: 003_create_pet.sql"));
     // before
     assertEquals(1, TestUtil.countStr(output, "insert into worklog (str1) values ('3')"));
   }
 
   private void versionDown() throws Exception {
-    out.clearLog();
-    Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "version", "1"));
-    String output = out.getLog();
-    assertTrue(out.getLog().contains("SUCCESS"));
+    String output = SystemLambda.tapSystemOut(() -> {
+      Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "version", "1"));
+    });
+    assertTrue(output.contains("SUCCESS"));
     assertEquals(1, TestUtil.countStr(output, "Downgrading to: 1"));
     assertEquals(1, TestUtil.countStr(output, "Undoing: 002_create_person.sql"));
     // before
@@ -151,10 +135,10 @@ public class MigrationHookTest {
   }
 
   private void versionUp() throws Exception {
-    out.clearLog();
-    Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "version", "2"));
-    String output = out.getLog();
-    assertTrue(out.getLog().contains("SUCCESS"));
+    String output = SystemLambda.tapSystemOut(() -> {
+      Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "version", "2"));
+    });
+    assertTrue(output.contains("SUCCESS"));
     assertEquals(1, TestUtil.countStr(output, "Upgrading to: 2"));
     // before
     assertEquals(1, TestUtil.countStr(output, "HELLO_1"));

@@ -15,7 +15,7 @@
  */
 package org.apache.ibatis.migration.runtime_migration;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -28,6 +28,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Map;
 import java.util.Properties;
+import java.util.stream.Stream;
 
 import org.apache.ibatis.migration.ConnectionProvider;
 import org.apache.ibatis.migration.FileMigrationLoader;
@@ -42,70 +43,60 @@ import org.apache.ibatis.migration.operations.UpOperation;
 import org.apache.ibatis.migration.operations.VersionOperation;
 import org.apache.ibatis.migration.options.DatabaseOperationOption;
 import org.apache.ibatis.migration.utils.TestUtil;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
-@RunWith(Parameterized.class)
-public class RuntimeMigrationTest {
-  private final JdbcConnectionProvider connectionProvider;
+class RuntimeMigrationTest {
+  private static final String driver = "org.hsqldb.jdbcDriver";
+  private static final String url = "jdbc:hsqldb:mem:javaapitest";
+  private static final String username = "sa";
+  private static final String password = "";
+  private JdbcConnectionProvider connectionProvider;
   private DatabaseOperationOption dbOption;
   private ByteArrayOutputStream out;
   private MigrationLoader migrationsLoader;
   private MigrationLoader migrationsLoaderFromOtherBranch;
 
-  @Parameters
-  public static ClassLoader[] testClassLoaders() {
-    return new ClassLoader[] { null, ClassLoader.getSystemClassLoader(), RuntimeMigrationTest.class.getClassLoader() };
-  }
-
-  public RuntimeMigrationTest(final ClassLoader classLoader) throws Exception {
-    final String driver = "org.hsqldb.jdbcDriver";
-    final String url = "jdbc:hsqldb:mem:javaapitest";
-    final String username = "sa";
-    final String password = "";
-
-    if (classLoader == null) {
-      connectionProvider = new JdbcConnectionProvider(driver, url, username, password);
-    } else {
-      connectionProvider = new JdbcConnectionProvider(classLoader, driver, url, username, password);
-    }
-  }
-
-  @Before
+  @BeforeEach
   public void setup() {
     dbOption = new DatabaseOperationOption();
     out = new ByteArrayOutputStream();
+    connectionProvider = new JdbcConnectionProvider(driver, url, username, password);
     migrationsLoader = createMigrationsLoader("org/apache/ibatis/migration/runtime_migration/scripts");
     migrationsLoaderFromOtherBranch = createMigrationsLoader(
         "org/apache/ibatis/migration/runtime_migration/scripts_from_other_branch");
   }
 
-  @After
+  @AfterEach
   public void tearDown() throws Exception {
     runSql(connectionProvider, "shutdown");
   }
 
-  @Test
-  public void testInitialStatus() {
-    StatusOperation status = new StatusOperation().operate(connectionProvider, migrationsLoader, dbOption,
-        new PrintStream(out));
+  @MethodSource("testClassLoaders")
+  @ParameterizedTest
+  void testInitialStatus(ClassLoader classLoader) {
+    ConnectionProvider provider = new JdbcConnectionProvider(classLoader, driver, url, username, password);
+    StatusOperation status = new StatusOperation().operate(provider, migrationsLoader, dbOption, new PrintStream(out));
     assertEquals(0, status.getAppliedCount());
     assertEquals(3, status.getPendingCount());
     assertEquals(3, status.getCurrentStatus().size());
   }
 
+  static Stream<ClassLoader> testClassLoaders() {
+    return Stream.of(null, ClassLoader.getSystemClassLoader(), RuntimeMigrationTest.class.getClassLoader());
+  }
+
   @Test
-  public void testBootstrapOperation() throws Exception {
+  void testBootstrapOperation() throws Exception {
     new BootstrapOperation().operate(connectionProvider, migrationsLoader, dbOption, new PrintStream(out));
     assertEquals("0", runQuery(connectionProvider, "select count(*) from bootstrap_table"));
   }
 
   @Test
-  public void shouldIgnoreBootstrapIfChangelogExists() {
+  void shouldIgnoreBootstrapIfChangelogExists() {
     new UpOperation(1).operate(connectionProvider, migrationsLoader, dbOption, new PrintStream(out));
 
     new BootstrapOperation().operate(connectionProvider, migrationsLoader, dbOption, new PrintStream(out));
@@ -113,7 +104,7 @@ public class RuntimeMigrationTest {
   }
 
   @Test
-  public void testUp() throws Exception {
+  void testUp() throws Exception {
     new UpOperation().operate(connectionProvider, migrationsLoader, dbOption, new PrintStream(out));
     assertEquals("3", runQuery(connectionProvider, "select count(*) from changelog"));
     assertEquals("0", runQuery(connectionProvider, "select count(*) from first_table"));
@@ -127,7 +118,7 @@ public class RuntimeMigrationTest {
   }
 
   @Test
-  public void testUpFromDifferentBranches() throws Exception {
+  void testUpFromDifferentBranches() throws Exception {
     new UpOperation().operate(connectionProvider, migrationsLoader, dbOption, new PrintStream(out));
     new UpOperation().operate(connectionProvider, migrationsLoaderFromOtherBranch, dbOption, new PrintStream(out));
     assertEquals("4", runQuery(connectionProvider, "select count(*) from changelog"));
@@ -144,7 +135,7 @@ public class RuntimeMigrationTest {
   }
 
   @Test
-  public void testUpWithStep() throws Exception {
+  void testUpWithStep() throws Exception {
     new UpOperation(2).operate(connectionProvider, migrationsLoader, dbOption, new PrintStream(out));
     assertEquals("2", runQuery(connectionProvider, "select count(*) from changelog"));
     assertEquals("0", runQuery(connectionProvider, "select count(*) from first_table"));
@@ -152,7 +143,7 @@ public class RuntimeMigrationTest {
   }
 
   @Test
-  public void testUpWithHook() throws Exception {
+  void testUpWithHook() throws Exception {
     final PrintStream printStream = new PrintStream(out);
     MigrationHook hook = new MigrationHook() {
       @Override
@@ -191,7 +182,7 @@ public class RuntimeMigrationTest {
   }
 
   @Test
-  public void testDown() throws Exception {
+  void testDown() throws Exception {
     new UpOperation().operate(connectionProvider, migrationsLoader, dbOption, new PrintStream(out));
 
     new DownOperation().operate(connectionProvider, migrationsLoader, dbOption, new PrintStream(out));
@@ -201,7 +192,7 @@ public class RuntimeMigrationTest {
   }
 
   @Test
-  public void testDownWithStep() throws Exception {
+  void testDownWithStep() throws Exception {
     new UpOperation().operate(connectionProvider, migrationsLoader, dbOption, new PrintStream(out));
 
     new DownOperation(2).operate(connectionProvider, migrationsLoader, dbOption, new PrintStream(out));
@@ -211,7 +202,7 @@ public class RuntimeMigrationTest {
   }
 
   @Test
-  public void testPending() throws Exception {
+  void testPending() throws Exception {
     new UpOperation().operate(connectionProvider, migrationsLoader, dbOption, new PrintStream(out));
 
     runSql(connectionProvider, "drop table first_table");
@@ -223,7 +214,7 @@ public class RuntimeMigrationTest {
   }
 
   @Test
-  public void testVersionUp() throws Exception {
+  void testVersionUp() throws Exception {
     // Need changelog.
     new UpOperation(1).operate(connectionProvider, migrationsLoader, dbOption, new PrintStream(out));
 
@@ -235,7 +226,7 @@ public class RuntimeMigrationTest {
   }
 
   @Test
-  public void testVersionDown() throws Exception {
+  void testVersionDown() throws Exception {
     new UpOperation().operate(connectionProvider, migrationsLoader, dbOption, new PrintStream(out));
 
     new VersionOperation(new BigDecimal("20130707120738")).operate(connectionProvider, migrationsLoader, dbOption,

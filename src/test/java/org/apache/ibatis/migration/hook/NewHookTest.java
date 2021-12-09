@@ -15,7 +15,9 @@
  */
 package org.apache.ibatis.migration.hook;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+
+import com.github.stefanbirkner.systemlambda.SystemLambda;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -31,28 +33,20 @@ import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.migration.Migrator;
 import org.apache.ibatis.migration.utils.TestUtil;
 import org.apache.ibatis.migration.utils.Util;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.contrib.java.lang.system.Assertion;
-import org.junit.contrib.java.lang.system.ExpectedSystemExit;
-import org.junit.contrib.java.lang.system.SystemOutRule;
+import org.junit.jupiter.api.Test;
 
-public class NewHookTest {
-  @Rule
-  public final ExpectedSystemExit exit = ExpectedSystemExit.none();
-
-  @Rule
-  public final SystemOutRule out = new SystemOutRule().enableLog();
+class NewHookTest {
 
   @Test
-  public void shouldRunNewHooks() throws Throwable {
+  void shouldRunNewHooks() throws Throwable {
     File basePath = initBaseDir();
     File scriptPath = new File(basePath.getCanonicalPath() + File.separator + "scripts");
-    Migrator
-        .main(TestUtil.args("--path=" + basePath.getAbsolutePath(), "--idpattern=00", "new", "create table1 JIRA-123"));
+    String output = SystemLambda.tapSystemOut(() -> {
+      Migrator.main(
+          TestUtil.args("--path=" + basePath.getAbsolutePath(), "--idpattern=00", "new", "create table1 JIRA-123"));
+    });
     String[] scripts = scriptPath.list();
     assertEquals(4, scripts.length);
-    String output = out.getLog();
     assertTrue(output.contains("SUCCESS"));
     assertTrue(output.contains("Description is valid."));
     assertTrue(output.contains("Renamed 03_create_table1_JIRA-123.sql to 03_create_table1_JIRA123.sql"));
@@ -60,17 +54,16 @@ public class NewHookTest {
   }
 
   @Test
-  public void shouldNotCreateFileWhenBeforeHookThrowsException() throws Throwable {
-    exit.expectSystemExitWithStatus(1);
-    exit.checkAssertionAfterwards(new Assertion() {
-      public void checkAssertion() {
-        String output = out.getLog();
-        assertTrue(output.contains("FAILURE"));
-      }
-    });
+  void shouldNotCreateFileWhenBeforeHookThrowsException() throws Throwable {
     File basePath = initBaseDir();
     File scriptPath = new File(basePath.getCanonicalPath() + File.separator + "scripts");
-    Migrator.main(TestUtil.args("--path=" + basePath.getAbsolutePath(), "new", "create table1"));
+    String output = SystemLambda.tapSystemOut(() -> {
+      int exitCode = SystemLambda.catchSystemExit(() -> {
+        Migrator.main(TestUtil.args("--path=" + basePath.getAbsolutePath(), "new", "create table1"));
+      });
+      assertEquals(1, exitCode);
+    });
+    assertTrue(output.contains("FAILURE"));
     assertEquals(3, scriptPath.list().length);
   }
 

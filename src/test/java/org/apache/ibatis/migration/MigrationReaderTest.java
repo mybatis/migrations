@@ -15,7 +15,7 @@
  */
 package org.apache.ibatis.migration;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -26,30 +26,30 @@ import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.Properties;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
-public class MigrationReaderTest {
+class MigrationReaderTest {
   private static final String charset = "utf-8";
 
   private String lineSeparator;
 
-  @Before
-  public void beforeEachTest() {
+  @BeforeEach
+  void beforeEachTest() {
     lineSeparator = System.getProperty("line.separator");
     System.setProperty("line.separator", "\n");
 
   }
 
-  @After
-  public void afterEachTest() {
+  @AfterEach
+  void afterEachTest() {
     System.setProperty("line.separator", lineSeparator);
   }
 
   @Test
-  public void shouldReturnDoPart() throws Exception {
+  void shouldReturnDoPart() throws Exception {
     // @formatter:off
     String script = "-- comment\n"
         + "do part\n"
@@ -62,7 +62,7 @@ public class MigrationReaderTest {
   }
 
   @Test
-  public void shouldReturnUndoPart() throws Exception {
+  void shouldReturnUndoPart() throws Exception {
     // @formatter:off
     String script = "-- comment\n"
         + "do part\n"
@@ -75,7 +75,7 @@ public class MigrationReaderTest {
   }
 
   @Test
-  public void shouldReturnUndoPart_NoEndBreak() throws Exception {
+  void shouldReturnUndoPart_NoEndBreak() throws Exception {
     // @formatter:off
     String script = "-- comment\n"
         + "do part\n"
@@ -88,7 +88,7 @@ public class MigrationReaderTest {
   }
 
   @Test
-  public void shouldUndoCommentBeLenient() throws Exception {
+  void shouldUndoCommentBeLenient() throws Exception {
     // @formatter:off
     String script = "-- comment\n"
         + "do part\n"
@@ -100,9 +100,9 @@ public class MigrationReaderTest {
     // @formatter:on
   }
 
-  @Ignore("This won't work since 3.2.2 for performance reason.")
+  @Disabled("This won't work since 3.2.2 for performance reason.")
   @Test
-  public void shouldUndoCommentAllowAnyCharBeforeAtMark() throws Exception {
+  void shouldUndoCommentAllowAnyCharBeforeAtMark() throws Exception {
     // @formatter:off
     String script = "-- comment\n"
         + "do part\n"
@@ -115,7 +115,7 @@ public class MigrationReaderTest {
   }
 
   @Test
-  public void shouldRequireDoubleSlashInUndoComment() throws Exception {
+  void shouldRequireDoubleSlashInUndoComment() throws Exception {
     // @formatter:off
     String script = "-- comment\n"
         + "do part\n"
@@ -127,7 +127,7 @@ public class MigrationReaderTest {
   }
 
   @Test
-  public void shouldReturnAllAsDoIfUndoCommentNotFound() throws Exception {
+  void shouldReturnAllAsDoIfUndoCommentNotFound() throws Exception {
     // @formatter:off
     String script = "-- comment\n"
         + "do part\n";
@@ -138,14 +138,14 @@ public class MigrationReaderTest {
   }
 
   @Test
-  public void shouldReturnAllAsDoIfUndoCommentNotFound_NoEndBreak() throws Exception {
+  void shouldReturnAllAsDoIfUndoCommentNotFound_NoEndBreak() throws Exception {
     String script = "-- ";
     String result = readAsString(new MigrationReader(strToInputStream(script, charset), charset, false, null));
     assertEquals("-- \n", result);
   }
 
   @Test
-  public void shouldReturnEmptyUndoIfUndoCommentNotFound() throws Exception {
+  void shouldReturnEmptyUndoIfUndoCommentNotFound() throws Exception {
     // @formatter:off
     String script = "-- comment\n"
         + "do part\n";
@@ -155,15 +155,15 @@ public class MigrationReaderTest {
   }
 
   @Test
-  public void shouldReturnEmptyUndoIfUndoCommentNotFound_NoEndBreak() throws Exception {
+  void shouldReturnEmptyUndoIfUndoCommentNotFound_NoEndBreak() throws Exception {
     String script = "-- ";
     String result = readAsString(new MigrationReader(strToInputStream(script, charset), charset, true, null));
     assertEquals("", result);
   }
 
-  @Ignore("This won't work since 3.2.2 mainly for performance reason.")
+  @Disabled("This won't work since 3.2.2 mainly for performance reason.")
   @Test
-  public void shouldRemoveFirstDoubleSlashInEveryComment_Do() throws Exception {
+  void shouldRemoveFirstDoubleSlashInEveryComment_Do() throws Exception {
     // @formatter:off
     String script = "--  //  comment\n"
         + "do part\n"
@@ -176,9 +176,9 @@ public class MigrationReaderTest {
     // @formatter:on
   }
 
-  @Ignore("This won't work since 3.2.2 mainly for performance reason.")
+  @Disabled("This won't work since 3.2.2 mainly for performance reason.")
   @Test
-  public void shouldRemoveFirstDoubleSlashInEveryComment_Undo() throws Exception {
+  void shouldRemoveFirstDoubleSlashInEveryComment_Undo() throws Exception {
     // @formatter:off
     String script = "--  //  comment\n"
         + "do part\n"
@@ -193,7 +193,7 @@ public class MigrationReaderTest {
   }
 
   @Test
-  public void shouldSecondUndoMarkerHaveNoEffect() throws Exception {
+  void shouldSecondUndoMarkerHaveNoEffect() throws Exception {
     // @formatter:off
     String script = "--  //  comment\n"
         + "do part\n"
@@ -210,7 +210,7 @@ public class MigrationReaderTest {
   }
 
   @Test
-  public void shouldReplaceVariables_Do() throws Exception {
+  void shouldReplaceVariables_Do() throws Exception {
     // @formatter:off
     String script = "do ${a} part${b} \n"
         + "-- ${a}\n"
@@ -229,7 +229,7 @@ public class MigrationReaderTest {
   }
 
   @Test
-  public void shouldReplaceVariables_Undo() throws Exception {
+  void shouldReplaceVariables_Undo() throws Exception {
     // @formatter:off
     String script = "do part\n"
         + "--//@UNDO ${c}\n"
@@ -249,7 +249,7 @@ public class MigrationReaderTest {
   }
 
   @Test
-  public void shouldNormalizeLineSeparator_Do() throws Exception {
+  void shouldNormalizeLineSeparator_Do() throws Exception {
     // This is just for consistency with older versions.
     // ScriptRunner normalizes line separator anyway.
     String originalSeparator = System.getProperty("line.separator");
@@ -271,7 +271,7 @@ public class MigrationReaderTest {
   }
 
   @Test
-  public void shouldNormalizeLineSeparator_Undo() throws Exception {
+  void shouldNormalizeLineSeparator_Undo() throws Exception {
     // This is just for consistency with older versions.
     // ScriptRunner normalizes line separator anyway.
     String originalSeparator = System.getProperty("line.separator");
@@ -294,13 +294,13 @@ public class MigrationReaderTest {
   }
 
   @Test
-  public void shouldRespectSpecifiedOffsetAndLength() throws Exception {
+  void shouldRespectSpecifiedOffsetAndLength() throws Exception {
     String script = "abcdefghij";
     MigrationReader reader = new MigrationReader(strToInputStream(script, charset), charset, false, null);
     try {
       char[] cbuf = new char[5];
       int read = reader.read(cbuf, 1, 3);
-      assertEquals(read, 3);
+      assertEquals(3, read);
       assertArrayEquals(new char[] { 0, 'a', 'b', 'c', 0 }, cbuf);
     } finally {
       reader.close();
@@ -308,7 +308,7 @@ public class MigrationReaderTest {
   }
 
   @Test
-  public void testReadWithBuffer() throws Exception {
+  void testReadWithBuffer() throws Exception {
     // @formatter:off
     String script = "long do part 123456789012345678901234567890\n"
         + "--//@UNDO\n"
@@ -329,7 +329,7 @@ public class MigrationReaderTest {
   }
 
   @Test
-  public void shouldRetainLineBreakAfterDelimiter() throws Exception {
+  void shouldRetainLineBreakAfterDelimiter() throws Exception {
     // @formatter:off
     String script = "-- //@DELIMITER ~\n"
         + "abc\n";

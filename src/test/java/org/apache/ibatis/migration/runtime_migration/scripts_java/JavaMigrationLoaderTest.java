@@ -15,7 +15,7 @@
  */
 package org.apache.ibatis.migration.runtime_migration.scripts_java;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.Reader;
 import java.io.StringWriter;
@@ -24,19 +24,19 @@ import java.util.List;
 
 import org.apache.ibatis.migration.Change;
 import org.apache.ibatis.migration.JavaMigrationLoader;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class JavaMigrationLoaderTest {
+class JavaMigrationLoaderTest {
 
   @Test
-  public void testGetMigrations() throws Exception {
+  void testGetMigrations() throws Exception {
     JavaMigrationLoader loader = createMigrationLoader();
     List<Change> migrations = loader.getMigrations();
     assertEquals(3, migrations.size());
   }
 
   @Test
-  public void testGetScriptReader() throws Exception {
+  void testGetScriptReader() throws Exception {
     JavaMigrationLoader loader = createMigrationLoader();
     Change change = new Change();
     change.setFilename("org.apache.ibatis.migration.runtime_migration.scripts_java.V002_CreateFirstTable");
@@ -50,7 +50,7 @@ public class JavaMigrationLoaderTest {
   }
 
   @Test
-  public void testGetBootstrapReader() throws Exception {
+  void testGetBootstrapReader() throws Exception {
     JavaMigrationLoader loader = createMigrationLoader();
     Reader reader = loader.getBootstrapReader();
     Writer writer = new StringWriter();

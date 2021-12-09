@@ -15,93 +15,62 @@
  */
 package org.apache.ibatis.migration.system_property;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+
+import com.github.stefanbirkner.systemlambda.SystemLambda;
 
 import java.io.File;
 
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.migration.Migrator;
 import org.apache.ibatis.migration.utils.TestUtil;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.contrib.java.lang.system.Assertion;
-import org.junit.contrib.java.lang.system.EnvironmentVariables;
-import org.junit.contrib.java.lang.system.ExpectedSystemExit;
-import org.junit.contrib.java.lang.system.RestoreSystemProperties;
-import org.junit.contrib.java.lang.system.SystemOutRule;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
-public class SystemPropertyTest {
-
-  @Rule
-  public final ExpectedSystemExit exit = ExpectedSystemExit.none();
-
-  @Rule
-  public final SystemOutRule out = new SystemOutRule().enableLog();
-
-  @Rule
-  public final RestoreSystemProperties restoreSysProps = new RestoreSystemProperties();
-
-  @Rule
-  public final EnvironmentVariables envVars = new EnvironmentVariables();
+class SystemPropertyTest {
 
   private static File dir;
 
-  @BeforeClass
+  @BeforeAll
   public static void init() throws Exception {
     dir = Resources.getResourceAsFile("org/apache/ibatis/migration/system_property/testdir");
   }
 
-  @Before
-  public void beforeEachTest() {
-    exit.expectSystemExit();
-    exit.checkAssertionAfterwards(new Assertion() {
-      public void checkAssertion() {
-        assertEquals("", out.getLog());
-      }
+  @Test
+  void testEnvironmentVariables() throws Exception {
+    SystemLambda.withEnvironmentVariable("MIGRATIONS_DRIVER", "org.hsqldb.jdbcDriver")
+        .and("username", "Pocahontas")
+        .and("var1", "Variable 1")
+        .and("MIGRATIONS_VAR3", "Variable 3")
+        .and("migrations_var4", "Variable 4")
+        .and("MIGRATIONS_VAR5", "Variable 5").execute(() -> {
+          assertEnvironment();
+        });
+  }
+
+  @Test
+  void testSystemProperties() throws Exception {
+    SystemLambda.restoreSystemProperties(() -> {
+      System.setProperty("MIGRATIONS_DRIVER", "org.hsqldb.jdbcDriver");
+      System.setProperty("username", "Pocahontas");
+      System.setProperty("var1", "Variable 1");
+      System.setProperty("MIGRATIONS_VAR3", "Variable 3");
+      System.setProperty("migrations_var4", "Variable 4");
+      System.setProperty("MIGRATIONS_VAR5", "Variable 5");
+      // Set duplicate env vars to assert priority
+      SystemLambda.withEnvironmentVariable("MIGRATIONS_DRIVER", "bogus_driver").and("MIGRATIONS_VAR3", "bogus_var3")
+          .execute(() -> {
+            assertEnvironment();
+          });
     });
-    out.clearLog();
+
   }
 
-  @After
-  public void afterEachTest() {
-    out.clearLog();
-    System.exit(0);
-  }
+  private void assertEnvironment() throws Exception {
+    String output = SystemLambda.tapSystemOut(() -> {
+      Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "up", "1", "--trace"));
+    });
 
-  @Test
-  public void testEnvironmentVariables() throws Exception {
-    envVars.set("MIGRATIONS_DRIVER", "org.hsqldb.jdbcDriver");
-    envVars.set("username", "Pocahontas");
-    envVars.set("var1", "Variable 1");
-    envVars.set("MIGRATIONS_VAR3", "Variable 3");
-    envVars.set("migrations_var4", "Variable 4");
-    envVars.set("MIGRATIONS_VAR5", "Variable 5");
-
-    assertEnvironment();
-  }
-
-  @Test
-  public void testSystemProperties() throws Exception {
-    System.setProperty("MIGRATIONS_DRIVER", "org.hsqldb.jdbcDriver");
-    System.setProperty("username", "Pocahontas");
-    System.setProperty("var1", "Variable 1");
-    System.setProperty("MIGRATIONS_VAR3", "Variable 3");
-    System.setProperty("migrations_var4", "Variable 4");
-    System.setProperty("MIGRATIONS_VAR5", "Variable 5");
-    // Set duplicate env vars to assert priority
-    envVars.set("MIGRATIONS_DRIVER", "bogus_driver");
-    envVars.set("MIGRATIONS_VAR3", "bogus_var3");
-
-    assertEnvironment();
-  }
-
-  private void assertEnvironment() {
-    Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "up", "1", "--trace"));
-
-    String output = out.getLog();
     assertTrue(output.contains("SUCCESS"));
     assertTrue(output.contains("username: Pocahontas"));
     assertTrue(output.contains("var1: Variable 1"));

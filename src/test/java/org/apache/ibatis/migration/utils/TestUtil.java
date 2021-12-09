@@ -15,7 +15,7 @@
  */
 package org.apache.ibatis.migration.utils;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
 import java.io.IOException;

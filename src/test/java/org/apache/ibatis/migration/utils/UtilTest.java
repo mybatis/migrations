@@ -17,30 +17,29 @@ package org.apache.ibatis.migration.utils;
 
 import static org.apache.ibatis.migration.utils.Util.file;
 import static org.apache.ibatis.migration.utils.Util.isOption;
-import static org.hamcrest.core.StringEndsWith.endsWith;
-import static org.hamcrest.core.StringStartsWith.startsWith;
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class UtilTest {
+class UtilTest {
   @Test
-  public void testIsOption() {
-    assertTrue("Util doesn't recognize proper option", isOption("--properOption"));
-    assertFalse("Util doesn't recognize improper option", isOption("-improperOption"));
-    assertTrue("Util doesn't recognize proper option with value", isOption("--properOptionValue=value"));
-    assertFalse("Util doesn't recognize proper option with value", isOption("--missingOptionValue="));
+  void testIsOption() {
+    assertTrue(isOption("--properOption"), "Util doesn't recognize proper option");
+    assertFalse(isOption("-improperOption"), "Util doesn't recognize improper option");
+    assertTrue(isOption("--properOptionValue=value"), "Util doesn't recognize proper option with value");
+    assertFalse(isOption("--missingOptionValue="), "Util doesn't recognize proper option with value");
   }
 
   @Test
-  public void testFile() {
+  void testFile() {
     final File parentDirectory = new File(".");
     final String childFile = "child.file";
     final File absoluteFile = file(parentDirectory, childFile);
 
-    assertThat(absoluteFile.getAbsolutePath(), startsWith(parentDirectory.getAbsolutePath()));
-    assertThat(absoluteFile.getAbsolutePath(), endsWith(File.separator + childFile));
+    assertThat(absoluteFile.getAbsolutePath()).startsWith(parentDirectory.getAbsolutePath());
+    assertThat(absoluteFile.getAbsolutePath()).endsWith(File.separator + childFile);
   }
 }
