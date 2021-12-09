@@ -193,7 +193,7 @@ public class MigratorTest {
     });
     assertFalse(output.contains("FAILURE"));
     assertEquals(-1, output.indexOf("DROP TABLE post_tag"), "Should down be just one step");
-            int dropIdx = output.indexOf("DROP TABLE comment");
+    int dropIdx = output.indexOf("DROP TABLE comment");
     int createIdx = output.indexOf("CREATE TABLE comment (");
     assertNotEquals(-1, dropIdx);
     assertNotEquals(-1, createIdx);
