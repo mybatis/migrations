@@ -37,19 +37,10 @@ class SystemPropertyTest {
   }
 
   @Test
-  void testEnvironmentVariables() throws Exception {
-    SystemLambda.withEnvironmentVariable("MIGRATIONS_DRIVER", "org.hsqldb.jdbcDriver")
-        .and("username", "Pocahontas")
-        .and("var1", "Variable 1")
-        .and("MIGRATIONS_VAR3", "Variable 3")
-        .and("migrations_var4", "Variable 4")
-        .and("MIGRATIONS_VAR5", "Variable 5").execute(() -> {
-          assertEnvironment();
-        });
-  }
-
-  @Test
   void testSystemProperties() throws Exception {
+    // This test requires two environment variables
+    // MIGRATIONS_VAR3 = bogus_var3
+    // MIGRATIONS_ENVVAR1 = Environment variable 1
     SystemLambda.restoreSystemProperties(() -> {
       System.setProperty("MIGRATIONS_DRIVER", "org.hsqldb.jdbcDriver");
       System.setProperty("username", "Pocahontas");
@@ -57,29 +48,20 @@ class SystemPropertyTest {
       System.setProperty("MIGRATIONS_VAR3", "Variable 3");
       System.setProperty("migrations_var4", "Variable 4");
       System.setProperty("MIGRATIONS_VAR5", "Variable 5");
-      // Set duplicate env vars to assert priority
-      SystemLambda.withEnvironmentVariable("MIGRATIONS_DRIVER", "bogus_driver").and("MIGRATIONS_VAR3", "bogus_var3")
-          .execute(() -> {
-            assertEnvironment();
-          });
+      String output = SystemLambda.tapSystemOut(() -> {
+        Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "up", "1", "--trace"));
+      });
+      assertTrue(output.contains("SUCCESS"));
+      assertTrue(output.contains("username: Pocahontas"));
+      assertTrue(output.contains("var1: Variable 1"));
+      assertTrue(output.contains("var2: ${var2}"));
+      assertTrue(output.contains("var3: Variable 3"), "System property should overwrite env var");
+      assertTrue(output.contains("var4: Variable 4"));
+      assertTrue(output.contains("var5: Variable 5"));
+      assertTrue(output.contains("Var5: Var5 in properties file"));
+      assertTrue(output.contains("envvar1: Environment variable 1"));
+
+      Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "down", "1"));
     });
-
-  }
-
-  private void assertEnvironment() throws Exception {
-    String output = SystemLambda.tapSystemOut(() -> {
-      Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "up", "1", "--trace"));
-    });
-
-    assertTrue(output.contains("SUCCESS"));
-    assertTrue(output.contains("username: Pocahontas"));
-    assertTrue(output.contains("var1: Variable 1"));
-    assertTrue(output.contains("var2: ${var2}"));
-    assertTrue(output.contains("var3: Variable 3"));
-    assertTrue(output.contains("var4: Variable 4"));
-    assertTrue(output.contains("var5: Variable 5"));
-    assertTrue(output.contains("Var5: Var5 in properties file"));
-
-    Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "down", "1"));
   }
 }
