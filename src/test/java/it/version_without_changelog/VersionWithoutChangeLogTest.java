@@ -15,27 +15,26 @@
  */
 package it.version_without_changelog;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+
+import com.github.stefanbirkner.systemlambda.SystemLambda;
 
 import java.io.File;
 
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.migration.Migrator;
 import org.apache.ibatis.migration.utils.TestUtil;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.contrib.java.lang.system.SystemOutRule;
+import org.junit.jupiter.api.Test;
 
-public class VersionWithoutChangeLogTest {
-  @Rule
-  public final SystemOutRule out = new SystemOutRule().enableLog();
+class VersionWithoutChangeLogTest {
 
   @Test
-  public void shouldUpToVersionEvenWithoutChangelog() throws Exception {
+  void shouldUpToVersionEvenWithoutChangelog() throws Exception {
     // gh-160
     File dir = Resources.getResourceAsFile("it/version_without_changelog");
-    Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "version", "20000101000001"));
-    String output = out.getLog();
+    String output = SystemLambda.tapSystemOut(() -> {
+      Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "version", "20000101000001"));
+    });
     assertFalse(output.contains("FAILURE"));
     assertTrue(output.contains("20000101000000"));
     assertTrue(output.contains("20000101000001"));

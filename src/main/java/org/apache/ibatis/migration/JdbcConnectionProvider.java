@@ -49,7 +49,7 @@ public class JdbcConnectionProvider implements ConnectionProvider {
   }
 
   private void registerDriver(ClassLoader classLoader, String driver) {
-    registeredDrivers.computeIfAbsent(driver, (d) -> createDriverClass(classLoader, d));
+    registeredDrivers.computeIfAbsent(driver, d -> createDriverClass(classLoader, d));
   }
 
   private Driver createDriverClass(ClassLoader classLoader, String driver) {

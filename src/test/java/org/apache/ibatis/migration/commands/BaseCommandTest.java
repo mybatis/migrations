@@ -15,8 +15,7 @@
  */
 package org.apache.ibatis.migration.commands;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -26,45 +25,40 @@ import java.util.Properties;
 import java.util.Scanner;
 
 import org.apache.ibatis.io.Resources;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.junit.jupiter.api.Test;
 
-public class BaseCommandTest {
-  @Rule
-  public ExpectedException expectedException = ExpectedException.none();
-
+class BaseCommandTest {
   @Test
-  public void testNonexistentResource() throws Exception {
+  void testNonexistentResource() throws Exception {
     String resource = "org/apache/ibatis/migration/commands/NoSuchFile.sql";
-    expectedException.expect(IOException.class);
-    expectedException.expectMessage(is("Could not find resource " + resource));
-
-    File src = Resources.getResourceAsFile(resource);
-    File dest = File.createTempFile("Out", ".sql");
-    try {
-      BaseCommand.copyTemplate(src, dest, null);
-    } finally {
-      dest.delete();
-    }
+    IOException e = assertThrows(IOException.class, () -> {
+      File src = Resources.getResourceAsFile(resource);
+      File dest = File.createTempFile("Out", ".sql");
+      try {
+        BaseCommand.copyTemplate(src, dest, null);
+      } finally {
+        dest.delete();
+      }
+    });
+    assertEquals(e.getMessage(), "Could not find resource " + resource);
   }
 
   @Test
-  public void testNonexistentFile() throws Exception {
+  void testNonexistentFile() throws Exception {
     String srcPath = "/tmp/NoSuchFile.sql";
-    expectedException.expect(FileNotFoundException.class);
-    expectedException.expectMessage(is(srcPath + " (No such file or directory)"));
-
-    File dest = File.createTempFile("Out", ".sql");
-    try {
-      BaseCommand.copyTemplate(new File(srcPath), dest, null);
-    } finally {
-      dest.delete();
-    }
+    FileNotFoundException e = assertThrows(FileNotFoundException.class, () -> {
+      File dest = File.createTempFile("Out", ".sql");
+      try {
+        BaseCommand.copyTemplate(new File(srcPath), dest, null);
+      } finally {
+        dest.delete();
+      }
+    });
+    assertEquals(e.getMessage(), srcPath + " (No such file or directory)");
   }
 
   @Test
-  public void testCopyResource() throws Exception {
+  void testCopyResource() throws Exception {
     File src = Resources.getResourceAsFile("org/apache/ibatis/migration/commands/TestTemplate.sql");
     File dest = File.createTempFile("Out", ".sql");
     try {
@@ -76,7 +70,7 @@ public class BaseCommandTest {
   }
 
   @Test
-  public void testCopyResourceWithVariables() throws Exception {
+  void testCopyResourceWithVariables() throws Exception {
     File src = Resources.getResourceAsFile("org/apache/ibatis/migration/commands/TestTemplate.sql");
     File dest = File.createTempFile("Out", ".sql");
     Properties variables = new Properties();
@@ -90,7 +84,7 @@ public class BaseCommandTest {
   }
 
   @Test
-  public void testExternalFile() throws Exception {
+  void testExternalFile() throws Exception {
     File src = File.createTempFile("ExternalTemplate", ".sql");
     PrintWriter writer = new PrintWriter(src);
     writer.println("// ${var}");
@@ -107,7 +101,7 @@ public class BaseCommandTest {
   }
 
   @Test
-  public void testExternalFileWithVariables() throws Exception {
+  void testExternalFileWithVariables() throws Exception {
     File src = File.createTempFile("ExternalTemplate", ".sql");
     PrintWriter writer = new PrintWriter(src);
     writer.println("// ${var}");

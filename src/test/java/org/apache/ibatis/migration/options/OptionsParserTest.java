@@ -16,19 +16,17 @@
 package org.apache.ibatis.migration.options;
 
 import static org.apache.ibatis.migration.options.Options.*;
-import static org.apache.ibatis.migration.options.OptionsParser.parse;
-import static org.hamcrest.core.IsEqual.equalTo;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.apache.ibatis.migration.options.OptionsParser.*;
+import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
 
-import org.hamcrest.core.StringContains;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class OptionsParserTest {
+class OptionsParserTest {
   @Test
-  public void testOptions() {
+  void testOptions() {
     final SelectedOptions options = parse(new String[] { option(FORCE), option(TRACE), option(HELP) });
 
     assertTrue(options.isForce());
@@ -37,19 +35,19 @@ public class OptionsParserTest {
   }
 
   @Test
-  public void testEnvAndTemplate() {
+  void testEnvAndTemplate() {
     final String testValue = "test";
     final String[] args = { valuedOption(ENV, testValue), valuedOption(TEMPLATE, testValue),
         valuedOption(Options.IDPATTERN, testValue) };
     final SelectedOptions options = parse(args);
 
-    assertThat(options.getEnvironment(), equalTo(testValue));
-    assertThat(options.getTemplate(), equalTo(testValue));
-    assertThat(options.getIdPattern(), equalTo(testValue));
+    assertThat(options.getEnvironment()).isEqualTo(testValue);
+    assertThat(options.getTemplate()).isEqualTo(testValue);
+    assertThat(options.getIdPattern()).isEqualTo(testValue);
   }
 
   @Test
-  public void testFileOptions() {
+  void testFileOptions() {
     final String testFileName = "test";
     final File testFile = new File(testFileName);
     final SelectedOptions expectedOptions = new SelectedOptions();
@@ -61,7 +59,7 @@ public class OptionsParserTest {
     paths.setDriverPath(testFile);
     paths.setHookPath(testFile);
 
-    final String[] args = { valuedOption(PATH, testFile.getAbsolutePath()),
+    final String[] args = { valuedOption(Options.PATH, testFile.getAbsolutePath()),
         valuedOption(ENVPATH, testFile.getAbsolutePath()), valuedOption(SCRIPTPATH, testFile.getAbsolutePath()),
         valuedOption(DRIVERPATH, testFile.getAbsolutePath()), valuedOption(HOOKPATH, testFile.getAbsolutePath()) };
 
@@ -74,20 +72,20 @@ public class OptionsParserTest {
   }
 
   private void checkFileOptionSet(File aFile, String expectedFileName) {
-    assertThat(aFile.getName(), equalTo(expectedFileName));
+    assertThat(aFile.getName()).isEqualTo(expectedFileName);
   }
 
   @Test
-  public void onlyPopulatesCommandOnce() {
+  void onlyPopulatesCommandOnce() {
     final String command = "command";
     final String ignoredCommand = "ignoredCommand";
     final String anotherIgnored = "anotherIgnored";
 
     final SelectedOptions options = parse(new String[] { command, ignoredCommand, anotherIgnored });
 
-    assertThat(options.getCommand(), equalTo(command));
-    assertThat(options.getParams(), StringContains.containsString(ignoredCommand));
-    assertThat(options.getParams(), StringContains.containsString(anotherIgnored));
+    assertThat(options.getCommand()).isEqualTo(command);
+    assertThat(options.getParams()).contains(ignoredCommand);
+    assertThat(options.getParams()).contains(anotherIgnored);
   }
 
   private String valuedOption(Options option, String aValue) {
