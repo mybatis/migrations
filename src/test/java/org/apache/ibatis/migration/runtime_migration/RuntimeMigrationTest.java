@@ -46,8 +46,6 @@ import org.apache.ibatis.migration.utils.TestUtil;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
 
 class RuntimeMigrationTest {
   private static final String driver = "org.hsqldb.jdbcDriver";
@@ -75,9 +73,12 @@ class RuntimeMigrationTest {
     runSql(connectionProvider, "shutdown");
   }
 
-  @MethodSource("testClassLoaders")
-  @ParameterizedTest
-  void testInitialStatus(ClassLoader classLoader) {
+  @Test
+  void testInitialStatus() {
+    testClassLoaders().forEach(this::assertStatus);
+  }
+
+  private void assertStatus(ClassLoader classLoader) {
     ConnectionProvider provider = new JdbcConnectionProvider(classLoader, driver, url, username, password);
     StatusOperation status = new StatusOperation().operate(provider, migrationsLoader, dbOption, new PrintStream(out));
     assertEquals(0, status.getAppliedCount());
