@@ -1,6 +1,6 @@
 MYBATIS Migrations
 ==================
-[![Build Status](https://travis-ci.org/mybatis/migrations.svg?branch=master)](https://travis-ci.org/mybatis/migrations)
+[![build](https://github.com/mybatis/migrations/workflows/Java%20CI/badge.svg)](https://github.com/mybatis/migrations/actions?query=workflow%3A%22Java+CI%22)
 [![Coverage Status](https://coveralls.io/repos/mybatis/migrations/badge.svg?branch=master&service=github)](https://coveralls.io/github/mybatis/migrations?branch=master)
 [![Maven central](https://maven-badges.herokuapp.com/maven-central/org.mybatis/mybatis-migrations/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.mybatis/mybatis-migrations)
 [![Docker pulls](https://img.shields.io/docker/pulls/mybatis/migrations.svg)](https://hub.docker.com/r/mybatis/migrations)
