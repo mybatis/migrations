@@ -1,5 +1,6 @@
 org.apache.ibatis.migration
 org.apache.ibatis.migration.commands
+org.apache.ibatis.migration.driver
 org.apache.ibatis.migration.hook
 org.apache.ibatis.migration.operations
 org.apache.ibatis.migration.options

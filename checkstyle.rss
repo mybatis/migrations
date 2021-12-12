@@ -23,11 +23,11 @@ under the License.
     <link>http://www.mybatis.org/migrations/</link>
     <description>MyBatis Migrations - Checkstyle report</description>
     <language>en-us</language>
-    <copyright>&#169;2010 - 2019 MyBatis.org</copyright>
+    <copyright>&#169;2010 - 2021 MyBatis.org</copyright>
     <item>
-      <title>File: 61,
+      <title>File: 70,
              Errors: 0,
-             Warnings: 65,
+             Warnings: 168,
              Infos: 0
       </title>
             <link>http://www.mybatis.org/migrations//checkstyle.html</link>
@@ -52,7 +52,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  0
+                  1
                 </td>
                 <td>
                   0
@@ -66,7 +66,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  0
+                  2
                 </td>
                 <td>
                   0
@@ -80,7 +80,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  3
+                  4
                 </td>
                 <td>
                   0
@@ -94,7 +94,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  2
+                  4
                 </td>
                 <td>
                   0
@@ -117,6 +117,20 @@ under the License.
                           <tr>
                 <td>
                   <a href="http://www.mybatis.org/migrations//checkstyle.html#org.apache.ibatis.migration.ConsoleColors.java">org/apache/ibatis/migration/ConsoleColors.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  7
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.mybatis.org/migrations//checkstyle.html#target.impsort-maven-cache.properties">target/impsort-maven-cache.properties</a>
                 </td>
                 <td>
                   0
@@ -150,7 +164,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  0
+                  1
                 </td>
                 <td>
                   0
@@ -164,7 +178,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  2
+                  4
                 </td>
                 <td>
                   0
@@ -192,7 +206,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  0
+                  1
                 </td>
                 <td>
                   0
@@ -206,7 +220,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  0
+                  5
                 </td>
                 <td>
                   0
@@ -220,7 +234,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  1
+                  4
                 </td>
                 <td>
                   0
@@ -234,7 +248,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  0
+                  1
                 </td>
                 <td>
                   0
@@ -248,7 +262,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  2
+                  3
                 </td>
                 <td>
                   0
@@ -262,7 +276,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  1
+                  3
                 </td>
                 <td>
                   0
@@ -276,7 +290,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  0
+                  2
                 </td>
                 <td>
                   0
@@ -290,7 +304,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  2
+                  3
                 </td>
                 <td>
                   0
@@ -304,7 +318,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  0
+                  1
                 </td>
                 <td>
                   0
@@ -326,21 +340,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://www.mybatis.org/migrations//checkstyle.html#org.apache.ibatis.migration.options.Options.java">org/apache/ibatis/migration/options/Options.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://www.mybatis.org/migrations//checkstyle.html#org.apache.ibatis.migration.options.SelectedOptions.java">org/apache/ibatis/migration/options/SelectedOptions.java</a>
+                  <a href="http://www.mybatis.org/migrations//checkstyle.html#org.apache.ibatis.migration.operations.ScriptRunner.java">org/apache/ibatis/migration/operations/ScriptRunner.java</a>
                 </td>
                 <td>
                   0
@@ -354,7 +354,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://www.mybatis.org/migrations//checkstyle.html#org.apache.ibatis.migration.Change.java">org/apache/ibatis/migration/Change.java</a>
+                  <a href="http://www.mybatis.org/migrations//checkstyle.html#org.apache.ibatis.migration.options.Options.java">org/apache/ibatis/migration/options/Options.java</a>
                 </td>
                 <td>
                   0
@@ -368,13 +368,41 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://www.mybatis.org/migrations//checkstyle.html#org.apache.ibatis.migration.operations.BootstrapOperation.java">org/apache/ibatis/migration/operations/BootstrapOperation.java</a>
+                  <a href="http://www.mybatis.org/migrations//checkstyle.html#org.apache.ibatis.migration.options.SelectedOptions.java">org/apache/ibatis/migration/options/SelectedOptions.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  8
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.mybatis.org/migrations//checkstyle.html#org.apache.ibatis.migration.Change.java">org/apache/ibatis/migration/Change.java</a>
                 </td>
                 <td>
                   0
                 </td>
                 <td>
                   2
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.mybatis.org/migrations//checkstyle.html#org.apache.ibatis.migration.operations.BootstrapOperation.java">org/apache/ibatis/migration/operations/BootstrapOperation.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  4
                 </td>
                 <td>
                   0
@@ -388,7 +416,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  2
+                  4
                 </td>
                 <td>
                   0
@@ -402,7 +430,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  2
+                  4
                 </td>
                 <td>
                   0
@@ -416,7 +444,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  4
+                  5
                 </td>
                 <td>
                   0
@@ -438,13 +466,27 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="http://www.mybatis.org/migrations//checkstyle.html#org.apache.ibatis.migration.VariableReplacer.java">org/apache/ibatis/migration/VariableReplacer.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  2
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="http://www.mybatis.org/migrations//checkstyle.html#org.apache.ibatis.migration.hook.HookScriptFactory.java">org/apache/ibatis/migration/hook/HookScriptFactory.java</a>
                 </td>
                 <td>
                   0
                 </td>
                 <td>
-                  0
+                  1
                 </td>
                 <td>
                   0
@@ -458,7 +500,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  0
+                  1
                 </td>
                 <td>
                   0
@@ -472,7 +514,21 @@ under the License.
                   0
                 </td>
                 <td>
-                  1
+                  3
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.mybatis.org/migrations//checkstyle.html#src.test.java.it.version_without_changelog.environments.development.properties">src/test/java/it/version_without_changelog/environments/development.properties</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
                 </td>
                 <td>
                   0
@@ -486,7 +542,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  0
+                  1
                 </td>
                 <td>
                   0
@@ -500,7 +556,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  4
+                  6
                 </td>
                 <td>
                   0
@@ -514,7 +570,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  1
+                  3
                 </td>
                 <td>
                   0
@@ -528,7 +584,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  0
+                  1
                 </td>
                 <td>
                   0
@@ -542,7 +598,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  0
+                  2
                 </td>
                 <td>
                   0
@@ -564,13 +620,27 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="http://www.mybatis.org/migrations//checkstyle.html#src.test.java.org.apache.ibatis.migration.script_hook.testdir.environments.development.properties">src/test/java/org/apache/ibatis/migration/script_hook/testdir/environments/development.properties</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="http://www.mybatis.org/migrations//checkstyle.html#org.apache.ibatis.migration.options.SelectedPaths.java">org/apache/ibatis/migration/options/SelectedPaths.java</a>
                 </td>
                 <td>
                   0
                 </td>
                 <td>
-                  5
+                  6
                 </td>
                 <td>
                   0
@@ -584,7 +654,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  0
+                  2
                 </td>
                 <td>
                   0
@@ -598,7 +668,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  3
+                  4
                 </td>
                 <td>
                   0
@@ -612,7 +682,21 @@ under the License.
                   0
                 </td>
                 <td>
+                  1
+                </td>
+                <td>
                   0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.mybatis.org/migrations//checkstyle.html#org.apache.ibatis.migration.hook.ScriptHookContext.java">org/apache/ibatis/migration/hook/ScriptHookContext.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
                 </td>
                 <td>
                   0
@@ -626,7 +710,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  5
+                  7
                 </td>
                 <td>
                   0
@@ -640,7 +724,21 @@ under the License.
                   0
                 </td>
                 <td>
+                  1
+                </td>
+                <td>
                   0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.mybatis.org/migrations//checkstyle.html#org.apache.ibatis.migration.commands.RedoCommand.java">org/apache/ibatis/migration/commands/RedoCommand.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
                 </td>
                 <td>
                   0
@@ -654,7 +752,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  2
+                  3
                 </td>
                 <td>
                   0
@@ -668,7 +766,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  3
+                  4
                 </td>
                 <td>
                   0
@@ -682,7 +780,21 @@ under the License.
                   0
                 </td>
                 <td>
+                  1
+                </td>
+                <td>
                   0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.mybatis.org/migrations//checkstyle.html#org.apache.ibatis.migration.driver.DriverShim.java">org/apache/ibatis/migration/driver/DriverShim.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
                 </td>
                 <td>
                   0
@@ -696,7 +808,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  1
+                  4
                 </td>
                 <td>
                   0
@@ -710,7 +822,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  1
+                  3
                 </td>
                 <td>
                   0
@@ -724,7 +836,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  1
+                  2
                 </td>
                 <td>
                   0
@@ -738,7 +850,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  0
+                  1
                 </td>
                 <td>
                   0
@@ -752,7 +864,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  1
+                  3
                 </td>
                 <td>
                   0
@@ -766,7 +878,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  0
+                  1
                 </td>
                 <td>
                   0
@@ -788,13 +900,27 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="http://www.mybatis.org/migrations//checkstyle.html#org.apache.ibatis.migration.operations.ChangelogOperation.java">org/apache/ibatis/migration/operations/ChangelogOperation.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  7
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="http://www.mybatis.org/migrations//checkstyle.html#org.apache.ibatis.migration.MigrationException.java">org/apache/ibatis/migration/MigrationException.java</a>
                 </td>
                 <td>
                   0
                 </td>
                 <td>
-                  0
+                  1
                 </td>
                 <td>
                   0
@@ -808,7 +934,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  0
+                  1
                 </td>
                 <td>
                   0
@@ -822,7 +948,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  0
+                  2
                 </td>
                 <td>
                   0
@@ -864,7 +990,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  0
+                  1
                 </td>
                 <td>
                   0
@@ -878,7 +1004,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  0
+                  2
                 </td>
                 <td>
                   0
@@ -892,7 +1018,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  3
+                  4
                 </td>
                 <td>
                   0
