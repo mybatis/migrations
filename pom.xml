@@ -46,12 +46,12 @@
     <tag>HEAD</tag>
   </scm>
   <issueManagement>
-    <system>GitHub Issue Management</system>
+    <system>GitHub</system>
     <url>https://github.com/mybatis/migrations/issues</url>
   </issueManagement>
   <ciManagement>
-    <system>Travis CI</system>
-    <url>https://travis-ci.org/mybatis/migrations</url>
+    <system>GitHub</system>
+    <url>https://github.com/mybatis/migrations/actions</url>
   </ciManagement>
   <distributionManagement>
     <site>
