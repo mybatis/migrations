@@ -30,8 +30,8 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v2
         with:
-          java-version: 11
-          distribution: adopt
+          java-version: 17
+          distribution: zulu
       - name: Deploy to Sonatype
         run: ./mvnw deploy -DskipTests -B --settings ./.mvn/settings.xml -Dlicense.skip=true
         env:

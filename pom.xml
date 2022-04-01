@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-       Copyright 2010-2021 the original author or authors.
+       Copyright 2010-2022 the original author or authors.
 
        Licensed under the Apache License, Version 2.0 (the "License");
        you may not use this file except in compliance with the License.
@@ -46,12 +46,12 @@
     <tag>HEAD</tag>
   </scm>
   <issueManagement>
-    <system>GitHub Issue Management</system>
+    <system>GitHub</system>
     <url>https://github.com/mybatis/migrations/issues</url>
   </issueManagement>
   <ciManagement>
-    <system>Travis CI</system>
-    <url>https://travis-ci.org/mybatis/migrations</url>
+    <system>GitHub</system>
+    <url>https://github.com/mybatis/migrations/actions</url>
   </ciManagement>
   <distributionManagement>
     <site>
@@ -135,7 +135,7 @@
         <plugin>
           <groupId>com.mycila</groupId>
           <artifactId>license-maven-plugin</artifactId>
-          <version>4.1</version>
+          <version>4.2.rc2</version>
           <configuration>
             <mapping combine.children="append">
                 <policy>DOUBLESLASH_STYLE</policy>
