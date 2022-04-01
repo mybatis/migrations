@@ -227,6 +227,15 @@
         </dependency>
       </dependencies>
     </profile>
+    <profile>
+      <id>security-manager</id>
+      <activation>
+        <jdk>[18,)</jdk>
+      </activation>
+      <properties>
+        <argLine>-Djava.security.manager=allow</argLine>
+      </properties>
+    </profile>
   </profiles>
 
 </project>
