@@ -1,5 +1,5 @@
 /*
- *    Copyright 2010-2021 the original author or authors.
+ *    Copyright 2010-2022 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -440,5 +440,29 @@ public class MigratorTest {
       assertEquals(1, exitCode);
     });
     assertTrue(output.contains(ConsoleColors.RED + "FAILURE"));
+  }
+
+  @Test
+  void shouldShowErrorOnMissingChangelog() throws Throwable {
+    // gh-220
+    try {
+      System.setProperty("migrations_changelog", "changelog1");
+      String output = SystemLambda.tapSystemOut(() -> {
+        Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "up", "1"));
+      });
+      assertFalse(output.contains("FAILURE"));
+
+      System.setProperty("migrations_changelog", "changelog2");
+      output = SystemLambda.tapSystemOut(() -> {
+        int exitCode = SystemLambda.catchSystemExit(() -> {
+          Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "pending"));
+        });
+        assertEquals(1, exitCode);
+      });
+      assertTrue(output.contains("FAILURE"));
+      assertTrue(output.contains("Change log doesn't exist, no migrations applied.  Try running 'up' instead."));
+    } finally {
+      System.clearProperty("migrations_changelog");
+    }
   }
 }
