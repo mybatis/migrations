@@ -465,4 +465,13 @@ public class MigratorTest {
       System.clearProperty("migrations_changelog");
     }
   }
+
+  @Test
+  void testInfoCommand() throws Exception {
+    String output = SystemLambda.tapSystemOut(() -> {
+      Migrator.main(TestUtil.args("info"));
+    });
+    assertFalse(output.contains("null"));
+  }
+
 }
