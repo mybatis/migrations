@@ -58,8 +58,26 @@ migrate init
 ```
 After that read the ./drivers and ./environments section of [Migrations init](http://mybatis.github.io/migrations/init.html)
 
-## docker
+## Docker
 Docker users can use https://hub.docker.com/r/mybatis/migrations
+
+## Package Manager ##
+
+*Note*: These are not maintained by the MyBatis team and issues should be reported to the package maintainers.
+
+### SDKMAN ###
+
+[SDKMAN](https://sdkman.io) is a tool to manage multiple installations of JDKs and SDKs. MyBatis Migrations is available as a [candidate in SDKMAN](https://sdkman.io/sdks#mybatis). To install using SKDMAN
+
+```sh
+sdk install mybatis
+
+# you can list the available versions
+sdk ls mybatis
+
+# install specific version
+sdk install mybatis 3.3.5
+```
 
 ## License
 
