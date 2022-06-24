@@ -471,7 +471,7 @@ public class MigratorTest {
     String output = SystemLambda.tapSystemOut(() -> {
       Migrator.main(TestUtil.args("info"));
     });
-    assertFalse(output, output.contains("null"));
+    assertFalse(output.contains("null"), output);
   }
 
 }
