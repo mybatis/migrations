@@ -18,6 +18,8 @@ package org.apache.ibatis.migration.commands;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
+import java.nio.charset.Charset;
+import java.util.Locale;
 import java.util.Properties;
 
 public final class InfoCommand implements Command {
@@ -42,8 +44,7 @@ public final class InfoCommand implements Command {
         properties.getProperty("build"));
     out.printf("Java version: %s, vendor: %s%n", System.getProperty("java.version"), System.getProperty("java.vendor"));
     out.printf("Java home: %s%n", System.getProperty("java.home"));
-    out.printf("Default locale: %s_%s, platform encoding: %s%n", System.getProperty("user.language"),
-        System.getProperty("user.country"), System.getProperty("sun.jnu.encoding"));
+    out.printf("Default locale: %s, platform encoding: %s%n", Locale.getDefault().toLanguageTag(), Charset.defaultCharset().name());
     out.printf("OS name: \"%s\", version: \"%s\", arch: \"%s\", family: \"%s\"%n", System.getProperty("os.name"),
         System.getProperty("os.version"), System.getProperty("os.arch"), getOsFamily());
   }
