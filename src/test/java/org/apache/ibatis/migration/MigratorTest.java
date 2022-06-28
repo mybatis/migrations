@@ -474,4 +474,29 @@ public class MigratorTest {
     assertFalse(output.contains("null"), output);
   }
 
+  @Test
+  void testInfoWithNonExistentBasePath() throws Exception {
+    File baseDir = TestUtil.getTempDir();
+    assertTrue(baseDir.delete()); // remove empty dir
+    assertFalse(baseDir.exists(), "directory does not exist");
+    String output = SystemLambda.tapSystemOut(() -> {
+      Migrator.main(TestUtil.args("info", "--path=" + baseDir.getAbsolutePath()));
+    });
+    assertFalse(output.contains("Migrations path must be a directory"), "base path not required for info");
+    assertFalse(output.contains("null"), output);
+  }
+
+  @Test
+  void testInitWithNonExistentBasePath() throws Exception {
+    File baseDir = TestUtil.getTempDir();
+    assertTrue(baseDir.delete()); // remove empty dir
+    assertFalse(baseDir.exists(), "directory does not exist");
+    String output = SystemLambda
+        .tapSystemOut(() -> Migrator.main(TestUtil.args("init", "--path=" + baseDir.getAbsolutePath())));
+    assertFalse(output.contains("Migrations path must be a directory"), output);
+    assertTrue(new File(baseDir, "README").exists(), "README created");
+    assertTrue(new File(baseDir, "environments").isDirectory(), "environments directory created");
+    assertTrue(TestUtil.deleteDirectory(baseDir), "delete temp dir");
+  }
+
 }
