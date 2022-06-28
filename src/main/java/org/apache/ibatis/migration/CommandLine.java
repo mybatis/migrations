@@ -39,7 +39,8 @@ public class CommandLine {
   public void execute() {
     final SelectedOptions selectedOptions = parse(args);
     try {
-      if (!validOptions(selectedOptions) || selectedOptions.needsHelp()) {
+      // order is important as if !needsHelp then a valid command is required but, not vice-versa
+      if (selectedOptions.needsHelp() || !validOptions(selectedOptions)) {
         printUsage();
       } else {
         runCommand(selectedOptions);
