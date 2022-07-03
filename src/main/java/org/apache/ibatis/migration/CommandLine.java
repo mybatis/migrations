@@ -15,7 +15,6 @@
  */
 package org.apache.ibatis.migration;
 
-import static org.apache.ibatis.migration.commands.Commands.resolveCommand;
 import static org.apache.ibatis.migration.options.OptionsParser.parse;
 
 import java.io.File;
@@ -24,6 +23,8 @@ import java.util.Date;
 
 import org.apache.ibatis.migration.commands.Command;
 import org.apache.ibatis.migration.commands.Commands;
+import org.apache.ibatis.migration.commands.InfoCommand;
+import org.apache.ibatis.migration.commands.InitializeCommand;
 import org.apache.ibatis.migration.options.Options;
 import org.apache.ibatis.migration.options.SelectedOptions;
 import org.apache.ibatis.migration.utils.Util;
@@ -38,12 +39,19 @@ public class CommandLine {
 
   public void execute() {
     final SelectedOptions selectedOptions = parse(args);
+    if (selectedOptions.needsHelp()) {
+      printUsage();
+      return;
+    } else if (selectedOptions.getCommand() == null) {
+      console.printf("No command specified.%n");
+      printUsage();
+      return;
+    }
     try {
-      // order is important as if !needsHelp then a valid command is required but, not vice-versa
-      if (selectedOptions.needsHelp() || !validOptions(selectedOptions)) {
-        printUsage();
-      } else {
-        runCommand(selectedOptions);
+      Command command = Commands.resolveCommand(selectedOptions.getCommand(), selectedOptions);
+      if (command instanceof InitializeCommand || command instanceof InfoCommand
+          || validBasePath(selectedOptions.getPaths().getBasePath())) {
+        runCommand(command, selectedOptions);
       }
     } catch (Exception e) {
       String errorMessage = e.getMessage();
@@ -61,18 +69,15 @@ public class CommandLine {
     }
   }
 
-  private void runCommand(SelectedOptions selectedOptions) {
-    final String commandString = selectedOptions.getCommand();
-
+  private void runCommand(Command command, SelectedOptions selectedOptions) {
     console.printf("------------------------------------------------------------------------%n");
-    console.printf("-- MyBatis Migrations - %s%n", commandString);
+    console.printf("-- MyBatis Migrations - %s%n", selectedOptions.getCommand());
     console.printf("------------------------------------------------------------------------%n");
 
     long start = System.currentTimeMillis();
     boolean exceptionCaught = false;
 
     try {
-      final Command command = resolveCommand(commandString.toUpperCase(), selectedOptions);
       command.execute(selectedOptions.getParams());
     } catch (Throwable t) {
       exceptionCaught = true;
@@ -109,16 +114,6 @@ public class CommandLine {
     final long totalMemory = runtime.totalMemory() / megaUnit;
 
     console.printf("-- Final Memory: %sM/%sM%n", usedMemory, totalMemory);
-  }
-
-  private boolean validOptions(SelectedOptions selectedOptions) {
-    if (!selectedOptions.needsHelp() && selectedOptions.getCommand() == null) {
-      console.printf("No command specified.%n");
-      return false;
-    }
-    String cmd = selectedOptions.getCommand().toUpperCase();
-    return Commands.INIT.name().startsWith(cmd) || Commands.INFO.name().startsWith(cmd)
-        || validBasePath(selectedOptions.getPaths().getBasePath());
   }
 
   private boolean validBasePath(File basePath) {
