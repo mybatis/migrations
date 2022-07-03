@@ -1,5 +1,5 @@
 /*
- *    Copyright 2010-2021 the original author or authors.
+ *    Copyright 2010-2022 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -51,6 +51,7 @@ class NewHookTest {
     assertTrue(output.contains("Description is valid."));
     assertTrue(output.contains("Renamed 03_create_table1_JIRA-123.sql to 03_create_table1_JIRA123.sql"));
     assertTrue(new File(scriptPath, "03_create_table1_JIRA123.sql").exists());
+    assertTrue(TestUtil.deleteDirectory(basePath), "delete test dir");
   }
 
   @Test
@@ -65,6 +66,7 @@ class NewHookTest {
     });
     assertTrue(output.contains("FAILURE"));
     assertEquals(3, scriptPath.list().length);
+    assertTrue(TestUtil.deleteDirectory(basePath), "delete test dir");
   }
 
   protected File initBaseDir() throws IOException {

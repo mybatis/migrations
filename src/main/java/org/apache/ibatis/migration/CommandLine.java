@@ -1,5 +1,5 @@
 /*
- *    Copyright 2010-2021 the original author or authors.
+ *    Copyright 2010-2022 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import java.io.PrintStream;
 import java.util.Date;
 
 import org.apache.ibatis.migration.commands.Command;
+import org.apache.ibatis.migration.commands.Commands;
 import org.apache.ibatis.migration.options.Options;
 import org.apache.ibatis.migration.options.SelectedOptions;
 import org.apache.ibatis.migration.utils.Util;
@@ -38,7 +39,8 @@ public class CommandLine {
   public void execute() {
     final SelectedOptions selectedOptions = parse(args);
     try {
-      if (!validOptions(selectedOptions) || selectedOptions.needsHelp()) {
+      // order is important as if !needsHelp then a valid command is required but, not vice-versa
+      if (selectedOptions.needsHelp() || !validOptions(selectedOptions)) {
         printUsage();
       } else {
         runCommand(selectedOptions);
@@ -114,8 +116,9 @@ public class CommandLine {
       console.printf("No command specified.%n");
       return false;
     }
-
-    return validBasePath(selectedOptions.getPaths().getBasePath());
+    String cmd = selectedOptions.getCommand().toUpperCase();
+    return Commands.INIT.name().startsWith(cmd) || Commands.INFO.name().startsWith(cmd)
+        || validBasePath(selectedOptions.getPaths().getBasePath());
   }
 
   private boolean validBasePath(File basePath) {

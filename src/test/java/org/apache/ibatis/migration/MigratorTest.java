@@ -329,6 +329,7 @@ public class MigratorTest {
     assertEquals(3, scriptPath.list().length);
     Migrator.main(TestUtil.args("--path=" + basePath.getAbsolutePath(), "new", "test new migration"));
     assertEquals(4, scriptPath.list().length);
+    assertTrue(TestUtil.deleteDirectory(basePath), "delete temp dir");
   }
 
   @Test
@@ -344,6 +345,7 @@ public class MigratorTest {
     File newMigration = new File(
         basePath.getCanonicalPath() + File.separator + "scripts" + File.separator + "003_new_migration.sql");
     assertTrue(newMigration.exists());
+    assertTrue(TestUtil.deleteDirectory(basePath), "delete temp dir");
   }
 
   @Test
@@ -371,6 +373,7 @@ public class MigratorTest {
       }
     }
     templatePath.delete();
+    assertTrue(TestUtil.deleteDirectory(basePath), "delete temp dir");
   }
 
   @Test
@@ -387,6 +390,7 @@ public class MigratorTest {
     Migrator.main(TestUtil.args("--path=" + basePath.getAbsolutePath(), "new", "test new migration", "--template="));
     assertEquals(4, scriptPath.list().length);
     templatePath.delete();
+    assertTrue(TestUtil.deleteDirectory(basePath), "delete temp dir");
   }
 
   @Test
@@ -405,6 +409,7 @@ public class MigratorTest {
     assertEquals(4, scriptPath.list().length);
     assertTrue(output
         .contains("Your migrations configuration did not find your custom template.  Using the default template."));
+    assertTrue(TestUtil.deleteDirectory(basePath), "delete temp dir");
   }
 
   @Test
@@ -416,6 +421,7 @@ public class MigratorTest {
     });
     assertFalse(output.contains("Initializing:"));
     assertNotNull(basePath.list());
+    assertTrue(TestUtil.deleteDirectory(basePath), "delete temp dir");
   }
 
   @Test
@@ -427,6 +433,7 @@ public class MigratorTest {
     });
     assertTrue(output.contains(ConsoleColors.GREEN + "SUCCESS"));
     assertNotNull(basePath.list());
+    assertTrue(TestUtil.deleteDirectory(basePath), "delete temp dir");
   }
 
   @Test
@@ -440,6 +447,7 @@ public class MigratorTest {
       assertEquals(1, exitCode);
     });
     assertTrue(output.contains(ConsoleColors.RED + "FAILURE"));
+    assertTrue(TestUtil.deleteDirectory(basePath), "delete temp dir");
   }
 
   @Test
@@ -472,6 +480,31 @@ public class MigratorTest {
       Migrator.main(TestUtil.args("info"));
     });
     assertFalse(output.contains("null"), output);
+  }
+
+  @Test
+  void testInfoWithNonExistentBasePath() throws Exception {
+    File baseDir = TestUtil.getTempDir();
+    assertTrue(baseDir.delete()); // remove empty dir
+    assertFalse(baseDir.exists(), "directory does not exist");
+    String output = SystemLambda.tapSystemOut(() -> {
+      Migrator.main(TestUtil.args("info", "--path=" + baseDir.getAbsolutePath()));
+    });
+    assertFalse(output.contains("Migrations path must be a directory"), "base path not required for info");
+    assertFalse(output.contains("null"), output);
+  }
+
+  @Test
+  void testInitWithNonExistentBasePath() throws Exception {
+    File baseDir = TestUtil.getTempDir();
+    assertTrue(baseDir.delete()); // remove empty dir
+    assertFalse(baseDir.exists(), "directory does not exist");
+    String output = SystemLambda
+        .tapSystemOut(() -> Migrator.main(TestUtil.args("init", "--path=" + baseDir.getAbsolutePath())));
+    assertFalse(output.contains("Migrations path must be a directory"), output);
+    assertTrue(new File(baseDir, "README").exists(), "README created");
+    assertTrue(new File(baseDir, "environments").isDirectory(), "environments directory created");
+    assertTrue(TestUtil.deleteDirectory(baseDir), "delete temp dir");
   }
 
 }
