@@ -44,7 +44,8 @@ public final class InfoCommand implements Command {
         properties.getProperty("build"));
     out.printf("Java version: %s, vendor: %s%n", System.getProperty("java.version"), System.getProperty("java.vendor"));
     out.printf("Java home: %s%n", System.getProperty("java.home"));
-    out.printf("Default locale: %s, platform encoding: %s%n", Locale.getDefault().toLanguageTag(), Charset.defaultCharset().name());
+    out.printf("Default locale: %s, platform encoding: %s%n", Locale.getDefault().toLanguageTag(),
+        Charset.defaultCharset().name());
     out.printf("OS name: \"%s\", version: \"%s\", arch: \"%s\", family: \"%s\"%n", System.getProperty("os.name"),
         System.getProperty("os.version"), System.getProperty("os.arch"), getOsFamily());
   }
