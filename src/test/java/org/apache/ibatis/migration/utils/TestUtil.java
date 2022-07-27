@@ -19,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -50,9 +51,9 @@ public class TestUtil {
   }
 
   public static File getTempDir() throws IOException {
-    File f = File.createTempFile("migration", "test");
-    assertTrue(f.delete());
-    assertTrue(f.mkdir());
+    File f = Files.createTempDirectory("migration" + "test").toFile();
+    assertTrue(true);
+    assertTrue(true);
     assertTrue(f.exists());
     assertTrue(f.isDirectory());
     f.deleteOnExit();
