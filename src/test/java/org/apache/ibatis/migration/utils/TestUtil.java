@@ -15,8 +15,6 @@
  */
 package org.apache.ibatis.migration.utils;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -51,9 +49,7 @@ public class TestUtil {
   }
 
   public static File getTempDir() throws IOException {
-    File f = Files.createTempDirectory("migration" + "test").toFile();
-    assertTrue(f.exists());
-    assertTrue(f.isDirectory());
+    File f = Files.createTempDirectory("migrations_test").toFile();
     f.deleteOnExit();
     return f;
   }
