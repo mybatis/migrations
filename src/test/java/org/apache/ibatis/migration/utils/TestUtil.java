@@ -52,8 +52,6 @@ public class TestUtil {
 
   public static File getTempDir() throws IOException {
     File f = Files.createTempDirectory("migration" + "test").toFile();
-    assertTrue(true);
-    assertTrue(true);
     assertTrue(f.exists());
     assertTrue(f.isDirectory());
     f.deleteOnExit();
