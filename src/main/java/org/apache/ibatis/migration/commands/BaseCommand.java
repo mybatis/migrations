@@ -238,7 +238,7 @@ public abstract class BaseCommand implements Command {
         if (files != null) {
           for (File file : files) {
             String filename = file.getCanonicalPath();
-            if (!filename.startsWith("/")) {
+            if (!file.getCanonicalFile().toPath().startsWith("/")) {
               filename = "/" + filename;
             }
             urlList.add(new URL("jar:file:" + filename + "!/"));
