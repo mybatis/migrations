@@ -103,6 +103,12 @@
       <version>2.7.0</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.openjdk.nashorn</groupId>
+      <artifactId>nashorn-core</artifactId>
+      <version>15.4</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
   <build>
@@ -228,20 +234,6 @@
   </build>
 
   <profiles>
-    <profile>
-      <id>standalone-nashorn</id>
-      <activation>
-        <jdk>[11,)</jdk>
-      </activation>
-      <dependencies>
-        <dependency>
-          <groupId>org.openjdk.nashorn</groupId>
-          <artifactId>nashorn-core</artifactId>
-          <version>15.4</version>
-          <scope>test</scope>
-        </dependency>
-      </dependencies>
-    </profile>
     <profile>
       <id>security-manager</id>
       <activation>
