@@ -145,7 +145,6 @@
         <plugin>
           <groupId>com.mycila</groupId>
           <artifactId>license-maven-plugin</artifactId>
-          <version>4.2.rc3</version>
           <configuration>
             <mapping combine.children="append">
                 <policy>DOUBLESLASH_STYLE</policy>
