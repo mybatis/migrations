@@ -5,12 +5,12 @@ MYBATIS Migrations
 [![Maven central](https://maven-badges.herokuapp.com/maven-central/org.mybatis/mybatis-migrations/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.mybatis/mybatis-migrations)
 [![Docker pulls](https://img.shields.io/docker/pulls/mybatis/migrations.svg)](https://hub.docker.com/r/mybatis/migrations)
 [![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/https/oss.sonatype.org/org.mybatis/mybatis-migrations.svg)](https://oss.sonatype.org/content/repositories/snapshots/org/mybatis/mybatis-migrations/)
-[![License](http://img.shields.io/:license-apache-brightgreen.svg)](http://www.apache.org/licenses/LICENSE-2.0.html)
+[![License](https://img.shields.io/:license-apache-brightgreen.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
 
 ![mybatis-migrations](http://mybatis.github.io/images/mybatis-logo.png)
 
 ## Requirements
-  MyBatis Migrations is a Java tool, so you must have Java installed in order to proceed. 
+MyBatis Migrations is a Java tool, so you must have Java installed in order to proceed. 
 Users need at least the Java Runtime Environment (JRE), the Java Development Kit (JDK) is a plus. 
 MyBatis Migrations requires Java version 8 or later.
 
