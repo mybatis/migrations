@@ -395,7 +395,7 @@ public class MigratorTest {
 
   @Test
   void useCustomTemplateWithBadPath() throws Exception {
-    System.setProperty("migrationsHome", "/tmp");
+    System.setProperty("migrationsHome", TestUtil.getTempDir().getAbsolutePath());
     File basePath = TestUtil.getTempDir();
     Migrator.main(TestUtil.args("--path=" + basePath.getAbsolutePath(), "init"));
     assertNotNull(basePath.list());
@@ -414,7 +414,7 @@ public class MigratorTest {
 
   @Test
   void shouldSuppressOutputIfQuietOptionEnabled() throws Throwable {
-    System.setProperty("migrationsHome", "/tmp");
+    System.setProperty("migrationsHome", TestUtil.getTempDir().getAbsolutePath());
     File basePath = TestUtil.getTempDir();
     String output = SystemLambda.tapSystemOut(() -> {
       Migrator.main(TestUtil.args("--path=" + basePath.getAbsolutePath(), "--quiet", "init"));
@@ -425,8 +425,8 @@ public class MigratorTest {
   }
 
   @Test
-  void shouldColorizeSuccessOutputIfColorOptionEnabled() throws Throwable {
-    System.setProperty("migrationsHome", "/tmp");
+   void shouldColorizeSuccessOutputIfColorOptionEnabled() throws Throwable {
+    System.setProperty("migrationsHome", TestUtil.getTempDir().getAbsolutePath());
     File basePath = TestUtil.getTempDir();
     String output = SystemLambda.tapSystemOut(() -> {
       Migrator.main(TestUtil.args("--path=" + basePath.getAbsolutePath(), "--color", "init"));
@@ -438,7 +438,7 @@ public class MigratorTest {
 
   @Test
   void shouldColorizeFailureOutputIfColorOptionEnabled() throws Throwable {
-    System.setProperty("migrationsHome", "/tmp");
+    System.setProperty("migrationsHome", TestUtil.getTempDir().getAbsolutePath());
     File basePath = TestUtil.getTempDir();
     String output = SystemLambda.tapSystemOut(() -> {
       int exitCode = SystemLambda.catchSystemExit(() -> {
