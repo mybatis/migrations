@@ -1,5 +1,5 @@
 /*
- *    Copyright 2010-2021 the original author or authors.
+ *    Copyright 2010-2022 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -262,8 +262,7 @@ class RuntimeMigrationTest {
   }
 
   protected String runQuery(ConnectionProvider provider, String query) throws SQLException {
-    try (Connection connection = provider.getConnection();
-        Statement statement = connection.createStatement();
+    try (Connection connection = provider.getConnection(); Statement statement = connection.createStatement();
         ResultSet rs = statement.executeQuery(query)) {
       String result = null;
       if (rs.next()) {
