@@ -424,7 +424,7 @@ public class MigratorTest {
   }
 
   @Test
-   void shouldColorizeSuccessOutputIfColorOptionEnabled() throws Throwable {
+  void shouldColorizeSuccessOutputIfColorOptionEnabled() throws Throwable {
     System.setProperty("migrationsHome", TestUtil.getTempDir().getAbsolutePath());
     File basePath = TestUtil.getTempDir();
     String output = SystemLambda.tapSystemOut(() -> {
