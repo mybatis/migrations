@@ -1,5 +1,5 @@
 /*
- *    Copyright 2010-2021 the original author or authors.
+ *    Copyright 2010-2022 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -153,8 +153,7 @@ class MigrationHookTest {
   }
 
   private void assertWorklogRowCount(int expectedRows) throws SQLException, ClassNotFoundException {
-    try (Connection con = TestUtil.getConnection(env);
-        Statement stmt = con.createStatement();
+    try (Connection con = TestUtil.getConnection(env); Statement stmt = con.createStatement();
         ResultSet rs = stmt.executeQuery("select count(*) from worklog")) {
       assertTrue(rs.next());
       assertEquals(expectedRows, rs.getInt(1));
@@ -162,8 +161,7 @@ class MigrationHookTest {
   }
 
   private void assertChangelogIntact() throws SQLException, ClassNotFoundException {
-    try (Connection con = TestUtil.getConnection(env);
-        Statement stmt = con.createStatement();
+    try (Connection con = TestUtil.getConnection(env); Statement stmt = con.createStatement();
         ResultSet rs = stmt.executeQuery("select count(*) from changes where description = 'bogus description'")) {
       assertTrue(rs.next());
       assertEquals(0, rs.getInt(1));

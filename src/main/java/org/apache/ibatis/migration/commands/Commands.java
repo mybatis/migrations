@@ -20,15 +20,25 @@ import org.apache.ibatis.migration.options.SelectedOptions;
 
 public enum Commands {
   INFO,
+
   INIT,
+
   BOOTSTRAP,
+
   NEW,
+
   UP,
+
   DOWN,
+
   PENDING,
+
   SCRIPT,
+
   VERSION,
+
   STATUS,
+
   REDO;
 
   public static Command resolveCommand(String commandString, SelectedOptions selectedOptions) {

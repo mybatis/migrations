@@ -104,8 +104,7 @@ public class MigratorTest {
   }
 
   private void assertAuthorEmailContainsPlaceholder() throws Exception {
-    try (final Connection conn = TestUtil.getConnection(env);
-        Statement stmt = conn.createStatement();
+    try (Connection conn = TestUtil.getConnection(env); Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery("select EMAIL from author where id = 1")) {
       assertTrue(rs.next());
       assertEquals("jim@${url}", rs.getString("EMAIL"));
@@ -425,7 +424,7 @@ public class MigratorTest {
   }
 
   @Test
-   void shouldColorizeSuccessOutputIfColorOptionEnabled() throws Throwable {
+  void shouldColorizeSuccessOutputIfColorOptionEnabled() throws Throwable {
     System.setProperty("migrationsHome", TestUtil.getTempDir().getAbsolutePath());
     File basePath = TestUtil.getTempDir();
     String output = SystemLambda.tapSystemOut(() -> {
