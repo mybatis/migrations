@@ -1,5 +1,5 @@
 /*
- *    Copyright 2010-2021 the original author or authors.
+ *    Copyright 2010-2022 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -50,6 +50,7 @@ public enum Util {
   /**
    * @param key
    *          of the property.
+   *
    * @return The value <code>null</code> if the property file does not exist or the <code>key</code> does not exist.
    */
   public static String getPropertyOption(String key) {
