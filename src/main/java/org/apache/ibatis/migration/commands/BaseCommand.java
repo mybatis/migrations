@@ -38,7 +38,6 @@ import java.util.Properties;
 import java.util.ServiceLoader;
 import java.util.TimeZone;
 
-import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.migration.Change;
 import org.apache.ibatis.migration.ConnectionProvider;
 import org.apache.ibatis.migration.Environment;
@@ -52,6 +51,7 @@ import org.apache.ibatis.migration.hook.FileHookScriptFactory;
 import org.apache.ibatis.migration.hook.FileMigrationHook;
 import org.apache.ibatis.migration.hook.HookScriptFactory;
 import org.apache.ibatis.migration.hook.MigrationHook;
+import org.apache.ibatis.migration.io.Resources;
 import org.apache.ibatis.migration.options.DatabaseOperationOption;
 import org.apache.ibatis.migration.options.Options;
 import org.apache.ibatis.migration.options.SelectedOptions;

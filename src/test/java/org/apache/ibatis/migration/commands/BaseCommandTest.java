@@ -25,7 +25,7 @@ import java.nio.file.FileSystems;
 import java.util.Properties;
 import java.util.Scanner;
 
-import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.migration.io.Resources;
 import org.apache.ibatis.migration.utils.TestUtil;
 import org.junit.jupiter.api.Test;
 

@@ -29,8 +29,8 @@ import java.io.PrintWriter;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
 
-import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.migration.Migrator;
+import org.apache.ibatis.migration.io.Resources;
 import org.apache.ibatis.migration.utils.TestUtil;
 import org.apache.ibatis.migration.utils.Util;
 import org.junit.jupiter.api.Test;

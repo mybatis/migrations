@@ -22,8 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.ibatis.io.ResolverUtil;
-import org.apache.ibatis.io.ResolverUtil.Test;
+import org.apache.ibatis.migration.io.ResolverUtil;
+import org.apache.ibatis.migration.io.ResolverUtil.Test;
 
 public class JavaMigrationLoader implements MigrationLoader {
 
