@@ -7,14 +7,14 @@ MYBATIS Migrations
 [![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/https/oss.sonatype.org/org.mybatis/mybatis-migrations.svg)](https://oss.sonatype.org/content/repositories/snapshots/org/mybatis/mybatis-migrations/)
 [![License](https://img.shields.io/:license-apache-brightgreen.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
 
-![mybatis-migrations](http://mybatis.github.io/images/mybatis-logo.png)
+![mybatis-migrations](https://mybatis.org/images/mybatis-logo.png)
 
 ## Requirements
 MyBatis Migrations is a Java tool, so you must have Java installed in order to proceed. 
 Users need at least the Java Runtime Environment (JRE), the Java Development Kit (JDK) is a plus. 
 MyBatis Migrations requires Java version 8 or later.
 
-See the [reference documentation](http://mybatis.github.io/migrations)
+See the [reference documentation](https://mybatis.org/migrations)
 
 ## Installation
 |Bundle Locations|
@@ -56,7 +56,7 @@ mkdir $HOME/my-migrations
 cd $HOME/my-migrations
 migrate init
 ```
-After that read the ./drivers and ./environments section of [Migrations init](http://mybatis.github.io/migrations/init.html)
+After that read the ./drivers and ./environments section of [Migrations init](https://mybatis.org/migrations/init.html)
 
 ## Docker
 Docker users can use https://hub.docker.com/r/mybatis/migrations
