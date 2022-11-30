@@ -358,9 +358,9 @@ public class MigratorTest {
     assertEquals(3, scriptPath.list().length);
 
     File templatePath = File.createTempFile("customTemplate", "sql");
-    PrintWriter writer = new PrintWriter(templatePath);
-    writer.println("// ${description}");
-    writer.close();
+    try (PrintWriter writer = new PrintWriter(templatePath)) {
+        writer.println("// ${description}");
+    }
     Migrator.main(TestUtil.args("--path=" + basePath.getAbsolutePath(), "new", desc,
         "--template=" + templatePath.getAbsolutePath()));
     String[] scripts = scriptPath.list();
