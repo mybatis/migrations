@@ -93,7 +93,7 @@ public final class ScriptCommand extends BaseCommand {
             printStream.println();
           }
           if (hook != null) {
-            hookBindings.put(MigrationHook.HOOK_CONTEXT, new ScriptHookContext(change.clone(), undo));
+            hookBindings.put(MigrationHook.HOOK_CONTEXT, new ScriptHookContext(new Change(change), undo));
             hook.beforeEach(hookBindings);
             printStream.println();
           }
@@ -114,7 +114,7 @@ public final class ScriptCommand extends BaseCommand {
           }
           printStream.println();
           if (hook != null) {
-            hookBindings.put(MigrationHook.HOOK_CONTEXT, new ScriptHookContext(change.clone(), undo));
+            hookBindings.put(MigrationHook.HOOK_CONTEXT, new ScriptHookContext(new Change(change), undo));
             hook.afterEach(hookBindings);
             printStream.println();
           }
