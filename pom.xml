@@ -198,7 +198,7 @@
         <jdk>[18,)</jdk>
       </activation>
       <properties>
-        <argLine>-Djava.security.manager=allow</argLine>
+        <argLine>-Djdk.attach.allowAttachSelf -Djava.security.manager=allow</argLine>
       </properties>
     </profile>
   </profiles>
