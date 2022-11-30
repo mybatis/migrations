@@ -193,12 +193,21 @@
 
   <profiles>
     <profile>
+      <id>add-opens</id>
+      <activation>
+        <jdk>[17,)</jdk>
+      </activation>
+      <properties>
+        <argLine>-Djdk.attach.allowAttachSelf --add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.util=ALL-UNNAMED</argLine>
+      </properties>
+    </profile>
+    <profile>
       <id>security-manager</id>
       <activation>
         <jdk>[18,)</jdk>
       </activation>
       <properties>
-        <argLine>-Djdk.attach.allowAttachSelf -Djava.security.manager=allow</argLine>
+        <argLine>-Djdk.attach.allowAttachSelf --add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.util=ALL-UNNAMED -Djava.security.manager=allow</argLine>
       </properties>
     </profile>
   </profiles>
