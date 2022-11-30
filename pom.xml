@@ -125,16 +125,6 @@
     </pluginManagement>
     <plugins>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <configuration>
-          <environmentVariables>
-            <migrations_var3>bogus_var3</migrations_var3>
-            <migrations_envvar1>Environment variable 1</migrations_envvar1>
-          </environmentVariables>
-        </configuration>
-      </plugin>
-      <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>appassembler-maven-plugin</artifactId>
         <version>2.1.0</version>
@@ -193,12 +183,21 @@
 
   <profiles>
     <profile>
+      <id>add-opens</id>
+      <activation>
+        <jdk>[17,)</jdk>
+      </activation>
+      <properties>
+        <argLine>-Djdk.attach.allowAttachSelf --add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.util=ALL-UNNAMED</argLine>
+      </properties>
+    </profile>
+    <profile>
       <id>security-manager</id>
       <activation>
         <jdk>[18,)</jdk>
       </activation>
       <properties>
-        <argLine>-Djava.security.manager=allow</argLine>
+        <argLine>-Djdk.attach.allowAttachSelf --add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.util=ALL-UNNAMED -Djava.security.manager=allow</argLine>
       </properties>
     </profile>
   </profiles>
