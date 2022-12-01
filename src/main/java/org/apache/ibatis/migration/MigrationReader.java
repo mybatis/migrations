@@ -27,6 +27,7 @@ import java.util.Properties;
 
 public class MigrationReader extends FilterReader {
 
+  // Note: Cannot use lineSeparator directly at this time due to tests manipulating it
   private final String lineSeparator = System.getProperty("line.separator", "\n");
 
   private static final String UNDO_TAG = "@UNDO";
