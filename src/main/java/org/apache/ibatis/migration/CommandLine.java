@@ -65,8 +65,10 @@ public class CommandLine {
       if (selectedOptions.isTrace()) {
         e.printStackTrace();
       }
+      console.close();
       System.exit(1); // Issue 730
     }
+    console.close();
   }
 
   private void runCommand(Command command, SelectedOptions selectedOptions) {
