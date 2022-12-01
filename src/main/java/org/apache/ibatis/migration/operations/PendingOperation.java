@@ -62,7 +62,8 @@ public final class PendingOperation extends DatabaseOperation {
             hook.before(hookBindings);
           }
           if (hook != null) {
-            hookBindings.put(MigrationHook.HOOK_CONTEXT, new HookContext(connectionProvider, runner, change.clone()));
+            hookBindings.put(MigrationHook.HOOK_CONTEXT,
+                new HookContext(connectionProvider, runner, new Change(change)));
             hook.beforeEach(hookBindings);
           }
           println(printStream, Util.horizontalLine("Applying: " + change.getFilename(), 80));
@@ -71,7 +72,8 @@ public final class PendingOperation extends DatabaseOperation {
           insertChangelog(change, con, option);
           println(printStream);
           if (hook != null) {
-            hookBindings.put(MigrationHook.HOOK_CONTEXT, new HookContext(connectionProvider, runner, change.clone()));
+            hookBindings.put(MigrationHook.HOOK_CONTEXT,
+                new HookContext(connectionProvider, runner, new Change(change)));
             hook.afterEach(hookBindings);
           }
           stepCount++;
