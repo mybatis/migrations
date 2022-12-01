@@ -59,7 +59,7 @@ public class SqlHookScript implements HookScript {
     printStream.println(Util.horizontalLine("Applying SQL hook: " + scriptFile.getName(), 80));
 
     try (FileInputStream inputStream = new FileInputStream(scriptFile);
-      ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
       byte[] buffer = new byte[1024];
       int length;
       while ((length = inputStream.read(buffer)) != -1) {

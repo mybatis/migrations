@@ -60,7 +60,7 @@ public enum Util {
     }
     Properties properties = new Properties();
     String path = migrationsHome + File.separator + MIGRATIONS_PROPERTIES;
-    try (FileInputStream stream = new FileInputStream(path)){
+    try (FileInputStream stream = new FileInputStream(path)) {
       properties.load(stream);
       return properties.getProperty(key);
     } catch (Exception e) {
