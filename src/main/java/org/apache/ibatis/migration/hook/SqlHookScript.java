@@ -58,10 +58,8 @@ public class SqlHookScript implements HookScript {
     HookContext context = (HookContext) bindingMap.get(MigrationHook.HOOK_CONTEXT);
     printStream.println(Util.horizontalLine("Applying SQL hook: " + scriptFile.getName(), 80));
 
-    FileInputStream inputStream = null;
-    try {
-      inputStream = new FileInputStream(scriptFile);
-      ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+    try (FileInputStream inputStream = new FileInputStream(scriptFile);
+      ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
       byte[] buffer = new byte[1024];
       int length;
       while ((length = inputStream.read(buffer)) != -1) {
@@ -70,14 +68,6 @@ public class SqlHookScript implements HookScript {
       context.executeSql(new StringReader(replacer.replace(outputStream.toString(charset))));
     } catch (IOException e) {
       throw new MigrationException("Error occurred while running SQL hook script.", e);
-    } finally {
-      try {
-        if (inputStream != null) {
-          inputStream.close();
-        }
-      } catch (IOException e) {
-        // ignore
-      }
     }
   }
 }
