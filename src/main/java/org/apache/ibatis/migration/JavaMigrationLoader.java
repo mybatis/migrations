@@ -50,7 +50,7 @@ public class JavaMigrationLoader implements MigrationLoader {
     for (Class<? extends MigrationScript> clazz : classes) {
       try {
         if (!Modifier.isAbstract(clazz.getModifiers())) {
-          MigrationScript script = clazz.newInstance();
+          MigrationScript script = clazz.getDeclaredConstructor().newInstance();
           Change change = parseChangeFromMigrationScript(script);
           migrations.add(change);
         }
@@ -85,7 +85,7 @@ public class JavaMigrationLoader implements MigrationLoader {
     Set<Class<? extends MigrationScript>> classes = resolver.getClasses();
     for (Class<? extends MigrationScript> clazz : classes) {
       try {
-        MigrationScript script = clazz.newInstance();
+        MigrationScript script = clazz.getDeclaredConstructor().newInstance();
         reader = new StringReader(undo ? script.getDownScript() : script.getUpScript());
       } catch (Exception e) {
         throw new MigrationException("Could not instanciate MigrationScript: " + clazz.getName(), e);
@@ -118,7 +118,7 @@ public class JavaMigrationLoader implements MigrationLoader {
     }
     Class<? extends T> clazz = classes.iterator().next();
     try {
-      T script = clazz.newInstance();
+      T script = clazz.getDeclaredConstructor().newInstance();
       return new StringReader(script.getScript());
     } catch (Exception e) {
       throw new MigrationException("Could not instanciate script class: " + clazz.getName(), e);
