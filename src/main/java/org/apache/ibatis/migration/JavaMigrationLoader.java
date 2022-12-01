@@ -43,8 +43,8 @@ public class JavaMigrationLoader implements MigrationLoader {
 
   @Override
   public List<Change> getMigrations() {
-    ResolverUtil<MigrationScript> resolver = getResolver(MigrationScript.class);
     List<Change> migrations = new ArrayList<>();
+    ResolverUtil<MigrationScript> resolver = getResolver();
     resolver.findImplementations(MigrationScript.class, packageNames);
     Set<Class<? extends MigrationScript>> classes = resolver.getClasses();
     for (Class<? extends MigrationScript> clazz : classes) {
@@ -71,7 +71,7 @@ public class JavaMigrationLoader implements MigrationLoader {
 
   @Override
   public Reader getScriptReader(Change change, boolean undo) {
-    ResolverUtil<MigrationScript> resolver = getResolver(MigrationScript.class);
+    ResolverUtil<MigrationScript> resolver = getResolver();
     final String className = change.getFilename();
     for (String pkg : packageNames) {
       resolver.find(new Test() {
@@ -107,7 +107,7 @@ public class JavaMigrationLoader implements MigrationLoader {
   }
 
   public <T extends SimpleScript> Reader getSoleScriptReader(Class<T> scriptClass) {
-    ResolverUtil<T> resolver = getResolver(scriptClass);
+    ResolverUtil<T> resolver = getResolver();
     resolver.findImplementations(scriptClass, packageNames);
     Set<Class<? extends T>> classes = resolver.getClasses();
     if (classes == null || classes.isEmpty()) {
@@ -125,7 +125,7 @@ public class JavaMigrationLoader implements MigrationLoader {
     }
   }
 
-  private <T> ResolverUtil<T> getResolver(Class<T> type) {
+  private <T> ResolverUtil<T> getResolver() {
     ResolverUtil<T> resolver = new ResolverUtil<>();
     if (classLoader != null) {
       resolver.setClassLoader(classLoader);
