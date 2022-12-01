@@ -359,7 +359,7 @@ public class MigratorTest {
 
     File templatePath = File.createTempFile("customTemplate", "sql");
     try (PrintWriter writer = new PrintWriter(templatePath)) {
-        writer.println("// ${description}");
+      writer.println("// ${description}");
     }
     Migrator.main(TestUtil.args("--path=" + basePath.getAbsolutePath(), "new", desc,
         "--template=" + templatePath.getAbsolutePath()));

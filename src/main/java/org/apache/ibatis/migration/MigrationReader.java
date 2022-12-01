@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.util.Properties;
 
@@ -278,8 +277,7 @@ public class MigrationReader extends FilterReader {
     return result == -1 ? -1 : (int) buf[0];
   }
 
-  protected static Reader scriptFileReader(InputStream inputStream, String charset)
-      throws UnsupportedEncodingException {
+  protected static Reader scriptFileReader(InputStream inputStream, String charset) {
     if (charset == null || charset.length() == 0) {
       return new InputStreamReader(inputStream);
     } else {

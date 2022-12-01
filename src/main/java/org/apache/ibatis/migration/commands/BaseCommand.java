@@ -107,7 +107,8 @@ public abstract class BaseCommand implements Command {
       // Ensure that two subsequent calls are less likely to return the same value.
       Thread.sleep(1000);
     } catch (InterruptedException e) {
-      // ignore
+      // Ignore and Restore interrupted state...
+      Thread.currentThread().interrupt();
     }
     String idPattern = options.getIdPattern();
     if (idPattern == null) {
@@ -123,7 +124,7 @@ public abstract class BaseCommand implements Command {
   private String generatePatternedId(String pattern) {
     DecimalFormat fmt = new DecimalFormat(pattern);
     List<Change> migrations = getMigrationLoader().getMigrations();
-    if (migrations.size() == 0) {
+    if (migrations.isEmpty()) {
       return fmt.format(1);
     }
     Change lastChange = migrations.get(migrations.size() - 1);

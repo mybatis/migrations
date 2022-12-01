@@ -43,14 +43,14 @@ public class JavaMigrationLoader implements MigrationLoader {
 
   @Override
   public List<Change> getMigrations() {
-    List<Change> migrations = new ArrayList<Change>();
-    ResolverUtil<MigrationScript> resolver = getResolver(MigrationScript.class);
+    List<Change> migrations = new ArrayList<>();
+    ResolverUtil<MigrationScript> resolver = getResolver();
     resolver.findImplementations(MigrationScript.class, packageNames);
     Set<Class<? extends MigrationScript>> classes = resolver.getClasses();
     for (Class<? extends MigrationScript> clazz : classes) {
       try {
         if (!Modifier.isAbstract(clazz.getModifiers())) {
-          MigrationScript script = clazz.newInstance();
+          MigrationScript script = clazz.getDeclaredConstructor().newInstance();
           Change change = parseChangeFromMigrationScript(script);
           migrations.add(change);
         }
@@ -71,7 +71,7 @@ public class JavaMigrationLoader implements MigrationLoader {
 
   @Override
   public Reader getScriptReader(Change change, boolean undo) {
-    ResolverUtil<MigrationScript> resolver = getResolver(MigrationScript.class);
+    ResolverUtil<MigrationScript> resolver = getResolver();
     final String className = change.getFilename();
     for (String pkg : packageNames) {
       resolver.find(new Test() {
@@ -85,7 +85,7 @@ public class JavaMigrationLoader implements MigrationLoader {
     Set<Class<? extends MigrationScript>> classes = resolver.getClasses();
     for (Class<? extends MigrationScript> clazz : classes) {
       try {
-        MigrationScript script = clazz.newInstance();
+        MigrationScript script = clazz.getDeclaredConstructor().newInstance();
         reader = new StringReader(undo ? script.getDownScript() : script.getUpScript());
       } catch (Exception e) {
         throw new MigrationException("Could not instanciate MigrationScript: " + clazz.getName(), e);
@@ -107,7 +107,7 @@ public class JavaMigrationLoader implements MigrationLoader {
   }
 
   public <T extends SimpleScript> Reader getSoleScriptReader(Class<T> scriptClass) {
-    ResolverUtil<T> resolver = getResolver(scriptClass);
+    ResolverUtil<T> resolver = getResolver();
     resolver.findImplementations(scriptClass, packageNames);
     Set<Class<? extends T>> classes = resolver.getClasses();
     if (classes == null || classes.isEmpty()) {
@@ -118,15 +118,15 @@ public class JavaMigrationLoader implements MigrationLoader {
     }
     Class<? extends T> clazz = classes.iterator().next();
     try {
-      T script = clazz.newInstance();
+      T script = clazz.getDeclaredConstructor().newInstance();
       return new StringReader(script.getScript());
     } catch (Exception e) {
       throw new MigrationException("Could not instanciate script class: " + clazz.getName(), e);
     }
   }
 
-  private <T> ResolverUtil<T> getResolver(Class<T> type) {
-    ResolverUtil<T> resolver = new ResolverUtil<T>();
+  private <T> ResolverUtil<T> getResolver() {
+    ResolverUtil<T> resolver = new ResolverUtil<>();
     if (classLoader != null) {
       resolver.setClassLoader(classLoader);
     }
