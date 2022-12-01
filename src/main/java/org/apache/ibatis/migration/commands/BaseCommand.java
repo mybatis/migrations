@@ -107,7 +107,8 @@ public abstract class BaseCommand implements Command {
       // Ensure that two subsequent calls are less likely to return the same value.
       Thread.sleep(1000);
     } catch (InterruptedException e) {
-      // ignore
+      // Ignore and Restore interrupted state...
+      Thread.currentThread().interrupt();
     }
     String idPattern = options.getIdPattern();
     if (idPattern == null) {
