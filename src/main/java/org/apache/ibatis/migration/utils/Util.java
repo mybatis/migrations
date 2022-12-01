@@ -58,10 +58,10 @@ public enum Util {
     if (migrationsHome == null || migrationsHome.isEmpty()) {
       return null;
     }
-    try {
-      String path = migrationsHome + File.separator + MIGRATIONS_PROPERTIES;
-      Properties properties = new Properties();
-      properties.load(new FileInputStream(path));
+    Properties properties = new Properties();
+    String path = migrationsHome + File.separator + MIGRATIONS_PROPERTIES;
+    try (FileInputStream stream = new FileInputStream(path)){
+      properties.load(stream);
       return properties.getProperty(key);
     } catch (Exception e) {
       return null;
