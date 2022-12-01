@@ -72,7 +72,7 @@ class OptionsParserTest {
   }
 
   private void checkFileOptionSet(File aFile, String expectedFileName) {
-    assertThat(aFile.getName()).isEqualTo(expectedFileName);
+    assertThat(aFile).hasName(expectedFileName);
   }
 
   @Test
