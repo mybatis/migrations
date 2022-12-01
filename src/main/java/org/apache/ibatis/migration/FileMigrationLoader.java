@@ -42,7 +42,7 @@ public class FileMigrationLoader implements MigrationLoader {
 
   @Override
   public List<Change> getMigrations() {
-    List<Change> migrations = new ArrayList<Change>();
+    List<Change> migrations = new ArrayList<>();
     if (scriptsDir.isDirectory()) {
       String[] filenames = scriptsDir.list();
       if (filenames == null) {

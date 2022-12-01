@@ -43,8 +43,8 @@ public class JavaMigrationLoader implements MigrationLoader {
 
   @Override
   public List<Change> getMigrations() {
-    List<Change> migrations = new ArrayList<Change>();
     ResolverUtil<MigrationScript> resolver = getResolver(MigrationScript.class);
+    List<Change> migrations = new ArrayList<>();
     resolver.findImplementations(MigrationScript.class, packageNames);
     Set<Class<? extends MigrationScript>> classes = resolver.getClasses();
     for (Class<? extends MigrationScript> clazz : classes) {
@@ -126,7 +126,7 @@ public class JavaMigrationLoader implements MigrationLoader {
   }
 
   private <T> ResolverUtil<T> getResolver(Class<T> type) {
-    ResolverUtil<T> resolver = new ResolverUtil<T>();
+    ResolverUtil<T> resolver = new ResolverUtil<>();
     if (classLoader != null) {
       resolver.setClassLoader(classLoader);
     }
