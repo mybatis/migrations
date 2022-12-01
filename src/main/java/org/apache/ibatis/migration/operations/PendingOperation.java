@@ -51,7 +51,7 @@ public final class PendingOperation extends DatabaseOperation {
       }
       List<Change> pending = getPendingChanges(con, migrationsLoader, option);
       int stepCount = 0;
-      Map<String, Object> hookBindings = new HashMap<String, Object>();
+      Map<String, Object> hookBindings = new HashMap<>();
       println(printStream, "WARNING: Running pending migrations out of order can create unexpected results.");
       Reader scriptReader = null;
       try {
@@ -100,7 +100,7 @@ public final class PendingOperation extends DatabaseOperation {
 
   private List<Change> getPendingChanges(Connection con, MigrationLoader migrationsLoader,
       DatabaseOperationOption option) {
-    List<Change> pending = new ArrayList<Change>();
+    List<Change> pending = new ArrayList<>();
     List<Change> migrations = migrationsLoader.getMigrations();
     List<Change> changelog = getChangelog(con, option);
     for (Change change : migrations) {

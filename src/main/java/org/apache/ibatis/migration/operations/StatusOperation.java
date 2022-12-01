@@ -46,7 +46,7 @@ public final class StatusOperation extends DatabaseOperation {
     }
     println(printStream, "ID             Applied At          Description");
     println(printStream, Util.horizontalLine("", 80));
-    changes = new ArrayList<Change>();
+    changes = new ArrayList<>();
     List<Change> migrations = migrationsLoader.getMigrations();
     String skippedOrMissing = null;
     try (Connection con = connectionProvider.getConnection()) {
@@ -54,7 +54,7 @@ public final class StatusOperation extends DatabaseOperation {
         List<Change> changelog = getChangelog(con, option);
         skippedOrMissing = checkSkippedOrMissing(changelog, migrations);
 
-        Set<Change> changelogAndMigrations = new HashSet<Change>();
+        Set<Change> changelogAndMigrations = new HashSet<>();
         changelogAndMigrations.addAll(changelog);
         changelogAndMigrations.addAll(migrations);
 
