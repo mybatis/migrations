@@ -123,7 +123,7 @@ public abstract class BaseCommand implements Command {
   private String generatePatternedId(String pattern) {
     DecimalFormat fmt = new DecimalFormat(pattern);
     List<Change> migrations = getMigrationLoader().getMigrations();
-    if (migrations.size() == 0) {
+    if (migrations.isEmpty()) {
       return fmt.format(1);
     }
     Change lastChange = migrations.get(migrations.size() - 1);
