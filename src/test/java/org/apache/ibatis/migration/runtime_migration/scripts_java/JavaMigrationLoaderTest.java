@@ -63,7 +63,6 @@ class JavaMigrationLoaderTest {
   }
 
   protected JavaMigrationLoader createMigrationLoader() {
-    JavaMigrationLoader loader = new JavaMigrationLoader("org.apache.ibatis.migration.runtime_migration.scripts_java");
-    return loader;
+    return new JavaMigrationLoader("org.apache.ibatis.migration.runtime_migration.scripts_java");
   }
 }

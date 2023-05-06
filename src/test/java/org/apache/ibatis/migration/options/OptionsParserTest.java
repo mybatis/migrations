@@ -15,7 +15,15 @@
  */
 package org.apache.ibatis.migration.options;
 
-import static org.apache.ibatis.migration.options.Options.*;
+import static org.apache.ibatis.migration.options.Options.DRIVERPATH;
+import static org.apache.ibatis.migration.options.Options.ENV;
+import static org.apache.ibatis.migration.options.Options.ENVPATH;
+import static org.apache.ibatis.migration.options.Options.FORCE;
+import static org.apache.ibatis.migration.options.Options.HELP;
+import static org.apache.ibatis.migration.options.Options.HOOKPATH;
+import static org.apache.ibatis.migration.options.Options.SCRIPTPATH;
+import static org.apache.ibatis.migration.options.Options.TEMPLATE;
+import static org.apache.ibatis.migration.options.Options.TRACE;
 import static org.apache.ibatis.migration.options.OptionsParser.parse;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;

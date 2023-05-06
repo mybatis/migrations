@@ -37,7 +37,7 @@ public class ScriptHookTest {
 
   private static File dir;
 
-  private static final String separator = System.getProperty("line.separator");
+  private static final String separator = System.lineSeparator();
 
   @BeforeAll
   public static void init() throws Exception {

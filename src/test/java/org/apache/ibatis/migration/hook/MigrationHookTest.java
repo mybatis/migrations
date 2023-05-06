@@ -53,13 +53,17 @@ class MigrationHookTest {
     assertChangelogIntact();
     assertWorklogRowCount(worklogCounter += 3);
     pending();
-    assertWorklogRowCount(++worklogCounter);
+    worklogCounter++;
+    assertWorklogRowCount(worklogCounter);
     down();
-    assertWorklogRowCount(++worklogCounter);
+    worklogCounter++;
+    assertWorklogRowCount(worklogCounter);
     versionDown();
-    assertWorklogRowCount(++worklogCounter);
+    worklogCounter++;
+    assertWorklogRowCount(worklogCounter);
     versionUp();
-    assertWorklogRowCount(++worklogCounter);
+    worklogCounter++;
+    assertWorklogRowCount(worklogCounter);
   }
 
   private void bootstrap() throws Exception {

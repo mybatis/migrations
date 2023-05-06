@@ -15,7 +15,9 @@
  */
 package org.apache.ibatis.migration.commands;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -143,8 +145,7 @@ class BaseCommandTest {
 
   protected static String contentOf(File file) throws FileNotFoundException {
     try (Scanner scanner = new Scanner(file)) {
-      String destContent = scanner.useDelimiter("\\Z").next();
-      return destContent;
+      return scanner.useDelimiter("\\Z").next();
     }
   }
 }

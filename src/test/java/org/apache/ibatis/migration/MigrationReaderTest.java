@@ -39,7 +39,7 @@ class MigrationReaderTest {
 
   @BeforeEach
   void beforeEachTest() {
-    lineSeparator = System.getProperty("line.separator");
+    lineSeparator = System.lineSeparator();
     System.setProperty("line.separator", "\n");
 
   }
@@ -56,7 +56,11 @@ class MigrationReaderTest {
         + "do part\n"
         + "--//@UNDO\n"
         + "undo part\n";
+    // @formatter:on
+
     String result = readAsString(new MigrationReader(strToInputStream(script, charset), charset, false, null));
+
+    // @formatter:off
     assertEquals("-- comment\n"
         + "do part\n", result);
     // @formatter:on
@@ -69,7 +73,11 @@ class MigrationReaderTest {
         + "do part\n"
         + "--//@UNDO\n"
         + "undo part\n";
+    // @formatter:on
+
     String result = readAsString(new MigrationReader(strToInputStream(script, charset), charset, true, null));
+
+    // @formatter:off
     assertEquals("-- @UNDO\n"
         + "undo part\n", result);
     // @formatter:on
@@ -82,7 +90,11 @@ class MigrationReaderTest {
         + "do part\n"
         + "--//@UNDO\n"
         + "undo part";
+    // @formatter:on
+
     String result = readAsString(new MigrationReader(strToInputStream(script, charset), charset, true, null));
+
+    // @formatter:off
     assertEquals("-- @UNDO\n"
         + "undo part\n", result);
     // @formatter:on
@@ -95,7 +107,11 @@ class MigrationReaderTest {
         + "do part\n"
         + " \t --  \t //  \t@UNDO  a \n"
         + "undo part\n";
+    // @formatter:on
+
     String result = readAsString(new MigrationReader(strToInputStream(script, charset), charset, true, null));
+
+    // @formatter:off
     assertEquals(" \t --   \t@UNDO  a \n"
         + "undo part\n", result);
     // @formatter:on
@@ -109,7 +125,11 @@ class MigrationReaderTest {
         + "do part\n"
         + "-- // b @UNDO\n"
         + "undo part\n";
+    // @formatter:on
+
     String result = readAsString(new MigrationReader(strToInputStream(script, charset), charset, true, null));
+
+    // @formatter:off
     assertEquals("--  b @UNDO\n"
         + "undo part\n", result);
     // @formatter:on
@@ -123,6 +143,7 @@ class MigrationReaderTest {
         + "-- @UNDO\n"
         + "undo part\n";
     // @formatter:on
+
     String result = readAsString(new MigrationReader(strToInputStream(script, charset), charset, true, null));
     assertEquals("", result);
   }
@@ -132,7 +153,11 @@ class MigrationReaderTest {
     // @formatter:off
     String script = "-- comment\n"
         + "do part\n";
+    // @formatter:on
+
     String result = readAsString(new MigrationReader(strToInputStream(script, charset), charset, false, null));
+
+    // @formatter:off
     assertEquals("-- comment\n"
         + "do part\n", result);
     // @formatter:on
@@ -151,6 +176,7 @@ class MigrationReaderTest {
     String script = "-- comment\n"
         + "do part\n";
     // @formatter:on
+
     String result = readAsString(new MigrationReader(strToInputStream(script, charset), charset, true, null));
     assertEquals("", result);
   }
@@ -171,7 +197,11 @@ class MigrationReaderTest {
         + "--//@UNDO\n"
         + "--//some comment\n"
         + "undo part\n";
+    // @formatter:on
+
     String result = readAsString(new MigrationReader(strToInputStream(script, charset), charset, false, null));
+
+    // @formatter:off
     assertEquals("--   comment\n"
         + "do part\n", result);
     // @formatter:on
@@ -186,7 +216,11 @@ class MigrationReaderTest {
         + "--//@UNDO\n"
         + "--//some comment\n"
         + "undo part\n";
+    // @formatter:on
+
     String result = readAsString(new MigrationReader(strToInputStream(script, charset), charset, true, null));
+
+    // @formatter:off
     assertEquals("-- @UNDO\n"
         + "-- some comment\n"
         + "undo part\n", result);
@@ -202,7 +236,11 @@ class MigrationReaderTest {
         + "first undo part\n"
         + "--//@UNDO\n"
         + "second undo part\n";
+    // @formatter:on
+
     String result = readAsString(new MigrationReader(strToInputStream(script, charset), charset, true, null));
+
+    // @formatter:off
     assertEquals("-- @UNDO\n"
         + "first undo part\n"
         + "--//@UNDO\n"
@@ -218,11 +256,15 @@ class MigrationReaderTest {
         + "${c} \\${b}\n"
         + "--//@UNDO\n"
         + "undo part\n";
+    // @formatter:on
+
     Properties vars = new Properties();
     vars.put("a", "AAA");
     vars.put("b", "BBB");
     vars.put("c", "CCC");
     String result = readAsString(new MigrationReader(strToInputStream(script, charset), charset, false, vars));
+
+    // @formatter:off
     assertEquals("do AAA partBBB \n"
         + "-- AAA\n"
         + "CCC ${b}\n", result);
@@ -237,11 +279,15 @@ class MigrationReaderTest {
         + "undo ${a} part${b} \n"
         + "-- ${a}\n"
         + "${c} \\${b}";
+    // @formatter:on
+
     Properties vars = new Properties();
     vars.put("a", "AAA");
     vars.put("b", "BBB");
     vars.put("c", "CCC");
     String result = readAsString(new MigrationReader(strToInputStream(script, charset), charset, true, vars));
+
+    // @formatter:off
     assertEquals("-- @UNDO CCC\n"
         + "undo AAA partBBB \n"
         + "-- AAA\n"
@@ -253,7 +299,7 @@ class MigrationReaderTest {
   void shouldNormalizeLineSeparator_Do() throws Exception {
     // This is just for consistency with older versions.
     // ScriptRunner normalizes line separator anyway.
-    String originalSeparator = System.getProperty("line.separator");
+    String originalSeparator = System.lineSeparator();
     System.setProperty("line.separator", "\r\n");
     try {
       // @formatter:off
@@ -262,7 +308,11 @@ class MigrationReaderTest {
           + "--//@UNDO ${c}\n"
           + "undo part 1\n"
           + "undo part 2\n";
+      // @formatter:on
+
       String result = readAsString(new MigrationReader(strToInputStream(script, charset), charset, false, null));
+
+      // @formatter:off
       assertEquals("do part 1\r\n"
           + "do part 2\r\n", result);
       // @formatter:on
@@ -275,7 +325,7 @@ class MigrationReaderTest {
   void shouldNormalizeLineSeparator_Undo() throws Exception {
     // This is just for consistency with older versions.
     // ScriptRunner normalizes line separator anyway.
-    String originalSeparator = System.getProperty("line.separator");
+    String originalSeparator = System.lineSeparator();
     try {
       System.setProperty("line.separator", "\r");
       // @formatter:off
@@ -284,7 +334,11 @@ class MigrationReaderTest {
           + "--//@UNDO\r\n"
           + "undo part 1\r\n"
           + "undo part 2\r\n";
+      // @formatter:on
+
       String result = readAsString(new MigrationReader(strToInputStream(script, charset), charset, true, null));
+
+      // @formatter:off
       assertEquals("-- @UNDO\r"
           + "undo part 1\r"
           + "undo part 2\r", result);
@@ -297,14 +351,11 @@ class MigrationReaderTest {
   @Test
   void shouldRespectSpecifiedOffsetAndLength() throws Exception {
     String script = "abcdefghij";
-    MigrationReader reader = new MigrationReader(strToInputStream(script, charset), charset, false, null);
-    try {
+    try (MigrationReader reader = new MigrationReader(strToInputStream(script, charset), charset, false, null)) {
       char[] cbuf = new char[5];
       int read = reader.read(cbuf, 1, 3);
       assertEquals(3, read);
       assertArrayEquals(new char[] { 0, 'a', 'b', 'c', 0 }, cbuf);
-    } finally {
-      reader.close();
     }
   }
 
@@ -315,8 +366,8 @@ class MigrationReaderTest {
         + "--//@UNDO\n"
         + "undo part\n";
     // @formatter:on
-    MigrationReader reader = new MigrationReader(strToInputStream(script, charset), charset, false, null);
-    try {
+
+    try (MigrationReader reader = new MigrationReader(strToInputStream(script, charset), charset, false, null)) {
       StringBuilder buffer = new StringBuilder();
       char[] cbuf = new char[30];
       int res;
@@ -324,8 +375,6 @@ class MigrationReaderTest {
         buffer.append(res == cbuf.length ? cbuf : Arrays.copyOf(cbuf, res));
       }
       assertEquals("long do part 123456789012345678901234567890\n", buffer.toString());
-    } finally {
-      reader.close();
     }
   }
 
@@ -334,7 +383,11 @@ class MigrationReaderTest {
     // @formatter:off
     String script = "-- //@DELIMITER ~\n"
         + "abc\n";
+    // @formatter:on
+
     String result = readAsString(new MigrationReader(strToInputStream(script, charset), charset, false, null));
+
+    // @formatter:off
     assertEquals("-- //@DELIMITER ~\n"
         + "abc\n", result);
     // @formatter:on
