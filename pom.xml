@@ -140,7 +140,7 @@
           <repositoryLayout>flat</repositoryLayout>
           <repositoryName>lib</repositoryName>
           <endorsedDir>lib</endorsedDir>
-          <extraJvmArguments>-Xms500m -Xmx500m -XX:-UseGCOverheadLimit</extraJvmArguments>
+          <extraJvmArguments>-Xms512m -Xmx512m -XX:-UseGCOverheadLimit</extraJvmArguments>
           <binFileExtensions>
             <windows>.cmd</windows>
           </binFileExtensions>
@@ -188,7 +188,7 @@
         <jdk>[17,)</jdk>
       </activation>
       <properties>
-        <argLine>-Djdk.attach.allowAttachSelf --add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.util=ALL-UNNAMED</argLine>
+        <argLine>--add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.util=ALL-UNNAMED</argLine>
       </properties>
     </profile>
     <profile>
@@ -197,7 +197,7 @@
         <jdk>[18,)</jdk>
       </activation>
       <properties>
-        <argLine>-Djdk.attach.allowAttachSelf --add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.util=ALL-UNNAMED -Djava.security.manager=allow</argLine>
+        <argLine>--add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.util=ALL-UNNAMED -Djava.security.manager=allow</argLine>
       </properties>
     </profile>
   </profiles>

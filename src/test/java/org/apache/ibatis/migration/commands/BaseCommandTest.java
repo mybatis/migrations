@@ -1,5 +1,5 @@
 /*
- *    Copyright 2010-2022 the original author or authors.
+ *    Copyright 2010-2023 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -28,6 +28,8 @@ import java.util.Scanner;
 import org.apache.ibatis.migration.io.Resources;
 import org.apache.ibatis.migration.utils.TestUtil;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledOnOs;
+import org.junit.jupiter.api.condition.OS;
 
 class BaseCommandTest {
   @Test
@@ -46,7 +48,8 @@ class BaseCommandTest {
   }
 
   @Test
-  void testNonexistentFile() throws Exception {
+  @EnabledOnOs({ OS.LINUX, OS.MAC })
+  void testNonexistentFileLinuxMac() throws Exception {
     String srcPath = TestUtil.getTempDir().getAbsolutePath() + FileSystems.getDefault().getSeparator()
         + "NoSuchFile.sql";
     FileNotFoundException e = assertThrows(FileNotFoundException.class, () -> {
@@ -58,6 +61,22 @@ class BaseCommandTest {
       }
     });
     assertEquals(e.getMessage(), srcPath + " (No such file or directory)");
+  }
+
+  @Test
+  @EnabledOnOs(OS.WINDOWS)
+  void testNonexistentFileWindows() throws Exception {
+    String srcPath = TestUtil.getTempDir().getAbsolutePath() + FileSystems.getDefault().getSeparator()
+        + "NoSuchFile.sql";
+    FileNotFoundException e = assertThrows(FileNotFoundException.class, () -> {
+      File dest = File.createTempFile("Out", ".sql");
+      try {
+        BaseCommand.copyTemplate(new File(srcPath), dest, null);
+      } finally {
+        dest.delete();
+      }
+    });
+    assertEquals(e.getMessage(), srcPath + " (The system cannot find the file specified)");
   }
 
   @Test

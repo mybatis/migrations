@@ -1,5 +1,5 @@
 /*
- *    Copyright 2010-2022 the original author or authors.
+ *    Copyright 2010-2023 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -160,7 +160,7 @@ public class MigratorTest {
   private void testMissingScript() throws Exception {
     File original = new File(dir + File.separator + "scripts", "20080827200216_create_procs.sql");
     File renamed = new File(dir + File.separator + "scripts", "20080827200216_create_procs._sql");
-    assertTrue(original.renameTo(renamed));
+    assertTrue(original.renameTo(renamed), "Original file is " + original + " and renamed is " + renamed);
     try {
       String output = SystemLambda.tapSystemOut(() -> {
         Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "up"));
