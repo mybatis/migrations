@@ -140,7 +140,7 @@
           <repositoryLayout>flat</repositoryLayout>
           <repositoryName>lib</repositoryName>
           <endorsedDir>lib</endorsedDir>
-          <extraJvmArguments>-Xms500m -Xmx500m -XX:-UseGCOverheadLimit</extraJvmArguments>
+          <extraJvmArguments>-Xms512m -Xmx512m -XX:-UseGCOverheadLimit</extraJvmArguments>
           <binFileExtensions>
             <windows>.cmd</windows>
           </binFileExtensions>
