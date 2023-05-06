@@ -89,13 +89,10 @@ class NewHookTest {
     }
     // Add hook settings
     File envFile = new File(basePath.getCanonicalPath() + File.separator + "environments", "development.properties");
-    PrintWriter writer = new PrintWriter(
-        new BufferedWriter(new OutputStreamWriter(new FileOutputStream(envFile, true), Charset.forName("utf-8"))));
-    try {
+    try (PrintWriter writer = new PrintWriter(
+        new BufferedWriter(new OutputStreamWriter(new FileOutputStream(envFile, true), Charset.forName("utf-8"))))) {
       writer.println("hook_before_new=js:NewHook.js:_function=validateDesc");
       writer.println("hook_after_new=js:NewHook.js:_function=renameFile");
-    } finally {
-      writer.close();
     }
     return basePath;
   }

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2010-2022 the original author or authors.
+ *    Copyright 2010-2023 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -60,8 +60,8 @@ public final class ScriptCommand extends BaseCommand {
         throw new MigrationException("The script command requires a range of versions from v1 - v2.");
       }
 
-      BigDecimal v1 = (scriptPending || scriptPendingUndo) ? null : new BigDecimal(firstToken);
-      BigDecimal v2 = (scriptPending || scriptPendingUndo) ? null : new BigDecimal(parser.nextToken());
+      BigDecimal v1 = scriptPending || scriptPendingUndo ? null : new BigDecimal(firstToken);
+      BigDecimal v2 = scriptPending || scriptPendingUndo ? null : new BigDecimal(parser.nextToken());
 
       boolean undo;
       undo = scriptPendingUndo;
@@ -76,7 +76,7 @@ public final class ScriptCommand extends BaseCommand {
 
       Map<String, Object> hookBindings = new HashMap<>();
       MigrationHook hook = createScriptHook();
-      List<Change> migrations = (scriptPending || scriptPendingUndo) ? new StatusOperation()
+      List<Change> migrations = scriptPending || scriptPendingUndo ? new StatusOperation()
           .operate(getConnectionProvider(), getMigrationLoader(), getDatabaseOperationOption(), null).getCurrentStatus()
           : getMigrationLoader().getMigrations();
       Collections.sort(migrations);
@@ -141,16 +141,14 @@ public final class ScriptCommand extends BaseCommand {
   }
 
   private boolean shouldRun(Change change, BigDecimal v1, BigDecimal v2, boolean pendingOnly) {
-    if (!pendingOnly) {
-      BigDecimal id = change.getId();
-      if (v1.compareTo(v2) > 0) {
-        return (id.compareTo(v2) > 0 && id.compareTo(v1) <= 0);
-      } else {
-        return (id.compareTo(v1) > 0 && id.compareTo(v2) <= 0);
-      }
-    } else {
+    if (pendingOnly) {
       return change.getAppliedTimestamp() == null;
     }
+    BigDecimal id = change.getId();
+    if (v1.compareTo(v2) > 0) {
+      return id.compareTo(v2) > 0 && id.compareTo(v1) <= 0;
+    }
+    return id.compareTo(v1) > 0 && id.compareTo(v2) <= 0;
   }
 
   // Issue 699

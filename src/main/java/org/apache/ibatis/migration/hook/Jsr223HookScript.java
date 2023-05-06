@@ -1,5 +1,5 @@
 /*
- *    Copyright 2010-2022 the original author or authors.
+ *    Copyright 2010-2023 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -59,12 +59,11 @@ public class Jsr223HookScript implements HookScript {
   protected String functionName;
   protected String objectName;
   protected String methodName;
-  protected List<String> args = new ArrayList<String>();
-  protected Map<String, String> localVars = new HashMap<String, String>();
+  protected List<String> args = new ArrayList<>();
+  protected Map<String, String> localVars = new HashMap<>();
 
   public Jsr223HookScript(String language, File scriptFile, String charset, String[] options, SelectedPaths paths,
       Properties variables, PrintStream printStream) {
-    super();
     this.language = language;
     this.scriptFile = scriptFile;
     this.charset = charset;
@@ -104,7 +103,7 @@ public class Jsr223HookScript implements HookScript {
     try {
       printStream.println(Util.horizontalLine("Applying JSR-223 hook : " + scriptFile.getName(), 80));
       engine.eval(new InputStreamReader(new FileInputStream(scriptFile), Charset.forName(charset)));
-      if (functionName != null || (objectName != null && methodName != null)) {
+      if (functionName != null || objectName != null && methodName != null) {
         Invocable invocable = (Invocable) engine;
         if (functionName != null) {
           printStream.println(Util.horizontalLine("Invoking function : " + functionName, 80));

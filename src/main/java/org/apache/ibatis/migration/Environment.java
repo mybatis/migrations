@@ -1,5 +1,5 @@
 /*
- *    Copyright 2010-2022 the original author or authors.
+ *    Copyright 2010-2023 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -146,11 +146,11 @@ public class Environment {
     this.timeZone = readProperty(prop, SETTING_KEY.time_zone.name(), "GMT+0:00");
     this.delimiter = readProperty(prop, SETTING_KEY.delimiter.name(), ";");
     this.scriptCharset = readProperty(prop, SETTING_KEY.script_char_set.name(), Charset.defaultCharset().name());
-    this.fullLineDelimiter = Boolean.valueOf(readProperty(prop, SETTING_KEY.full_line_delimiter.name()));
-    this.sendFullScript = Boolean.valueOf(readProperty(prop, SETTING_KEY.send_full_script.name()));
-    this.autoCommit = Boolean.valueOf(readProperty(prop, SETTING_KEY.auto_commit.name()));
-    this.removeCrs = Boolean.valueOf(readProperty(prop, SETTING_KEY.remove_crs.name()));
-    this.ignoreWarnings = Boolean.valueOf(readProperty(prop, SETTING_KEY.ignore_warnings.name(), "true"));
+    this.fullLineDelimiter = Boolean.parseBoolean(readProperty(prop, SETTING_KEY.full_line_delimiter.name()));
+    this.sendFullScript = Boolean.parseBoolean(readProperty(prop, SETTING_KEY.send_full_script.name()));
+    this.autoCommit = Boolean.parseBoolean(readProperty(prop, SETTING_KEY.auto_commit.name()));
+    this.removeCrs = Boolean.parseBoolean(readProperty(prop, SETTING_KEY.remove_crs.name()));
+    this.ignoreWarnings = Boolean.parseBoolean(readProperty(prop, SETTING_KEY.ignore_warnings.name(), "true"));
 
     this.driverPath = readProperty(prop, SETTING_KEY.driver_path.name());
     this.driver = readProperty(prop, SETTING_KEY.driver.name());

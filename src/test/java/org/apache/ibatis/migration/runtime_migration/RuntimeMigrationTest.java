@@ -252,8 +252,7 @@ class RuntimeMigrationTest {
     File scriptsDir = new File(url.getFile());
     Properties properties = new Properties();
     properties.setProperty("changelog", "CHANGELOG");
-    FileMigrationLoader migrationsLoader = new FileMigrationLoader(scriptsDir, "utf-8", properties);
-    return migrationsLoader;
+    return new FileMigrationLoader(scriptsDir, "utf-8", properties);
   }
 
   protected void runSql(ConnectionProvider provider, String sql) throws SQLException {

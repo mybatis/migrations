@@ -1,5 +1,5 @@
 /*
- *    Copyright 2010-2022 the original author or authors.
+ *    Copyright 2010-2023 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ import java.util.Map;
 
 public interface MigrationHook {
 
-  public static final String HOOK_CONTEXT = "hookContext";
+  String HOOK_CONTEXT = "hookContext";
 
   void before(Map<String, Object> bindingMap);
 
