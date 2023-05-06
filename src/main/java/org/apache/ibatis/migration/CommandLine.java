@@ -1,5 +1,5 @@
 /*
- *    Copyright 2010-2022 the original author or authors.
+ *    Copyright 2010-2023 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -42,7 +42,8 @@ public class CommandLine {
     if (selectedOptions.needsHelp()) {
       printUsage();
       return;
-    } else if (selectedOptions.getCommand() == null) {
+    }
+    if (selectedOptions.getCommand() == null) {
       console.printf("No command specified.%n");
       printUsage();
       return;
@@ -85,20 +86,19 @@ public class CommandLine {
       exceptionCaught = true;
       if (t instanceof MigrationException) {
         throw (MigrationException) t;
-      } else {
-        throw new MigrationException(t);
       }
+      throw new MigrationException(t);
     } finally {
       console.printf("------------------------------------------------------------------------%n");
 
       if (hasColor(selectedOptions)) {
-        console.printf("-- MyBatis Migrations %s%s%s%n", (exceptionCaught) ? ConsoleColors.RED : ConsoleColors.GREEN,
-            (exceptionCaught) ? "FAILURE" : "SUCCESS", ConsoleColors.RESET);
+        console.printf("-- MyBatis Migrations %s%s%s%n", exceptionCaught ? ConsoleColors.RED : ConsoleColors.GREEN,
+            exceptionCaught ? "FAILURE" : "SUCCESS", ConsoleColors.RESET);
       } else {
-        console.printf("-- MyBatis Migrations %s%n", (exceptionCaught) ? "FAILURE" : "SUCCESS");
+        console.printf("-- MyBatis Migrations %s%n", exceptionCaught ? "FAILURE" : "SUCCESS");
       }
 
-      console.printf("-- Total time: %ss%n", ((System.currentTimeMillis() - start) / 1000));
+      console.printf("-- Total time: %ss%n", (System.currentTimeMillis() - start) / 1000);
       console.printf("-- Finished at: %s%n", new Date());
       printMemoryUsage();
       console.printf("------------------------------------------------------------------------%n");

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2010-2022 the original author or authors.
+ *    Copyright 2010-2023 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -49,6 +49,8 @@ public final class InitializeCommand extends BaseCommand {
         Util.file(scriptPath, getNextIDAsString() + "_" + DESC_CREATE_CHANGELOG.replace(' ', '_') + ".sql"));
     copyResourceTo("org/apache/ibatis/migration/template_migration.sql",
         Util.file(scriptPath, getNextIDAsString() + "_first_migration.sql"), new Properties() {
+          private static final long serialVersionUID = 1L;
+
           {
             setProperty("description", "First migration.");
           }

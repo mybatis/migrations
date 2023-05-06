@@ -1,5 +1,5 @@
 /*
- *    Copyright 2010-2022 the original author or authors.
+ *    Copyright 2010-2023 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -116,9 +116,8 @@ public abstract class BaseCommand implements Command {
     }
     if (idPattern != null && !idPattern.isEmpty()) {
       return generatePatternedId(idPattern);
-    } else {
-      return generateTimestampId();
     }
+    return generateTimestampId();
   }
 
   private String generatePatternedId(String pattern) {
@@ -130,7 +129,8 @@ public abstract class BaseCommand implements Command {
     Change lastChange = migrations.get(migrations.size() - 1);
     try {
       long lastId = (Long) fmt.parse(lastChange.getId().toString());
-      return fmt.format(++lastId);
+      lastId++;
+      return fmt.format(lastId);
     } catch (ParseException e) {
       throw new MigrationException(
           "Failed to parse last id '" + lastChange.getId() + "' using the specified idPattern '" + pattern + "'");
@@ -210,12 +210,11 @@ public abstract class BaseCommand implements Command {
     final String stringParam = params.length > 0 ? params[0] : null;
     if (stringParam == null || "".equals(stringParam)) {
       return defaultSteps;
-    } else {
-      try {
-        return Integer.parseInt(stringParam);
-      } catch (NumberFormatException e) {
-        throw new MigrationException("Invalid parameter passed to command: " + params[0]);
-      }
+    }
+    try {
+      return Integer.parseInt(stringParam);
+    } catch (NumberFormatException e) {
+      throw new MigrationException("Invalid parameter passed to command: " + params[0]);
     }
   }
 
@@ -232,7 +231,8 @@ public abstract class BaseCommand implements Command {
     File localDriverPath = getCustomDriverPath();
     if (driverClassLoader != null) {
       return driverClassLoader;
-    } else if (localDriverPath.exists()) {
+    }
+    if (localDriverPath.exists()) {
       try {
         List<URL> urlList = new ArrayList<>();
         File[] files = localDriverPath.listFiles();
@@ -259,9 +259,8 @@ public abstract class BaseCommand implements Command {
     String customDriverPath = environment().getDriverPath();
     if (customDriverPath != null && customDriverPath.length() > 0) {
       return new File(customDriverPath);
-    } else {
-      return options.getPaths().getDriverPath();
     }
+    return options.getPaths().getDriverPath();
   }
 
   protected MigrationLoader getMigrationLoader() {

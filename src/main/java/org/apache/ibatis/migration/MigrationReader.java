@@ -1,5 +1,5 @@
 /*
- *    Copyright 2010-2022 the original author or authors.
+ *    Copyright 2010-2023 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -122,23 +122,21 @@ public class MigrationReader extends FilterReader {
         determinePart(c);
         searchVariable(c);
 
-        if (c == '\r' || (c == '\n' && previousChar != '\r')) {
+        if (c == '\r' || c == '\n' && previousChar != '\r') {
           switch (part) {
             case AFTER_UNDO_TAG:
-              if (undo) {
-                addToBuffer(lineBuffer.delete(afterCommentPrefixIndex, afterDoubleSlashIndex)
-                    .insert(afterCommentPrefixIndex, ' '));
-                inUndo = true;
-              } else {
+              if (!undo) {
                 // Won't read from the file anymore.
                 lineBuffer.setLength(0);
                 int bufferLen = buffer.length();
                 if (bufferLen == 0) {
                   return -1;
-                } else {
-                  return readFromBuffer(cbuf, off, len);
                 }
+                return readFromBuffer(cbuf, off, len);
               }
+              addToBuffer(lineBuffer.delete(afterCommentPrefixIndex, afterDoubleSlashIndex)
+                  .insert(afterCommentPrefixIndex, ' '));
+              inUndo = true;
               break;
             case NOT_UNDO_LINE:
               if (!undo || inUndo) {
@@ -281,8 +279,7 @@ public class MigrationReader extends FilterReader {
   protected static Reader scriptFileReader(InputStream inputStream, String charset) {
     if (charset == null || charset.length() == 0) {
       return new InputStreamReader(inputStream);
-    } else {
-      return new InputStreamReader(inputStream, Charset.forName(charset));
     }
+    return new InputStreamReader(inputStream, Charset.forName(charset));
   }
 }

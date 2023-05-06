@@ -1,5 +1,5 @@
 /*
- *    Copyright 2010-2022 the original author or authors.
+ *    Copyright 2010-2023 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -120,20 +120,19 @@ public class DefaultVFS extends VFS {
            * For file URLs the openStream() call might fail, depending on the servlet container, because directories
            * can't be opened for reading. If that happens, then list the directory directly instead.
            */
-          if ("file".equals(url.getProtocol())) {
-            File file = new File(url.getFile());
-            if (log.isLoggable(Level.FINER)) {
-              log.log(Level.FINER, "Listing directory " + file.getAbsolutePath());
-            }
-            if (file.isDirectory()) {
-              if (log.isLoggable(Level.FINER)) {
-                log.log(Level.FINER, "Listing " + url);
-              }
-              children = Arrays.asList(file.list());
-            }
-          } else {
+          if (!"file".equals(url.getProtocol())) {
             // No idea where the exception came from so rethrow it
             throw e;
+          }
+          File file = new File(url.getFile());
+          if (log.isLoggable(Level.FINER)) {
+            log.log(Level.FINER, "Listing directory " + file.getAbsolutePath());
+          }
+          if (file.isDirectory()) {
+            if (log.isLoggable(Level.FINER)) {
+              log.log(Level.FINER, "Listing " + url);
+            }
+            children = Arrays.asList(file.list());
           }
         }
 
@@ -245,16 +244,15 @@ public class DefaultVFS extends VFS {
     // Look for the .jar extension and chop off everything after that
     StringBuilder jarUrl = new StringBuilder(url.toExternalForm());
     int index = jarUrl.lastIndexOf(".jar");
-    if (index >= 0) {
-      jarUrl.setLength(index + 4);
-      if (log.isLoggable(Level.FINER)) {
-        log.log(Level.FINER, "Extracted JAR URL: " + jarUrl);
-      }
-    } else {
+    if (index < 0) {
       if (log.isLoggable(Level.FINER)) {
         log.log(Level.FINER, "Not a JAR: " + jarUrl);
       }
       return null;
+    }
+    jarUrl.setLength(index + 4);
+    if (log.isLoggable(Level.FINER)) {
+      log.log(Level.FINER, "Extracted JAR URL: " + jarUrl);
     }
 
     // Try to open and test it
@@ -262,31 +260,30 @@ public class DefaultVFS extends VFS {
       URL testUrl = new URL(jarUrl.toString());
       if (isJar(testUrl)) {
         return testUrl;
-      } else {
-        // WebLogic fix: check if the URL's file exists in the filesystem.
+      }
+      // WebLogic fix: check if the URL's file exists in the filesystem.
+      if (log.isLoggable(Level.FINER)) {
+        log.log(Level.FINER, "Not a JAR: " + jarUrl);
+      }
+      jarUrl.replace(0, jarUrl.length(), testUrl.getFile());
+      File file = new File(jarUrl.toString());
+
+      // File name might be URL-encoded
+      if (!file.exists()) {
+        try {
+          file = new File(URLEncoder.encode(jarUrl.toString(), "UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+          throw new RuntimeException("Unsupported encoding?  UTF-8?  That's impossible.");
+        }
+      }
+
+      if (file.exists()) {
         if (log.isLoggable(Level.FINER)) {
-          log.log(Level.FINER, "Not a JAR: " + jarUrl);
+          log.log(Level.FINER, "Trying real file: " + file.getAbsolutePath());
         }
-        jarUrl.replace(0, jarUrl.length(), testUrl.getFile());
-        File file = new File(jarUrl.toString());
-
-        // File name might be URL-encoded
-        if (!file.exists()) {
-          try {
-            file = new File(URLEncoder.encode(jarUrl.toString(), "UTF-8"));
-          } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException("Unsupported encoding?  UTF-8?  That's impossible.");
-          }
-        }
-
-        if (file.exists()) {
-          if (log.isLoggable(Level.FINER)) {
-            log.log(Level.FINER, "Trying real file: " + file.getAbsolutePath());
-          }
-          testUrl = file.toURI().toURL();
-          if (isJar(testUrl)) {
-            return testUrl;
-          }
+        testUrl = file.toURI().toURL();
+        if (isJar(testUrl)) {
+          return testUrl;
         }
       }
     } catch (MalformedURLException e) {

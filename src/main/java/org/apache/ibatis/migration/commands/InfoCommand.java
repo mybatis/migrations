@@ -1,5 +1,5 @@
 /*
- *    Copyright 2010-2022 the original author or authors.
+ *    Copyright 2010-2023 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package org.apache.ibatis.migration.commands;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
@@ -50,30 +51,46 @@ public final class InfoCommand implements Command {
         System.getProperty("os.version"), System.getProperty("os.arch"), getOsFamily());
   }
 
-  private static final String getOsFamily() {
+  private static String getOsFamily() {
     String osName = System.getProperty("os.name").toLowerCase();
-    String pathSep = System.getProperty("path.separator");
+    String pathSep = File.pathSeparator;
 
     if (osName.indexOf("windows") != -1) {
       return "windows";
-    } else if (osName.indexOf("os/2") != -1) {
+    }
+
+    if (osName.indexOf("os/2") != -1) {
       return "os/2";
-    } else if (osName.indexOf("z/os") != -1 || osName.indexOf("os/390") != -1) {
+    }
+
+    if (osName.indexOf("z/os") != -1 || osName.indexOf("os/390") != -1) {
       return "z/os";
-    } else if (osName.indexOf("os/400") != -1) {
+    }
+
+    if (osName.indexOf("os/400") != -1) {
       return "os/400";
-    } else if (pathSep.equals(";")) {
+    }
+
+    if (pathSep.equals(";")) {
       return "dos";
-    } else if (osName.indexOf("mac") != -1) {
+    }
+
+    if (osName.indexOf("mac") != -1) {
       if (osName.endsWith("x")) {
         return "mac"; // MACOSX
       }
       return "unix";
-    } else if (osName.indexOf("nonstop_kernel") != -1) {
+    }
+
+    if (osName.indexOf("nonstop_kernel") != -1) {
       return "tandem";
-    } else if (osName.indexOf("openvms") != -1) {
+    }
+
+    if (osName.indexOf("openvms") != -1) {
       return "openvms";
-    } else if (pathSep.equals(":")) {
+    }
+
+    if (pathSep.equals(":")) {
       return "unix";
     }
 

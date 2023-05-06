@@ -1,5 +1,5 @@
 /*
- *    Copyright 2010-2022 the original author or authors.
+ *    Copyright 2010-2023 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.ibatis.migration.io.ResolverUtil;
-import org.apache.ibatis.migration.io.ResolverUtil.Test;
 
 public class JavaMigrationLoader implements MigrationLoader {
 
@@ -36,7 +35,6 @@ public class JavaMigrationLoader implements MigrationLoader {
   }
 
   public JavaMigrationLoader(ClassLoader classLoader, String... packageNames) {
-    super();
     this.classLoader = classLoader;
     this.packageNames = packageNames;
   }
@@ -74,12 +72,9 @@ public class JavaMigrationLoader implements MigrationLoader {
     ResolverUtil<MigrationScript> resolver = getResolver();
     final String className = change.getFilename();
     for (String pkg : packageNames) {
-      resolver.find(new Test() {
-        @Override
-        public boolean matches(Class<?> type) {
-          return type != null && MigrationScript.class.isAssignableFrom(type) && type.getName().equals(className);
-        }
-      }, pkg);
+      resolver.find(
+          type -> type != null && MigrationScript.class.isAssignableFrom(type) && type.getName().equals(className),
+          pkg);
     }
     Reader reader = null;
     Set<Class<? extends MigrationScript>> classes = resolver.getClasses();
