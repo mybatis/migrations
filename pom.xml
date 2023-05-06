@@ -188,7 +188,7 @@
         <jdk>[17,)</jdk>
       </activation>
       <properties>
-        <argLine>-Djdk.attach.allowAttachSelf --add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.util=ALL-UNNAMED</argLine>
+        <argLine>--add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.util=ALL-UNNAMED</argLine>
       </properties>
     </profile>
     <profile>
@@ -197,7 +197,7 @@
         <jdk>[18,)</jdk>
       </activation>
       <properties>
-        <argLine>-Djdk.attach.allowAttachSelf --add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.util=ALL-UNNAMED -Djava.security.manager=allow</argLine>
+        <argLine>--add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.util=ALL-UNNAMED -Djava.security.manager=allow</argLine>
       </properties>
     </profile>
   </profiles>
