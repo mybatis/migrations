@@ -58,9 +58,9 @@ public class CommandLine {
       String errorMessage = e.getMessage();
 
       if (hasColor(selectedOptions)) {
-        console.printf(ConsoleColors.RED + "\nERROR: %s%n", errorMessage + ConsoleColors.RESET);
+        console.printf(ConsoleColors.RED + "%nERROR: %s%n", errorMessage + ConsoleColors.RESET);
       } else {
-        console.printf("\nERROR: %s%n", errorMessage);
+        console.printf("%nERROR: %s%n", errorMessage);
       }
 
       if (selectedOptions.isTrace()) {
