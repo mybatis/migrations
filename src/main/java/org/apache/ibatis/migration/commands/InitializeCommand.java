@@ -28,7 +28,6 @@ public final class InitializeCommand extends BaseCommand {
   }
 
   @Override
-  @SuppressWarnings("serial")
   public void execute(String... params) {
     final File basePath = paths.getBasePath();
     final File scriptPath = paths.getScriptPath();
