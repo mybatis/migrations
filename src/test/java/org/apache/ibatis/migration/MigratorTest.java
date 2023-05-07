@@ -25,6 +25,10 @@ import com.github.stefanbirkner.systemlambda.SystemLambda;
 
 import java.io.File;
 import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -162,18 +166,18 @@ public class MigratorTest {
   }
 
   private void testMissingScript() throws Exception {
-    File original = new File(dir + File.separator + "scripts", "20080827200216_create_procs.sql");
-    File renamed = new File(dir + File.separator + "scripts", "20080827200216_create_procs._sql");
-    assertTrue(original.renameTo(renamed), "Original file is " + original + " and renamed is " + renamed);
+    Path original = Paths.get(dir + File.separator + "scripts", "20080827200216_create_procs.sql");
+    Path renamed = Paths.get(dir + File.separator + "scripts", "20080827200216_create_procs._sql");
+    assertEquals(renamed, Files.move(original, renamed, StandardCopyOption.REPLACE_EXISTING));
     try {
       String output = SystemLambda.tapSystemOut(() -> {
         Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "up"));
       });
-      assertFalse(output.contains("FAILURE"));
-      assertTrue(
-          output.contains("WARNING: Missing migration script. id='20080827200216', description='create procs'."));
+      assertFalse(output.contains("FAILURE"), "Output contains: \n" + output);
+      assertTrue(output.contains("WARNING: Missing migration script. id='20080827200216', description='create procs'."),
+          "Output contains: \n" + output);
     } finally {
-      assertTrue(renamed.renameTo(original));
+      assertEquals(original, Files.move(renamed, original, StandardCopyOption.REPLACE_EXISTING));
     }
   }
 

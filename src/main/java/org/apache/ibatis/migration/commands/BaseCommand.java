@@ -150,8 +150,8 @@ public abstract class BaseCommand implements Command {
 
   protected void copyResourceTo(String resource, File toFile, Properties variables) {
     printStream.println("Creating: " + toFile.getName());
-    try {
-      copyTemplate(Resources.getResourceAsReader(this.getClass().getClassLoader(), resource), toFile, variables);
+    try (Reader reader = Resources.getResourceAsReader(this.getClass().getClassLoader(), resource)) {
+      copyTemplate(reader, toFile, variables);
     } catch (IOException e) {
       throw new MigrationException("Error copying " + resource + " to " + toFile.getAbsolutePath() + ".  Cause: " + e,
           e);
@@ -240,7 +240,7 @@ public abstract class BaseCommand implements Command {
           for (File file : files) {
             String filename = file.getCanonicalPath();
             if (!filename.startsWith("/")) {
-              filename = "/" + filename;
+              filename = '/' + filename;
             }
             urlList.add(new URL("jar:file:" + filename + "!/"));
             urlList.add(new URL("file:" + filename));

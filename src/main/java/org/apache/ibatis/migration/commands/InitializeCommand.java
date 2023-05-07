@@ -47,14 +47,11 @@ public final class InitializeCommand extends BaseCommand {
     copyResourceTo("org/apache/ibatis/migration/template_bootstrap.sql", Util.file(scriptPath, "bootstrap.sql"));
     copyResourceTo("org/apache/ibatis/migration/template_changelog.sql",
         Util.file(scriptPath, getNextIDAsString() + "_" + DESC_CREATE_CHANGELOG.replace(' ', '_') + ".sql"));
-    copyResourceTo("org/apache/ibatis/migration/template_migration.sql",
-        Util.file(scriptPath, getNextIDAsString() + "_first_migration.sql"), new Properties() {
-          private static final long serialVersionUID = 1L;
 
-          {
-            setProperty("description", "First migration.");
-          }
-        });
+    Properties firstMigration = new Properties();
+    firstMigration.setProperty("description", "First migration.");
+    copyResourceTo("org/apache/ibatis/migration/template_migration.sql",
+        Util.file(scriptPath, getNextIDAsString() + "_first_migration.sql"), firstMigration);
     printStream.println("Done!");
     printStream.println();
   }

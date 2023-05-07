@@ -43,7 +43,7 @@ public final class NewCommand extends BaseCommand {
     Properties variables = new Properties();
     variables.setProperty("description", description);
     existingEnvironmentFile();
-    String filename = getNextIDAsString() + "_" + description.replace(' ', '_') + ".sql";
+    String filename = getNextIDAsString() + '_' + description.replace(' ', '_') + ".sql";
 
     Map<String, Object> hookBindings = new HashMap<>();
     MigrationHook hook = createNewHook();

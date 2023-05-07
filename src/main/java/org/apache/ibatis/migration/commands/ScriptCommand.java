@@ -155,7 +155,7 @@ public final class ScriptCommand extends BaseCommand {
   private String getDelimiter() {
     StringBuilder delimiter = new StringBuilder();
     if (environment().isFullLineDelimiter()) {
-      delimiter.append("\n");
+      delimiter.append('\n');
     }
     delimiter.append(environment().getDelimiter());
     return delimiter.toString();
