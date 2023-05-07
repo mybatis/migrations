@@ -51,7 +51,7 @@ public class MigratorTest {
   private static Properties env;
 
   @BeforeAll
-  public static void setup() throws Exception {
+  static void setup() throws Exception {
     dir = Resources.getResourceAsFile("org/apache/ibatis/migration/example");
     env = Resources.getResourceAsProperties("org/apache/ibatis/migration/example/environments/development.properties");
   }

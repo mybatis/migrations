@@ -32,7 +32,7 @@ class SystemPropertyTest {
   private static File dir;
 
   @BeforeAll
-  public static void init() throws Exception {
+  static void init() throws Exception {
     dir = Resources.getResourceAsFile("org/apache/ibatis/migration/system_property/testdir");
   }
 
