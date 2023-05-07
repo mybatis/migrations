@@ -122,8 +122,7 @@ public class ScriptRunner {
 
   private void executeFullScript(Reader reader) {
     StringBuilder script = new StringBuilder();
-    try {
-      BufferedReader lineReader = new BufferedReader(reader);
+    try (BufferedReader lineReader = new BufferedReader(reader)) {
       String line;
       while ((line = lineReader.readLine()) != null) {
         script.append(line);

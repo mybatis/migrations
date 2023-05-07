@@ -58,7 +58,9 @@ public class HookContext {
    *          SQL to execute.
    */
   public void executeSql(String sql) {
-    executeSql(new StringReader(sql));
+    try (StringReader reader = new StringReader(sql)) {
+      executeSql(reader);
+    }
   }
 
   /**

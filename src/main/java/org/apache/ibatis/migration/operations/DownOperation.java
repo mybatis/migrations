@@ -16,6 +16,7 @@
 package org.apache.ibatis.migration.operations;
 
 import java.io.PrintStream;
+import java.io.Reader;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Collections;
@@ -82,7 +83,9 @@ public final class DownOperation extends DatabaseOperation {
               hook.beforeEach(hookBindings);
             }
             println(printStream, Util.horizontalLine("Undoing: " + change.getFilename(), 80));
-            runner.runScript(migrationsLoader.getScriptReader(change, true));
+            try (Reader reader = migrationsLoader.getScriptReader(change, true)) {
+              runner.runScript(reader);
+            }
             if (changelogExists(con, option)) {
               deleteChange(con, change, option);
             } else {
