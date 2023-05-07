@@ -37,10 +37,10 @@ class BaseCommandTest {
   @Test
   void testNonexistentResource() throws Exception {
     String resource = "org/apache/ibatis/migration/commands/NoSuchFile.sql";
+    File src = Resources.getResourceAsFile(resource);
+    File dest = File.createTempFile("Out", ".sql");
+    dest.deleteOnExit();
     IOException e = assertThrows(IOException.class, () -> {
-      File src = Resources.getResourceAsFile(resource);
-      File dest = File.createTempFile("Out", ".sql");
-      dest.deleteOnExit();
       BaseCommand.copyTemplate(src, dest, null);
     });
     assertEquals(e.getMessage(), "Could not find resource " + resource);
@@ -51,9 +51,9 @@ class BaseCommandTest {
   void testNonexistentFileLinuxMac() throws Exception {
     String srcPath = TestUtil.getTempDir().getAbsolutePath() + FileSystems.getDefault().getSeparator()
         + "NoSuchFile.sql";
+    File dest = File.createTempFile("Out", ".sql");
+    dest.deleteOnExit();
     FileNotFoundException e = assertThrows(FileNotFoundException.class, () -> {
-      File dest = File.createTempFile("Out", ".sql");
-      dest.deleteOnExit();
       BaseCommand.copyTemplate(new File(srcPath), dest, null);
     });
     assertEquals(e.getMessage(), srcPath + " (No such file or directory)");
@@ -64,9 +64,9 @@ class BaseCommandTest {
   void testNonexistentFileWindows() throws Exception {
     String srcPath = TestUtil.getTempDir().getAbsolutePath() + FileSystems.getDefault().getSeparator()
         + "NoSuchFile.sql";
+    File dest = File.createTempFile("Out", ".sql");
+    dest.deleteOnExit();
     FileNotFoundException e = assertThrows(FileNotFoundException.class, () -> {
-      File dest = File.createTempFile("Out", ".sql");
-      dest.deleteOnExit();
       BaseCommand.copyTemplate(new File(srcPath), dest, null);
     });
     assertEquals(e.getMessage(), srcPath + " (The system cannot find the file specified)");
