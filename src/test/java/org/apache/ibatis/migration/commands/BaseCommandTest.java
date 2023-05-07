@@ -38,13 +38,7 @@ class BaseCommandTest {
   void testNonexistentResource() throws Exception {
     String resource = "org/apache/ibatis/migration/commands/NoSuchFile.sql";
     IOException e = assertThrows(IOException.class, () -> {
-      File src = Resources.getResourceAsFile(resource);
-      File dest = File.createTempFile("Out", ".sql");
-      try {
-        BaseCommand.copyTemplate(src, dest, null);
-      } finally {
-        dest.delete();
-      }
+      Resources.getResourceAsFile(resource);
     });
     assertEquals(e.getMessage(), "Could not find resource " + resource);
   }
@@ -54,13 +48,10 @@ class BaseCommandTest {
   void testNonexistentFileLinuxMac() throws Exception {
     String srcPath = TestUtil.getTempDir().getAbsolutePath() + FileSystems.getDefault().getSeparator()
         + "NoSuchFile.sql";
+    File dest = File.createTempFile("Out", ".sql");
+    dest.deleteOnExit();
     FileNotFoundException e = assertThrows(FileNotFoundException.class, () -> {
-      File dest = File.createTempFile("Out", ".sql");
-      try {
-        BaseCommand.copyTemplate(new File(srcPath), dest, null);
-      } finally {
-        dest.delete();
-      }
+      BaseCommand.copyTemplate(new File(srcPath), dest, null);
     });
     assertEquals(e.getMessage(), srcPath + " (No such file or directory)");
   }
@@ -70,13 +61,10 @@ class BaseCommandTest {
   void testNonexistentFileWindows() throws Exception {
     String srcPath = TestUtil.getTempDir().getAbsolutePath() + FileSystems.getDefault().getSeparator()
         + "NoSuchFile.sql";
+    File dest = File.createTempFile("Out", ".sql");
+    dest.deleteOnExit();
     FileNotFoundException e = assertThrows(FileNotFoundException.class, () -> {
-      File dest = File.createTempFile("Out", ".sql");
-      try {
-        BaseCommand.copyTemplate(new File(srcPath), dest, null);
-      } finally {
-        dest.delete();
-      }
+      BaseCommand.copyTemplate(new File(srcPath), dest, null);
     });
     assertEquals(e.getMessage(), srcPath + " (The system cannot find the file specified)");
   }
@@ -85,62 +73,50 @@ class BaseCommandTest {
   void testCopyResource() throws Exception {
     File src = Resources.getResourceAsFile("org/apache/ibatis/migration/commands/TestTemplate.sql");
     File dest = File.createTempFile("Out", ".sql");
-    try {
-      BaseCommand.copyTemplate(src, dest, null);
-      assertTrue(contentOf(dest).contains("// ${var}"));
-    } finally {
-      dest.delete();
-    }
+    dest.deleteOnExit();
+    BaseCommand.copyTemplate(src, dest, null);
+    assertTrue(contentOf(dest).contains("// ${var}"));
   }
 
   @Test
   void testCopyResourceWithVariables() throws Exception {
     File src = Resources.getResourceAsFile("org/apache/ibatis/migration/commands/TestTemplate.sql");
     File dest = File.createTempFile("Out", ".sql");
+    dest.deleteOnExit();
     Properties variables = new Properties();
     variables.put("var", "Some description");
-    try {
-      BaseCommand.copyTemplate(src, dest, variables);
-      assertTrue(contentOf(dest).contains("// Some description"));
-    } finally {
-      dest.delete();
-    }
+    BaseCommand.copyTemplate(src, dest, variables);
+    assertTrue(contentOf(dest).contains("// Some description"));
   }
 
   @Test
   void testExternalFile() throws Exception {
     File src = File.createTempFile("ExternalTemplate", ".sql");
+    src.deleteOnExit();
     try (PrintWriter writer = new PrintWriter(src)) {
       writer.println("// ${var}");
     }
 
     File dest = File.createTempFile("Out", ".sql");
-    try {
-      BaseCommand.copyTemplate(src, dest, null);
-      assertTrue(contentOf(dest).contains("// ${var}"));
-    } finally {
-      src.delete();
-      dest.delete();
-    }
+    dest.deleteOnExit();
+    BaseCommand.copyTemplate(src, dest, null);
+    assertTrue(contentOf(dest).contains("// ${var}"));
   }
 
   @Test
   void testExternalFileWithVariables() throws Exception {
     File src = File.createTempFile("ExternalTemplate", ".sql");
+    src.deleteOnExit();
     try (PrintWriter writer = new PrintWriter(src)) {
       writer.println("// ${var}");
     }
 
     File dest = File.createTempFile("Out", ".sql");
+    dest.deleteOnExit();
     Properties variables = new Properties();
     variables.put("var", "Some description");
-    try {
-      BaseCommand.copyTemplate(src, dest, variables);
-      assertTrue(contentOf(dest).contains("// Some description"));
-    } finally {
-      src.delete();
-      dest.delete();
-    }
+    BaseCommand.copyTemplate(src, dest, variables);
+    assertTrue(contentOf(dest).contains("// Some description"));
   }
 
   protected static String contentOf(File file) throws FileNotFoundException {

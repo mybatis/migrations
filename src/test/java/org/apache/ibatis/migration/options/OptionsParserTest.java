@@ -97,7 +97,7 @@ class OptionsParserTest {
   }
 
   private String valuedOption(Options option, String aValue) {
-    return option(option) + "=" + aValue;
+    return option(option) + '=' + aValue;
   }
 
   private String option(Options option) {
