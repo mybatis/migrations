@@ -37,11 +37,8 @@ class BaseCommandTest {
   @Test
   void testNonexistentResource() throws Exception {
     String resource = "org/apache/ibatis/migration/commands/NoSuchFile.sql";
-    File src = Resources.getResourceAsFile(resource);
-    File dest = File.createTempFile("Out", ".sql");
-    dest.deleteOnExit();
     IOException e = assertThrows(IOException.class, () -> {
-      BaseCommand.copyTemplate(src, dest, null);
+      Resources.getResourceAsFile(resource);
     });
     assertEquals(e.getMessage(), "Could not find resource " + resource);
   }
