@@ -170,18 +170,19 @@ public abstract class BaseCommand implements Command {
   }
 
   protected static void copyTemplate(File templateFile, File toFile, Properties variables) throws IOException {
-    copyTemplate(new FileReader(templateFile), toFile, variables);
+    try (FileReader reader = new FileReader(templateFile)) {
+      copyTemplate(reader, toFile, variables);
+    }
   }
 
   protected static void copyTemplate(Reader templateReader, File toFile, Properties variables) throws IOException {
     VariableReplacer replacer = new VariableReplacer(variables);
-    try (LineNumberReader reader = new LineNumberReader(templateReader)) {
-      try (PrintWriter writer = new PrintWriter(new FileWriter(toFile))) {
-        String line;
-        while ((line = reader.readLine()) != null) {
-          line = replacer.replace(line);
-          writer.println(line);
-        }
+    try (LineNumberReader reader = new LineNumberReader(templateReader);
+        PrintWriter writer = new PrintWriter(new FileWriter(toFile))) {
+      String line;
+      while ((line = reader.readLine()) != null) {
+        line = replacer.replace(line);
+        writer.println(line);
       }
     }
   }
