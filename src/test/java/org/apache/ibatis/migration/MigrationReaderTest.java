@@ -60,7 +60,7 @@ class MigrationReaderTest {
 
     String result = null;
     try (InputStream stream = strToInputStream(script);
-            MigrationReader migrationReader = new MigrationReader(stream, charset, false, null)) {
+        MigrationReader migrationReader = new MigrationReader(stream, charset, false, null)) {
       result = readAsString(migrationReader);
     }
 
