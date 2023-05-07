@@ -88,8 +88,7 @@ public class MigrationReader extends FilterReader {
     this(new FileInputStream(file), charset, undo, variables);
   }
 
-  public MigrationReader(InputStream inputStream, String charset, boolean undo, Properties variables)
-      throws IOException {
+  public MigrationReader(InputStream inputStream, String charset, boolean undo, Properties variables) {
     super(scriptFileReader(inputStream, charset));
     this.undo = undo;
     this.variables = variables;
