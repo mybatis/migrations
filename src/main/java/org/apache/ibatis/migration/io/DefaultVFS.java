@@ -180,10 +180,10 @@ public class DefaultVFS extends VFS {
   protected List<String> listResources(JarInputStream jar, String path) throws IOException {
     // Include the leading and trailing slash when matching names
     if (!path.startsWith("/")) {
-      path = "/" + path;
+      path = '/' + path;
     }
     if (!path.endsWith("/")) {
-      path = path + "/";
+      path = path + '/';
     }
 
     // Iterate over the entries and collect those that begin with the requested path
