@@ -76,16 +76,13 @@ class NewHookTest {
     // Copy hook script
     File hooksDir = new File(basePath, "hooks");
     hooksDir.mkdir();
-    FileInputStream srcStream = new FileInputStream(
-        Resources.getResourceAsFile("org/apache/ibatis/migration/hook/testdir/hooks/NewHook.js"));
-    FileOutputStream destStream = new FileOutputStream(Util.file(hooksDir, "NewHook.js"));
-    try {
+    try (
+        FileInputStream srcStream = new FileInputStream(
+            Resources.getResourceAsFile("org/apache/ibatis/migration/hook/testdir/hooks/NewHook.js"));
+        FileOutputStream destStream = new FileOutputStream(Util.file(hooksDir, "NewHook.js"))) {
       FileChannel srcChannel = srcStream.getChannel();
       FileChannel destChannel = destStream.getChannel();
       srcChannel.transferTo(0, srcChannel.size(), destChannel);
-    } finally {
-      srcStream.close();
-      destStream.close();
     }
     // Add hook settings
     File envFile = new File(basePath.getCanonicalPath() + File.separator + "environments", "development.properties");
