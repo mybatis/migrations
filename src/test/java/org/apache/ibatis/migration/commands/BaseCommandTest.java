@@ -110,9 +110,9 @@ class BaseCommandTest {
   @Test
   void testExternalFile() throws Exception {
     File src = File.createTempFile("ExternalTemplate", ".sql");
-    PrintWriter writer = new PrintWriter(src);
-    writer.println("// ${var}");
-    writer.close();
+    try (PrintWriter writer = new PrintWriter(src)) {
+      writer.println("// ${var}");
+    }
 
     File dest = File.createTempFile("Out", ".sql");
     try {
@@ -127,9 +127,9 @@ class BaseCommandTest {
   @Test
   void testExternalFileWithVariables() throws Exception {
     File src = File.createTempFile("ExternalTemplate", ".sql");
-    PrintWriter writer = new PrintWriter(src);
-    writer.println("// ${var}");
-    writer.close();
+    try (PrintWriter writer = new PrintWriter(src)) {
+      writer.println("// ${var}");
+    }
 
     File dest = File.createTempFile("Out", ".sql");
     Properties variables = new Properties();
