@@ -100,7 +100,7 @@ class MigrationHookTest {
     try (Connection con = TestUtil.getConnection(env); Statement stmt = con.createStatement()) {
       stmt.execute("delete from changes where id = 2");
       stmt.execute("drop table person");
-
+    }
       String output = SystemLambda.tapSystemOut(() -> {
         Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "pending"));
       });
@@ -115,7 +115,6 @@ class MigrationHookTest {
           "insert into worklog (str1, str2, str3) values ('GLOBALVAR', 'LOCALVAR1', 'LOCALVAR2')"));
       // after
       assertEquals(1, TestUtil.countStr(output, "METHOD_GLOBALVAR_LOCALVAR1_LOCALVAR2_ARG1_ARG2"));
-    }
   }
 
   private void down() throws Exception {
