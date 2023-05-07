@@ -59,8 +59,9 @@ class MigrationReaderTest {
     // @formatter:on
 
     String result = null;
-    try (InputStream stream = strToInputStream(script)) {
-      result = readAsString(new MigrationReader(stream, charset, false, null));
+    try (InputStream stream = strToInputStream(script);
+            MigrationReader migrationReader = new MigrationReader(stream, charset, false, null)) {
+      result = readAsString(migrationReader);
     }
 
     // @formatter:off
@@ -79,8 +80,9 @@ class MigrationReaderTest {
     // @formatter:on
 
     String result = null;
-    try (InputStream stream = strToInputStream(script)) {
-      result = readAsString(new MigrationReader(stream, charset, true, null));
+    try (InputStream stream = strToInputStream(script);
+        MigrationReader migrationReader = new MigrationReader(stream, charset, true, null)) {
+      result = readAsString(migrationReader);
     }
 
     // @formatter:off
@@ -99,8 +101,9 @@ class MigrationReaderTest {
     // @formatter:on
 
     String result = null;
-    try (InputStream stream = strToInputStream(script)) {
-      result = readAsString(new MigrationReader(stream, charset, true, null));
+    try (InputStream stream = strToInputStream(script);
+        MigrationReader migrationReader = new MigrationReader(stream, charset, true, null)) {
+      result = readAsString(migrationReader);
     }
 
     // @formatter:off
@@ -119,8 +122,9 @@ class MigrationReaderTest {
     // @formatter:on
 
     String result = null;
-    try (InputStream stream = strToInputStream(script)) {
-      result = readAsString(new MigrationReader(stream, charset, true, null));
+    try (InputStream stream = strToInputStream(script);
+        MigrationReader migrationReader = new MigrationReader(stream, charset, true, null)) {
+      result = readAsString(migrationReader);
     }
 
     // @formatter:off
@@ -140,8 +144,9 @@ class MigrationReaderTest {
     // @formatter:on
 
     String result = null;
-    try (InputStream stream = strToInputStream(script)) {
-      result = readAsString(new MigrationReader(stream, charset, true, null));
+    try (InputStream stream = strToInputStream(script);
+        MigrationReader migrationReader = new MigrationReader(stream, charset, true, null)) {
+      result = readAsString(migrationReader);
     }
 
     // @formatter:off
@@ -160,8 +165,9 @@ class MigrationReaderTest {
     // @formatter:on
 
     String result = null;
-    try (InputStream stream = strToInputStream(script)) {
-      result = readAsString(new MigrationReader(stream, charset, true, null));
+    try (InputStream stream = strToInputStream(script);
+        MigrationReader migrationReader = new MigrationReader(stream, charset, true, null)) {
+      result = readAsString(migrationReader);
     }
 
     assertEquals("", result);
@@ -175,8 +181,9 @@ class MigrationReaderTest {
     // @formatter:on
 
     String result = null;
-    try (InputStream stream = strToInputStream(script)) {
-      result = readAsString(new MigrationReader(stream, charset, false, null));
+    try (InputStream stream = strToInputStream(script);
+        MigrationReader migrationReader = new MigrationReader(stream, charset, false, null)) {
+      result = readAsString(migrationReader);
     }
 
     // @formatter:off
@@ -190,8 +197,9 @@ class MigrationReaderTest {
     String script = "-- ";
 
     String result = null;
-    try (InputStream stream = strToInputStream(script)) {
-      result = readAsString(new MigrationReader(stream, charset, false, null));
+    try (InputStream stream = strToInputStream(script);
+        MigrationReader migrationReader = new MigrationReader(stream, charset, false, null)) {
+      result = readAsString(migrationReader);
     }
 
     assertEquals("-- \n", result);
@@ -205,8 +213,9 @@ class MigrationReaderTest {
     // @formatter:on
 
     String result = null;
-    try (InputStream stream = strToInputStream(script)) {
-      result = readAsString(new MigrationReader(stream, charset, true, null));
+    try (InputStream stream = strToInputStream(script);
+        MigrationReader migrationReader = new MigrationReader(stream, charset, true, null)) {
+      result = readAsString(migrationReader);
     }
 
     assertEquals("", result);
@@ -217,8 +226,9 @@ class MigrationReaderTest {
     String script = "-- ";
 
     String result = null;
-    try (InputStream stream = strToInputStream(script)) {
-      result = readAsString(new MigrationReader(stream, charset, true, null));
+    try (InputStream stream = strToInputStream(script);
+        MigrationReader migrationReader = new MigrationReader(stream, charset, true, null)) {
+      result = readAsString(migrationReader);
     }
 
     assertEquals("", result);
@@ -236,8 +246,9 @@ class MigrationReaderTest {
     // @formatter:on
 
     String result = null;
-    try (InputStream stream = strToInputStream(script)) {
-      result = readAsString(new MigrationReader(stream, charset, false, null));
+    try (InputStream stream = strToInputStream(script);
+        MigrationReader migrationReader = new MigrationReader(stream, charset, false, null)) {
+      result = readAsString(migrationReader);
     }
 
     // @formatter:off
@@ -258,8 +269,9 @@ class MigrationReaderTest {
     // @formatter:on
 
     String result = null;
-    try (InputStream stream = strToInputStream(script)) {
-      result = readAsString(new MigrationReader(stream, charset, true, null));
+    try (InputStream stream = strToInputStream(script);
+        MigrationReader migrationReader = new MigrationReader(stream, charset, true, null)) {
+      result = readAsString(migrationReader);
     }
 
     // @formatter:off
@@ -281,8 +293,9 @@ class MigrationReaderTest {
     // @formatter:on
 
     String result = null;
-    try (InputStream stream = strToInputStream(script)) {
-      result = readAsString(new MigrationReader(stream, charset, true, null));
+    try (InputStream stream = strToInputStream(script);
+        MigrationReader migrationReader = new MigrationReader(stream, charset, true, null)) {
+      result = readAsString(migrationReader);
     }
 
     // @formatter:off
@@ -309,8 +322,9 @@ class MigrationReaderTest {
     vars.put("c", "CCC");
 
     String result = null;
-    try (InputStream stream = strToInputStream(script)) {
-      result = readAsString(new MigrationReader(stream, charset, false, vars));
+    try (InputStream stream = strToInputStream(script);
+        MigrationReader migrationReader = new MigrationReader(stream, charset, false, vars)) {
+      result = readAsString(migrationReader);
     }
 
     // @formatter:off
@@ -336,8 +350,9 @@ class MigrationReaderTest {
     vars.put("c", "CCC");
 
     String result = null;
-    try (InputStream stream = strToInputStream(script)) {
-      result = readAsString(new MigrationReader(stream, charset, true, vars));
+    try (InputStream stream = strToInputStream(script);
+        MigrationReader migrationReader = new MigrationReader(stream, charset, true, vars)) {
+      result = readAsString(migrationReader);
     }
 
     // @formatter:off
@@ -364,8 +379,9 @@ class MigrationReaderTest {
       // @formatter:on
 
       String result = null;
-      try (InputStream stream = strToInputStream(script)) {
-        result = readAsString(new MigrationReader(stream, charset, false, null));
+      try (InputStream stream = strToInputStream(script);
+          MigrationReader migrationReader = new MigrationReader(stream, charset, false, null)) {
+        result = readAsString(migrationReader);
       }
 
       // @formatter:off
@@ -393,8 +409,9 @@ class MigrationReaderTest {
       // @formatter:on
 
       String result = null;
-      try (InputStream stream = strToInputStream(script)) {
-        result = readAsString(new MigrationReader(stream, charset, true, null));
+      try (InputStream stream = strToInputStream(script);
+          MigrationReader migrationReader = new MigrationReader(stream, charset, true, null)) {
+        result = readAsString(migrationReader);
       }
 
       // @formatter:off
@@ -410,7 +427,6 @@ class MigrationReaderTest {
   @Test
   void shouldRespectSpecifiedOffsetAndLength() throws Exception {
     String script = "abcdefghij";
-    String result = null;
     try (InputStream stream = strToInputStream(script);
         MigrationReader reader = new MigrationReader(stream, charset, false, null)) {
       char[] cbuf = new char[5];
@@ -428,7 +444,6 @@ class MigrationReaderTest {
         + "undo part\n";
     // @formatter:on
 
-    String result = null;
     try (InputStream stream = strToInputStream(script);
         MigrationReader reader = new MigrationReader(stream, charset, false, null)) {
       StringBuilder buffer = new StringBuilder();
@@ -449,8 +464,9 @@ class MigrationReaderTest {
     // @formatter:on
 
     String result = null;
-    try (InputStream stream = strToInputStream(script)) {
-      result = readAsString(new MigrationReader(stream, charset, false, null));
+    try (InputStream stream = strToInputStream(script);
+        MigrationReader migrationReader = new MigrationReader(stream, charset, false, null)) {
+      result = readAsString(migrationReader);
     }
 
     // @formatter:off
