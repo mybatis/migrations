@@ -58,7 +58,10 @@ class MigrationReaderTest {
         + "undo part\n";
     // @formatter:on
 
-    String result = readAsString(new MigrationReader(strToInputStream(script), charset, false, null));
+    String result = null;
+    try (InputStream stream = strToInputStream(script)) {
+      result = readAsString(new MigrationReader(stream, charset, false, null));
+    }
 
     // @formatter:off
     assertEquals("-- comment\n"
@@ -75,7 +78,10 @@ class MigrationReaderTest {
         + "undo part\n";
     // @formatter:on
 
-    String result = readAsString(new MigrationReader(strToInputStream(script), charset, true, null));
+    String result = null;
+    try (InputStream stream = strToInputStream(script)) {
+      result = readAsString(new MigrationReader(stream, charset, true, null));
+    }
 
     // @formatter:off
     assertEquals("-- @UNDO\n"
@@ -92,7 +98,10 @@ class MigrationReaderTest {
         + "undo part";
     // @formatter:on
 
-    String result = readAsString(new MigrationReader(strToInputStream(script), charset, true, null));
+    String result = null;
+    try (InputStream stream = strToInputStream(script)) {
+      result = readAsString(new MigrationReader(stream, charset, true, null));
+    }
 
     // @formatter:off
     assertEquals("-- @UNDO\n"
@@ -109,7 +118,10 @@ class MigrationReaderTest {
         + "undo part\n";
     // @formatter:on
 
-    String result = readAsString(new MigrationReader(strToInputStream(script), charset, true, null));
+    String result = null;
+    try (InputStream stream = strToInputStream(script)) {
+      result = readAsString(new MigrationReader(stream, charset, true, null));
+    }
 
     // @formatter:off
     assertEquals(" \t --   \t@UNDO  a \n"
@@ -127,7 +139,10 @@ class MigrationReaderTest {
         + "undo part\n";
     // @formatter:on
 
-    String result = readAsString(new MigrationReader(strToInputStream(script), charset, true, null));
+    String result = null;
+    try (InputStream stream = strToInputStream(script)) {
+      result = readAsString(new MigrationReader(stream, charset, true, null));
+    }
 
     // @formatter:off
     assertEquals("--  b @UNDO\n"
@@ -144,7 +159,11 @@ class MigrationReaderTest {
         + "undo part\n";
     // @formatter:on
 
-    String result = readAsString(new MigrationReader(strToInputStream(script), charset, true, null));
+    String result = null;
+    try (InputStream stream = strToInputStream(script)) {
+      result = readAsString(new MigrationReader(stream, charset, true, null));
+    }
+
     assertEquals("", result);
   }
 
@@ -155,7 +174,10 @@ class MigrationReaderTest {
         + "do part\n";
     // @formatter:on
 
-    String result = readAsString(new MigrationReader(strToInputStream(script), charset, false, null));
+    String result = null;
+    try (InputStream stream = strToInputStream(script)) {
+      result = readAsString(new MigrationReader(stream, charset, false, null));
+    }
 
     // @formatter:off
     assertEquals("-- comment\n"
@@ -166,7 +188,12 @@ class MigrationReaderTest {
   @Test
   void shouldReturnAllAsDoIfUndoCommentNotFound_NoEndBreak() throws Exception {
     String script = "-- ";
-    String result = readAsString(new MigrationReader(strToInputStream(script), charset, false, null));
+
+    String result = null;
+    try (InputStream stream = strToInputStream(script)) {
+      result = readAsString(new MigrationReader(stream, charset, false, null));
+    }
+
     assertEquals("-- \n", result);
   }
 
@@ -177,14 +204,23 @@ class MigrationReaderTest {
         + "do part\n";
     // @formatter:on
 
-    String result = readAsString(new MigrationReader(strToInputStream(script), charset, true, null));
+    String result = null;
+    try (InputStream stream = strToInputStream(script)) {
+      result = readAsString(new MigrationReader(stream, charset, true, null));
+    }
+
     assertEquals("", result);
   }
 
   @Test
   void shouldReturnEmptyUndoIfUndoCommentNotFound_NoEndBreak() throws Exception {
     String script = "-- ";
-    String result = readAsString(new MigrationReader(strToInputStream(script), charset, true, null));
+
+    String result = null;
+    try (InputStream stream = strToInputStream(script)) {
+      result = readAsString(new MigrationReader(stream, charset, true, null));
+    }
+
     assertEquals("", result);
   }
 
@@ -199,7 +235,10 @@ class MigrationReaderTest {
         + "undo part\n";
     // @formatter:on
 
-    String result = readAsString(new MigrationReader(strToInputStream(script), charset, false, null));
+    String result = null;
+    try (InputStream stream = strToInputStream(script)) {
+      result = readAsString(new MigrationReader(stream, charset, false, null));
+    }
 
     // @formatter:off
     assertEquals("--   comment\n"
@@ -218,7 +257,10 @@ class MigrationReaderTest {
         + "undo part\n";
     // @formatter:on
 
-    String result = readAsString(new MigrationReader(strToInputStream(script), charset, true, null));
+    String result = null;
+    try (InputStream stream = strToInputStream(script)) {
+      result = readAsString(new MigrationReader(stream, charset, true, null));
+    }
 
     // @formatter:off
     assertEquals("-- @UNDO\n"
@@ -238,7 +280,10 @@ class MigrationReaderTest {
         + "second undo part\n";
     // @formatter:on
 
-    String result = readAsString(new MigrationReader(strToInputStream(script), charset, true, null));
+    String result = null;
+    try (InputStream stream = strToInputStream(script)) {
+      result = readAsString(new MigrationReader(stream, charset, true, null));
+    }
 
     // @formatter:off
     assertEquals("-- @UNDO\n"
@@ -262,7 +307,11 @@ class MigrationReaderTest {
     vars.put("a", "AAA");
     vars.put("b", "BBB");
     vars.put("c", "CCC");
-    String result = readAsString(new MigrationReader(strToInputStream(script), charset, false, vars));
+
+    String result = null;
+    try (InputStream stream = strToInputStream(script)) {
+      result = readAsString(new MigrationReader(stream, charset, false, vars));
+    }
 
     // @formatter:off
     assertEquals("do AAA partBBB \n"
@@ -285,7 +334,11 @@ class MigrationReaderTest {
     vars.put("a", "AAA");
     vars.put("b", "BBB");
     vars.put("c", "CCC");
-    String result = readAsString(new MigrationReader(strToInputStream(script), charset, true, vars));
+
+    String result = null;
+    try (InputStream stream = strToInputStream(script)) {
+      result = readAsString(new MigrationReader(stream, charset, true, vars));
+    }
 
     // @formatter:off
     assertEquals("-- @UNDO CCC\n"
@@ -310,7 +363,10 @@ class MigrationReaderTest {
           + "undo part 2\n";
       // @formatter:on
 
-      String result = readAsString(new MigrationReader(strToInputStream(script), charset, false, null));
+      String result = null;
+      try (InputStream stream = strToInputStream(script)) {
+        result = readAsString(new MigrationReader(stream, charset, false, null));
+      }
 
       // @formatter:off
       assertEquals("do part 1\r\n"
@@ -336,7 +392,10 @@ class MigrationReaderTest {
           + "undo part 2\r\n";
       // @formatter:on
 
-      String result = readAsString(new MigrationReader(strToInputStream(script), charset, true, null));
+      String result = null;
+      try (InputStream stream = strToInputStream(script)) {
+        result = readAsString(new MigrationReader(stream, charset, true, null));
+      }
 
       // @formatter:off
       assertEquals("-- @UNDO\r"
@@ -351,7 +410,9 @@ class MigrationReaderTest {
   @Test
   void shouldRespectSpecifiedOffsetAndLength() throws Exception {
     String script = "abcdefghij";
-    try (MigrationReader reader = new MigrationReader(strToInputStream(script), charset, false, null)) {
+    String result = null;
+    try (InputStream stream = strToInputStream(script);
+        MigrationReader reader = new MigrationReader(stream, charset, false, null)) {
       char[] cbuf = new char[5];
       int read = reader.read(cbuf, 1, 3);
       assertEquals(3, read);
@@ -367,7 +428,9 @@ class MigrationReaderTest {
         + "undo part\n";
     // @formatter:on
 
-    try (MigrationReader reader = new MigrationReader(strToInputStream(script), charset, false, null)) {
+    String result = null;
+    try (InputStream stream = strToInputStream(script);
+        MigrationReader reader = new MigrationReader(stream, charset, false, null)) {
       StringBuilder buffer = new StringBuilder();
       char[] cbuf = new char[30];
       int res;
@@ -385,7 +448,10 @@ class MigrationReaderTest {
         + "abc\n";
     // @formatter:on
 
-    String result = readAsString(new MigrationReader(strToInputStream(script), charset, false, null));
+    String result = null;
+    try (InputStream stream = strToInputStream(script)) {
+      result = readAsString(new MigrationReader(stream, charset, false, null));
+    }
 
     // @formatter:off
     assertEquals("-- //@DELIMITER ~\n"
