@@ -69,8 +69,6 @@ public final class UpOperation extends DatabaseOperation {
       int stepCount = 0;
 
       Map<String, Object> hookBindings = new HashMap<>();
-      Reader scriptReader = null;
-      Reader onAbortScriptReader = null;
       ScriptRunner runner = getScriptRunner(con, option, printStream);
       try {
         for (Change change : migrations) {
@@ -85,8 +83,9 @@ public final class UpOperation extends DatabaseOperation {
               hook.beforeEach(hookBindings);
             }
             println(printStream, Util.horizontalLine("Applying: " + change.getFilename(), 80));
-            scriptReader = migrationsLoader.getScriptReader(change, false);
-            runner.runScript(scriptReader);
+            try (Reader scriptReader = migrationsLoader.getScriptReader(change, false)) {
+              runner.runScript(scriptReader);
+            }
             insertChangelog(change, con, option);
             println(printStream);
             if (hook != null) {
@@ -107,21 +106,15 @@ public final class UpOperation extends DatabaseOperation {
         println(printStream, skippedOrMissing);
         return this;
       } catch (Exception e) {
-        onAbortScriptReader = migrationsLoader.getOnAbortReader();
-        if (onAbortScriptReader != null) {
-          println(printStream);
-          println(printStream, Util.horizontalLine("Executing onabort.sql script.", 80));
-          runner.runScript(onAbortScriptReader);
-          println(printStream);
+        try (Reader onAbortScriptReader = migrationsLoader.getOnAbortReader()) {
+          if (onAbortScriptReader != null) {
+            println(printStream);
+            println(printStream, Util.horizontalLine("Executing onabort.sql script.", 80));
+            runner.runScript(onAbortScriptReader);
+            println(printStream);
+          }
         }
         throw e;
-      } finally {
-        if (scriptReader != null) {
-          scriptReader.close();
-        }
-        if (onAbortScriptReader != null) {
-          onAbortScriptReader.close();
-        }
       }
     } catch (Throwable e) {
       while (e instanceof MigrationException && e.getCause() != null) {

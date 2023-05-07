@@ -175,6 +175,7 @@
         <configuration>
           <excludes combine.children="append">
             <exclude>**/template_*</exclude>
+            <exclude>**/README</exclude>
           </excludes>
         </configuration>
       </plugin>
