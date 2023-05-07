@@ -42,7 +42,7 @@ public class MigrationReader extends FilterReader {
 
   private char previousChar;
 
-  private int undoIndex = 0;
+  private int undoIndex;
 
   private int afterCommentPrefixIndex;
 
