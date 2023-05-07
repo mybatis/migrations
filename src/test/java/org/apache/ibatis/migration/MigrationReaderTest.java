@@ -475,19 +475,17 @@ class MigrationReaderTest {
     // @formatter:on
   }
 
+  // Closed by callers
   private String readAsString(Reader reader) throws IOException {
-    try {
-      StringBuilder buffer = new StringBuilder();
-      int res;
-      while ((res = reader.read()) != -1) {
-        buffer.append((char) res);
-      }
-      return buffer.toString();
-    } finally {
-      reader.close();
+    StringBuilder buffer = new StringBuilder();
+    int res;
+    while ((res = reader.read()) != -1) {
+      buffer.append((char) res);
     }
+    return buffer.toString();
   }
 
+  // Closed by callers
   private InputStream strToInputStream(String str) {
     return new ByteArrayInputStream(str.getBytes(StandardCharsets.UTF_8));
   }

@@ -102,7 +102,10 @@ public class Jsr223HookScript implements HookScript {
     bindings.putAll(bindingMap);
     try {
       printStream.println(Util.horizontalLine("Applying JSR-223 hook : " + scriptFile.getName(), 80));
-      engine.eval(new InputStreamReader(new FileInputStream(scriptFile), Charset.forName(charset)));
+      try (
+          InputStreamReader stream = new InputStreamReader(new FileInputStream(scriptFile), Charset.forName(charset))) {
+        engine.eval(stream);
+      }
       if (functionName != null || objectName != null && methodName != null) {
         Invocable invocable = (Invocable) engine;
         if (functionName != null) {

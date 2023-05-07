@@ -1,5 +1,5 @@
 /*
- *    Copyright 2010-2022 the original author or authors.
+ *    Copyright 2010-2023 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -53,7 +53,6 @@ public final class PendingOperation extends DatabaseOperation {
       int stepCount = 0;
       Map<String, Object> hookBindings = new HashMap<>();
       println(printStream, "WARNING: Running pending migrations out of order can create unexpected results.");
-      Reader scriptReader = null;
       try {
         ScriptRunner runner = getScriptRunner(con, option, printStream);
         for (Change change : pending) {
@@ -67,8 +66,9 @@ public final class PendingOperation extends DatabaseOperation {
             hook.beforeEach(hookBindings);
           }
           println(printStream, Util.horizontalLine("Applying: " + change.getFilename(), 80));
-          scriptReader = migrationsLoader.getScriptReader(change, false);
-          runner.runScript(scriptReader);
+          try (Reader scriptReader = migrationsLoader.getScriptReader(change, false)) {
+            runner.runScript(scriptReader);
+          }
           insertChangelog(change, con, option);
           println(printStream);
           if (hook != null) {
@@ -85,10 +85,6 @@ public final class PendingOperation extends DatabaseOperation {
         return this;
       } catch (Exception e) {
         throw new MigrationException("Error executing command.  Cause: " + e, e);
-      } finally {
-        if (scriptReader != null) {
-          scriptReader.close();
-        }
       }
     } catch (Throwable e) {
       while (e instanceof MigrationException && e.getCause() != null) {
