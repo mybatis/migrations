@@ -101,20 +101,20 @@ class MigrationHookTest {
       stmt.execute("delete from changes where id = 2");
       stmt.execute("drop table person");
     }
-      String output = SystemLambda.tapSystemOut(() -> {
-        Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "pending"));
-      });
-      assertTrue(output.contains("SUCCESS"));
-      // before
-      assertEquals(1, TestUtil.countStr(output, "HELLO_1"));
-      assertEquals(1, TestUtil.countStr(output, "Applying: 002_create_person.sql"));
-      // before each
-      assertEquals(1, TestUtil.countStr(output, "FUNCTION_GLOBALVAR_LOCALVAR1_LOCALVAR2_ARG1_ARG2"));
-      // after each
-      assertEquals(1, TestUtil.countStr(output,
-          "insert into worklog (str1, str2, str3) values ('GLOBALVAR', 'LOCALVAR1', 'LOCALVAR2')"));
-      // after
-      assertEquals(1, TestUtil.countStr(output, "METHOD_GLOBALVAR_LOCALVAR1_LOCALVAR2_ARG1_ARG2"));
+    String output = SystemLambda.tapSystemOut(() -> {
+      Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "pending"));
+    });
+    assertTrue(output.contains("SUCCESS"));
+    // before
+    assertEquals(1, TestUtil.countStr(output, "HELLO_1"));
+    assertEquals(1, TestUtil.countStr(output, "Applying: 002_create_person.sql"));
+    // before each
+    assertEquals(1, TestUtil.countStr(output, "FUNCTION_GLOBALVAR_LOCALVAR1_LOCALVAR2_ARG1_ARG2"));
+    // after each
+    assertEquals(1, TestUtil.countStr(output,
+        "insert into worklog (str1, str2, str3) values ('GLOBALVAR', 'LOCALVAR1', 'LOCALVAR2')"));
+    // after
+    assertEquals(1, TestUtil.countStr(output, "METHOD_GLOBALVAR_LOCALVAR1_LOCALVAR2_ARG1_ARG2"));
   }
 
   private void down() throws Exception {
