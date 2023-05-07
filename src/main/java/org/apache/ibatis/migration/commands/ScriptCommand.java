@@ -98,11 +98,12 @@ public final class ScriptCommand extends BaseCommand {
             printStream.println();
           }
           printStream.println("-- " + change.getFilename());
-          Reader migrationReader = getMigrationLoader().getScriptReader(change, undo);
-          char[] cbuf = new char[1024];
-          int l;
-          while ((l = migrationReader.read(cbuf)) > -1) {
-            printStream.print(l == cbuf.length ? cbuf : Arrays.copyOf(cbuf, l));
+          try (Reader migrationReader = getMigrationLoader().getScriptReader(change, undo)) {
+              char[] cbuf = new char[1024];
+              int l;
+              while ((l = migrationReader.read(cbuf)) > -1) {
+                  printStream.print(l == cbuf.length ? cbuf : Arrays.copyOf(cbuf, l));
+              }
           }
           count++;
           printStream.println();
