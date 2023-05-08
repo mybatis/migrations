@@ -44,7 +44,7 @@ import org.apache.ibatis.migration.utils.TestUtil;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-public class MigratorTest {
+class MigratorTest {
 
   private static File dir;
 
