@@ -39,7 +39,7 @@ class MigrationHookTest {
   private static Properties env;
 
   @BeforeAll
-  public static void init() throws Exception {
+  static void init() throws Exception {
     dir = Resources.getResourceAsFile("org/apache/ibatis/migration/hook/testdir");
     env = Resources
         .getResourceAsProperties("org/apache/ibatis/migration/hook/testdir/environments/development.properties");

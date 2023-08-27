@@ -44,14 +44,14 @@ import org.apache.ibatis.migration.utils.TestUtil;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-public class MigratorTest {
+class MigratorTest {
 
   private static File dir;
 
   private static Properties env;
 
   @BeforeAll
-  public static void setup() throws Exception {
+  static void setup() throws Exception {
     dir = Resources.getResourceAsFile("org/apache/ibatis/migration/example");
     env = Resources.getResourceAsProperties("org/apache/ibatis/migration/example/environments/development.properties");
   }

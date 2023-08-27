@@ -33,14 +33,14 @@ import org.apache.ibatis.migration.utils.TestUtil;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-public class ScriptHookTest {
+class ScriptHookTest {
 
   private static File dir;
 
   private static final String separator = System.lineSeparator();
 
   @BeforeAll
-  public static void init() throws Exception {
+  static void init() throws Exception {
     dir = Resources.getResourceAsFile("org/apache/ibatis/migration/script_hook/testdir");
   }
 

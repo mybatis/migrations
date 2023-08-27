@@ -60,7 +60,7 @@ class RuntimeMigrationTest {
   private MigrationLoader migrationsLoaderFromOtherBranch;
 
   @BeforeEach
-  public void setup() {
+  void setup() {
     dbOption = new DatabaseOperationOption();
     out = new ByteArrayOutputStream();
     connectionProvider = new JdbcConnectionProvider(driver, url, username, password);
@@ -70,7 +70,7 @@ class RuntimeMigrationTest {
   }
 
   @AfterEach
-  public void tearDown() throws Exception {
+  void tearDown() throws Exception {
     runSql(connectionProvider, "shutdown");
   }
 
