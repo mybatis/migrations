@@ -41,7 +41,7 @@
 
   <scm>
     <url>http://github.com/mybatis/migrations</url>
-    <connection>scm:git:ssh://github.com/mybatis/migrations.git</connection>
+    <connection>scm:git:ssh://git@github.com/mybatis/migrations.git</connection>
     <developerConnection>scm:git:ssh://git@github.com/mybatis/migrations.git</developerConnection>
     <tag>HEAD</tag>
   </scm>
@@ -55,9 +55,9 @@
   </ciManagement>
   <distributionManagement>
     <site>
-      <id>gh-pages</id>
+      <id>gh-pages-scm</id>
       <name>Mybatis GitHub Pages</name>
-      <url>git:ssh://git@github.com/mybatis/migrations.git?gh-pages#</url>
+      <url>scm:git:ssh://git@github.com/mybatis/migrations.git</url>
     </site>
   </distributionManagement>
 
@@ -173,10 +173,14 @@
         <groupId>com.mycila</groupId>
         <artifactId>license-maven-plugin</artifactId>
         <configuration>
-          <excludes combine.children="append">
-            <exclude>**/template_*</exclude>
-            <exclude>**/README</exclude>
-          </excludes>
+          <licenseSets>
+            <licenseSet>
+              <excludes combine.children="append">
+                <exclude>**/README</exclude>
+                <exclude>**/template_README</exclude>
+              </excludes>
+            </licenseSet>
+          </licenseSets>
         </configuration>
       </plugin>
     </plugins>
