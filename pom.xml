@@ -176,8 +176,8 @@
           <licenseSets>
             <licenseSet>
               <excludes combine.children="append">
-                <exclude>**/template_README</exclude>
                 <exclude>**/README</exclude>
+                <exclude>**/template_README</exclude>
               </excludes>
             </licenseSet>
           </licenseSets>
