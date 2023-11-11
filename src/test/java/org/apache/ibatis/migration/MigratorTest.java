@@ -42,8 +42,12 @@ import java.util.TreeSet;
 import org.apache.ibatis.migration.io.Resources;
 import org.apache.ibatis.migration.utils.TestUtil;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 
+@TestMethodOrder(OrderAnnotation.class)
 class MigratorTest {
 
   private static File dir;
@@ -57,38 +61,8 @@ class MigratorTest {
   }
 
   @Test
-  void shouldRunThroughFullMigrationUseCaseInOneTestToEnsureOrder() throws Throwable {
-    // Due to the nature of schema migrations, these tests must be run in order,
-    // which is why they're executed from this single test. Perhaps there's a better way.
-
-    testBootstrapCommand();
-    testStatusContainsNoPendingEntriesUsingStatusShorthand();
-    testUpCommandWithSpecifiedSteps();
-
-    assertAuthorEmailContainsPlaceholder();
-
-    testStatusContainsNoPendingMigrations();
-    testDownCommandGiven2Steps();
-    testStatusContainsPendingMigrations();
-
-    testRedoCommand();
-
-    testDoPendingScriptCommand();
-
-    testVersionCommand();
-    testStatusContainsNoPendingMigrations();
-    testSkippedScript();
-    testMissingScript();
-    testDownCommand();
-    testStatusContainsPendingMigrations();
-    testPendingCommand();
-    testStatusContainsNoPendingMigrations();
-    testHelpCommand();
-    testDoScriptCommand();
-    testUndoScriptCommand();
-  }
-
-  private void testBootstrapCommand() throws Exception {
+  @Order(1)
+  void testBootstrapCommand() throws Exception {
     String output = SystemLambda.tapSystemOut(() -> {
       Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "bootstrap", "--env=development"));
     });
@@ -96,7 +70,9 @@ class MigratorTest {
     assertTrue(output.contains("-- // Bootstrap.sql"));
   }
 
-  private void testStatusContainsNoPendingEntriesUsingStatusShorthand() throws Exception {
+  @Test
+  @Order(2)
+  void testStatusContainsNoPendingEntriesUsingStatusShorthand() throws Exception {
     String output = SystemLambda.tapSystemOut(() -> {
       Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "sta"));
     });
@@ -104,14 +80,18 @@ class MigratorTest {
     assertTrue(output.contains("...pending..."));
   }
 
-  private void testUpCommandWithSpecifiedSteps() throws Exception {
+  @Test
+  @Order(3)
+  void testUpCommandWithSpecifiedSteps() throws Exception {
     String output = SystemLambda.tapSystemOut(() -> {
       Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "up", "3000"));
     });
     assertFalse(output.contains("FAILURE"));
   }
 
-  private void assertAuthorEmailContainsPlaceholder() throws Exception {
+  @Test
+  @Order(4)
+  void assertAuthorEmailContainsPlaceholder() throws Exception {
     try (Connection conn = TestUtil.getConnection(env); Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery("select EMAIL from author where id = 1")) {
       assertTrue(rs.next());
@@ -119,76 +99,20 @@ class MigratorTest {
     }
   }
 
-  private void testDownCommandGiven2Steps() throws Exception {
+  @Test
+  @Order(5)
+  void testDownCommandGiven2Steps() throws Exception {
+    testStatusContainsNoPendingMigrations();
     String output = SystemLambda.tapSystemOut(() -> {
       Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "down", "2"));
     });
     assertFalse(output.contains("FAILURE"));
+    testStatusContainsPendingMigrations();
   }
 
-  private void testDoPendingScriptCommand() throws Exception {
-    String output = SystemLambda.tapSystemOut(() -> {
-      Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "script", "pending"));
-    });
-    assertTrue(output.contains("INSERT"));
-    assertTrue(output.contains("CHANGELOG"));
-    assertFalse(output.contains("-- @UNDO"));
-
-    output = SystemLambda.tapSystemOut(() -> {
-      Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "script", "pending_undo"));
-    });
-    assertTrue(output.contains("DELETE"));
-    assertTrue(output.contains("CHANGELOG"));
-    assertTrue(output.contains("-- @UNDO"));
-  }
-
-  private void testVersionCommand() throws Exception {
-    String output = SystemLambda.tapSystemOut(() -> {
-      Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "version", "20080827200217"));
-    });
-    assertFalse(output.contains("FAILURE"));
-  }
-
-  private void testSkippedScript() throws Exception {
-    File skipped = new File(dir + File.separator + "scripts", "20080827200215_skipped_migration.sql");
-    assertTrue(skipped.createNewFile());
-    try {
-      String output = SystemLambda.tapSystemOut(() -> {
-        Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "up"));
-      });
-      assertFalse(output.contains("FAILURE"));
-      assertEquals(1, TestUtil.countStr(output, "WARNING"));
-      assertTrue(output.contains(
-          "WARNING: Migration script '20080827200215_skipped_migration.sql' was not applied to the database."));
-    } finally {
-      skipped.delete();
-    }
-  }
-
-  private void testMissingScript() throws Exception {
-    Path original = Paths.get(dir + File.separator + "scripts", "20080827200216_create_procs.sql");
-    Path renamed = Paths.get(dir + File.separator + "scripts", "20080827200216_create_procs._sql");
-    assertEquals(renamed, Files.move(original, renamed, StandardCopyOption.REPLACE_EXISTING));
-    try {
-      String output = SystemLambda.tapSystemOut(() -> {
-        Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "up"));
-      });
-      assertFalse(output.contains("FAILURE"), "Output contains: \n" + output);
-      assertTrue(output.contains("WARNING: Missing migration script. id='20080827200216', description='create procs'."),
-          "Output contains: \n" + output);
-    } finally {
-      assertEquals(original, Files.move(renamed, original, StandardCopyOption.REPLACE_EXISTING));
-    }
-  }
-
-  private void testDownCommand() throws Exception {
-    String output = SystemLambda.tapSystemOut(() -> {
-      Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "down"));
-    });
-    assertFalse(output.contains("FAILURE"));
-  }
-
-  private void testRedoCommand() throws Exception {
+  @Test
+  @Order(6)
+  void testRedoCommand() throws Exception {
     String output = SystemLambda.tapSystemOut(() -> {
       Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "status"));
     });
@@ -231,30 +155,93 @@ class MigratorTest {
     assertTrue(output.contains("20080827200216    ...pending..."));
   }
 
-  private void testStatusContainsPendingMigrations() throws Exception {
+  @Test
+  @Order(7)
+  void testDoPendingScriptCommand() throws Exception {
     String output = SystemLambda.tapSystemOut(() -> {
-      Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "status"));
+      Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "script", "pending"));
     });
-    assertFalse(output.contains("FAILURE"));
-    assertTrue(output.contains("...pending..."));
+    assertTrue(output.contains("INSERT"));
+    assertTrue(output.contains("CHANGELOG"));
+    assertFalse(output.contains("-- @UNDO"));
+
+    output = SystemLambda.tapSystemOut(() -> {
+      Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "script", "pending_undo"));
+    });
+    assertTrue(output.contains("DELETE"));
+    assertTrue(output.contains("CHANGELOG"));
+    assertTrue(output.contains("-- @UNDO"));
   }
 
-  private void testPendingCommand() throws Exception {
+  @Test
+  @Order(8)
+  void testVersionCommand() throws Exception {
+    String output = SystemLambda.tapSystemOut(() -> {
+      Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "version", "20080827200217"));
+    });
+    assertFalse(output.contains("FAILURE"));
+  }
+
+  @Test
+  @Order(9)
+  void testSkippedScript() throws Exception {
+    testStatusContainsNoPendingMigrations();
+    File skipped = new File(dir + File.separator + "scripts", "20080827200215_skipped_migration.sql");
+    assertTrue(skipped.createNewFile());
+    try {
+      String output = SystemLambda.tapSystemOut(() -> {
+        Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "up"));
+      });
+      assertFalse(output.contains("FAILURE"));
+      assertEquals(1, TestUtil.countStr(output, "WARNING"));
+      assertTrue(output.contains(
+          "WARNING: Migration script '20080827200215_skipped_migration.sql' was not applied to the database."));
+    } finally {
+      skipped.delete();
+    }
+  }
+
+  @Test
+  @Order(10)
+  void testMissingScript() throws Exception {
+    Path original = Paths.get(dir + File.separator + "scripts", "20080827200216_create_procs.sql");
+    Path renamed = Paths.get(dir + File.separator + "scripts", "20080827200216_create_procs._sql");
+    assertEquals(renamed, Files.move(original, renamed, StandardCopyOption.REPLACE_EXISTING));
+    try {
+      String output = SystemLambda.tapSystemOut(() -> {
+        Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "up"));
+      });
+      assertFalse(output.contains("FAILURE"), "Output contains: \n" + output);
+      assertTrue(output.contains("WARNING: Missing migration script. id='20080827200216', description='create procs'."),
+          "Output contains: \n" + output);
+    } finally {
+      assertEquals(original, Files.move(renamed, original, StandardCopyOption.REPLACE_EXISTING));
+    }
+  }
+
+  @Test
+  @Order(11)
+  void testDownCommand() throws Exception {
+    String output = SystemLambda.tapSystemOut(() -> {
+      Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "down"));
+    });
+    assertFalse(output.contains("FAILURE"));
+    testStatusContainsPendingMigrations();
+  }
+
+  @Test
+  @Order(12)
+  void testPendingCommand() throws Exception {
     String output = SystemLambda.tapSystemOut(() -> {
       Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "pending"));
     });
     assertFalse(output.contains("FAILURE"));
+    testStatusContainsNoPendingMigrations();
   }
 
-  private void testStatusContainsNoPendingMigrations() throws Exception {
-    String output = SystemLambda.tapSystemOut(() -> {
-      Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "status"));
-    });
-    assertFalse(output.contains("FAILURE"));
-    assertFalse(output.contains("...pending..."));
-  }
-
-  private void testHelpCommand() throws Exception {
+  @Test
+  @Order(13)
+  void testHelpCommand() throws Exception {
     String output = SystemLambda.tapSystemOut(() -> {
       Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "--help"));
     });
@@ -262,7 +249,9 @@ class MigratorTest {
     assertTrue(output.contains("--help"));
   }
 
-  private void testDoScriptCommand() throws Exception {
+  @Test
+  @Order(14)
+  void testDoScriptCommand() throws Exception {
     String output = SystemLambda.tapSystemOut(() -> {
       Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "script", "20080827200212", "20080827200214"));
     });
@@ -288,7 +277,9 @@ class MigratorTest {
     assertFalse(output.contains("-- @UNDO"));
   }
 
-  private void testUndoScriptCommand() throws Exception {
+  @Test
+  @Order(15)
+  void testUndoScriptCommand() throws Exception {
     String output = SystemLambda.tapSystemOut(() -> {
       Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "script", "20080827200216", "20080827200213"));
     });
@@ -512,6 +503,22 @@ class MigratorTest {
     assertTrue(new File(baseDir, "README").exists(), "README created");
     assertTrue(new File(baseDir, "environments").isDirectory(), "environments directory created");
     assertTrue(TestUtil.deleteDirectory(baseDir), "delete temp dir");
+  }
+
+  private void testStatusContainsPendingMigrations() throws Exception {
+    String output = SystemLambda.tapSystemOut(() -> {
+      Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "status"));
+    });
+    assertFalse(output.contains("FAILURE"));
+    assertTrue(output.contains("...pending..."));
+  }
+
+  private void testStatusContainsNoPendingMigrations() throws Exception {
+    String output = SystemLambda.tapSystemOut(() -> {
+      Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "status"));
+    });
+    assertFalse(output.contains("FAILURE"));
+    assertFalse(output.contains("...pending..."));
   }
 
 }
