@@ -24,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import com.github.stefanbirkner.systemlambda.SystemLambda;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -55,7 +56,7 @@ class MigratorTest {
   private static Properties env;
 
   @BeforeAll
-  static void setup() throws Exception {
+  static void setup() throws IOException {
     dir = Resources.getResourceAsFile("org/apache/ibatis/migration/example");
     env = Resources.getResourceAsProperties("org/apache/ibatis/migration/example/environments/development.properties");
   }
@@ -80,6 +81,7 @@ class MigratorTest {
     assertTrue(output.contains("...pending..."));
   }
 
+  // TODO This causes hsqldb 2.7.1 or 2.7.2 to blow up
   @Test
   @Order(3)
   void testUpCommandWithSpecifiedSteps() throws Exception {
