@@ -30,6 +30,7 @@ import org.apache.ibatis.migration.options.SelectedOptions;
 import org.apache.ibatis.migration.utils.Util;
 
 public class CommandLine {
+  // Leave this non static as it is messed with in this project tests
   private final PrintStream console = System.out;
   private final String[] args;
 
