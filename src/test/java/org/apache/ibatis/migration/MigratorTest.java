@@ -21,8 +21,6 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.github.stefanbirkner.systemlambda.SystemLambda;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -48,6 +46,8 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
+import uk.org.webcompere.systemstubs.SystemStubs;
+
 @TestMethodOrder(OrderAnnotation.class)
 class MigratorTest {
 
@@ -64,7 +64,7 @@ class MigratorTest {
   @Test
   @Order(1)
   void testBootstrapCommand() throws Exception {
-    String output = SystemLambda.tapSystemOut(() -> {
+    String output = SystemStubs.tapSystemOut(() -> {
       Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "bootstrap", "--env=development"));
     });
     assertFalse(output.contains("FAILURE"));
@@ -74,7 +74,7 @@ class MigratorTest {
   @Test
   @Order(2)
   void testStatusContainsNoPendingEntriesUsingStatusShorthand() throws Exception {
-    String output = SystemLambda.tapSystemOut(() -> {
+    String output = SystemStubs.tapSystemOut(() -> {
       Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "sta"));
     });
     assertFalse(output.contains("FAILURE"));
@@ -85,7 +85,7 @@ class MigratorTest {
   @Test
   @Order(3)
   void testUpCommandWithSpecifiedSteps() throws Exception {
-    String output = SystemLambda.tapSystemOut(() -> {
+    String output = SystemStubs.tapSystemOut(() -> {
       Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "up", "3000"));
     });
     assertFalse(output.contains("FAILURE"));
@@ -105,7 +105,7 @@ class MigratorTest {
   @Order(5)
   void testDownCommandGiven2Steps() throws Exception {
     testStatusContainsNoPendingMigrations();
-    String output = SystemLambda.tapSystemOut(() -> {
+    String output = SystemStubs.tapSystemOut(() -> {
       Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "down", "2"));
     });
     assertFalse(output.contains("FAILURE"));
@@ -115,13 +115,13 @@ class MigratorTest {
   @Test
   @Order(6)
   void testRedoCommand() throws Exception {
-    String output = SystemLambda.tapSystemOut(() -> {
+    String output = SystemStubs.tapSystemOut(() -> {
       Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "status"));
     });
     assertFalse(output.contains("20080827200214    ...pending..."));
     assertTrue(output.contains("20080827200216    ...pending..."));
 
-    output = SystemLambda.tapSystemOut(() -> {
+    output = SystemStubs.tapSystemOut(() -> {
       Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "redo"));
     });
     assertFalse(output.contains("FAILURE"));
@@ -132,13 +132,13 @@ class MigratorTest {
     assertNotEquals(-1, createIdx);
     assertTrue(dropIdx < createIdx);
 
-    output = SystemLambda.tapSystemOut(() -> {
+    output = SystemStubs.tapSystemOut(() -> {
       Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "status"));
     });
     assertFalse(output.contains("20080827200214    ...pending..."));
     assertTrue(output.contains("20080827200216    ...pending..."));
 
-    output = SystemLambda.tapSystemOut(() -> {
+    output = SystemStubs.tapSystemOut(() -> {
       Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "redo", "2"));
     });
     assertFalse(output.contains("FAILURE"));
@@ -150,7 +150,7 @@ class MigratorTest {
     lineNums.add(output.indexOf("CREATE TABLE comment ("));
     assertEquals(new TreeSet<>(lineNums).toString(), lineNums.toString());
 
-    output = SystemLambda.tapSystemOut(() -> {
+    output = SystemStubs.tapSystemOut(() -> {
       Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "status"));
     });
     assertFalse(output.contains("20080827200214    ...pending..."));
@@ -160,14 +160,14 @@ class MigratorTest {
   @Test
   @Order(7)
   void testDoPendingScriptCommand() throws Exception {
-    String output = SystemLambda.tapSystemOut(() -> {
+    String output = SystemStubs.tapSystemOut(() -> {
       Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "script", "pending"));
     });
     assertTrue(output.contains("INSERT"));
     assertTrue(output.contains("CHANGELOG"));
     assertFalse(output.contains("-- @UNDO"));
 
-    output = SystemLambda.tapSystemOut(() -> {
+    output = SystemStubs.tapSystemOut(() -> {
       Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "script", "pending_undo"));
     });
     assertTrue(output.contains("DELETE"));
@@ -178,7 +178,7 @@ class MigratorTest {
   @Test
   @Order(8)
   void testVersionCommand() throws Exception {
-    String output = SystemLambda.tapSystemOut(() -> {
+    String output = SystemStubs.tapSystemOut(() -> {
       Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "version", "20080827200217"));
     });
     assertFalse(output.contains("FAILURE"));
@@ -191,7 +191,7 @@ class MigratorTest {
     File skipped = new File(dir + File.separator + "scripts", "20080827200215_skipped_migration.sql");
     assertTrue(skipped.createNewFile());
     try {
-      String output = SystemLambda.tapSystemOut(() -> {
+      String output = SystemStubs.tapSystemOut(() -> {
         Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "up"));
       });
       assertFalse(output.contains("FAILURE"));
@@ -210,7 +210,7 @@ class MigratorTest {
     Path renamed = Paths.get(dir + File.separator + "scripts", "20080827200216_create_procs._sql");
     assertEquals(renamed, Files.move(original, renamed, StandardCopyOption.REPLACE_EXISTING));
     try {
-      String output = SystemLambda.tapSystemOut(() -> {
+      String output = SystemStubs.tapSystemOut(() -> {
         Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "up"));
       });
       assertFalse(output.contains("FAILURE"), "Output contains: \n" + output);
@@ -224,7 +224,7 @@ class MigratorTest {
   @Test
   @Order(11)
   void testDownCommand() throws Exception {
-    String output = SystemLambda.tapSystemOut(() -> {
+    String output = SystemStubs.tapSystemOut(() -> {
       Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "down"));
     });
     assertFalse(output.contains("FAILURE"));
@@ -234,7 +234,7 @@ class MigratorTest {
   @Test
   @Order(12)
   void testPendingCommand() throws Exception {
-    String output = SystemLambda.tapSystemOut(() -> {
+    String output = SystemStubs.tapSystemOut(() -> {
       Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "pending"));
     });
     assertFalse(output.contains("FAILURE"));
@@ -244,7 +244,7 @@ class MigratorTest {
   @Test
   @Order(13)
   void testHelpCommand() throws Exception {
-    String output = SystemLambda.tapSystemOut(() -> {
+    String output = SystemStubs.tapSystemOut(() -> {
       Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "--help"));
     });
     assertFalse(output.contains("FAILURE"));
@@ -254,7 +254,7 @@ class MigratorTest {
   @Test
   @Order(14)
   void testDoScriptCommand() throws Exception {
-    String output = SystemLambda.tapSystemOut(() -> {
+    String output = SystemStubs.tapSystemOut(() -> {
       Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "script", "20080827200212", "20080827200214"));
     });
     assertFalse(output.contains("FAILURE"));
@@ -266,7 +266,7 @@ class MigratorTest {
     assertFalse(output.contains("20080827200216"));
     assertFalse(output.contains("-- @UNDO"));
 
-    output = SystemLambda.tapSystemOut(() -> {
+    output = SystemStubs.tapSystemOut(() -> {
       Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "script", "0", "20080827200211"));
     });
     assertFalse(output.contains("FAILURE"));
@@ -282,7 +282,7 @@ class MigratorTest {
   @Test
   @Order(15)
   void testUndoScriptCommand() throws Exception {
-    String output = SystemLambda.tapSystemOut(() -> {
+    String output = SystemStubs.tapSystemOut(() -> {
       Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "script", "20080827200216", "20080827200213"));
     });
     assertFalse(output.contains("FAILURE"));
@@ -294,7 +294,7 @@ class MigratorTest {
     assertTrue(output.contains("20080827200216"));
     assertTrue(output.contains("-- @UNDO"));
 
-    output = SystemLambda.tapSystemOut(() -> {
+    output = SystemStubs.tapSystemOut(() -> {
       Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "script", "20080827200211", "0"));
     });
     assertFalse(output.contains("FAILURE"));
@@ -310,8 +310,8 @@ class MigratorTest {
 
   @Test
   void shouldScriptCommandFailIfSameVersion() throws Exception {
-    String output = SystemLambda.tapSystemOut(() -> {
-      int exitCode = SystemLambda.catchSystemExit(() -> {
+    String output = SystemStubs.tapSystemOut(() -> {
+      int exitCode = SystemStubs.catchSystemExit(() -> {
         Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "script", "20080827200211", "20080827200211"));
       });
       assertEquals(1, exitCode);
@@ -403,7 +403,7 @@ class MigratorTest {
     File scriptPath = new File(basePath.getCanonicalPath() + File.separator + "scripts");
     assertEquals(3, scriptPath.list().length);
 
-    String output = SystemLambda.tapSystemOut(() -> {
+    String output = SystemStubs.tapSystemOut(() -> {
       Migrator.main(TestUtil.args("--path=" + basePath.getAbsolutePath(), "new", "test new migration"));
     });
     assertEquals(4, scriptPath.list().length);
@@ -416,7 +416,7 @@ class MigratorTest {
   void shouldSuppressOutputIfQuietOptionEnabled() throws Throwable {
     System.setProperty("migrationsHome", TestUtil.getTempDir().getAbsolutePath());
     File basePath = TestUtil.getTempDir();
-    String output = SystemLambda.tapSystemOut(() -> {
+    String output = SystemStubs.tapSystemOut(() -> {
       Migrator.main(TestUtil.args("--path=" + basePath.getAbsolutePath(), "--quiet", "init"));
     });
     assertFalse(output.contains("Initializing:"));
@@ -428,7 +428,7 @@ class MigratorTest {
   void shouldColorizeSuccessOutputIfColorOptionEnabled() throws Throwable {
     System.setProperty("migrationsHome", TestUtil.getTempDir().getAbsolutePath());
     File basePath = TestUtil.getTempDir();
-    String output = SystemLambda.tapSystemOut(() -> {
+    String output = SystemStubs.tapSystemOut(() -> {
       Migrator.main(TestUtil.args("--path=" + basePath.getAbsolutePath(), "--color", "init"));
     });
     assertTrue(output.contains(ConsoleColors.GREEN + "SUCCESS"));
@@ -440,8 +440,8 @@ class MigratorTest {
   void shouldColorizeFailureOutputIfColorOptionEnabled() throws Throwable {
     System.setProperty("migrationsHome", TestUtil.getTempDir().getAbsolutePath());
     File basePath = TestUtil.getTempDir();
-    String output = SystemLambda.tapSystemOut(() -> {
-      int exitCode = SystemLambda.catchSystemExit(() -> {
+    String output = SystemStubs.tapSystemOut(() -> {
+      int exitCode = SystemStubs.catchSystemExit(() -> {
         Migrator.main(TestUtil.args("--path=" + basePath.getAbsolutePath(), "--color", "new"));
       });
       assertEquals(1, exitCode);
@@ -455,14 +455,14 @@ class MigratorTest {
     // gh-220
     try {
       System.setProperty("migrations_changelog", "changelog1");
-      String output = SystemLambda.tapSystemOut(() -> {
+      String output = SystemStubs.tapSystemOut(() -> {
         Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "up", "1"));
       });
       assertFalse(output.contains("FAILURE"));
 
       System.setProperty("migrations_changelog", "changelog2");
-      output = SystemLambda.tapSystemOut(() -> {
-        int exitCode = SystemLambda.catchSystemExit(() -> {
+      output = SystemStubs.tapSystemOut(() -> {
+        int exitCode = SystemStubs.catchSystemExit(() -> {
           Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "pending"));
         });
         assertEquals(1, exitCode);
@@ -476,7 +476,7 @@ class MigratorTest {
 
   @Test
   void testInfoCommand() throws Exception {
-    String output = SystemLambda.tapSystemOut(() -> {
+    String output = SystemStubs.tapSystemOut(() -> {
       Migrator.main(TestUtil.args("info"));
     });
     assertFalse(output.contains("null"), output);
@@ -487,7 +487,7 @@ class MigratorTest {
     File baseDir = TestUtil.getTempDir();
     assertTrue(baseDir.delete()); // remove empty dir
     assertFalse(baseDir.exists(), "directory does not exist");
-    String output = SystemLambda.tapSystemOut(() -> {
+    String output = SystemStubs.tapSystemOut(() -> {
       Migrator.main(TestUtil.args("info", "--path=" + baseDir.getAbsolutePath()));
     });
     assertFalse(output.contains("Migrations path must be a directory"), "base path not required for info");
@@ -499,7 +499,7 @@ class MigratorTest {
     File baseDir = TestUtil.getTempDir();
     assertTrue(baseDir.delete()); // remove empty dir
     assertFalse(baseDir.exists(), "directory does not exist");
-    String output = SystemLambda
+    String output = SystemStubs
         .tapSystemOut(() -> Migrator.main(TestUtil.args("init", "--path=" + baseDir.getAbsolutePath())));
     assertFalse(output.contains("Migrations path must be a directory"), output);
     assertTrue(new File(baseDir, "README").exists(), "README created");
@@ -508,7 +508,7 @@ class MigratorTest {
   }
 
   private void testStatusContainsPendingMigrations() throws Exception {
-    String output = SystemLambda.tapSystemOut(() -> {
+    String output = SystemStubs.tapSystemOut(() -> {
       Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "status"));
     });
     assertFalse(output.contains("FAILURE"));
@@ -516,7 +516,7 @@ class MigratorTest {
   }
 
   private void testStatusContainsNoPendingMigrations() throws Exception {
-    String output = SystemLambda.tapSystemOut(() -> {
+    String output = SystemStubs.tapSystemOut(() -> {
       Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "status"));
     });
     assertFalse(output.contains("FAILURE"));

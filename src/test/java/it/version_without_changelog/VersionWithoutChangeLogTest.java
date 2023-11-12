@@ -18,8 +18,6 @@ package it.version_without_changelog;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.github.stefanbirkner.systemlambda.SystemLambda;
-
 import java.io.File;
 
 import org.apache.ibatis.migration.Migrator;
@@ -27,13 +25,15 @@ import org.apache.ibatis.migration.io.Resources;
 import org.apache.ibatis.migration.utils.TestUtil;
 import org.junit.jupiter.api.Test;
 
+import uk.org.webcompere.systemstubs.SystemStubs;
+
 class VersionWithoutChangeLogTest {
 
   @Test
   void shouldUpToVersionEvenWithoutChangelog() throws Exception {
     // gh-160
     File dir = Resources.getResourceAsFile("it/version_without_changelog");
-    String output = SystemLambda.tapSystemOut(() -> {
+    String output = SystemStubs.tapSystemOut(() -> {
       Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "version", "20000101000001"));
     });
     assertFalse(output.contains("FAILURE"));
