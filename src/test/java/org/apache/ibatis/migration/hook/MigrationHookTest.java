@@ -18,8 +18,6 @@ package org.apache.ibatis.migration.hook;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.github.stefanbirkner.systemlambda.SystemLambda;
-
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
@@ -33,6 +31,8 @@ import org.apache.ibatis.migration.io.Resources;
 import org.apache.ibatis.migration.utils.TestUtil;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+
+import uk.org.webcompere.systemstubs.SystemStubs;
 
 class MigrationHookTest {
 
@@ -68,7 +68,7 @@ class MigrationHookTest {
   }
 
   private void bootstrap() throws Exception {
-    String output = SystemLambda.tapSystemOut(() -> {
+    String output = SystemStubs.tapSystemOut(() -> {
       // bootstrap creates a table used in a hook script later
       Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "bootstrap"));
     });
@@ -76,7 +76,7 @@ class MigrationHookTest {
   }
 
   private void up() throws Exception {
-    String output = SystemLambda.tapSystemOut(() -> {
+    String output = SystemStubs.tapSystemOut(() -> {
       Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "up"));
     });
     assertTrue(output.contains("SUCCESS"));
@@ -102,7 +102,7 @@ class MigrationHookTest {
       stmt.execute("delete from changes where id = 2");
       stmt.execute("drop table person");
     }
-    String output = SystemLambda.tapSystemOut(() -> {
+    String output = SystemStubs.tapSystemOut(() -> {
       Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "pending"));
     });
     assertTrue(output.contains("SUCCESS"));
@@ -119,7 +119,7 @@ class MigrationHookTest {
   }
 
   private void down() throws Exception {
-    String output = SystemLambda.tapSystemOut(() -> {
+    String output = SystemStubs.tapSystemOut(() -> {
       Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "down"));
     });
     assertTrue(output.contains("SUCCESS"));
@@ -129,7 +129,7 @@ class MigrationHookTest {
   }
 
   private void versionDown() throws Exception {
-    String output = SystemLambda.tapSystemOut(() -> {
+    String output = SystemStubs.tapSystemOut(() -> {
       Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "version", "1"));
     });
     assertTrue(output.contains("SUCCESS"));
@@ -140,7 +140,7 @@ class MigrationHookTest {
   }
 
   private void versionUp() throws Exception {
-    String output = SystemLambda.tapSystemOut(() -> {
+    String output = SystemStubs.tapSystemOut(() -> {
       Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "version", "2"));
     });
     assertTrue(output.contains("SUCCESS"));

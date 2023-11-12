@@ -18,8 +18,6 @@ package org.apache.ibatis.migration.script_hook;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.github.stefanbirkner.systemlambda.SystemLambda;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -33,6 +31,8 @@ import org.apache.ibatis.migration.io.Resources;
 import org.apache.ibatis.migration.utils.TestUtil;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+
+import uk.org.webcompere.systemstubs.SystemStubs;
 
 class ScriptHookTest {
 
@@ -49,7 +49,7 @@ class ScriptHookTest {
   void testDoScript() throws Exception {
     System.setProperty("DB_NAME", "do_script_hook");
 
-    String output = SystemLambda.tapSystemOut(() -> {
+    String output = SystemStubs.tapSystemOut(() -> {
       Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "script", "0", "003"));
     });
     assertTrue(output.contains("SUCCESS"));
@@ -87,12 +87,12 @@ class ScriptHookTest {
   void testPendingDoScript() throws Exception {
     System.setProperty("DB_NAME", "pending_do_script_hook");
 
-    String output = SystemLambda.tapSystemOut(() -> {
+    String output = SystemStubs.tapSystemOut(() -> {
       Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "up", "1"));
     });
     assertTrue(output.contains("SUCCESS"));
 
-    output = SystemLambda.tapSystemOut(() -> {
+    output = SystemStubs.tapSystemOut(() -> {
       Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "script", "pending"));
     });
     assertTrue(output.contains("SUCCESS"));
@@ -130,7 +130,7 @@ class ScriptHookTest {
   void testUndoScript() throws Exception {
     System.setProperty("DB_NAME", "undo_script_hook");
 
-    String output = SystemLambda.tapSystemOut(() -> {
+    String output = SystemStubs.tapSystemOut(() -> {
       Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "script", "003", "0"));
     });
     assertTrue(output.contains("SUCCESS"));
@@ -166,12 +166,12 @@ class ScriptHookTest {
   void testPendingUndoScript() throws Exception {
     System.setProperty("DB_NAME", "pending_undo_script_hook");
 
-    String output = SystemLambda.tapSystemOut(() -> {
+    String output = SystemStubs.tapSystemOut(() -> {
       Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "up", "1"));
     });
     assertTrue(output.contains("SUCCESS"));
 
-    output = SystemLambda.tapSystemOut(() -> {
+    output = SystemStubs.tapSystemOut(() -> {
       Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "script", "pending_undo"));
     });
     assertTrue(output.contains("SUCCESS"));

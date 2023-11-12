@@ -18,8 +18,6 @@ package org.apache.ibatis.migration.hook;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.github.stefanbirkner.systemlambda.SystemLambda;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
@@ -36,13 +34,15 @@ import org.apache.ibatis.migration.utils.TestUtil;
 import org.apache.ibatis.migration.utils.Util;
 import org.junit.jupiter.api.Test;
 
+import uk.org.webcompere.systemstubs.SystemStubs;
+
 class NewHookTest {
 
   @Test
   void shouldRunNewHooks() throws Throwable {
     File basePath = initBaseDir();
     File scriptPath = new File(basePath.getCanonicalPath() + File.separator + "scripts");
-    String output = SystemLambda.tapSystemOut(() -> {
+    String output = SystemStubs.tapSystemOut(() -> {
       Migrator.main(
           TestUtil.args("--path=" + basePath.getAbsolutePath(), "--idpattern=00", "new", "create table1 JIRA-123"));
     });
@@ -59,8 +59,8 @@ class NewHookTest {
   void shouldNotCreateFileWhenBeforeHookThrowsException() throws Throwable {
     File basePath = initBaseDir();
     File scriptPath = new File(basePath.getCanonicalPath() + File.separator + "scripts");
-    String output = SystemLambda.tapSystemOut(() -> {
-      int exitCode = SystemLambda.catchSystemExit(() -> {
+    String output = SystemStubs.tapSystemOut(() -> {
+      int exitCode = SystemStubs.catchSystemExit(() -> {
         Migrator.main(TestUtil.args("--path=" + basePath.getAbsolutePath(), "new", "create table1"));
       });
       assertEquals(1, exitCode);
