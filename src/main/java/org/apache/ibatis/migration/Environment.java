@@ -33,59 +33,64 @@ public class Environment {
   public static final String CHANGELOG = "changelog";
 
   private enum SETTING_KEY {
-    time_zone,
+    TIME_ZONE,
 
-    delimiter,
+    DELIMITER,
 
-    script_char_set,
+    SCRIPT_CHAR_SET,
 
-    full_line_delimiter,
+    FULL_LINE_DELIMITER,
 
-    send_full_script,
+    SEND_FULL_SCRIPT,
 
-    auto_commit,
+    AUTO_COMMIT,
 
-    remove_crs,
+    REMOVE_CRS,
 
-    ignore_warnings,
+    IGNORE_WARNINGS,
 
-    driver_path,
+    DRIVER_PATH,
 
-    driver,
+    DRIVER,
 
-    url,
+    URL,
 
-    username,
+    USERNAME,
 
-    password,
+    PASSWORD,
 
-    hook_before_up,
+    HOOK_BEFORE_UP,
 
-    hook_before_each_up,
+    HOOK_BEFORE_EACH_UP,
 
-    hook_after_each_up,
+    HOOK_AFTER_EACH_UP,
 
-    hook_after_up,
+    HOOK_AFTER_UP,
 
-    hook_before_down,
+    HOOK_BEFORE_DOWN,
 
-    hook_before_each_down,
+    HOOK_BEFORE_EACH_DOWN,
 
-    hook_after_each_down,
+    HOOK_AFTER_EACH_DOWN,
 
-    hook_after_down,
+    HOOK_AFTER_DOWN,
 
-    hook_before_new,
+    HOOK_BEFORE_NEW,
 
-    hook_after_new,
+    HOOK_AFTER_NEW,
 
-    hook_before_script,
+    HOOK_BEFORE_SCRIPT,
 
-    hook_before_each_script,
+    HOOK_BEFORE_EACH_SCRIPT,
 
-    hook_after_each_script,
+    HOOK_AFTER_EACH_SCRIPT,
 
-    hook_after_script
+    HOOK_AFTER_SCRIPT;
+
+    @Override
+    public String toString() {
+      return this.name().toLowerCase(Locale.ENGLISH);
+    }
   }
 
   private static final List<String> SETTING_KEYS;
@@ -94,7 +99,7 @@ public class Environment {
     ArrayList<String> list = new ArrayList<>();
     SETTING_KEY[] keys = SETTING_KEY.values();
     for (SETTING_KEY key : keys) {
-      list.add(key.name());
+      list.add(key.toString());
     }
     SETTING_KEYS = Collections.unmodifiableList(list);
   }
@@ -143,37 +148,38 @@ public class Environment {
   public Environment(File file) {
     Properties prop = mergeProperties(file);
 
-    this.timeZone = readProperty(prop, SETTING_KEY.time_zone.name(), "GMT+0:00");
-    this.delimiter = readProperty(prop, SETTING_KEY.delimiter.name(), ";");
-    this.scriptCharset = readProperty(prop, SETTING_KEY.script_char_set.name(), Charset.defaultCharset().name());
-    this.fullLineDelimiter = Boolean.parseBoolean(readProperty(prop, SETTING_KEY.full_line_delimiter.name()));
-    this.sendFullScript = Boolean.parseBoolean(readProperty(prop, SETTING_KEY.send_full_script.name()));
-    this.autoCommit = Boolean.parseBoolean(readProperty(prop, SETTING_KEY.auto_commit.name()));
-    this.removeCrs = Boolean.parseBoolean(readProperty(prop, SETTING_KEY.remove_crs.name()));
-    this.ignoreWarnings = Boolean.parseBoolean(readProperty(prop, SETTING_KEY.ignore_warnings.name(), "true"));
+    this.timeZone = readProperty(prop, SETTING_KEY.TIME_ZONE.toString(), "GMT+0:00");
+    this.delimiter = readProperty(prop, SETTING_KEY.DELIMITER.toString(), ";");
+    this.scriptCharset = readProperty(prop, SETTING_KEY.SCRIPT_CHAR_SET.toString(),
+        Charset.defaultCharset().toString());
+    this.fullLineDelimiter = Boolean.parseBoolean(readProperty(prop, SETTING_KEY.FULL_LINE_DELIMITER.toString()));
+    this.sendFullScript = Boolean.parseBoolean(readProperty(prop, SETTING_KEY.SEND_FULL_SCRIPT.toString()));
+    this.autoCommit = Boolean.parseBoolean(readProperty(prop, SETTING_KEY.AUTO_COMMIT.toString()));
+    this.removeCrs = Boolean.parseBoolean(readProperty(prop, SETTING_KEY.REMOVE_CRS.toString()));
+    this.ignoreWarnings = Boolean.parseBoolean(readProperty(prop, SETTING_KEY.IGNORE_WARNINGS.toString(), "true"));
 
-    this.driverPath = readProperty(prop, SETTING_KEY.driver_path.name());
-    this.driver = readProperty(prop, SETTING_KEY.driver.name());
-    this.url = readProperty(prop, SETTING_KEY.url.name());
-    this.username = readProperty(prop, SETTING_KEY.username.name());
-    this.password = readProperty(prop, SETTING_KEY.password.name());
+    this.driverPath = readProperty(prop, SETTING_KEY.DRIVER_PATH.toString());
+    this.driver = readProperty(prop, SETTING_KEY.DRIVER.toString());
+    this.url = readProperty(prop, SETTING_KEY.URL.toString());
+    this.username = readProperty(prop, SETTING_KEY.USERNAME.toString());
+    this.password = readProperty(prop, SETTING_KEY.PASSWORD.toString());
 
-    this.hookBeforeUp = readProperty(prop, SETTING_KEY.hook_before_up.name());
-    this.hookBeforeEachUp = readProperty(prop, SETTING_KEY.hook_before_each_up.name());
-    this.hookAfterEachUp = readProperty(prop, SETTING_KEY.hook_after_each_up.name());
-    this.hookAfterUp = readProperty(prop, SETTING_KEY.hook_after_up.name());
-    this.hookBeforeDown = readProperty(prop, SETTING_KEY.hook_before_down.name());
-    this.hookBeforeEachDown = readProperty(prop, SETTING_KEY.hook_before_each_down.name());
-    this.hookAfterEachDown = readProperty(prop, SETTING_KEY.hook_after_each_down.name());
-    this.hookAfterDown = readProperty(prop, SETTING_KEY.hook_after_down.name());
+    this.hookBeforeUp = readProperty(prop, SETTING_KEY.HOOK_BEFORE_UP.toString());
+    this.hookBeforeEachUp = readProperty(prop, SETTING_KEY.HOOK_BEFORE_EACH_UP.toString());
+    this.hookAfterEachUp = readProperty(prop, SETTING_KEY.HOOK_AFTER_EACH_UP.toString());
+    this.hookAfterUp = readProperty(prop, SETTING_KEY.HOOK_AFTER_UP.toString());
+    this.hookBeforeDown = readProperty(prop, SETTING_KEY.HOOK_BEFORE_DOWN.toString());
+    this.hookBeforeEachDown = readProperty(prop, SETTING_KEY.HOOK_BEFORE_EACH_DOWN.toString());
+    this.hookAfterEachDown = readProperty(prop, SETTING_KEY.HOOK_AFTER_EACH_DOWN.toString());
+    this.hookAfterDown = readProperty(prop, SETTING_KEY.HOOK_AFTER_DOWN.toString());
 
-    this.hookBeforeNew = readProperty(prop, SETTING_KEY.hook_before_new.name());
-    this.hookAfterNew = readProperty(prop, SETTING_KEY.hook_after_new.name());
+    this.hookBeforeNew = readProperty(prop, SETTING_KEY.HOOK_BEFORE_NEW.toString());
+    this.hookAfterNew = readProperty(prop, SETTING_KEY.HOOK_AFTER_NEW.toString());
 
-    this.hookBeforeScript = readProperty(prop, SETTING_KEY.hook_before_script.name());
-    this.hookBeforeEachScript = readProperty(prop, SETTING_KEY.hook_before_each_script.name());
-    this.hookAfterEachScript = readProperty(prop, SETTING_KEY.hook_after_each_script.name());
-    this.hookAfterScript = readProperty(prop, SETTING_KEY.hook_after_script.name());
+    this.hookBeforeScript = readProperty(prop, SETTING_KEY.HOOK_BEFORE_SCRIPT.toString());
+    this.hookBeforeEachScript = readProperty(prop, SETTING_KEY.HOOK_BEFORE_EACH_SCRIPT.toString());
+    this.hookAfterEachScript = readProperty(prop, SETTING_KEY.HOOK_AFTER_EACH_SCRIPT.toString());
+    this.hookAfterScript = readProperty(prop, SETTING_KEY.HOOK_AFTER_SCRIPT.toString());
 
     // User defined variables.
     prop.entrySet().stream().filter(e -> !SETTING_KEYS.contains(e.getKey()))
