@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import com.github.stefanbirkner.systemlambda.SystemLambda;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.apache.ibatis.migration.Migrator;
 import org.apache.ibatis.migration.io.Resources;
@@ -32,7 +33,7 @@ class SystemPropertyTest {
   private static File dir;
 
   @BeforeAll
-  static void init() throws Exception {
+  static void init() throws IOException {
     dir = Resources.getResourceAsFile("org/apache/ibatis/migration/system_property/testdir");
   }
 

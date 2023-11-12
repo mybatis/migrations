@@ -76,19 +76,17 @@ public class JavaMigrationLoader implements MigrationLoader {
           type -> type != null && MigrationScript.class.isAssignableFrom(type) && type.getName().equals(className),
           pkg);
     }
-    Reader reader = null;
     Set<Class<? extends MigrationScript>> classes = resolver.getClasses();
+    // There should be only one script.
     for (Class<? extends MigrationScript> clazz : classes) {
       try {
         MigrationScript script = clazz.getDeclaredConstructor().newInstance();
-        reader = new StringReader(undo ? script.getDownScript() : script.getUpScript());
+        return new StringReader(undo ? script.getDownScript() : script.getUpScript());
       } catch (Exception e) {
         throw new MigrationException("Could not instanciate MigrationScript: " + clazz.getName(), e);
       }
-      // There should be only one script.
-      break;
     }
-    return reader;
+    return null;
   }
 
   @Override
