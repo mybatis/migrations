@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import com.github.stefanbirkner.systemlambda.SystemLambda;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -40,7 +41,7 @@ class ScriptHookTest {
   private static final String separator = System.lineSeparator();
 
   @BeforeAll
-  static void init() throws Exception {
+  static void init() throws IOException {
     dir = Resources.getResourceAsFile("org/apache/ibatis/migration/script_hook/testdir");
   }
 

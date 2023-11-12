@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import com.github.stefanbirkner.systemlambda.SystemLambda;
 
 import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -39,7 +40,7 @@ class MigrationHookTest {
   private static Properties env;
 
   @BeforeAll
-  static void init() throws Exception {
+  static void init() throws IOException {
     dir = Resources.getResourceAsFile("org/apache/ibatis/migration/hook/testdir");
     env = Resources
         .getResourceAsProperties("org/apache/ibatis/migration/hook/testdir/environments/development.properties");
