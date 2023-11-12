@@ -38,8 +38,8 @@ class SystemPropertyTest {
   private static File dir;
 
   @SystemStub
-  private EnvironmentVariables variables = new EnvironmentVariables("migrations_var3", "bogus_var3",
-      "migrations_envvar1", "Environment variable 1");
+  private EnvironmentVariables variables = new EnvironmentVariables("MIGRATIONS_VAR3", "bogus_var3",
+      "MIGRATIONS_ENVVAR1", "Environment variable 1");
 
   @BeforeAll
   static void init() throws IOException {
@@ -48,17 +48,14 @@ class SystemPropertyTest {
 
   @Test
   void testSystemProperties() throws Exception {
-    // This test requires two environment variables
-    // MIGRATIONS_VAR3 = bogus_var3
-    // MIGRATIONS_ENVVAR1 = Environment variable 1
+    variables.setup();
     SystemStubs.restoreSystemProperties(() -> {
-      variables.setup();
-      variables.set("MIGRATIONS_DRIVER", "org.hsqldb.jdbcDriver");
-      variables.set("username", "Pocahontas");
-      variables.set("var1", "Variable 1");
-      variables.set("MIGRATIONS_VAR3", "Variable 3");
-      variables.set("migrations_var4", "Variable 4");
-      variables.set("MIGRATIONS_VAR5", "Variable 5");
+      System.setProperty("MIGRATIONS_DRIVER", "org.hsqldb.jdbcDriver");
+      System.setProperty("username", "Pocahontas");
+      System.setProperty("var1", "Variable 1");
+      System.setProperty("MIGRATIONS_VAR3", "Variable 3");
+      System.setProperty("migrations_var4", "Variable 4");
+      System.setProperty("MIGRATIONS_VAR5", "Variable 5");
 
       String output = SystemStubs.tapSystemOut(() -> {
         Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "up", "1", "--trace"));
@@ -75,7 +72,7 @@ class SystemPropertyTest {
       assertTrue(output.contains("envvar1: Environment variable 1"), "Output is:" + output);
 
       Migrator.main(TestUtil.args("--path=" + dir.getAbsolutePath(), "down", "1"));
-      variables.teardown();
     });
+    variables.teardown();
   }
 }
