@@ -30,7 +30,7 @@
   <version>3.3.12-SNAPSHOT</version>
 
   <name>MyBatis Migrations</name>
-  <url>http://www.mybatis.org/migrations/</url>
+  <url>https://www.mybatis.org/migrations/</url>
 
   <contributors>
     <contributor>
@@ -40,7 +40,7 @@
   </contributors>
 
   <scm>
-    <url>http://github.com/mybatis/migrations</url>
+    <url>https://github.com/mybatis/migrations/</url>
     <connection>scm:git:ssh://git@github.com/mybatis/migrations.git</connection>
     <developerConnection>scm:git:ssh://git@github.com/mybatis/migrations.git</developerConnection>
     <tag>HEAD</tag>
