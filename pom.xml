@@ -62,6 +62,10 @@
   </distributionManagement>
 
   <properties>
+    <!-- Java Usage -->
+    <java.version>8</java.version>
+    <java.release.version>8</java.release.version>
+
     <findbugs.onlyAnalyze>org.apache.ibatis.migration</findbugs.onlyAnalyze>
     <clirr.comparisonVersion>3.2.0</clirr.comparisonVersion>
     <module.name>org.mybatis.migrations</module.name>
