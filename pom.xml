@@ -27,7 +27,7 @@
   </parent>
 
   <artifactId>mybatis-migrations</artifactId>
-  <version>3.4.0</version>
+  <version>3.4.1-SNAPSHOT</version>
 
   <name>MyBatis Migrations</name>
   <url>https://www.mybatis.org/migrations/</url>
@@ -42,7 +42,7 @@
   <scm>
     <connection>scm:git:ssh://git@github.com/mybatis/migrations.git</connection>
     <developerConnection>scm:git:ssh://git@github.com/mybatis/migrations.git</developerConnection>
-    <tag>mybatis-migrations-3.4.0</tag>
+    <tag>HEAD</tag>
     <url>https://github.com/mybatis/migrations/</url>
   </scm>
   <issueManagement>
@@ -71,7 +71,7 @@
     <module.name>org.mybatis.migrations</module.name>
 
     <!-- Reproducible Builds -->
-    <project.build.outputTimestamp>1723307980</project.build.outputTimestamp>
+    <project.build.outputTimestamp>1723308152</project.build.outputTimestamp>
   </properties>
 
   <dependencies>
