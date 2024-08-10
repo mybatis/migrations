@@ -81,7 +81,6 @@ class MigratorTest {
     assertTrue(output.contains("...pending..."));
   }
 
-  // TODO This causes hsqldb 2.7.1 or 2.7.2 to blow up
   @Test
   @Order(3)
   void testUpCommandWithSpecifiedSteps() throws Exception {
