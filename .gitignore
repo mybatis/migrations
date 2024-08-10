@@ -10,3 +10,5 @@ atlassian-ide-plugin.xml
 .project
 .settings
 .mvn/wrapper/maven-wrapper.jar
+release.properties
+pom.xml.releaseBackup
