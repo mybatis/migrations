@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ScriptCommand.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MyBatis Migrations</a> &gt; <a href="index.source.html" class="el_package">org.apache.ibatis.migration.commands</a> &gt; <span class="el_source">ScriptCommand.java</span></div><h1>ScriptCommand.java</h1><pre class="source lang-java linenums">/*
+ *    Copyright 2010-2023 the original author or authors.
+ *
+ *    Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *       https://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+package org.apache.ibatis.migration.commands;
+
+import java.io.IOException;
+import java.io.Reader;
+import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.StringTokenizer;
+
+import org.apache.ibatis.migration.Change;
+import org.apache.ibatis.migration.MigrationException;
+import org.apache.ibatis.migration.hook.MigrationHook;
+import org.apache.ibatis.migration.hook.ScriptHookContext;
+import org.apache.ibatis.migration.operations.DatabaseOperation;
+import org.apache.ibatis.migration.operations.StatusOperation;
+import org.apache.ibatis.migration.options.SelectedOptions;
+
+public final class ScriptCommand extends BaseCommand {
+
+  public ScriptCommand(SelectedOptions options) {
+<span class="fc" id="L39">    super(options);</span>
+<span class="fc" id="L40">  }</span>
+
+  @Override
+  public void execute(String... sparams) {
+    try {
+<span class="pc bpc" id="L45" title="3 of 6 branches missed.">      if (sparams == null || sparams.length &lt; 1 || sparams[0] == null) {</span>
+<span class="nc" id="L46">        throw new MigrationException(&quot;The script command requires a range of versions from v1 - v2.&quot;);</span>
+      }
+<span class="fc" id="L48">      StringTokenizer parser = new StringTokenizer(sparams[0]);</span>
+<span class="fc" id="L49">      int tokenCount = parser.countTokens();</span>
+<span class="fc" id="L50">      boolean scriptPending = false;</span>
+<span class="fc" id="L51">      boolean scriptPendingUndo = false;</span>
+
+<span class="fc" id="L53">      String firstToken = parser.nextToken();</span>
+
+<span class="fc bfc" id="L55" title="All 4 branches covered.">      if (tokenCount == 1 &amp;&amp; firstToken.equals(&quot;pending&quot;)) {</span>
+<span class="fc" id="L56">        scriptPending = true;</span>
+<span class="pc bpc" id="L57" title="1 of 4 branches missed.">      } else if (tokenCount == 1 &amp;&amp; firstToken.equals(&quot;pending_undo&quot;)) {</span>
+<span class="fc" id="L58">        scriptPendingUndo = true;</span>
+<span class="pc bpc" id="L59" title="3 of 6 branches missed.">      } else if (!scriptPending &amp;&amp; !scriptPendingUndo &amp;&amp; tokenCount != 2) {</span>
+<span class="nc" id="L60">        throw new MigrationException(&quot;The script command requires a range of versions from v1 - v2.&quot;);</span>
+      }
+
+<span class="fc bfc" id="L63" title="All 4 branches covered.">      BigDecimal v1 = scriptPending || scriptPendingUndo ? null : new BigDecimal(firstToken);</span>
+<span class="fc bfc" id="L64" title="All 4 branches covered.">      BigDecimal v2 = scriptPending || scriptPendingUndo ? null : new BigDecimal(parser.nextToken());</span>
+
+      boolean undo;
+<span class="fc" id="L67">      undo = scriptPendingUndo;</span>
+<span class="fc bfc" id="L68" title="All 4 branches covered.">      if (!scriptPending &amp;&amp; !scriptPendingUndo) {</span>
+<span class="fc" id="L69">        int comparison = v1.compareTo(v2);</span>
+<span class="fc bfc" id="L70" title="All 2 branches covered.">        if (comparison == 0) {</span>
+<span class="fc" id="L71">          throw new MigrationException(</span>
+              &quot;The script command requires two different versions. Use 0 to include the first version.&quot;);
+        }
+<span class="fc bfc" id="L74" title="All 2 branches covered.">        undo = comparison &gt; 0;</span>
+      }
+
+<span class="fc" id="L77">      Map&lt;String, Object&gt; hookBindings = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L78">      MigrationHook hook = createScriptHook();</span>
+<span class="fc bfc" id="L79" title="All 4 branches covered.">      List&lt;Change&gt; migrations = scriptPending || scriptPendingUndo ? new StatusOperation()</span>
+<span class="fc" id="L80">          .operate(getConnectionProvider(), getMigrationLoader(), getDatabaseOperationOption(), null).getCurrentStatus()</span>
+<span class="fc" id="L81">          : getMigrationLoader().getMigrations();</span>
+<span class="fc" id="L82">      Collections.sort(migrations);</span>
+<span class="fc bfc" id="L83" title="All 2 branches covered.">      if (undo) {</span>
+<span class="fc" id="L84">        Collections.reverse(migrations);</span>
+      }
+<span class="fc" id="L86">      int count = 0;</span>
+<span class="fc bfc" id="L87" title="All 2 branches covered.">      for (int i = 0; i &lt; migrations.size(); i++) {</span>
+<span class="fc" id="L88">        Change change = migrations.get(i);</span>
+<span class="fc bfc" id="L89" title="All 6 branches covered.">        if (shouldRun(change, v1, v2, scriptPending || scriptPendingUndo)) {</span>
+<span class="fc bfc" id="L90" title="All 4 branches covered.">          if (count == 0 &amp;&amp; hook != null) {</span>
+<span class="fc" id="L91">            hookBindings.put(MigrationHook.HOOK_CONTEXT, new ScriptHookContext(null, undo));</span>
+<span class="fc" id="L92">            hook.before(hookBindings);</span>
+<span class="fc" id="L93">            printStream.println();</span>
+          }
+<span class="fc bfc" id="L95" title="All 2 branches covered.">          if (hook != null) {</span>
+<span class="fc" id="L96">            hookBindings.put(MigrationHook.HOOK_CONTEXT, new ScriptHookContext(new Change(change), undo));</span>
+<span class="fc" id="L97">            hook.beforeEach(hookBindings);</span>
+<span class="fc" id="L98">            printStream.println();</span>
+          }
+<span class="fc" id="L100">          printStream.println(&quot;-- &quot; + change.getFilename());</span>
+<span class="fc" id="L101">          try (Reader migrationReader = getMigrationLoader().getScriptReader(change, undo)) {</span>
+<span class="fc" id="L102">            char[] cbuf = new char[1024];</span>
+            int l;
+<span class="fc bfc" id="L104" title="All 2 branches covered.">            while ((l = migrationReader.read(cbuf)) &gt; -1) {</span>
+<span class="pc bpc" id="L105" title="1 of 2 branches missed.">              printStream.print(l == cbuf.length ? cbuf : Arrays.copyOf(cbuf, l));</span>
+            }
+          }
+<span class="fc" id="L108">          count++;</span>
+<span class="fc" id="L109">          printStream.println();</span>
+<span class="fc" id="L110">          printStream.println();</span>
+<span class="fc bfc" id="L111" title="All 2 branches covered.">          if (!undo) {</span>
+<span class="fc" id="L112">            printStream.println(generateVersionInsert(change));</span>
+<span class="pc bpc" id="L113" title="1 of 4 branches missed.">          } else if (i + 1 &lt; migrations.size() || !DESC_CREATE_CHANGELOG.equals(change.getDescription())) {</span>
+<span class="fc" id="L114">            printStream.println(generateVersionDelete(change));</span>
+          }
+<span class="fc" id="L116">          printStream.println();</span>
+<span class="fc bfc" id="L117" title="All 2 branches covered.">          if (hook != null) {</span>
+<span class="fc" id="L118">            hookBindings.put(MigrationHook.HOOK_CONTEXT, new ScriptHookContext(new Change(change), undo));</span>
+<span class="fc" id="L119">            hook.afterEach(hookBindings);</span>
+<span class="fc" id="L120">            printStream.println();</span>
+          }
+        }
+      }
+<span class="pc bpc" id="L124" title="1 of 4 branches missed.">      if (count &gt; 0 &amp;&amp; hook != null) {</span>
+<span class="fc" id="L125">        hookBindings.put(MigrationHook.HOOK_CONTEXT, new ScriptHookContext(null, undo));</span>
+<span class="fc" id="L126">        hook.after(hookBindings);</span>
+<span class="fc" id="L127">        printStream.println();</span>
+      }
+<span class="nc" id="L129">    } catch (IOException e) {</span>
+<span class="nc" id="L130">      throw new MigrationException(&quot;Error generating script. Cause: &quot; + e, e);</span>
+<span class="fc" id="L131">    }</span>
+<span class="fc" id="L132">  }</span>
+
+  private String generateVersionInsert(Change change) {
+<span class="fc" id="L135">    return &quot;INSERT INTO &quot; + changelogTable() + &quot; (ID, APPLIED_AT, DESCRIPTION) &quot; + &quot;VALUES (&quot; + change.getId() + &quot;, '&quot;</span>
+<span class="fc" id="L136">        + DatabaseOperation.generateAppliedTimeStampAsString() + &quot;', '&quot; + change.getDescription().replace('\'', ' ')</span>
+<span class="fc" id="L137">        + &quot;')&quot; + getDelimiter();</span>
+  }
+
+  private String generateVersionDelete(Change change) {
+<span class="fc" id="L141">    return &quot;DELETE FROM &quot; + changelogTable() + &quot; WHERE ID = &quot; + change.getId() + getDelimiter();</span>
+  }
+
+  private boolean shouldRun(Change change, BigDecimal v1, BigDecimal v2, boolean pendingOnly) {
+<span class="fc bfc" id="L145" title="All 2 branches covered.">    if (pendingOnly) {</span>
+<span class="fc bfc" id="L146" title="All 2 branches covered.">      return change.getAppliedTimestamp() == null;</span>
+    }
+<span class="fc" id="L148">    BigDecimal id = change.getId();</span>
+<span class="fc bfc" id="L149" title="All 2 branches covered.">    if (v1.compareTo(v2) &gt; 0) {</span>
+<span class="fc bfc" id="L150" title="All 4 branches covered.">      return id.compareTo(v2) &gt; 0 &amp;&amp; id.compareTo(v1) &lt;= 0;</span>
+    }
+<span class="fc bfc" id="L152" title="All 4 branches covered.">    return id.compareTo(v1) &gt; 0 &amp;&amp; id.compareTo(v2) &lt;= 0;</span>
+  }
+
+  // Issue 699
+  private String getDelimiter() {
+<span class="fc" id="L157">    StringBuilder delimiter = new StringBuilder();</span>
+<span class="pc bpc" id="L158" title="1 of 2 branches missed.">    if (environment().isFullLineDelimiter()) {</span>
+<span class="nc" id="L159">      delimiter.append('\n');</span>
+    }
+<span class="fc" id="L161">    delimiter.append(environment().getDelimiter());</span>
+<span class="fc" id="L162">    return delimiter.toString();</span>
+  }
+
+  private MigrationHook createScriptHook() {
+<span class="fc" id="L166">    String before = environment().getHookBeforeScript();</span>
+<span class="fc" id="L167">    String beforeEach = environment().getHookBeforeEachScript();</span>
+<span class="fc" id="L168">    String afterEach = environment().getHookAfterEachScript();</span>
+<span class="fc" id="L169">    String after = environment().getHookAfterScript();</span>
+<span class="pc bpc" id="L170" title="3 of 8 branches missed.">    if (before == null &amp;&amp; beforeEach == null &amp;&amp; afterEach == null &amp;&amp; after == null) {</span>
+<span class="fc" id="L171">      return null;</span>
+    }
+<span class="fc" id="L173">    return createFileMigrationHook(before, beforeEach, afterEach, after);</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

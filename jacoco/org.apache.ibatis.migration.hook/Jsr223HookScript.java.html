@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Jsr223HookScript.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MyBatis Migrations</a> &gt; <a href="index.source.html" class="el_package">org.apache.ibatis.migration.hook</a> &gt; <span class="el_source">Jsr223HookScript.java</span></div><h1>Jsr223HookScript.java</h1><pre class="source lang-java linenums">/*
+ *    Copyright 2010-2023 the original author or authors.
+ *
+ *    Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *       https://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+package org.apache.ibatis.migration.hook;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Properties;
+import java.util.Set;
+
+import javax.script.Bindings;
+import javax.script.Invocable;
+import javax.script.ScriptContext;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
+
+import org.apache.ibatis.migration.MigrationException;
+import org.apache.ibatis.migration.options.SelectedPaths;
+import org.apache.ibatis.migration.utils.Util;
+
+public class Jsr223HookScript implements HookScript {
+
+  private static final String MIGRATION_PATHS = &quot;migrationPaths&quot;;
+
+  private static final String KEY_FUNCTION = &quot;_function&quot;;
+  private static final String KEY_OBJECT = &quot;_object&quot;;
+  private static final String KEY_METHOD = &quot;_method&quot;;
+  private static final String KEY_ARG = &quot;_arg&quot;;
+
+  protected final String language;
+  protected final File scriptFile;
+  protected final String charset;
+  protected final Properties variables;
+  protected final SelectedPaths paths;
+  protected final PrintStream printStream;
+
+  protected String functionName;
+  protected String objectName;
+  protected String methodName;
+<span class="fc" id="L62">  protected List&lt;String&gt; args = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L63">  protected Map&lt;String, String&gt; localVars = new HashMap&lt;&gt;();</span>
+
+  public Jsr223HookScript(String language, File scriptFile, String charset, String[] options, SelectedPaths paths,
+<span class="fc" id="L66">      Properties variables, PrintStream printStream) {</span>
+<span class="fc" id="L67">    this.language = language;</span>
+<span class="fc" id="L68">    this.scriptFile = scriptFile;</span>
+<span class="fc" id="L69">    this.charset = charset;</span>
+<span class="fc" id="L70">    this.paths = paths;</span>
+<span class="fc" id="L71">    this.variables = variables;</span>
+<span class="fc" id="L72">    this.printStream = printStream;</span>
+<span class="fc bfc" id="L73" title="All 2 branches covered.">    for (String option : options) {</span>
+<span class="fc" id="L74">      int sep = option.indexOf('=');</span>
+<span class="pc bpc" id="L75" title="1 of 2 branches missed.">      if (sep &gt; -1) {</span>
+<span class="fc" id="L76">        String key = option.substring(0, sep);</span>
+<span class="fc" id="L77">        String value = option.substring(sep + 1);</span>
+<span class="fc bfc" id="L78" title="All 2 branches covered.">        if (KEY_FUNCTION.equals(key)) {</span>
+<span class="fc" id="L79">          functionName = value;</span>
+<span class="fc bfc" id="L80" title="All 2 branches covered.">        } else if (KEY_METHOD.equals(key)) {</span>
+<span class="fc" id="L81">          methodName = value;</span>
+<span class="fc bfc" id="L82" title="All 2 branches covered.">        } else if (KEY_OBJECT.equals(key)) {</span>
+<span class="fc" id="L83">          objectName = value;</span>
+<span class="fc bfc" id="L84" title="All 2 branches covered.">        } else if (KEY_ARG.equals(key)) {</span>
+<span class="fc" id="L85">          args.add(value);</span>
+        } else {
+<span class="fc" id="L87">          localVars.put(key, value);</span>
+        }
+      }
+    }
+<span class="fc" id="L91">  }</span>
+
+  @Override
+  public void execute(Map&lt;String, Object&gt; bindingMap) {
+<span class="fc" id="L95">    ScriptEngineManager manager = new ScriptEngineManager();</span>
+<span class="fc" id="L96">    ScriptEngine engine = manager.getEngineByName(language);</span>
+    // bind global/local variables defined in the environment file
+<span class="fc" id="L98">    Bindings bindings = engine.getContext().getBindings(ScriptContext.ENGINE_SCOPE);</span>
+<span class="fc" id="L99">    bindVariables(bindingMap, variables.entrySet());</span>
+<span class="fc" id="L100">    bindVariables(bindingMap, localVars.entrySet());</span>
+<span class="fc" id="L101">    bindings.put(MIGRATION_PATHS, paths);</span>
+<span class="fc" id="L102">    bindings.putAll(bindingMap);</span>
+    try {
+<span class="fc" id="L104">      printStream.println(Util.horizontalLine(&quot;Applying JSR-223 hook : &quot; + scriptFile.getName(), 80));</span>
+      try (
+<span class="fc" id="L106">          InputStreamReader stream = new InputStreamReader(new FileInputStream(scriptFile), Charset.forName(charset))) {</span>
+<span class="fc" id="L107">        engine.eval(stream);</span>
+      }
+<span class="pc bpc" id="L109" title="1 of 6 branches missed.">      if (functionName != null || objectName != null &amp;&amp; methodName != null) {</span>
+<span class="fc" id="L110">        Invocable invocable = (Invocable) engine;</span>
+<span class="fc bfc" id="L111" title="All 2 branches covered.">        if (functionName != null) {</span>
+<span class="fc" id="L112">          printStream.println(Util.horizontalLine(&quot;Invoking function : &quot; + functionName, 80));</span>
+<span class="fc" id="L113">          invocable.invokeFunction(functionName, args.toArray());</span>
+        } else {
+<span class="fc" id="L115">          printStream.println(Util.horizontalLine(&quot;Invoking method : &quot; + methodName, 80));</span>
+<span class="fc" id="L116">          Object targetObject = engine.get(objectName);</span>
+<span class="fc" id="L117">          invocable.invokeMethod(targetObject, methodName, args.toArray());</span>
+        }
+      }
+      // store vars in bindings to the per-operation map
+<span class="fc" id="L121">      bindVariables(bindingMap, bindings.entrySet());</span>
+<span class="nc" id="L122">    } catch (ClassCastException e) {</span>
+<span class="nc" id="L123">      throw new MigrationException(</span>
+<span class="nc" id="L124">          &quot;Script engine '&quot; + engine.getClass().getName() + &quot;' does not support function/method invocation.&quot;, e);</span>
+<span class="nc" id="L125">    } catch (IOException e) {</span>
+<span class="nc" id="L126">      throw new MigrationException(&quot;Failed to read JSR-223 hook script file.&quot;, e);</span>
+<span class="fc" id="L127">    } catch (ScriptException e) {</span>
+<span class="fc" id="L128">      throw new MigrationException(&quot;Failed to execute JSR-223 hook script.&quot;, e);</span>
+<span class="nc" id="L129">    } catch (NoSuchMethodException e) {</span>
+<span class="nc" id="L130">      throw new MigrationException(&quot;Method or function not found in JSR-223 hook script: &quot; + functionName, e);</span>
+<span class="fc" id="L131">    }</span>
+<span class="fc" id="L132">  }</span>
+
+  private &lt;S, T&gt; void bindVariables(Map&lt;String, Object&gt; bindingMap, Set&lt;Entry&lt;S, T&gt;&gt; vars) {
+<span class="fc bfc" id="L135" title="All 2 branches covered.">    for (Entry&lt;S, T&gt; entry : vars) {</span>
+<span class="fc" id="L136">      bindingMap.put((String) entry.getKey(), entry.getValue());</span>
+<span class="fc" id="L137">    }</span>
+<span class="fc" id="L138">  }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

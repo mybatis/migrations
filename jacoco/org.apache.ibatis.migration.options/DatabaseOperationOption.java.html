@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DatabaseOperationOption.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MyBatis Migrations</a> &gt; <a href="index.source.html" class="el_package">org.apache.ibatis.migration.options</a> &gt; <span class="el_source">DatabaseOperationOption.java</span></div><h1>DatabaseOperationOption.java</h1><pre class="source lang-java linenums">/*
+ *    Copyright 2010-2022 the original author or authors.
+ *
+ *    Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *       https://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+package org.apache.ibatis.migration.options;
+
+<span class="fc" id="L18">public class DatabaseOperationOption {</span>
+  private static final String DEFAULT_CHANGELOG_TABLE = &quot;CHANGELOG&quot;;
+
+  private static final String DEFAULT_DELIMITER = &quot;;&quot;;
+
+  private String changelogTable;
+
+<span class="fc" id="L25">  private boolean stopOnError = true;</span>
+
+<span class="fc" id="L27">  private boolean throwWarning = true;</span>
+
+  private boolean autoCommit;
+
+  private boolean sendFullScript;
+
+  private boolean removeCRs;
+
+<span class="fc" id="L35">  private boolean escapeProcessing = true;</span>
+
+<span class="fc" id="L37">  private boolean fullLineDelimiter = false;</span>
+
+  private String delimiter;
+
+  public String getChangelogTable() {
+<span class="fc bfc" id="L42" title="All 2 branches covered.">    return changelogTable == null ? DEFAULT_CHANGELOG_TABLE : changelogTable;</span>
+  }
+
+  public void setChangelogTable(String changelogTable) {
+<span class="fc" id="L46">    this.changelogTable = changelogTable;</span>
+<span class="fc" id="L47">  }</span>
+
+  public boolean isStopOnError() {
+<span class="fc" id="L50">    return stopOnError;</span>
+  }
+
+  public void setStopOnError(boolean stopOnError) {
+<span class="fc" id="L54">    this.stopOnError = stopOnError;</span>
+<span class="fc" id="L55">  }</span>
+
+  public boolean isThrowWarning() {
+<span class="fc" id="L58">    return throwWarning;</span>
+  }
+
+  public void setThrowWarning(boolean throwWarning) {
+<span class="fc" id="L62">    this.throwWarning = throwWarning;</span>
+<span class="fc" id="L63">  }</span>
+
+  public boolean isAutoCommit() {
+<span class="fc" id="L66">    return autoCommit;</span>
+  }
+
+  public void setAutoCommit(boolean autoCommit) {
+<span class="fc" id="L70">    this.autoCommit = autoCommit;</span>
+<span class="fc" id="L71">  }</span>
+
+  public boolean isSendFullScript() {
+<span class="fc" id="L74">    return sendFullScript;</span>
+  }
+
+  public void setSendFullScript(boolean sendFullScript) {
+<span class="fc" id="L78">    this.sendFullScript = sendFullScript;</span>
+<span class="fc" id="L79">  }</span>
+
+  public boolean isRemoveCRs() {
+<span class="fc" id="L82">    return removeCRs;</span>
+  }
+
+  public void setRemoveCRs(boolean removeCRs) {
+<span class="fc" id="L86">    this.removeCRs = removeCRs;</span>
+<span class="fc" id="L87">  }</span>
+
+  public boolean isEscapeProcessing() {
+<span class="nc" id="L90">    return escapeProcessing;</span>
+  }
+
+  public void setEscapeProcessing(boolean escapeProcessing) {
+<span class="fc" id="L94">    this.escapeProcessing = escapeProcessing;</span>
+<span class="fc" id="L95">  }</span>
+
+  public boolean isFullLineDelimiter() {
+<span class="fc" id="L98">    return fullLineDelimiter;</span>
+  }
+
+  public void setFullLineDelimiter(boolean fullLineDelimiter) {
+<span class="fc" id="L102">    this.fullLineDelimiter = fullLineDelimiter;</span>
+<span class="fc" id="L103">  }</span>
+
+  public String getDelimiter() {
+<span class="fc bfc" id="L106" title="All 2 branches covered.">    return delimiter == null ? DEFAULT_DELIMITER : delimiter;</span>
+  }
+
+  public void setDelimiter(String delimiter) {
+<span class="fc" id="L110">    this.delimiter = delimiter;</span>
+<span class="fc" id="L111">  }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

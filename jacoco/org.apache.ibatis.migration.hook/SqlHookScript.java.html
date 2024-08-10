@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SqlHookScript.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MyBatis Migrations</a> &gt; <a href="index.source.html" class="el_package">org.apache.ibatis.migration.hook</a> &gt; <span class="el_source">SqlHookScript.java</span></div><h1>SqlHookScript.java</h1><pre class="source lang-java linenums">/*
+ *    Copyright 2010-2023 the original author or authors.
+ *
+ *    Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *       https://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+package org.apache.ibatis.migration.hook;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.io.StringReader;
+import java.util.Map;
+import java.util.Properties;
+
+import org.apache.ibatis.migration.MigrationException;
+import org.apache.ibatis.migration.VariableReplacer;
+import org.apache.ibatis.migration.utils.Util;
+
+public class SqlHookScript implements HookScript {
+
+  protected final File scriptFile;
+  protected final String charset;
+  protected final Properties variables;
+  protected final PrintStream printStream;
+  protected final VariableReplacer replacer;
+
+  public SqlHookScript(File scriptFile, String charset, String[] options, Properties variables,
+<span class="fc" id="L40">      PrintStream printStream) {</span>
+<span class="fc" id="L41">    this.scriptFile = scriptFile;</span>
+<span class="fc" id="L42">    this.charset = charset;</span>
+<span class="fc" id="L43">    this.variables = variables;</span>
+<span class="fc" id="L44">    this.printStream = printStream;</span>
+    // options can be local variables in key=value format.
+<span class="fc bfc" id="L46" title="All 2 branches covered.">    for (String option : options) {</span>
+<span class="fc" id="L47">      int sep = option.indexOf('=');</span>
+<span class="pc bpc" id="L48" title="1 of 2 branches missed.">      if (sep &gt; -1) {</span>
+<span class="fc" id="L49">        this.variables.put(option.substring(0, sep), option.substring(sep + 1));</span>
+      }
+    }
+<span class="fc" id="L52">    replacer = new VariableReplacer(this.variables);</span>
+<span class="fc" id="L53">  }</span>
+
+  @Override
+  public void execute(Map&lt;String, Object&gt; bindingMap) {
+<span class="fc" id="L57">    HookContext context = (HookContext) bindingMap.get(MigrationHook.HOOK_CONTEXT);</span>
+<span class="fc" id="L58">    printStream.println(Util.horizontalLine(&quot;Applying SQL hook: &quot; + scriptFile.getName(), 80));</span>
+
+<span class="fc" id="L60">    try (FileInputStream inputStream = new FileInputStream(scriptFile);</span>
+<span class="fc" id="L61">        ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {</span>
+<span class="fc" id="L62">      byte[] buffer = new byte[1024];</span>
+      int length;
+<span class="fc bfc" id="L64" title="All 2 branches covered.">      while ((length = inputStream.read(buffer)) != -1) {</span>
+<span class="fc" id="L65">        outputStream.write(buffer, 0, length);</span>
+      }
+<span class="fc" id="L67">      try (StringReader reader = new StringReader(replacer.replace(outputStream.toString(charset)))) {</span>
+<span class="fc" id="L68">        context.executeSql(reader);</span>
+      }
+<span class="nc" id="L70">    } catch (IOException e) {</span>
+<span class="nc" id="L71">      throw new MigrationException(&quot;Error occurred while running SQL hook script.&quot;, e);</span>
+<span class="fc" id="L72">    }</span>
+<span class="fc" id="L73">  }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

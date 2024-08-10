@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FileHookScriptFactory.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MyBatis Migrations</a> &gt; <a href="index.source.html" class="el_package">org.apache.ibatis.migration.hook</a> &gt; <span class="el_source">FileHookScriptFactory.java</span></div><h1>FileHookScriptFactory.java</h1><pre class="source lang-java linenums">/*
+ *    Copyright 2010-2023 the original author or authors.
+ *
+ *    Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *       https://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+package org.apache.ibatis.migration.hook;
+
+import java.io.File;
+import java.io.PrintStream;
+import java.util.Arrays;
+import java.util.Properties;
+
+import org.apache.ibatis.migration.Environment;
+import org.apache.ibatis.migration.MigrationException;
+import org.apache.ibatis.migration.options.SelectedPaths;
+
+public class FileHookScriptFactory implements HookScriptFactory {
+
+  protected final SelectedPaths paths;
+  protected final Environment environment;
+  protected final PrintStream printStream;
+
+<span class="fc" id="L33">  public FileHookScriptFactory(SelectedPaths paths, Environment environment, PrintStream printStream) {</span>
+<span class="fc" id="L34">    this.paths = paths;</span>
+<span class="fc" id="L35">    this.environment = environment;</span>
+<span class="fc" id="L36">    this.printStream = printStream;</span>
+<span class="fc" id="L37">  }</span>
+
+  @Override
+  public HookScript create(String hookSetting) {
+<span class="fc bfc" id="L41" title="All 2 branches covered.">    if (hookSetting == null) {</span>
+<span class="fc" id="L42">      return null;</span>
+    }
+<span class="fc" id="L44">    File hooksDir = paths.getHookPath();</span>
+<span class="pc bpc" id="L45" title="1 of 2 branches missed.">    if (hooksDir == null) {</span>
+<span class="nc" id="L46">      throw new MigrationException(&quot;Hooks directory must not be null.&quot;);</span>
+    }
+<span class="pc bpc" id="L48" title="1 of 2 branches missed.">    if (!hooksDir.exists()) {</span>
+<span class="nc" id="L49">      throw new MigrationException(&quot;Hooks directory not found : &quot; + hooksDir.getAbsolutePath());</span>
+    }
+<span class="fc" id="L51">    String[] segments = hookSetting.split(&quot;:&quot;);</span>
+<span class="pc bpc" id="L52" title="1 of 2 branches missed.">    if (segments.length &lt; 2) {</span>
+<span class="nc" id="L53">      throw new MigrationException(</span>
+          &quot;Error creating a HookScript. Hook setting must contain 'language' and 'file name' separated by ':' (e.g. SQL:post-up.sql).&quot;);
+    }
+<span class="fc" id="L56">    String charset = environment.getScriptCharset();</span>
+<span class="fc" id="L57">    Properties variables = environment.getVariables();</span>
+    // First segment is language
+<span class="fc" id="L59">    String scriptLang = segments[0];</span>
+    // Second segment is file
+<span class="fc" id="L61">    File scriptFile = new File(hooksDir, segments[1]);</span>
+    // The rest are script dependent options
+<span class="fc" id="L63">    String[] hookOptions = Arrays.copyOfRange(segments, 2, segments.length);</span>
+<span class="pc bpc" id="L64" title="1 of 2 branches missed.">    if (!scriptFile.exists()) {</span>
+<span class="nc" id="L65">      throw new MigrationException(&quot;Hook script not found : &quot; + scriptFile.getAbsolutePath());</span>
+    }
+<span class="fc bfc" id="L67" title="All 2 branches covered.">    if (&quot;sql&quot;.equalsIgnoreCase(scriptLang)) {</span>
+<span class="fc" id="L68">      return new SqlHookScript(scriptFile, charset, hookOptions, variables, printStream);</span>
+    }
+    // Assuming it's JSR-223.
+<span class="fc" id="L71">    return new Jsr223HookScript(scriptLang, scriptFile, charset, hookOptions, paths, variables, printStream);</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

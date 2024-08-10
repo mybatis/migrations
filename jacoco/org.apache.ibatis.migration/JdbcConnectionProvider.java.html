@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>JdbcConnectionProvider.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MyBatis Migrations</a> &gt; <a href="index.source.html" class="el_package">org.apache.ibatis.migration</a> &gt; <span class="el_source">JdbcConnectionProvider.java</span></div><h1>JdbcConnectionProvider.java</h1><pre class="source lang-java linenums">/*
+ *    Copyright 2010-2022 the original author or authors.
+ *
+ *    Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *       https://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+package org.apache.ibatis.migration;
+
+import java.sql.Connection;
+import java.sql.Driver;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.ibatis.migration.driver.DriverShim;
+
+public class JdbcConnectionProvider implements ConnectionProvider {
+<span class="fc" id="L29">  private static final Map&lt;String, Driver&gt; registeredDrivers = registeredDrivers();</span>
+
+  private final String url;
+  private final String username;
+  private final String password;
+
+  public JdbcConnectionProvider(String driver, String url, String username, String password) {
+<span class="fc" id="L36">    this(null, driver, url, username, password);</span>
+<span class="fc" id="L37">  }</span>
+
+<span class="fc" id="L39">  public JdbcConnectionProvider(ClassLoader classLoader, String driver, String url, String username, String password) {</span>
+<span class="fc" id="L40">    this.url = url;</span>
+<span class="fc" id="L41">    this.username = username;</span>
+<span class="fc" id="L42">    this.password = password;</span>
+<span class="fc" id="L43">    registerDriver(classLoader, driver);</span>
+<span class="fc" id="L44">  }</span>
+
+  @Override
+  public Connection getConnection() throws SQLException {
+<span class="fc" id="L48">    return DriverManager.getConnection(url, username, password);</span>
+  }
+
+  private void registerDriver(ClassLoader classLoader, String driver) {
+<span class="fc" id="L52">    registeredDrivers.computeIfAbsent(driver, d -&gt; createDriverClass(classLoader, d));</span>
+<span class="fc" id="L53">  }</span>
+
+  private Driver createDriverClass(ClassLoader classLoader, String driver) {
+    try {
+<span class="pc bpc" id="L57" title="1 of 2 branches missed.">      final Class&lt;?&gt; driverClass = classLoader == null ? Class.forName(driver)</span>
+<span class="pc" id="L58">          : Class.forName(driver, true, classLoader);</span>
+<span class="fc" id="L59">      final Driver driverInstance = (Driver) driverClass.getDeclaredConstructor().newInstance();</span>
+<span class="fc" id="L60">      final DriverShim driverShim = new DriverShim(driverInstance);</span>
+<span class="fc" id="L61">      DriverManager.registerDriver(driverShim);</span>
+<span class="fc" id="L62">      return driverShim;</span>
+<span class="nc" id="L63">    } catch (final Exception e) {</span>
+<span class="nc" id="L64">      throw new IllegalStateException(&quot;Failed to register driver &quot; + driver, e);</span>
+    }
+  }
+
+  private static Map&lt;String, Driver&gt; registeredDrivers() {
+<span class="fc" id="L69">    final Map&lt;String, Driver&gt; registeredDrivers = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L70">    final Enumeration&lt;Driver&gt; drivers = DriverManager.getDrivers();</span>
+<span class="fc bfc" id="L71" title="All 2 branches covered.">    while (drivers.hasMoreElements()) {</span>
+<span class="fc" id="L72">      final Driver driver = drivers.nextElement();</span>
+<span class="fc" id="L73">      registeredDrivers.put(driver.getClass().getName(), driver);</span>
+<span class="fc" id="L74">    }</span>
+<span class="fc" id="L75">    return registeredDrivers;</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
