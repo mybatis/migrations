@@ -40,10 +40,10 @@
   </contributors>
 
   <scm>
-    <url>https://github.com/mybatis/migrations/</url>
     <connection>scm:git:ssh://git@github.com/mybatis/migrations.git</connection>
     <developerConnection>scm:git:ssh://git@github.com/mybatis/migrations.git</developerConnection>
     <tag>HEAD</tag>
+    <url>https://github.com/mybatis/migrations/</url>
   </scm>
   <issueManagement>
     <system>GitHub</system>
@@ -133,7 +133,7 @@
           <artifactId>license-maven-plugin</artifactId>
           <configuration>
             <mapping combine.children="append">
-                <policy>DOUBLESLASH_STYLE</policy>
+              <policy>DOUBLESLASH_STYLE</policy>
             </mapping>
           </configuration>
         </plugin>
@@ -144,14 +144,6 @@
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>appassembler-maven-plugin</artifactId>
         <version>2.1.0</version>
-        <executions>
-          <execution>
-            <phase>package</phase>
-            <goals>
-              <goal>assemble</goal>
-            </goals>
-          </execution>
-        </executions>
         <configuration>
           <repositoryLayout>flat</repositoryLayout>
           <repositoryName>lib</repositoryName>
@@ -167,6 +159,14 @@
             </program>
           </programs>
         </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>assemble</goal>
+            </goals>
+            <phase>package</phase>
+          </execution>
+        </executions>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
