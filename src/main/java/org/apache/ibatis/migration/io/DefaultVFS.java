@@ -80,7 +80,16 @@ public class DefaultVFS extends VFS {
                 if (log.isLoggable(Level.FINER)) {
                   log.log(Level.FINER, "Jar entry: " + entry.getName());
                 }
-                children.add(entry.getName());
+                String entryName = entry.getName();
+                File entryFile = new File(path, entryName).getCanonicalFile();
+                File baseDir = new File(path).getCanonicalFile();
+                if (!entryFile.toPath().startsWith(baseDir.toPath())) {
+                  if (log.isLoggable(Level.WARNING)) {
+                    log.log(Level.WARNING, "Skipping potentially unsafe entry: " + entryName);
+                  }
+                  continue;
+                }
+                children.add(entryName);
               }
             }
           } else {
