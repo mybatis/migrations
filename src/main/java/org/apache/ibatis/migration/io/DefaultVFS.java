@@ -1,5 +1,5 @@
 /*
- *    Copyright 2010-2023 the original author or authors.
+ *    Copyright 2010-2025 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -26,6 +26,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.file.InvalidPathException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -124,7 +125,7 @@ public class DefaultVFS extends VFS {
             // No idea where the exception came from so rethrow it
             throw e;
           }
-          File file = new File(url.getFile());
+          File file = Paths.get(url.getFile()).toFile();
           if (log.isLoggable(Level.FINER)) {
             log.log(Level.FINER, "Listing directory " + file.getAbsolutePath());
           }
@@ -266,12 +267,12 @@ public class DefaultVFS extends VFS {
         log.log(Level.FINER, "Not a JAR: " + jarUrl);
       }
       jarUrl.replace(0, jarUrl.length(), testUrl.getFile());
-      File file = new File(jarUrl.toString());
+      File file = Paths.get(jarUrl.toString()).toFile();
 
       // File name might be URL-encoded
       if (!file.exists()) {
         try {
-          file = new File(URLEncoder.encode(jarUrl.toString(), "UTF-8"));
+          file = Paths.get(URLEncoder.encode(jarUrl.toString(), "UTF-8")).toFile();
         } catch (UnsupportedEncodingException e) {
           throw new RuntimeException("Unsupported encoding?  UTF-8?  That's impossible.");
         }

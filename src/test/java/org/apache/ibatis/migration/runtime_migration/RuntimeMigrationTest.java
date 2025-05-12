@@ -1,5 +1,5 @@
 /*
- *    Copyright 2010-2023 the original author or authors.
+ *    Copyright 2010-2025 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.PrintStream;
 import java.math.BigDecimal;
 import java.net.URL;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -249,7 +250,7 @@ class RuntimeMigrationTest {
 
   protected FileMigrationLoader createMigrationsLoader(String resource) {
     URL url = getClass().getClassLoader().getResource(resource);
-    File scriptsDir = new File(url.getFile());
+    File scriptsDir = Paths.get(url.getPath()).toFile();
     Properties properties = new Properties();
     properties.setProperty("changelog", "CHANGELOG");
     return new FileMigrationLoader(scriptsDir, "utf-8", properties);
