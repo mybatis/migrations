@@ -1,5 +1,5 @@
 /*
- *    Copyright 2010-2022 the original author or authors.
+ *    Copyright 2010-2025 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@ package org.apache.ibatis.migration.options;
 
 import static org.apache.ibatis.migration.utils.Util.isOption;
 
-import java.io.File;
+import java.nio.file.Paths;
 
 public enum OptionsParser {
   ;
@@ -55,19 +55,19 @@ public enum OptionsParser {
 
       switch (option) {
         case PATH:
-          options.getPaths().setBasePath(new File(argParts[1]));
+          options.getPaths().setBasePath(Paths.get(argParts[1]).toFile());
           break;
         case ENVPATH:
-          options.getPaths().setEnvPath(new File(argParts[1]));
+          options.getPaths().setEnvPath(Paths.get(argParts[1]).toFile());
           break;
         case SCRIPTPATH:
-          options.getPaths().setScriptPath(new File(argParts[1]));
+          options.getPaths().setScriptPath(Paths.get(argParts[1]).toFile());
           break;
         case DRIVERPATH:
-          options.getPaths().setDriverPath(new File(argParts[1]));
+          options.getPaths().setDriverPath(Paths.get(argParts[1]).toFile());
           break;
         case HOOKPATH:
-          options.getPaths().setHookPath(new File(argParts[1]));
+          options.getPaths().setHookPath(Paths.get(argParts[1]).toFile());
           break;
         case ENV:
           options.setEnvironment(argParts[1]);

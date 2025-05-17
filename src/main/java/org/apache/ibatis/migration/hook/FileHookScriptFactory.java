@@ -1,5 +1,5 @@
 /*
- *    Copyright 2010-2023 the original author or authors.
+ *    Copyright 2010-2025 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -58,7 +58,7 @@ public class FileHookScriptFactory implements HookScriptFactory {
     // First segment is language
     String scriptLang = segments[0];
     // Second segment is file
-    File scriptFile = new File(hooksDir, segments[1]);
+    File scriptFile = hooksDir.toPath().resolve(segments[1]).toFile();
     // The rest are script dependent options
     String[] hookOptions = Arrays.copyOfRange(segments, 2, segments.length);
     if (!scriptFile.exists()) {

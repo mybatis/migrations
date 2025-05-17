@@ -1,5 +1,5 @@
 /*
- *    Copyright 2010-2023 the original author or authors.
+ *    Copyright 2010-2025 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -16,13 +16,13 @@
 package org.apache.ibatis.migration;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FilterReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.Charset;
+import java.nio.file.Files;
 import java.util.Properties;
 
 public class MigrationReader extends FilterReader {
@@ -85,7 +85,7 @@ public class MigrationReader extends FilterReader {
   }
 
   public MigrationReader(File file, String charset, boolean undo, Properties variables) throws IOException {
-    this(new FileInputStream(file), charset, undo, variables);
+    this(Files.newInputStream(file.toPath()), charset, undo, variables);
   }
 
   public MigrationReader(InputStream inputStream, String charset, boolean undo, Properties variables) {
