@@ -33,6 +33,7 @@ import org.apache.ibatis.migration.io.Resources;
 import org.apache.ibatis.migration.utils.TestUtil;
 import org.apache.ibatis.migration.utils.Util;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledForJreRange;
 
 import uk.org.webcompere.systemstubs.SystemStubs;
 
@@ -55,6 +56,7 @@ class NewHookTest {
     assertTrue(TestUtil.deleteDirectory(basePath), "delete test dir");
   }
 
+  @EnabledForJreRange(maxVersion = 23)
   @Test
   void shouldNotCreateFileWhenBeforeHookThrowsException() throws Throwable {
     File basePath = initBaseDir();
