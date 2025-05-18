@@ -22,7 +22,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.PrintStream;
 import java.math.BigDecimal;
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -249,8 +250,14 @@ class RuntimeMigrationTest {
   }
 
   protected FileMigrationLoader createMigrationsLoader(String resource) {
-    URL url = getClass().getClassLoader().getResource(resource);
-    File scriptsDir = Path.of(url.getPath()).toFile();
+    URI uri = null;
+    try {
+      uri = getClass().getClassLoader().getResource(resource).toURI();
+    } catch (URISyntaxException e) {
+      // Should not occur
+      fail();
+    }
+    File scriptsDir = Path.of(uri).toFile();
     Properties properties = new Properties();
     properties.setProperty("changelog", "CHANGELOG");
     return new FileMigrationLoader(scriptsDir, "utf-8", properties);
