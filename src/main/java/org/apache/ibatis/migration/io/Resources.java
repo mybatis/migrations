@@ -20,10 +20,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.Charset;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.util.Properties;
 
 /**
@@ -60,7 +62,7 @@ public class Resources {
   }
 
   /**
-   * Returns the URL of the resource on the classpath
+   * Returns the URI of the resource on the classpath
    *
    * @param resource
    *          The resource to find
@@ -70,13 +72,13 @@ public class Resources {
    * @throws java.io.IOException
    *           If the resource cannot be found or read
    */
-  public static URL getResourceURL(String resource) throws IOException {
+  public static URI getResourceURI(String resource) throws IOException {
     // issue #625
-    return getResourceURL(null, resource);
+    return getResourceURI(null, resource);
   }
 
   /**
-   * Returns the URL of the resource on the classpath
+   * Returns the URI of the resource on the classpath
    *
    * @param loader
    *          The classloader used to fetch the resource
@@ -88,12 +90,16 @@ public class Resources {
    * @throws java.io.IOException
    *           If the resource cannot be found or read
    */
-  public static URL getResourceURL(ClassLoader loader, String resource) throws IOException {
+  public static URI getResourceURI(ClassLoader loader, String resource) throws IOException {
     URL url = classLoaderWrapper.getResourceAsURL(resource, loader);
     if (url == null) {
       throw new IOException("Could not find resource " + resource);
     }
-    return url;
+    try {
+      return url.toURI();
+    } catch (URISyntaxException e) {
+      throw new IOException("Could not find resource " + resource);
+    }
   }
 
   /**
@@ -228,7 +234,7 @@ public class Resources {
    *           If the resource cannot be found or read
    */
   public static File getResourceAsFile(String resource) throws IOException {
-    return Paths.get(getResourceURL(resource).getFile()).toFile();
+    return Path.of(getResourceURI(resource)).toFile();
   }
 
   /**
@@ -245,7 +251,7 @@ public class Resources {
    *           If the resource cannot be found or read
    */
   public static File getResourceAsFile(ClassLoader loader, String resource) throws IOException {
-    return Paths.get(getResourceURL(loader, resource).getFile()).toFile();
+    return Path.of(getResourceURI(loader, resource)).toFile();
   }
 
   /**
