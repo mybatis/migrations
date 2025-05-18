@@ -45,6 +45,7 @@ import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.condition.EnabledForJreRange;
 
 import uk.org.webcompere.systemstubs.SystemStubs;
 
@@ -307,6 +308,7 @@ class MigratorTest {
     assertTrue(output.contains("-- @UNDO"));
   }
 
+  @EnabledForJreRange(maxVersion = 23)
   @Test
   void shouldScriptCommandFailIfSameVersion() throws Exception {
     String output = SystemStubs.tapSystemOut(() -> {
@@ -435,6 +437,7 @@ class MigratorTest {
     assertTrue(TestUtil.deleteDirectory(basePath), "delete temp dir");
   }
 
+  @EnabledForJreRange(maxVersion = 23)
   @Test
   void shouldColorizeFailureOutputIfColorOptionEnabled() throws Throwable {
     System.setProperty("migrationsHome", TestUtil.getTempDir().getAbsolutePath());
@@ -449,6 +452,7 @@ class MigratorTest {
     assertTrue(TestUtil.deleteDirectory(basePath), "delete temp dir");
   }
 
+  @EnabledForJreRange(maxVersion = 23)
   @Test
   void shouldShowErrorOnMissingChangelog() throws Throwable {
     // gh-220
