@@ -27,7 +27,7 @@ import java.io.Reader;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -161,7 +161,7 @@ public abstract class BaseCommand implements Command {
   protected void copyExternalResourceTo(String resource, File toFile, Properties variables) {
     printStream.println("Creating: " + toFile.getName());
     try {
-      File sourceFile = Paths.get(resource).toFile();
+      File sourceFile = Path.of(resource).toFile();
       copyTemplate(sourceFile, toFile, variables);
     } catch (Exception e) {
       throw new MigrationException("Error copying " + resource + " to " + toFile.getAbsolutePath() + ".  Cause: " + e,
@@ -259,7 +259,7 @@ public abstract class BaseCommand implements Command {
   private File getCustomDriverPath() {
     String customDriverPath = environment().getDriverPath();
     if (customDriverPath != null && customDriverPath.length() > 0) {
-      return Paths.get(customDriverPath).toFile();
+      return Path.of(customDriverPath).toFile();
     }
     return options.getPaths().getDriverPath();
   }

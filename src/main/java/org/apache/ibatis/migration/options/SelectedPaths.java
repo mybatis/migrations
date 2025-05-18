@@ -18,10 +18,10 @@ package org.apache.ibatis.migration.options;
 import static org.apache.ibatis.migration.utils.Util.file;
 
 import java.io.File;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 
 public class SelectedPaths {
-  private File basePath = Paths.get("./").toFile();
+  private File basePath = Path.of("./").toFile();
   private File envPath;
   private File scriptPath;
   private File driverPath;

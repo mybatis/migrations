@@ -24,7 +24,7 @@ import java.io.PrintWriter;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 
 import org.apache.ibatis.migration.Migrator;
@@ -40,7 +40,7 @@ class NewHookTest {
   @Test
   void shouldRunNewHooks() throws Throwable {
     File basePath = initBaseDir();
-    File scriptPath = Paths.get(basePath.getCanonicalPath(), "scripts").toFile();
+    File scriptPath = Path.of(basePath.getCanonicalPath(), "scripts").toFile();
     String output = SystemStubs.tapSystemOut(() -> {
       Migrator.main(
           TestUtil.args("--path=" + basePath.getAbsolutePath(), "--idpattern=00", "new", "create table1 JIRA-123"));
@@ -50,14 +50,14 @@ class NewHookTest {
     assertTrue(output.contains("SUCCESS"));
     assertTrue(output.contains("Description is valid."));
     assertTrue(output.contains("Renamed 03_create_table1_JIRA-123.sql to 03_create_table1_JIRA123.sql"));
-    assertTrue(Files.exists(Paths.get(scriptPath.getCanonicalPath(), "03_create_table1_JIRA123.sql")));
+    assertTrue(Files.exists(Path.of(scriptPath.getCanonicalPath(), "03_create_table1_JIRA123.sql")));
     assertTrue(TestUtil.deleteDirectory(basePath), "delete test dir");
   }
 
   @Test
   void shouldNotCreateFileWhenBeforeHookThrowsException() throws Throwable {
     File basePath = initBaseDir();
-    File scriptPath = Paths.get(basePath.getCanonicalPath(), "scripts").toFile();
+    File scriptPath = Path.of(basePath.getCanonicalPath(), "scripts").toFile();
     String output = SystemStubs.tapSystemOut(() -> {
       int exitCode = SystemStubs.catchSystemExit(() -> {
         Migrator.main(TestUtil.args("--path=" + basePath.getAbsolutePath(), "new", "create table1"));
@@ -73,7 +73,7 @@ class NewHookTest {
     File basePath = TestUtil.getTempDir();
     Migrator.main(TestUtil.args("--path=" + basePath.getAbsolutePath(), "--idpattern=00", "init"));
     // Copy hook script
-    File hooksDir = Paths.get(basePath.getCanonicalPath(), "hooks").toFile();
+    File hooksDir = Path.of(basePath.getCanonicalPath(), "hooks").toFile();
     hooksDir.mkdir();
     try (
         FileChannel srcChannel = FileChannel
@@ -83,7 +83,7 @@ class NewHookTest {
       srcChannel.transferTo(0, srcChannel.size(), destChannel);
     }
     // Add hook settings
-    File envFile = Paths.get(basePath.getCanonicalPath(), "environments", "development.properties").toFile();
+    File envFile = Path.of(basePath.getCanonicalPath(), "environments", "development.properties").toFile();
     try (PrintWriter writer = new PrintWriter(
         Files.newBufferedWriter(envFile.toPath(), Charset.forName("utf-8"), StandardOpenOption.APPEND))) {
       writer.println("hook_before_new=js:NewHook.js:_function=validateDesc");

@@ -17,7 +17,7 @@ package org.apache.ibatis.migration.options;
 
 import static org.apache.ibatis.migration.utils.Util.isOption;
 
-import java.nio.file.Paths;
+import java.nio.file.Path;
 
 public enum OptionsParser {
   ;
@@ -55,19 +55,19 @@ public enum OptionsParser {
 
       switch (option) {
         case PATH:
-          options.getPaths().setBasePath(Paths.get(argParts[1]).toFile());
+          options.getPaths().setBasePath(Path.of(argParts[1]).toFile());
           break;
         case ENVPATH:
-          options.getPaths().setEnvPath(Paths.get(argParts[1]).toFile());
+          options.getPaths().setEnvPath(Path.of(argParts[1]).toFile());
           break;
         case SCRIPTPATH:
-          options.getPaths().setScriptPath(Paths.get(argParts[1]).toFile());
+          options.getPaths().setScriptPath(Path.of(argParts[1]).toFile());
           break;
         case DRIVERPATH:
-          options.getPaths().setDriverPath(Paths.get(argParts[1]).toFile());
+          options.getPaths().setDriverPath(Path.of(argParts[1]).toFile());
           break;
         case HOOKPATH:
-          options.getPaths().setHookPath(Paths.get(argParts[1]).toFile());
+          options.getPaths().setHookPath(Path.of(argParts[1]).toFile());
           break;
         case ENV:
           options.setEnvironment(argParts[1]);

@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 
 import org.junit.jupiter.api.Test;
 
@@ -37,7 +37,7 @@ class UtilTest {
 
   @Test
   void testFile() {
-    final File parentDirectory = Paths.get(".").toFile();
+    final File parentDirectory = Path.of(".").toFile();
     final String childFile = "child.file";
     final File absoluteFile = file(parentDirectory, childFile);
 

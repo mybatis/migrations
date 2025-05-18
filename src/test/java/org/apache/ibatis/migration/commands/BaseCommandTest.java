@@ -25,7 +25,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.FileSystems;
 import java.nio.file.NoSuchFileException;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.util.Properties;
 import java.util.Scanner;
 
@@ -53,7 +53,7 @@ class BaseCommandTest {
     File dest = File.createTempFile("Out", ".sql");
     dest.deleteOnExit();
     NoSuchFileException e = assertThrows(NoSuchFileException.class, () -> {
-      BaseCommand.copyTemplate(Paths.get(srcPath).toFile(), dest, null);
+      BaseCommand.copyTemplate(Path.of(srcPath).toFile(), dest, null);
     });
     assertEquals(e.getMessage(), srcPath);
   }
@@ -66,7 +66,7 @@ class BaseCommandTest {
     File dest = File.createTempFile("Out", ".sql");
     dest.deleteOnExit();
     NoSuchFileException e = assertThrows(NoSuchFileException.class, () -> {
-      BaseCommand.copyTemplate(Paths.get(srcPath).toFile(), dest, null);
+      BaseCommand.copyTemplate(Path.of(srcPath).toFile(), dest, null);
     });
     assertEquals(e.getMessage(), srcPath + " (The system cannot find the file specified)");
   }

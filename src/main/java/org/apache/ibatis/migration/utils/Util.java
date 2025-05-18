@@ -18,7 +18,7 @@ package org.apache.ibatis.migration.utils;
 import java.io.File;
 import java.io.InputStream;
 import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.util.Properties;
 
 public enum Util {
@@ -62,7 +62,7 @@ public enum Util {
     }
     Properties properties = new Properties();
     String path = migrationsHome + File.separator + MIGRATIONS_PROPERTIES;
-    try (InputStream stream = Files.newInputStream(Paths.get(path))) {
+    try (InputStream stream = Files.newInputStream(Path.of(path))) {
       properties.load(stream);
       return properties.getProperty(key);
     } catch (Exception e) {
@@ -75,7 +75,7 @@ public enum Util {
   }
 
   public static File file(File path, String fileName) {
-    return Paths.get(path.getAbsolutePath() + File.separator + fileName).toFile();
+    return Path.of(path.getAbsolutePath() + File.separator + fileName).toFile();
   }
 
   public static String horizontalLine(String caption, int length) {

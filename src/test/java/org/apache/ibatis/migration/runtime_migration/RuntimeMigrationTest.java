@@ -23,7 +23,7 @@ import java.io.File;
 import java.io.PrintStream;
 import java.math.BigDecimal;
 import java.net.URL;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -250,7 +250,7 @@ class RuntimeMigrationTest {
 
   protected FileMigrationLoader createMigrationsLoader(String resource) {
     URL url = getClass().getClassLoader().getResource(resource);
-    File scriptsDir = Paths.get(url.getPath()).toFile();
+    File scriptsDir = Path.of(url.getPath()).toFile();
     Properties properties = new Properties();
     properties.setProperty("changelog", "CHANGELOG");
     return new FileMigrationLoader(scriptsDir, "utf-8", properties);

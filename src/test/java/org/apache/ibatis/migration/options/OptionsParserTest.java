@@ -29,7 +29,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 
 import org.junit.jupiter.api.Test;
 
@@ -58,7 +58,7 @@ class OptionsParserTest {
   @Test
   void testFileOptions() {
     final String testFileName = "test";
-    final File testFile = Paths.get(testFileName).toFile();
+    final File testFile = Path.of(testFileName).toFile();
     final SelectedOptions expectedOptions = new SelectedOptions();
 
     final SelectedPaths paths = expectedOptions.getPaths();

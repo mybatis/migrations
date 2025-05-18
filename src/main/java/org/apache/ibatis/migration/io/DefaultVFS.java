@@ -26,7 +26,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.file.InvalidPathException;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -125,7 +125,7 @@ public class DefaultVFS extends VFS {
             // No idea where the exception came from so rethrow it
             throw e;
           }
-          File file = Paths.get(url.getFile()).toFile();
+          File file = Path.of(url.getFile()).toFile();
           if (log.isLoggable(Level.FINER)) {
             log.log(Level.FINER, "Listing directory " + file.getAbsolutePath());
           }
@@ -267,12 +267,12 @@ public class DefaultVFS extends VFS {
         log.log(Level.FINER, "Not a JAR: " + jarUrl);
       }
       jarUrl.replace(0, jarUrl.length(), testUrl.getFile());
-      File file = Paths.get(jarUrl.toString()).toFile();
+      File file = Path.of(jarUrl.toString()).toFile();
 
       // File name might be URL-encoded
       if (!file.exists()) {
         try {
-          file = Paths.get(URLEncoder.encode(jarUrl.toString(), "UTF-8")).toFile();
+          file = Path.of(URLEncoder.encode(jarUrl.toString(), "UTF-8")).toFile();
         } catch (UnsupportedEncodingException e) {
           throw new RuntimeException("Unsupported encoding?  UTF-8?  That's impossible.");
         }
