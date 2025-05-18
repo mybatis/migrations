@@ -24,6 +24,7 @@ import java.io.PrintStream;
 import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -171,14 +172,14 @@ class RuntimeMigrationTest {
       }
     };
     new UpOperation(3).operate(connectionProvider, migrationsLoader, dbOption, printStream, hook);
-    String output = out.toString("utf-8");
+    String output = out.toString(StandardCharsets.UTF_8);
     assertEquals(1, TestUtil.countStr(output, "<BEFORE>"));
     assertEquals(3, TestUtil.countStr(output, "<BEFORE_EACH>"));
     assertEquals(3, TestUtil.countStr(output, "<AFTER_EACH>"));
     assertEquals(1, TestUtil.countStr(output, "<AFTER>"));
     out.reset();
     new DownOperation(2).operate(connectionProvider, migrationsLoader, dbOption, printStream, hook);
-    output = out.toString("utf-8");
+    output = out.toString(StandardCharsets.UTF_8);
     assertEquals(1, TestUtil.countStr(output, "<BEFORE>"));
     assertEquals(2, TestUtil.countStr(output, "<BEFORE_EACH>"));
     assertEquals(2, TestUtil.countStr(output, "<AFTER_EACH>"));

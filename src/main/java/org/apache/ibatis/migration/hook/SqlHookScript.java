@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.io.StringReader;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.util.Map;
 import java.util.Properties;
@@ -65,7 +66,7 @@ public class SqlHookScript implements HookScript {
       while ((length = inputStream.read(buffer)) != -1) {
         outputStream.write(buffer, 0, length);
       }
-      try (StringReader reader = new StringReader(replacer.replace(outputStream.toString(charset)))) {
+      try (StringReader reader = new StringReader(replacer.replace(outputStream.toString(Charset.forName(charset))))) {
         context.executeSql(reader);
       }
     } catch (IOException e) {

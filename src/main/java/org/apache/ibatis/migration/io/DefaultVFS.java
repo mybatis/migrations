@@ -21,10 +21,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -271,11 +271,7 @@ public class DefaultVFS extends VFS {
 
       // File name might be URL-encoded
       if (!file.exists()) {
-        try {
-          file = Path.of(URLEncoder.encode(jarUrl.toString(), "UTF-8")).toFile();
-        } catch (UnsupportedEncodingException e) {
-          throw new RuntimeException("Unsupported encoding?  UTF-8?  That's impossible.");
-        }
+        file = Path.of(URLEncoder.encode(jarUrl.toString(), StandardCharsets.UTF_8)).toFile();
       }
 
       if (file.exists()) {
