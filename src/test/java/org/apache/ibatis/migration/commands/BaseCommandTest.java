@@ -32,8 +32,6 @@ import java.util.Scanner;
 import org.apache.ibatis.migration.io.Resources;
 import org.apache.ibatis.migration.utils.TestUtil;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.EnabledOnOs;
-import org.junit.jupiter.api.condition.OS;
 
 class BaseCommandTest {
   @Test
@@ -46,8 +44,7 @@ class BaseCommandTest {
   }
 
   @Test
-  @EnabledOnOs({ OS.LINUX, OS.MAC })
-  void testNonexistentFileLinuxMac() throws Exception {
+  void testNonexistentFile() throws Exception {
     String srcPath = TestUtil.getTempDir().getAbsolutePath() + FileSystems.getDefault().getSeparator()
         + "NoSuchFile.sql";
     File dest = File.createTempFile("Out", ".sql");
@@ -56,19 +53,6 @@ class BaseCommandTest {
       BaseCommand.copyTemplate(Path.of(srcPath).toFile(), dest, null);
     });
     assertEquals(e.getMessage(), srcPath);
-  }
-
-  @Test
-  @EnabledOnOs(OS.WINDOWS)
-  void testNonexistentFileWindows() throws Exception {
-    String srcPath = TestUtil.getTempDir().getAbsolutePath() + FileSystems.getDefault().getSeparator()
-        + "NoSuchFile.sql";
-    File dest = File.createTempFile("Out", ".sql");
-    dest.deleteOnExit();
-    NoSuchFileException e = assertThrows(NoSuchFileException.class, () -> {
-      BaseCommand.copyTemplate(Path.of(srcPath).toFile(), dest, null);
-    });
-    assertEquals(e.getMessage(), srcPath + " (The system cannot find the file specified)");
   }
 
   @Test
