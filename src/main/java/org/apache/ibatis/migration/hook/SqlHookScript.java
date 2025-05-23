@@ -1,5 +1,5 @@
 /*
- *    Copyright 2010-2023 the original author or authors.
+ *    Copyright 2010-2025 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -17,10 +17,12 @@ package org.apache.ibatis.migration.hook;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintStream;
 import java.io.StringReader;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
 import java.util.Map;
 import java.util.Properties;
 
@@ -57,14 +59,14 @@ public class SqlHookScript implements HookScript {
     HookContext context = (HookContext) bindingMap.get(MigrationHook.HOOK_CONTEXT);
     printStream.println(Util.horizontalLine("Applying SQL hook: " + scriptFile.getName(), 80));
 
-    try (FileInputStream inputStream = new FileInputStream(scriptFile);
+    try (InputStream inputStream = Files.newInputStream(scriptFile.toPath());
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
       byte[] buffer = new byte[1024];
       int length;
       while ((length = inputStream.read(buffer)) != -1) {
         outputStream.write(buffer, 0, length);
       }
-      try (StringReader reader = new StringReader(replacer.replace(outputStream.toString(charset)))) {
+      try (StringReader reader = new StringReader(replacer.replace(outputStream.toString(Charset.forName(charset))))) {
         context.executeSql(reader);
       }
     } catch (IOException e) {

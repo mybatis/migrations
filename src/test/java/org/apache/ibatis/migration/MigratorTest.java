@@ -1,5 +1,5 @@
 /*
- *    Copyright 2010-2023 the original author or authors.
+ *    Copyright 2010-2025 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -26,7 +26,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -188,7 +187,7 @@ class MigratorTest {
   @Order(9)
   void testSkippedScript() throws Exception {
     testStatusContainsNoPendingMigrations();
-    File skipped = new File(dir + File.separator + "scripts", "20080827200215_skipped_migration.sql");
+    File skipped = Path.of(dir.getCanonicalPath(), "scripts", "20080827200215_skipped_migration.sql").toFile();
     assertTrue(skipped.createNewFile());
     try {
       String output = SystemStubs.tapSystemOut(() -> {
@@ -206,8 +205,8 @@ class MigratorTest {
   @Test
   @Order(10)
   void testMissingScript() throws Exception {
-    Path original = Paths.get(dir + File.separator + "scripts", "20080827200216_create_procs.sql");
-    Path renamed = Paths.get(dir + File.separator + "scripts", "20080827200216_create_procs._sql");
+    Path original = Path.of(dir + File.separator + "scripts", "20080827200216_create_procs.sql");
+    Path renamed = Path.of(dir + File.separator + "scripts", "20080827200216_create_procs._sql");
     assertEquals(renamed, Files.move(original, renamed, StandardCopyOption.REPLACE_EXISTING));
     try {
       String output = SystemStubs.tapSystemOut(() -> {
@@ -326,7 +325,7 @@ class MigratorTest {
     Migrator.main(TestUtil.args("--path=" + basePath.getAbsolutePath(), "init"));
     assertNotNull(basePath.list());
     assertEquals(4, basePath.list().length);
-    File scriptPath = new File(basePath.getCanonicalPath() + File.separator + "scripts");
+    File scriptPath = Path.of(basePath.getCanonicalPath(), "scripts").toFile();
     assertEquals(3, scriptPath.list().length);
     Migrator.main(TestUtil.args("--path=" + basePath.getAbsolutePath(), "new", "test new migration"));
     assertEquals(4, scriptPath.list().length);
@@ -338,13 +337,11 @@ class MigratorTest {
     String idPattern = "000";
     File basePath = TestUtil.getTempDir();
     Migrator.main(TestUtil.args("--path=" + basePath.getAbsolutePath(), "--idpattern=" + idPattern, "init"));
-    File changelog = new File(
-        basePath.getCanonicalPath() + File.separator + "scripts" + File.separator + "001_create_changelog.sql");
+    File changelog = Path.of(basePath.getCanonicalPath(), "scripts", "001_create_changelog.sql").toFile();
     assertTrue(changelog.exists());
     Migrator.main(
         TestUtil.args("--path=" + basePath.getAbsolutePath(), "--idpattern=" + idPattern, "new", "new migration"));
-    File newMigration = new File(
-        basePath.getCanonicalPath() + File.separator + "scripts" + File.separator + "003_new_migration.sql");
+    File newMigration = Path.of(basePath.getCanonicalPath(), "scripts", "003_new_migration.sql").toFile();
     assertTrue(newMigration.exists());
     assertTrue(TestUtil.deleteDirectory(basePath), "delete temp dir");
   }
@@ -356,7 +353,7 @@ class MigratorTest {
     Migrator.main(TestUtil.args("--path=" + basePath.getAbsolutePath(), "init"));
     assertNotNull(basePath.list());
     assertEquals(4, basePath.list().length);
-    File scriptPath = new File(basePath.getCanonicalPath() + File.separator + "scripts");
+    File scriptPath = Path.of(basePath.getCanonicalPath(), "scripts").toFile();
     assertEquals(3, scriptPath.list().length);
 
     File templatePath = File.createTempFile("customTemplate", "sql");
@@ -368,7 +365,7 @@ class MigratorTest {
     String[] scripts = scriptPath.list();
     Arrays.sort(scripts);
     assertEquals(4, scripts.length);
-    try (Scanner scanner = new Scanner(new File(scriptPath, scripts[scripts.length - 2]))) {
+    try (Scanner scanner = new Scanner(Path.of(scriptPath.getCanonicalPath(), scripts[scripts.length - 2]))) {
       if (scanner.hasNextLine()) {
         assertEquals("// " + desc, scanner.nextLine());
       }
@@ -383,7 +380,7 @@ class MigratorTest {
     Migrator.main(TestUtil.args("--path=" + basePath.getAbsolutePath(), "init"));
     assertNotNull(basePath.list());
     assertEquals(4, basePath.list().length);
-    File scriptPath = new File(basePath.getCanonicalPath() + File.separator + "scripts");
+    File scriptPath = Path.of(basePath.getCanonicalPath(), "scripts").toFile();
     assertEquals(3, scriptPath.list().length);
 
     File templatePath = File.createTempFile("customTemplate", "sql");
@@ -401,7 +398,7 @@ class MigratorTest {
     Migrator.main(TestUtil.args("--path=" + basePath.getAbsolutePath(), "init"));
     assertNotNull(basePath.list());
     assertEquals(4, basePath.list().length);
-    File scriptPath = new File(basePath.getCanonicalPath() + File.separator + "scripts");
+    File scriptPath = Path.of(basePath.getCanonicalPath(), "scripts").toFile();
     assertEquals(3, scriptPath.list().length);
 
     String output = SystemStubs.tapSystemOut(() -> {
@@ -505,8 +502,9 @@ class MigratorTest {
     String output = SystemStubs
         .tapSystemOut(() -> Migrator.main(TestUtil.args("init", "--path=" + baseDir.getAbsolutePath())));
     assertFalse(output.contains("Migrations path must be a directory"), output);
-    assertTrue(new File(baseDir, "README").exists(), "README created");
-    assertTrue(new File(baseDir, "environments").isDirectory(), "environments directory created");
+    assertTrue(Files.exists(Path.of(baseDir.getCanonicalPath(), "README")), "README created");
+    assertTrue(Files.isDirectory(Path.of(baseDir.getCanonicalPath(), "environments")),
+        "environments directory created");
     assertTrue(TestUtil.deleteDirectory(baseDir), "delete temp dir");
   }
 

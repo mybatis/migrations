@@ -1,5 +1,5 @@
 /*
- *    Copyright 2010-2023 the original author or authors.
+ *    Copyright 2010-2025 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -22,7 +22,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.PrintStream;
 import java.math.BigDecimal;
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -169,14 +172,14 @@ class RuntimeMigrationTest {
       }
     };
     new UpOperation(3).operate(connectionProvider, migrationsLoader, dbOption, printStream, hook);
-    String output = out.toString("utf-8");
+    String output = out.toString(StandardCharsets.UTF_8);
     assertEquals(1, TestUtil.countStr(output, "<BEFORE>"));
     assertEquals(3, TestUtil.countStr(output, "<BEFORE_EACH>"));
     assertEquals(3, TestUtil.countStr(output, "<AFTER_EACH>"));
     assertEquals(1, TestUtil.countStr(output, "<AFTER>"));
     out.reset();
     new DownOperation(2).operate(connectionProvider, migrationsLoader, dbOption, printStream, hook);
-    output = out.toString("utf-8");
+    output = out.toString(StandardCharsets.UTF_8);
     assertEquals(1, TestUtil.countStr(output, "<BEFORE>"));
     assertEquals(2, TestUtil.countStr(output, "<BEFORE_EACH>"));
     assertEquals(2, TestUtil.countStr(output, "<AFTER_EACH>"));
@@ -248,8 +251,14 @@ class RuntimeMigrationTest {
   }
 
   protected FileMigrationLoader createMigrationsLoader(String resource) {
-    URL url = getClass().getClassLoader().getResource(resource);
-    File scriptsDir = new File(url.getFile());
+    URI uri = null;
+    try {
+      uri = getClass().getClassLoader().getResource(resource).toURI();
+    } catch (URISyntaxException e) {
+      // Should not occur
+      fail();
+    }
+    File scriptsDir = Path.of(uri).toFile();
     Properties properties = new Properties();
     properties.setProperty("changelog", "CHANGELOG");
     return new FileMigrationLoader(scriptsDir, "utf-8", properties);

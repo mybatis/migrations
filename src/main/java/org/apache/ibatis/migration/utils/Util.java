@@ -1,5 +1,5 @@
 /*
- *    Copyright 2010-2023 the original author or authors.
+ *    Copyright 2010-2025 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -16,7 +16,9 @@
 package org.apache.ibatis.migration.utils;
 
 import java.io.File;
-import java.io.FileInputStream;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Properties;
 
 public enum Util {
@@ -60,7 +62,7 @@ public enum Util {
     }
     Properties properties = new Properties();
     String path = migrationsHome + File.separator + MIGRATIONS_PROPERTIES;
-    try (FileInputStream stream = new FileInputStream(path)) {
+    try (InputStream stream = Files.newInputStream(Path.of(path))) {
       properties.load(stream);
       return properties.getProperty(key);
     } catch (Exception e) {
@@ -73,7 +75,7 @@ public enum Util {
   }
 
   public static File file(File path, String fileName) {
-    return new File(path.getAbsolutePath() + File.separator + fileName);
+    return Path.of(path.getAbsolutePath() + File.separator + fileName).toFile();
   }
 
   public static String horizontalLine(String caption, int length) {

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2010-2023 the original author or authors.
+ *    Copyright 2010-2025 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -20,9 +20,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.Charset;
+import java.nio.file.Path;
 import java.util.Properties;
 
 /**
@@ -59,7 +62,7 @@ public class Resources {
   }
 
   /**
-   * Returns the URL of the resource on the classpath
+   * Returns the URI of the resource on the classpath
    *
    * @param resource
    *          The resource to find
@@ -69,13 +72,13 @@ public class Resources {
    * @throws java.io.IOException
    *           If the resource cannot be found or read
    */
-  public static URL getResourceURL(String resource) throws IOException {
+  public static URI getResourceURI(String resource) throws IOException {
     // issue #625
-    return getResourceURL(null, resource);
+    return getResourceURI(null, resource);
   }
 
   /**
-   * Returns the URL of the resource on the classpath
+   * Returns the URI of the resource on the classpath
    *
    * @param loader
    *          The classloader used to fetch the resource
@@ -87,12 +90,16 @@ public class Resources {
    * @throws java.io.IOException
    *           If the resource cannot be found or read
    */
-  public static URL getResourceURL(ClassLoader loader, String resource) throws IOException {
+  public static URI getResourceURI(ClassLoader loader, String resource) throws IOException {
     URL url = classLoaderWrapper.getResourceAsURL(resource, loader);
     if (url == null) {
       throw new IOException("Could not find resource " + resource);
     }
-    return url;
+    try {
+      return url.toURI();
+    } catch (URISyntaxException e) {
+      throw new IOException("Could not find resource " + resource);
+    }
   }
 
   /**
@@ -227,7 +234,7 @@ public class Resources {
    *           If the resource cannot be found or read
    */
   public static File getResourceAsFile(String resource) throws IOException {
-    return new File(getResourceURL(resource).getFile());
+    return Path.of(getResourceURI(resource)).toFile();
   }
 
   /**
@@ -244,7 +251,7 @@ public class Resources {
    *           If the resource cannot be found or read
    */
   public static File getResourceAsFile(ClassLoader loader, String resource) throws IOException {
-    return new File(getResourceURL(loader, resource).getFile());
+    return Path.of(getResourceURI(loader, resource)).toFile();
   }
 
   /**

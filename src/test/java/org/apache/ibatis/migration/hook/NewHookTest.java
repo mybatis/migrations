@@ -1,5 +1,5 @@
 /*
- *    Copyright 2010-2023 the original author or authors.
+ *    Copyright 2010-2025 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -18,15 +18,14 @@ package org.apache.ibatis.migration.hook;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 
 import org.apache.ibatis.migration.Migrator;
 import org.apache.ibatis.migration.io.Resources;
@@ -42,7 +41,7 @@ class NewHookTest {
   @Test
   void shouldRunNewHooks() throws Throwable {
     File basePath = initBaseDir();
-    File scriptPath = new File(basePath.getCanonicalPath() + File.separator + "scripts");
+    File scriptPath = Path.of(basePath.getCanonicalPath(), "scripts").toFile();
     String output = SystemStubs.tapSystemOut(() -> {
       Migrator.main(
           TestUtil.args("--path=" + basePath.getAbsolutePath(), "--idpattern=00", "new", "create table1 JIRA-123"));
@@ -52,7 +51,7 @@ class NewHookTest {
     assertTrue(output.contains("SUCCESS"));
     assertTrue(output.contains("Description is valid."));
     assertTrue(output.contains("Renamed 03_create_table1_JIRA-123.sql to 03_create_table1_JIRA123.sql"));
-    assertTrue(new File(scriptPath, "03_create_table1_JIRA123.sql").exists());
+    assertTrue(Files.exists(Path.of(scriptPath.getCanonicalPath(), "03_create_table1_JIRA123.sql")));
     assertTrue(TestUtil.deleteDirectory(basePath), "delete test dir");
   }
 
@@ -60,7 +59,7 @@ class NewHookTest {
   @Test
   void shouldNotCreateFileWhenBeforeHookThrowsException() throws Throwable {
     File basePath = initBaseDir();
-    File scriptPath = new File(basePath.getCanonicalPath() + File.separator + "scripts");
+    File scriptPath = Path.of(basePath.getCanonicalPath(), "scripts").toFile();
     String output = SystemStubs.tapSystemOut(() -> {
       int exitCode = SystemStubs.catchSystemExit(() -> {
         Migrator.main(TestUtil.args("--path=" + basePath.getAbsolutePath(), "new", "create table1"));
@@ -76,20 +75,19 @@ class NewHookTest {
     File basePath = TestUtil.getTempDir();
     Migrator.main(TestUtil.args("--path=" + basePath.getAbsolutePath(), "--idpattern=00", "init"));
     // Copy hook script
-    File hooksDir = new File(basePath, "hooks");
+    File hooksDir = Path.of(basePath.getCanonicalPath(), "hooks").toFile();
     hooksDir.mkdir();
     try (
-        FileInputStream srcStream = new FileInputStream(
-            Resources.getResourceAsFile("org/apache/ibatis/migration/hook/testdir/hooks/NewHook.js"));
-        FileOutputStream destStream = new FileOutputStream(Util.file(hooksDir, "NewHook.js"))) {
-      FileChannel srcChannel = srcStream.getChannel();
-      FileChannel destChannel = destStream.getChannel();
+        FileChannel srcChannel = FileChannel
+            .open(Resources.getResourceAsFile("org/apache/ibatis/migration/hook/testdir/hooks/NewHook.js").toPath());
+        FileChannel destChannel = FileChannel.open(Util.file(hooksDir, "NewHook.js").toPath(),
+            StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE)) {
       srcChannel.transferTo(0, srcChannel.size(), destChannel);
     }
     // Add hook settings
-    File envFile = new File(basePath.getCanonicalPath() + File.separator + "environments", "development.properties");
+    File envFile = Path.of(basePath.getCanonicalPath(), "environments", "development.properties").toFile();
     try (PrintWriter writer = new PrintWriter(
-        new BufferedWriter(new OutputStreamWriter(new FileOutputStream(envFile, true), Charset.forName("utf-8"))))) {
+        Files.newBufferedWriter(envFile.toPath(), Charset.forName("utf-8"), StandardOpenOption.APPEND))) {
       writer.println("hook_before_new=js:NewHook.js:_function=validateDesc");
       writer.println("hook_after_new=js:NewHook.js:_function=renameFile");
     }
