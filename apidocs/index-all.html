@@ -174,7 +174,7 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/ibatis/migration/operations/ScriptRunner.html#closeConnection()" class="member-name-link">closeConnection()</a> - Method in class org.apache.ibatis.migration.operations.<a href="org/apache/ibatis/migration/operations/ScriptRunner.html" title="class in org.apache.ibatis.migration.operations">ScriptRunner</a></dt>
 <dd>
 <div class="deprecation-block"><span class="deprecated-label">Deprecated.</span>
-<div class="deprecation-comment">Since 3.5.4, this method is deprecated. Please close the <a href="https://docs.oracle.com/javase/8/docs/api/java/sql/Connection.html" title="class or interface in java.sql" class="external-link"><code>Connection</code></a> outside of this class.</div>
+<div class="deprecation-comment">Since 3.5.4, this method is deprecated. Please close the <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.sql/java/sql/Connection.html" title="class or interface in java.sql" class="external-link"><code>Connection</code></a> outside of this class.</div>
 </div>
 </dd>
 <dt><a href="org/apache/ibatis/migration/options/Options.html#COLOR" class="member-name-link">COLOR</a> - Enum constant in enum org.apache.ibatis.migration.options.<a href="org/apache/ibatis/migration/options/Options.html" title="enum in org.apache.ibatis.migration.options">Options</a></dt>
@@ -516,12 +516,12 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/ibatis/migration/io/DefaultVFS.html#getPackagePath(java.lang.String)" class="member-name-link">getPackagePath(String)</a> - Method in class org.apache.ibatis.migration.io.<a href="org/apache/ibatis/migration/io/DefaultVFS.html" title="class in org.apache.ibatis.migration.io">DefaultVFS</a></dt>
 <dd>
 <div class="block">Converts a Java package name to a path that can be looked up with a call to
- <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/ClassLoader.html#getResources-java.lang.String-" title="class or interface in java.lang" class="external-link"><code>ClassLoader.getResources(String)</code></a>.</div>
+ <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/ClassLoader.html#getResources(java.lang.String)" title="class or interface in java.lang" class="external-link"><code>ClassLoader.getResources(String)</code></a>.</div>
 </dd>
 <dt><a href="org/apache/ibatis/migration/io/ResolverUtil.html#getPackagePath(java.lang.String)" class="member-name-link">getPackagePath(String)</a> - Method in class org.apache.ibatis.migration.io.<a href="org/apache/ibatis/migration/io/ResolverUtil.html" title="class in org.apache.ibatis.migration.io">ResolverUtil</a></dt>
 <dd>
 <div class="block">Converts a Java package name to a path that can be looked up with a call to
- <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/ClassLoader.html#getResources-java.lang.String-" title="class or interface in java.lang" class="external-link"><code>ClassLoader.getResources(String)</code></a>.</div>
+ <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/ClassLoader.html#getResources(java.lang.String)" title="class or interface in java.lang" class="external-link"><code>ClassLoader.getResources(String)</code></a>.</div>
 </dd>
 <dt><a href="org/apache/ibatis/migration/options/SelectedOptions.html#getParams()" class="member-name-link">getParams()</a> - Method in class org.apache.ibatis.migration.options.<a href="org/apache/ibatis/migration/options/SelectedOptions.html" title="class in org.apache.ibatis.migration.options">SelectedOptions</a></dt>
 <dd>&nbsp;</dd>
@@ -589,15 +589,15 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="org/apache/ibatis/migration/io/VFS.html#getResources(java.lang.String)" class="member-name-link">getResources(String)</a> - Static method in class org.apache.ibatis.migration.io.<a href="org/apache/ibatis/migration/io/VFS.html" title="class in org.apache.ibatis.migration.io">VFS</a></dt>
 <dd>
-<div class="block">Get a list of <a href="https://docs.oracle.com/javase/8/docs/api/java/net/URL.html" title="class or interface in java.net" class="external-link"><code>URL</code></a>s from the context classloader for all the resources found at the specified path.</div>
+<div class="block">Get a list of <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/net/URL.html" title="class or interface in java.net" class="external-link"><code>URL</code></a>s from the context classloader for all the resources found at the specified path.</div>
 </dd>
-<dt><a href="org/apache/ibatis/migration/io/Resources.html#getResourceURL(java.lang.ClassLoader,java.lang.String)" class="member-name-link">getResourceURL(ClassLoader, String)</a> - Static method in class org.apache.ibatis.migration.io.<a href="org/apache/ibatis/migration/io/Resources.html" title="class in org.apache.ibatis.migration.io">Resources</a></dt>
+<dt><a href="org/apache/ibatis/migration/io/Resources.html#getResourceURI(java.lang.ClassLoader,java.lang.String)" class="member-name-link">getResourceURI(ClassLoader, String)</a> - Static method in class org.apache.ibatis.migration.io.<a href="org/apache/ibatis/migration/io/Resources.html" title="class in org.apache.ibatis.migration.io">Resources</a></dt>
 <dd>
-<div class="block">Returns the URL of the resource on the classpath</div>
+<div class="block">Returns the URI of the resource on the classpath</div>
 </dd>
-<dt><a href="org/apache/ibatis/migration/io/Resources.html#getResourceURL(java.lang.String)" class="member-name-link">getResourceURL(String)</a> - Static method in class org.apache.ibatis.migration.io.<a href="org/apache/ibatis/migration/io/Resources.html" title="class in org.apache.ibatis.migration.io">Resources</a></dt>
+<dt><a href="org/apache/ibatis/migration/io/Resources.html#getResourceURI(java.lang.String)" class="member-name-link">getResourceURI(String)</a> - Static method in class org.apache.ibatis.migration.io.<a href="org/apache/ibatis/migration/io/Resources.html" title="class in org.apache.ibatis.migration.io">Resources</a></dt>
 <dd>
-<div class="block">Returns the URL of the resource on the classpath</div>
+<div class="block">Returns the URI of the resource on the classpath</div>
 </dd>
 <dt><a href="org/apache/ibatis/migration/SimpleScript.html#getScript()" class="member-name-link">getScript()</a> - Method in interface org.apache.ibatis.migration.<a href="org/apache/ibatis/migration/SimpleScript.html" title="interface in org.apache.ibatis.migration">SimpleScript</a></dt>
 <dd>&nbsp;</dd>
@@ -804,7 +804,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="org/apache/ibatis/migration/io/DefaultVFS.html#listResources(java.util.jar.JarInputStream,java.lang.String)" class="member-name-link">listResources(JarInputStream, String)</a> - Method in class org.apache.ibatis.migration.io.<a href="org/apache/ibatis/migration/io/DefaultVFS.html" title="class in org.apache.ibatis.migration.io">DefaultVFS</a></dt>
 <dd>
-<div class="block">List the names of the entries in the given <a href="https://docs.oracle.com/javase/8/docs/api/java/util/jar/JarInputStream.html" title="class or interface in java.util.jar" class="external-link"><code>JarInputStream</code></a> that begin with the specified <code>path</code>.</div>
+<div class="block">List the names of the entries in the given <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/jar/JarInputStream.html" title="class or interface in java.util.jar" class="external-link"><code>JarInputStream</code></a> that begin with the specified <code>path</code>.</div>
 </dd>
 <dt><a href="org/apache/ibatis/migration/hook/Jsr223HookScript.html#localVars" class="member-name-link">localVars</a> - Variable in class org.apache.ibatis.migration.hook.<a href="org/apache/ibatis/migration/hook/Jsr223HookScript.html" title="class in org.apache.ibatis.migration.hook">Jsr223HookScript</a></dt>
 <dd>&nbsp;</dd>

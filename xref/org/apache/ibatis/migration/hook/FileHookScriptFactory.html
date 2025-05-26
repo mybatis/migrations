@@ -7,7 +7,7 @@
 <body>
 <div id="overview"><a href="../../../../../../apidocs/org/apache/ibatis/migration/hook/FileHookScriptFactory.html">View Javadoc</a></div><pre>
 <a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
-<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> *    Copyright 2010-2023 the original author or authors.</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> *    Copyright 2010-2025 the original author or authors.</em>
 <a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> *</em>
 <a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> *    Licensed under the Apache License, Version 2.0 (the "License");</em>
 <a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> *    you may not use this file except in compliance with the License.</em>
@@ -66,7 +66,7 @@
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>      <em class="jxr_comment">// First segment is language</em>
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>      String scriptLang = segments[0];
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>      <em class="jxr_comment">// Second segment is file</em>
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>      File scriptFile = <strong class="jxr_keyword">new</strong> File(hooksDir, segments[1]);
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>      File scriptFile = hooksDir.toPath().resolve(segments[1]).toFile();
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>      <em class="jxr_comment">// The rest are script dependent options</em>
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>      String[] hookOptions = Arrays.copyOfRange(segments, 2, segments.length);
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>      <strong class="jxr_keyword">if</strong> (!scriptFile.exists()) {

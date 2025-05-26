@@ -7,7 +7,7 @@
 <body>
 <div id="overview"><a href="../../../../../testapidocs/org/apache/ibatis/migration/MigratorTest.html">View Javadoc</a></div><pre>
 <a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
-<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> *    Copyright 2010-2023 the original author or authors.</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> *    Copyright 2010-2025 the original author or authors.</em>
 <a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> *</em>
 <a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> *    Licensed under the Apache License, Version 2.0 (the "License");</em>
 <a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> *    you may not use this file except in compliance with the License.</em>
@@ -34,25 +34,25 @@
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> java.io.PrintWriter;
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> java.nio.file.Files;
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> java.nio.file.Path;
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> java.nio.file.Paths;
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> java.nio.file.StandardCopyOption;
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> java.sql.Connection;
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> java.sql.ResultSet;
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> java.sql.Statement;
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> java.util.ArrayList;
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> java.util.Arrays;
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> java.util.List;
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">import</strong> java.util.Properties;
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <strong class="jxr_keyword">import</strong> java.util.Scanner;
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <strong class="jxr_keyword">import</strong> java.util.TreeSet;
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <strong class="jxr_keyword">import</strong> org.apache.ibatis.migration.io.Resources;
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <strong class="jxr_keyword">import</strong> org.apache.ibatis.migration.utils.TestUtil;
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.BeforeAll;
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.Order;
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.Test;
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.TestMethodOrder;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> java.nio.file.StandardCopyOption;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> java.sql.Connection;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> java.sql.ResultSet;
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> java.sql.Statement;
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> java.util.ArrayList;
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> java.util.Arrays;
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> java.util.List;
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> java.util.Properties;
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">import</strong> java.util.Scanner;
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <strong class="jxr_keyword">import</strong> java.util.TreeSet;
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <strong class="jxr_keyword">import</strong> org.apache.ibatis.migration.io.Resources;
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <strong class="jxr_keyword">import</strong> org.apache.ibatis.migration.utils.TestUtil;
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.BeforeAll;
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.Order;
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.Test;
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.TestMethodOrder;
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.condition.EnabledForJreRange;
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  <strong class="jxr_keyword">import</strong> uk.org.webcompere.systemstubs.SystemStubs;
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  
@@ -195,7 +195,7 @@
 <a class="jxr_linenumber" name="L187" href="#L187">187</a>   @Order(9)
 <a class="jxr_linenumber" name="L188" href="#L188">188</a>   <strong class="jxr_keyword">void</strong> testSkippedScript() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L189" href="#L189">189</a>     testStatusContainsNoPendingMigrations();
-<a class="jxr_linenumber" name="L190" href="#L190">190</a>     File skipped = <strong class="jxr_keyword">new</strong> File(dir + File.separator + <span class="jxr_string">"scripts"</span>, <span class="jxr_string">"20080827200215_skipped_migration.sql"</span>);
+<a class="jxr_linenumber" name="L190" href="#L190">190</a>     File skipped = Path.of(dir.getCanonicalPath(), <span class="jxr_string">"scripts"</span>, <span class="jxr_string">"20080827200215_skipped_migration.sql"</span>).toFile();
 <a class="jxr_linenumber" name="L191" href="#L191">191</a>     assertTrue(skipped.createNewFile());
 <a class="jxr_linenumber" name="L192" href="#L192">192</a>     <strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L193" href="#L193">193</a>       String output = SystemStubs.tapSystemOut(() -&gt; {
@@ -213,8 +213,8 @@
 <a class="jxr_linenumber" name="L205" href="#L205">205</a>   @Test
 <a class="jxr_linenumber" name="L206" href="#L206">206</a>   @Order(10)
 <a class="jxr_linenumber" name="L207" href="#L207">207</a>   <strong class="jxr_keyword">void</strong> testMissingScript() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L208" href="#L208">208</a>     Path original = Paths.get(dir + File.separator + <span class="jxr_string">"scripts"</span>, <span class="jxr_string">"20080827200216_create_procs.sql"</span>);
-<a class="jxr_linenumber" name="L209" href="#L209">209</a>     Path renamed = Paths.get(dir + File.separator + <span class="jxr_string">"scripts"</span>, <span class="jxr_string">"20080827200216_create_procs._sql"</span>);
+<a class="jxr_linenumber" name="L208" href="#L208">208</a>     Path original = Path.of(dir + File.separator + <span class="jxr_string">"scripts"</span>, <span class="jxr_string">"20080827200216_create_procs.sql"</span>);
+<a class="jxr_linenumber" name="L209" href="#L209">209</a>     Path renamed = Path.of(dir + File.separator + <span class="jxr_string">"scripts"</span>, <span class="jxr_string">"20080827200216_create_procs._sql"</span>);
 <a class="jxr_linenumber" name="L210" href="#L210">210</a>     assertEquals(renamed, Files.move(original, renamed, StandardCopyOption.REPLACE_EXISTING));
 <a class="jxr_linenumber" name="L211" href="#L211">211</a>     <strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L212" href="#L212">212</a>       String output = SystemStubs.tapSystemOut(() -&gt; {
@@ -315,134 +315,134 @@
 <a class="jxr_linenumber" name="L307" href="#L307">307</a>     assertTrue(output.contains(<span class="jxr_string">"-- @UNDO"</span>));
 <a class="jxr_linenumber" name="L308" href="#L308">308</a>   }
 <a class="jxr_linenumber" name="L309" href="#L309">309</a> 
-<a class="jxr_linenumber" name="L310" href="#L310">310</a>   @Test
-<a class="jxr_linenumber" name="L311" href="#L311">311</a>   <strong class="jxr_keyword">void</strong> shouldScriptCommandFailIfSameVersion() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L312" href="#L312">312</a>     String output = SystemStubs.tapSystemOut(() -&gt; {
-<a class="jxr_linenumber" name="L313" href="#L313">313</a>       <strong class="jxr_keyword">int</strong> exitCode = SystemStubs.catchSystemExit(() -&gt; {
-<a class="jxr_linenumber" name="L314" href="#L314">314</a>         Migrator.main(TestUtil.args(<span class="jxr_string">"--path="</span> + dir.getAbsolutePath(), <span class="jxr_string">"script"</span>, <span class="jxr_string">"20080827200211"</span>, <span class="jxr_string">"20080827200211"</span>));
-<a class="jxr_linenumber" name="L315" href="#L315">315</a>       });
-<a class="jxr_linenumber" name="L316" href="#L316">316</a>       assertEquals(1, exitCode);
-<a class="jxr_linenumber" name="L317" href="#L317">317</a>     });
-<a class="jxr_linenumber" name="L318" href="#L318">318</a>     assertTrue(output.contains(<span class="jxr_string">"FAILURE"</span>));
-<a class="jxr_linenumber" name="L319" href="#L319">319</a>   }
-<a class="jxr_linenumber" name="L320" href="#L320">320</a> 
-<a class="jxr_linenumber" name="L321" href="#L321">321</a>   @Test
-<a class="jxr_linenumber" name="L322" href="#L322">322</a>   <strong class="jxr_keyword">void</strong> shouldInitTempDirectory() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L323" href="#L323">323</a>     File basePath = TestUtil.getTempDir();
-<a class="jxr_linenumber" name="L324" href="#L324">324</a>     Migrator.main(TestUtil.args(<span class="jxr_string">"--path="</span> + basePath.getAbsolutePath(), <span class="jxr_string">"init"</span>));
-<a class="jxr_linenumber" name="L325" href="#L325">325</a>     assertNotNull(basePath.list());
-<a class="jxr_linenumber" name="L326" href="#L326">326</a>     assertEquals(4, basePath.list().length);
-<a class="jxr_linenumber" name="L327" href="#L327">327</a>     File scriptPath = <strong class="jxr_keyword">new</strong> File(basePath.getCanonicalPath() + File.separator + <span class="jxr_string">"scripts"</span>);
-<a class="jxr_linenumber" name="L328" href="#L328">328</a>     assertEquals(3, scriptPath.list().length);
-<a class="jxr_linenumber" name="L329" href="#L329">329</a>     Migrator.main(TestUtil.args(<span class="jxr_string">"--path="</span> + basePath.getAbsolutePath(), <span class="jxr_string">"new"</span>, <span class="jxr_string">"test new migration"</span>));
-<a class="jxr_linenumber" name="L330" href="#L330">330</a>     assertEquals(4, scriptPath.list().length);
-<a class="jxr_linenumber" name="L331" href="#L331">331</a>     assertTrue(TestUtil.deleteDirectory(basePath), <span class="jxr_string">"delete temp dir"</span>);
-<a class="jxr_linenumber" name="L332" href="#L332">332</a>   }
-<a class="jxr_linenumber" name="L333" href="#L333">333</a> 
-<a class="jxr_linenumber" name="L334" href="#L334">334</a>   @Test
-<a class="jxr_linenumber" name="L335" href="#L335">335</a>   <strong class="jxr_keyword">void</strong> shouldRespectIdPattern() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L336" href="#L336">336</a>     String idPattern = <span class="jxr_string">"000"</span>;
-<a class="jxr_linenumber" name="L337" href="#L337">337</a>     File basePath = TestUtil.getTempDir();
-<a class="jxr_linenumber" name="L338" href="#L338">338</a>     Migrator.main(TestUtil.args(<span class="jxr_string">"--path="</span> + basePath.getAbsolutePath(), <span class="jxr_string">"--idpattern="</span> + idPattern, <span class="jxr_string">"init"</span>));
-<a class="jxr_linenumber" name="L339" href="#L339">339</a>     File changelog = <strong class="jxr_keyword">new</strong> File(
-<a class="jxr_linenumber" name="L340" href="#L340">340</a>         basePath.getCanonicalPath() + File.separator + <span class="jxr_string">"scripts"</span> + File.separator + <span class="jxr_string">"001_create_changelog.sql"</span>);
+<a class="jxr_linenumber" name="L310" href="#L310">310</a>   @EnabledForJreRange(maxVersion = 23)
+<a class="jxr_linenumber" name="L311" href="#L311">311</a>   @Test
+<a class="jxr_linenumber" name="L312" href="#L312">312</a>   <strong class="jxr_keyword">void</strong> shouldScriptCommandFailIfSameVersion() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L313" href="#L313">313</a>     String output = SystemStubs.tapSystemOut(() -&gt; {
+<a class="jxr_linenumber" name="L314" href="#L314">314</a>       <strong class="jxr_keyword">int</strong> exitCode = SystemStubs.catchSystemExit(() -&gt; {
+<a class="jxr_linenumber" name="L315" href="#L315">315</a>         Migrator.main(TestUtil.args(<span class="jxr_string">"--path="</span> + dir.getAbsolutePath(), <span class="jxr_string">"script"</span>, <span class="jxr_string">"20080827200211"</span>, <span class="jxr_string">"20080827200211"</span>));
+<a class="jxr_linenumber" name="L316" href="#L316">316</a>       });
+<a class="jxr_linenumber" name="L317" href="#L317">317</a>       assertEquals(1, exitCode);
+<a class="jxr_linenumber" name="L318" href="#L318">318</a>     });
+<a class="jxr_linenumber" name="L319" href="#L319">319</a>     assertTrue(output.contains(<span class="jxr_string">"FAILURE"</span>));
+<a class="jxr_linenumber" name="L320" href="#L320">320</a>   }
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> 
+<a class="jxr_linenumber" name="L322" href="#L322">322</a>   @Test
+<a class="jxr_linenumber" name="L323" href="#L323">323</a>   <strong class="jxr_keyword">void</strong> shouldInitTempDirectory() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L324" href="#L324">324</a>     File basePath = TestUtil.getTempDir();
+<a class="jxr_linenumber" name="L325" href="#L325">325</a>     Migrator.main(TestUtil.args(<span class="jxr_string">"--path="</span> + basePath.getAbsolutePath(), <span class="jxr_string">"init"</span>));
+<a class="jxr_linenumber" name="L326" href="#L326">326</a>     assertNotNull(basePath.list());
+<a class="jxr_linenumber" name="L327" href="#L327">327</a>     assertEquals(4, basePath.list().length);
+<a class="jxr_linenumber" name="L328" href="#L328">328</a>     File scriptPath = Path.of(basePath.getCanonicalPath(), <span class="jxr_string">"scripts"</span>).toFile();
+<a class="jxr_linenumber" name="L329" href="#L329">329</a>     assertEquals(3, scriptPath.list().length);
+<a class="jxr_linenumber" name="L330" href="#L330">330</a>     Migrator.main(TestUtil.args(<span class="jxr_string">"--path="</span> + basePath.getAbsolutePath(), <span class="jxr_string">"new"</span>, <span class="jxr_string">"test new migration"</span>));
+<a class="jxr_linenumber" name="L331" href="#L331">331</a>     assertEquals(4, scriptPath.list().length);
+<a class="jxr_linenumber" name="L332" href="#L332">332</a>     assertTrue(TestUtil.deleteDirectory(basePath), <span class="jxr_string">"delete temp dir"</span>);
+<a class="jxr_linenumber" name="L333" href="#L333">333</a>   }
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 
+<a class="jxr_linenumber" name="L335" href="#L335">335</a>   @Test
+<a class="jxr_linenumber" name="L336" href="#L336">336</a>   <strong class="jxr_keyword">void</strong> shouldRespectIdPattern() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L337" href="#L337">337</a>     String idPattern = <span class="jxr_string">"000"</span>;
+<a class="jxr_linenumber" name="L338" href="#L338">338</a>     File basePath = TestUtil.getTempDir();
+<a class="jxr_linenumber" name="L339" href="#L339">339</a>     Migrator.main(TestUtil.args(<span class="jxr_string">"--path="</span> + basePath.getAbsolutePath(), <span class="jxr_string">"--idpattern="</span> + idPattern, <span class="jxr_string">"init"</span>));
+<a class="jxr_linenumber" name="L340" href="#L340">340</a>     File changelog = Path.of(basePath.getCanonicalPath(), <span class="jxr_string">"scripts"</span>, <span class="jxr_string">"001_create_changelog.sql"</span>).toFile();
 <a class="jxr_linenumber" name="L341" href="#L341">341</a>     assertTrue(changelog.exists());
 <a class="jxr_linenumber" name="L342" href="#L342">342</a>     Migrator.main(
 <a class="jxr_linenumber" name="L343" href="#L343">343</a>         TestUtil.args(<span class="jxr_string">"--path="</span> + basePath.getAbsolutePath(), <span class="jxr_string">"--idpattern="</span> + idPattern, <span class="jxr_string">"new"</span>, <span class="jxr_string">"new migration"</span>));
-<a class="jxr_linenumber" name="L344" href="#L344">344</a>     File newMigration = <strong class="jxr_keyword">new</strong> File(
-<a class="jxr_linenumber" name="L345" href="#L345">345</a>         basePath.getCanonicalPath() + File.separator + <span class="jxr_string">"scripts"</span> + File.separator + <span class="jxr_string">"003_new_migration.sql"</span>);
-<a class="jxr_linenumber" name="L346" href="#L346">346</a>     assertTrue(newMigration.exists());
-<a class="jxr_linenumber" name="L347" href="#L347">347</a>     assertTrue(TestUtil.deleteDirectory(basePath), <span class="jxr_string">"delete temp dir"</span>);
-<a class="jxr_linenumber" name="L348" href="#L348">348</a>   }
-<a class="jxr_linenumber" name="L349" href="#L349">349</a> 
-<a class="jxr_linenumber" name="L350" href="#L350">350</a>   @Test
-<a class="jxr_linenumber" name="L351" href="#L351">351</a>   <strong class="jxr_keyword">void</strong> useCustomTemplate() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L352" href="#L352">352</a>     String desc = <span class="jxr_string">"test new migration"</span>;
-<a class="jxr_linenumber" name="L353" href="#L353">353</a>     File basePath = TestUtil.getTempDir();
-<a class="jxr_linenumber" name="L354" href="#L354">354</a>     Migrator.main(TestUtil.args(<span class="jxr_string">"--path="</span> + basePath.getAbsolutePath(), <span class="jxr_string">"init"</span>));
-<a class="jxr_linenumber" name="L355" href="#L355">355</a>     assertNotNull(basePath.list());
-<a class="jxr_linenumber" name="L356" href="#L356">356</a>     assertEquals(4, basePath.list().length);
-<a class="jxr_linenumber" name="L357" href="#L357">357</a>     File scriptPath = <strong class="jxr_keyword">new</strong> File(basePath.getCanonicalPath() + File.separator + <span class="jxr_string">"scripts"</span>);
-<a class="jxr_linenumber" name="L358" href="#L358">358</a>     assertEquals(3, scriptPath.list().length);
-<a class="jxr_linenumber" name="L359" href="#L359">359</a> 
-<a class="jxr_linenumber" name="L360" href="#L360">360</a>     File templatePath = File.createTempFile(<span class="jxr_string">"customTemplate"</span>, <span class="jxr_string">"sql"</span>);
-<a class="jxr_linenumber" name="L361" href="#L361">361</a>     <strong class="jxr_keyword">try</strong> (PrintWriter writer = <strong class="jxr_keyword">new</strong> PrintWriter(templatePath)) {
-<a class="jxr_linenumber" name="L362" href="#L362">362</a>       writer.println(<span class="jxr_string">"// ${description}"</span>);
-<a class="jxr_linenumber" name="L363" href="#L363">363</a>     }
-<a class="jxr_linenumber" name="L364" href="#L364">364</a>     Migrator.main(TestUtil.args(<span class="jxr_string">"--path="</span> + basePath.getAbsolutePath(), <span class="jxr_string">"new"</span>, desc,
-<a class="jxr_linenumber" name="L365" href="#L365">365</a>         <span class="jxr_string">"--template="</span> + templatePath.getAbsolutePath()));
-<a class="jxr_linenumber" name="L366" href="#L366">366</a>     String[] scripts = scriptPath.list();
-<a class="jxr_linenumber" name="L367" href="#L367">367</a>     Arrays.sort(scripts);
-<a class="jxr_linenumber" name="L368" href="#L368">368</a>     assertEquals(4, scripts.length);
-<a class="jxr_linenumber" name="L369" href="#L369">369</a>     <strong class="jxr_keyword">try</strong> (Scanner scanner = <strong class="jxr_keyword">new</strong> Scanner(<strong class="jxr_keyword">new</strong> File(scriptPath, scripts[scripts.length - 2]))) {
-<a class="jxr_linenumber" name="L370" href="#L370">370</a>       <strong class="jxr_keyword">if</strong> (scanner.hasNextLine()) {
-<a class="jxr_linenumber" name="L371" href="#L371">371</a>         assertEquals(<span class="jxr_string">"// "</span> + desc, scanner.nextLine());
-<a class="jxr_linenumber" name="L372" href="#L372">372</a>       }
-<a class="jxr_linenumber" name="L373" href="#L373">373</a>     }
-<a class="jxr_linenumber" name="L374" href="#L374">374</a>     templatePath.delete();
-<a class="jxr_linenumber" name="L375" href="#L375">375</a>     assertTrue(TestUtil.deleteDirectory(basePath), <span class="jxr_string">"delete temp dir"</span>);
-<a class="jxr_linenumber" name="L376" href="#L376">376</a>   }
-<a class="jxr_linenumber" name="L377" href="#L377">377</a> 
-<a class="jxr_linenumber" name="L378" href="#L378">378</a>   @Test
-<a class="jxr_linenumber" name="L379" href="#L379">379</a>   <strong class="jxr_keyword">void</strong> useCustomTemplateWithNoValue() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L380" href="#L380">380</a>     File basePath = TestUtil.getTempDir();
-<a class="jxr_linenumber" name="L381" href="#L381">381</a>     Migrator.main(TestUtil.args(<span class="jxr_string">"--path="</span> + basePath.getAbsolutePath(), <span class="jxr_string">"init"</span>));
-<a class="jxr_linenumber" name="L382" href="#L382">382</a>     assertNotNull(basePath.list());
-<a class="jxr_linenumber" name="L383" href="#L383">383</a>     assertEquals(4, basePath.list().length);
-<a class="jxr_linenumber" name="L384" href="#L384">384</a>     File scriptPath = <strong class="jxr_keyword">new</strong> File(basePath.getCanonicalPath() + File.separator + <span class="jxr_string">"scripts"</span>);
-<a class="jxr_linenumber" name="L385" href="#L385">385</a>     assertEquals(3, scriptPath.list().length);
-<a class="jxr_linenumber" name="L386" href="#L386">386</a> 
-<a class="jxr_linenumber" name="L387" href="#L387">387</a>     File templatePath = File.createTempFile(<span class="jxr_string">"customTemplate"</span>, <span class="jxr_string">"sql"</span>);
-<a class="jxr_linenumber" name="L388" href="#L388">388</a>     templatePath.createNewFile();
-<a class="jxr_linenumber" name="L389" href="#L389">389</a>     Migrator.main(TestUtil.args(<span class="jxr_string">"--path="</span> + basePath.getAbsolutePath(), <span class="jxr_string">"new"</span>, <span class="jxr_string">"test new migration"</span>, <span class="jxr_string">"--template="</span>));
-<a class="jxr_linenumber" name="L390" href="#L390">390</a>     assertEquals(4, scriptPath.list().length);
-<a class="jxr_linenumber" name="L391" href="#L391">391</a>     templatePath.delete();
-<a class="jxr_linenumber" name="L392" href="#L392">392</a>     assertTrue(TestUtil.deleteDirectory(basePath), <span class="jxr_string">"delete temp dir"</span>);
-<a class="jxr_linenumber" name="L393" href="#L393">393</a>   }
-<a class="jxr_linenumber" name="L394" href="#L394">394</a> 
-<a class="jxr_linenumber" name="L395" href="#L395">395</a>   @Test
-<a class="jxr_linenumber" name="L396" href="#L396">396</a>   <strong class="jxr_keyword">void</strong> useCustomTemplateWithBadPath() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L397" href="#L397">397</a>     System.setProperty(<span class="jxr_string">"migrationsHome"</span>, TestUtil.getTempDir().getAbsolutePath());
-<a class="jxr_linenumber" name="L398" href="#L398">398</a>     File basePath = TestUtil.getTempDir();
-<a class="jxr_linenumber" name="L399" href="#L399">399</a>     Migrator.main(TestUtil.args(<span class="jxr_string">"--path="</span> + basePath.getAbsolutePath(), <span class="jxr_string">"init"</span>));
-<a class="jxr_linenumber" name="L400" href="#L400">400</a>     assertNotNull(basePath.list());
-<a class="jxr_linenumber" name="L401" href="#L401">401</a>     assertEquals(4, basePath.list().length);
-<a class="jxr_linenumber" name="L402" href="#L402">402</a>     File scriptPath = <strong class="jxr_keyword">new</strong> File(basePath.getCanonicalPath() + File.separator + <span class="jxr_string">"scripts"</span>);
-<a class="jxr_linenumber" name="L403" href="#L403">403</a>     assertEquals(3, scriptPath.list().length);
-<a class="jxr_linenumber" name="L404" href="#L404">404</a> 
-<a class="jxr_linenumber" name="L405" href="#L405">405</a>     String output = SystemStubs.tapSystemOut(() -&gt; {
-<a class="jxr_linenumber" name="L406" href="#L406">406</a>       Migrator.main(TestUtil.args(<span class="jxr_string">"--path="</span> + basePath.getAbsolutePath(), <span class="jxr_string">"new"</span>, <span class="jxr_string">"test new migration"</span>));
-<a class="jxr_linenumber" name="L407" href="#L407">407</a>     });
-<a class="jxr_linenumber" name="L408" href="#L408">408</a>     assertEquals(4, scriptPath.list().length);
-<a class="jxr_linenumber" name="L409" href="#L409">409</a>     assertTrue(output
-<a class="jxr_linenumber" name="L410" href="#L410">410</a>         .contains(<span class="jxr_string">"Your migrations configuration did not find your custom template.  Using the default template."</span>));
-<a class="jxr_linenumber" name="L411" href="#L411">411</a>     assertTrue(TestUtil.deleteDirectory(basePath), <span class="jxr_string">"delete temp dir"</span>);
-<a class="jxr_linenumber" name="L412" href="#L412">412</a>   }
-<a class="jxr_linenumber" name="L413" href="#L413">413</a> 
-<a class="jxr_linenumber" name="L414" href="#L414">414</a>   @Test
-<a class="jxr_linenumber" name="L415" href="#L415">415</a>   <strong class="jxr_keyword">void</strong> shouldSuppressOutputIfQuietOptionEnabled() <strong class="jxr_keyword">throws</strong> Throwable {
-<a class="jxr_linenumber" name="L416" href="#L416">416</a>     System.setProperty(<span class="jxr_string">"migrationsHome"</span>, TestUtil.getTempDir().getAbsolutePath());
-<a class="jxr_linenumber" name="L417" href="#L417">417</a>     File basePath = TestUtil.getTempDir();
-<a class="jxr_linenumber" name="L418" href="#L418">418</a>     String output = SystemStubs.tapSystemOut(() -&gt; {
-<a class="jxr_linenumber" name="L419" href="#L419">419</a>       Migrator.main(TestUtil.args(<span class="jxr_string">"--path="</span> + basePath.getAbsolutePath(), <span class="jxr_string">"--quiet"</span>, <span class="jxr_string">"init"</span>));
-<a class="jxr_linenumber" name="L420" href="#L420">420</a>     });
-<a class="jxr_linenumber" name="L421" href="#L421">421</a>     assertFalse(output.contains(<span class="jxr_string">"Initializing:"</span>));
-<a class="jxr_linenumber" name="L422" href="#L422">422</a>     assertNotNull(basePath.list());
-<a class="jxr_linenumber" name="L423" href="#L423">423</a>     assertTrue(TestUtil.deleteDirectory(basePath), <span class="jxr_string">"delete temp dir"</span>);
-<a class="jxr_linenumber" name="L424" href="#L424">424</a>   }
-<a class="jxr_linenumber" name="L425" href="#L425">425</a> 
-<a class="jxr_linenumber" name="L426" href="#L426">426</a>   @Test
-<a class="jxr_linenumber" name="L427" href="#L427">427</a>   <strong class="jxr_keyword">void</strong> shouldColorizeSuccessOutputIfColorOptionEnabled() <strong class="jxr_keyword">throws</strong> Throwable {
-<a class="jxr_linenumber" name="L428" href="#L428">428</a>     System.setProperty(<span class="jxr_string">"migrationsHome"</span>, TestUtil.getTempDir().getAbsolutePath());
-<a class="jxr_linenumber" name="L429" href="#L429">429</a>     File basePath = TestUtil.getTempDir();
-<a class="jxr_linenumber" name="L430" href="#L430">430</a>     String output = SystemStubs.tapSystemOut(() -&gt; {
-<a class="jxr_linenumber" name="L431" href="#L431">431</a>       Migrator.main(TestUtil.args(<span class="jxr_string">"--path="</span> + basePath.getAbsolutePath(), <span class="jxr_string">"--color"</span>, <span class="jxr_string">"init"</span>));
-<a class="jxr_linenumber" name="L432" href="#L432">432</a>     });
-<a class="jxr_linenumber" name="L433" href="#L433">433</a>     assertTrue(output.contains(ConsoleColors.GREEN + <span class="jxr_string">"SUCCESS"</span>));
-<a class="jxr_linenumber" name="L434" href="#L434">434</a>     assertNotNull(basePath.list());
-<a class="jxr_linenumber" name="L435" href="#L435">435</a>     assertTrue(TestUtil.deleteDirectory(basePath), <span class="jxr_string">"delete temp dir"</span>);
-<a class="jxr_linenumber" name="L436" href="#L436">436</a>   }
-<a class="jxr_linenumber" name="L437" href="#L437">437</a> 
+<a class="jxr_linenumber" name="L344" href="#L344">344</a>     File newMigration = Path.of(basePath.getCanonicalPath(), <span class="jxr_string">"scripts"</span>, <span class="jxr_string">"003_new_migration.sql"</span>).toFile();
+<a class="jxr_linenumber" name="L345" href="#L345">345</a>     assertTrue(newMigration.exists());
+<a class="jxr_linenumber" name="L346" href="#L346">346</a>     assertTrue(TestUtil.deleteDirectory(basePath), <span class="jxr_string">"delete temp dir"</span>);
+<a class="jxr_linenumber" name="L347" href="#L347">347</a>   }
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 
+<a class="jxr_linenumber" name="L349" href="#L349">349</a>   @Test
+<a class="jxr_linenumber" name="L350" href="#L350">350</a>   <strong class="jxr_keyword">void</strong> useCustomTemplate() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L351" href="#L351">351</a>     String desc = <span class="jxr_string">"test new migration"</span>;
+<a class="jxr_linenumber" name="L352" href="#L352">352</a>     File basePath = TestUtil.getTempDir();
+<a class="jxr_linenumber" name="L353" href="#L353">353</a>     Migrator.main(TestUtil.args(<span class="jxr_string">"--path="</span> + basePath.getAbsolutePath(), <span class="jxr_string">"init"</span>));
+<a class="jxr_linenumber" name="L354" href="#L354">354</a>     assertNotNull(basePath.list());
+<a class="jxr_linenumber" name="L355" href="#L355">355</a>     assertEquals(4, basePath.list().length);
+<a class="jxr_linenumber" name="L356" href="#L356">356</a>     File scriptPath = Path.of(basePath.getCanonicalPath(), <span class="jxr_string">"scripts"</span>).toFile();
+<a class="jxr_linenumber" name="L357" href="#L357">357</a>     assertEquals(3, scriptPath.list().length);
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 
+<a class="jxr_linenumber" name="L359" href="#L359">359</a>     File templatePath = File.createTempFile(<span class="jxr_string">"customTemplate"</span>, <span class="jxr_string">"sql"</span>);
+<a class="jxr_linenumber" name="L360" href="#L360">360</a>     <strong class="jxr_keyword">try</strong> (PrintWriter writer = <strong class="jxr_keyword">new</strong> PrintWriter(templatePath)) {
+<a class="jxr_linenumber" name="L361" href="#L361">361</a>       writer.println(<span class="jxr_string">"// ${description}"</span>);
+<a class="jxr_linenumber" name="L362" href="#L362">362</a>     }
+<a class="jxr_linenumber" name="L363" href="#L363">363</a>     Migrator.main(TestUtil.args(<span class="jxr_string">"--path="</span> + basePath.getAbsolutePath(), <span class="jxr_string">"new"</span>, desc,
+<a class="jxr_linenumber" name="L364" href="#L364">364</a>         <span class="jxr_string">"--template="</span> + templatePath.getAbsolutePath()));
+<a class="jxr_linenumber" name="L365" href="#L365">365</a>     String[] scripts = scriptPath.list();
+<a class="jxr_linenumber" name="L366" href="#L366">366</a>     Arrays.sort(scripts);
+<a class="jxr_linenumber" name="L367" href="#L367">367</a>     assertEquals(4, scripts.length);
+<a class="jxr_linenumber" name="L368" href="#L368">368</a>     <strong class="jxr_keyword">try</strong> (Scanner scanner = <strong class="jxr_keyword">new</strong> Scanner(Path.of(scriptPath.getCanonicalPath(), scripts[scripts.length - 2]))) {
+<a class="jxr_linenumber" name="L369" href="#L369">369</a>       <strong class="jxr_keyword">if</strong> (scanner.hasNextLine()) {
+<a class="jxr_linenumber" name="L370" href="#L370">370</a>         assertEquals(<span class="jxr_string">"// "</span> + desc, scanner.nextLine());
+<a class="jxr_linenumber" name="L371" href="#L371">371</a>       }
+<a class="jxr_linenumber" name="L372" href="#L372">372</a>     }
+<a class="jxr_linenumber" name="L373" href="#L373">373</a>     templatePath.delete();
+<a class="jxr_linenumber" name="L374" href="#L374">374</a>     assertTrue(TestUtil.deleteDirectory(basePath), <span class="jxr_string">"delete temp dir"</span>);
+<a class="jxr_linenumber" name="L375" href="#L375">375</a>   }
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> 
+<a class="jxr_linenumber" name="L377" href="#L377">377</a>   @Test
+<a class="jxr_linenumber" name="L378" href="#L378">378</a>   <strong class="jxr_keyword">void</strong> useCustomTemplateWithNoValue() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L379" href="#L379">379</a>     File basePath = TestUtil.getTempDir();
+<a class="jxr_linenumber" name="L380" href="#L380">380</a>     Migrator.main(TestUtil.args(<span class="jxr_string">"--path="</span> + basePath.getAbsolutePath(), <span class="jxr_string">"init"</span>));
+<a class="jxr_linenumber" name="L381" href="#L381">381</a>     assertNotNull(basePath.list());
+<a class="jxr_linenumber" name="L382" href="#L382">382</a>     assertEquals(4, basePath.list().length);
+<a class="jxr_linenumber" name="L383" href="#L383">383</a>     File scriptPath = Path.of(basePath.getCanonicalPath(), <span class="jxr_string">"scripts"</span>).toFile();
+<a class="jxr_linenumber" name="L384" href="#L384">384</a>     assertEquals(3, scriptPath.list().length);
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> 
+<a class="jxr_linenumber" name="L386" href="#L386">386</a>     File templatePath = File.createTempFile(<span class="jxr_string">"customTemplate"</span>, <span class="jxr_string">"sql"</span>);
+<a class="jxr_linenumber" name="L387" href="#L387">387</a>     templatePath.createNewFile();
+<a class="jxr_linenumber" name="L388" href="#L388">388</a>     Migrator.main(TestUtil.args(<span class="jxr_string">"--path="</span> + basePath.getAbsolutePath(), <span class="jxr_string">"new"</span>, <span class="jxr_string">"test new migration"</span>, <span class="jxr_string">"--template="</span>));
+<a class="jxr_linenumber" name="L389" href="#L389">389</a>     assertEquals(4, scriptPath.list().length);
+<a class="jxr_linenumber" name="L390" href="#L390">390</a>     templatePath.delete();
+<a class="jxr_linenumber" name="L391" href="#L391">391</a>     assertTrue(TestUtil.deleteDirectory(basePath), <span class="jxr_string">"delete temp dir"</span>);
+<a class="jxr_linenumber" name="L392" href="#L392">392</a>   }
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 
+<a class="jxr_linenumber" name="L394" href="#L394">394</a>   @Test
+<a class="jxr_linenumber" name="L395" href="#L395">395</a>   <strong class="jxr_keyword">void</strong> useCustomTemplateWithBadPath() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L396" href="#L396">396</a>     System.setProperty(<span class="jxr_string">"migrationsHome"</span>, TestUtil.getTempDir().getAbsolutePath());
+<a class="jxr_linenumber" name="L397" href="#L397">397</a>     File basePath = TestUtil.getTempDir();
+<a class="jxr_linenumber" name="L398" href="#L398">398</a>     Migrator.main(TestUtil.args(<span class="jxr_string">"--path="</span> + basePath.getAbsolutePath(), <span class="jxr_string">"init"</span>));
+<a class="jxr_linenumber" name="L399" href="#L399">399</a>     assertNotNull(basePath.list());
+<a class="jxr_linenumber" name="L400" href="#L400">400</a>     assertEquals(4, basePath.list().length);
+<a class="jxr_linenumber" name="L401" href="#L401">401</a>     File scriptPath = Path.of(basePath.getCanonicalPath(), <span class="jxr_string">"scripts"</span>).toFile();
+<a class="jxr_linenumber" name="L402" href="#L402">402</a>     assertEquals(3, scriptPath.list().length);
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> 
+<a class="jxr_linenumber" name="L404" href="#L404">404</a>     String output = SystemStubs.tapSystemOut(() -&gt; {
+<a class="jxr_linenumber" name="L405" href="#L405">405</a>       Migrator.main(TestUtil.args(<span class="jxr_string">"--path="</span> + basePath.getAbsolutePath(), <span class="jxr_string">"new"</span>, <span class="jxr_string">"test new migration"</span>));
+<a class="jxr_linenumber" name="L406" href="#L406">406</a>     });
+<a class="jxr_linenumber" name="L407" href="#L407">407</a>     assertEquals(4, scriptPath.list().length);
+<a class="jxr_linenumber" name="L408" href="#L408">408</a>     assertTrue(output
+<a class="jxr_linenumber" name="L409" href="#L409">409</a>         .contains(<span class="jxr_string">"Your migrations configuration did not find your custom template.  Using the default template."</span>));
+<a class="jxr_linenumber" name="L410" href="#L410">410</a>     assertTrue(TestUtil.deleteDirectory(basePath), <span class="jxr_string">"delete temp dir"</span>);
+<a class="jxr_linenumber" name="L411" href="#L411">411</a>   }
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 
+<a class="jxr_linenumber" name="L413" href="#L413">413</a>   @Test
+<a class="jxr_linenumber" name="L414" href="#L414">414</a>   <strong class="jxr_keyword">void</strong> shouldSuppressOutputIfQuietOptionEnabled() <strong class="jxr_keyword">throws</strong> Throwable {
+<a class="jxr_linenumber" name="L415" href="#L415">415</a>     System.setProperty(<span class="jxr_string">"migrationsHome"</span>, TestUtil.getTempDir().getAbsolutePath());
+<a class="jxr_linenumber" name="L416" href="#L416">416</a>     File basePath = TestUtil.getTempDir();
+<a class="jxr_linenumber" name="L417" href="#L417">417</a>     String output = SystemStubs.tapSystemOut(() -&gt; {
+<a class="jxr_linenumber" name="L418" href="#L418">418</a>       Migrator.main(TestUtil.args(<span class="jxr_string">"--path="</span> + basePath.getAbsolutePath(), <span class="jxr_string">"--quiet"</span>, <span class="jxr_string">"init"</span>));
+<a class="jxr_linenumber" name="L419" href="#L419">419</a>     });
+<a class="jxr_linenumber" name="L420" href="#L420">420</a>     assertFalse(output.contains(<span class="jxr_string">"Initializing:"</span>));
+<a class="jxr_linenumber" name="L421" href="#L421">421</a>     assertNotNull(basePath.list());
+<a class="jxr_linenumber" name="L422" href="#L422">422</a>     assertTrue(TestUtil.deleteDirectory(basePath), <span class="jxr_string">"delete temp dir"</span>);
+<a class="jxr_linenumber" name="L423" href="#L423">423</a>   }
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> 
+<a class="jxr_linenumber" name="L425" href="#L425">425</a>   @Test
+<a class="jxr_linenumber" name="L426" href="#L426">426</a>   <strong class="jxr_keyword">void</strong> shouldColorizeSuccessOutputIfColorOptionEnabled() <strong class="jxr_keyword">throws</strong> Throwable {
+<a class="jxr_linenumber" name="L427" href="#L427">427</a>     System.setProperty(<span class="jxr_string">"migrationsHome"</span>, TestUtil.getTempDir().getAbsolutePath());
+<a class="jxr_linenumber" name="L428" href="#L428">428</a>     File basePath = TestUtil.getTempDir();
+<a class="jxr_linenumber" name="L429" href="#L429">429</a>     String output = SystemStubs.tapSystemOut(() -&gt; {
+<a class="jxr_linenumber" name="L430" href="#L430">430</a>       Migrator.main(TestUtil.args(<span class="jxr_string">"--path="</span> + basePath.getAbsolutePath(), <span class="jxr_string">"--color"</span>, <span class="jxr_string">"init"</span>));
+<a class="jxr_linenumber" name="L431" href="#L431">431</a>     });
+<a class="jxr_linenumber" name="L432" href="#L432">432</a>     assertTrue(output.contains(ConsoleColors.GREEN + <span class="jxr_string">"SUCCESS"</span>));
+<a class="jxr_linenumber" name="L433" href="#L433">433</a>     assertNotNull(basePath.list());
+<a class="jxr_linenumber" name="L434" href="#L434">434</a>     assertTrue(TestUtil.deleteDirectory(basePath), <span class="jxr_string">"delete temp dir"</span>);
+<a class="jxr_linenumber" name="L435" href="#L435">435</a>   }
+<a class="jxr_linenumber" name="L436" href="#L436">436</a> 
+<a class="jxr_linenumber" name="L437" href="#L437">437</a>   @EnabledForJreRange(maxVersion = 23)
 <a class="jxr_linenumber" name="L438" href="#L438">438</a>   @Test
 <a class="jxr_linenumber" name="L439" href="#L439">439</a>   <strong class="jxr_keyword">void</strong> shouldColorizeFailureOutputIfColorOptionEnabled() <strong class="jxr_keyword">throws</strong> Throwable {
 <a class="jxr_linenumber" name="L440" href="#L440">440</a>     System.setProperty(<span class="jxr_string">"migrationsHome"</span>, TestUtil.getTempDir().getAbsolutePath());
@@ -457,80 +457,82 @@
 <a class="jxr_linenumber" name="L449" href="#L449">449</a>     assertTrue(TestUtil.deleteDirectory(basePath), <span class="jxr_string">"delete temp dir"</span>);
 <a class="jxr_linenumber" name="L450" href="#L450">450</a>   }
 <a class="jxr_linenumber" name="L451" href="#L451">451</a> 
-<a class="jxr_linenumber" name="L452" href="#L452">452</a>   @Test
-<a class="jxr_linenumber" name="L453" href="#L453">453</a>   <strong class="jxr_keyword">void</strong> shouldShowErrorOnMissingChangelog() <strong class="jxr_keyword">throws</strong> Throwable {
-<a class="jxr_linenumber" name="L454" href="#L454">454</a>     <em class="jxr_comment">// gh-220</em>
-<a class="jxr_linenumber" name="L455" href="#L455">455</a>     <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L456" href="#L456">456</a>       System.setProperty(<span class="jxr_string">"migrations_changelog"</span>, <span class="jxr_string">"changelog1"</span>);
-<a class="jxr_linenumber" name="L457" href="#L457">457</a>       String output = SystemStubs.tapSystemOut(() -&gt; {
-<a class="jxr_linenumber" name="L458" href="#L458">458</a>         Migrator.main(TestUtil.args(<span class="jxr_string">"--path="</span> + dir.getAbsolutePath(), <span class="jxr_string">"up"</span>, <span class="jxr_string">"1"</span>));
-<a class="jxr_linenumber" name="L459" href="#L459">459</a>       });
-<a class="jxr_linenumber" name="L460" href="#L460">460</a>       assertFalse(output.contains(<span class="jxr_string">"FAILURE"</span>));
-<a class="jxr_linenumber" name="L461" href="#L461">461</a> 
-<a class="jxr_linenumber" name="L462" href="#L462">462</a>       System.setProperty(<span class="jxr_string">"migrations_changelog"</span>, <span class="jxr_string">"changelog2"</span>);
-<a class="jxr_linenumber" name="L463" href="#L463">463</a>       output = SystemStubs.tapSystemOut(() -&gt; {
-<a class="jxr_linenumber" name="L464" href="#L464">464</a>         <strong class="jxr_keyword">int</strong> exitCode = SystemStubs.catchSystemExit(() -&gt; {
-<a class="jxr_linenumber" name="L465" href="#L465">465</a>           Migrator.main(TestUtil.args(<span class="jxr_string">"--path="</span> + dir.getAbsolutePath(), <span class="jxr_string">"pending"</span>));
-<a class="jxr_linenumber" name="L466" href="#L466">466</a>         });
-<a class="jxr_linenumber" name="L467" href="#L467">467</a>         assertEquals(1, exitCode);
-<a class="jxr_linenumber" name="L468" href="#L468">468</a>       });
-<a class="jxr_linenumber" name="L469" href="#L469">469</a>       assertTrue(output.contains(<span class="jxr_string">"FAILURE"</span>));
-<a class="jxr_linenumber" name="L470" href="#L470">470</a>       assertTrue(output.contains(<span class="jxr_string">"Change log doesn't exist, no migrations applied.  Try running 'up' instead."</span>));
-<a class="jxr_linenumber" name="L471" href="#L471">471</a>     } <strong class="jxr_keyword">finally</strong> {
-<a class="jxr_linenumber" name="L472" href="#L472">472</a>       System.clearProperty(<span class="jxr_string">"migrations_changelog"</span>);
-<a class="jxr_linenumber" name="L473" href="#L473">473</a>     }
-<a class="jxr_linenumber" name="L474" href="#L474">474</a>   }
-<a class="jxr_linenumber" name="L475" href="#L475">475</a> 
-<a class="jxr_linenumber" name="L476" href="#L476">476</a>   @Test
-<a class="jxr_linenumber" name="L477" href="#L477">477</a>   <strong class="jxr_keyword">void</strong> testInfoCommand() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L478" href="#L478">478</a>     String output = SystemStubs.tapSystemOut(() -&gt; {
-<a class="jxr_linenumber" name="L479" href="#L479">479</a>       Migrator.main(TestUtil.args(<span class="jxr_string">"info"</span>));
-<a class="jxr_linenumber" name="L480" href="#L480">480</a>     });
-<a class="jxr_linenumber" name="L481" href="#L481">481</a>     assertFalse(output.contains(<span class="jxr_string">"null"</span>), output);
-<a class="jxr_linenumber" name="L482" href="#L482">482</a>   }
-<a class="jxr_linenumber" name="L483" href="#L483">483</a> 
-<a class="jxr_linenumber" name="L484" href="#L484">484</a>   @Test
-<a class="jxr_linenumber" name="L485" href="#L485">485</a>   <strong class="jxr_keyword">void</strong> testInfoWithNonExistentBasePath() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L486" href="#L486">486</a>     File baseDir = TestUtil.getTempDir();
-<a class="jxr_linenumber" name="L487" href="#L487">487</a>     assertTrue(baseDir.delete()); <em class="jxr_comment">// remove empty dir</em>
-<a class="jxr_linenumber" name="L488" href="#L488">488</a>     assertFalse(baseDir.exists(), <span class="jxr_string">"directory does not exist"</span>);
-<a class="jxr_linenumber" name="L489" href="#L489">489</a>     String output = SystemStubs.tapSystemOut(() -&gt; {
-<a class="jxr_linenumber" name="L490" href="#L490">490</a>       Migrator.main(TestUtil.args(<span class="jxr_string">"info"</span>, <span class="jxr_string">"--path="</span> + baseDir.getAbsolutePath()));
-<a class="jxr_linenumber" name="L491" href="#L491">491</a>     });
-<a class="jxr_linenumber" name="L492" href="#L492">492</a>     assertFalse(output.contains(<span class="jxr_string">"Migrations path must be a directory"</span>), <span class="jxr_string">"base path not required for info"</span>);
-<a class="jxr_linenumber" name="L493" href="#L493">493</a>     assertFalse(output.contains(<span class="jxr_string">"null"</span>), output);
-<a class="jxr_linenumber" name="L494" href="#L494">494</a>   }
-<a class="jxr_linenumber" name="L495" href="#L495">495</a> 
-<a class="jxr_linenumber" name="L496" href="#L496">496</a>   @Test
-<a class="jxr_linenumber" name="L497" href="#L497">497</a>   <strong class="jxr_keyword">void</strong> testInitWithNonExistentBasePath() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L498" href="#L498">498</a>     File baseDir = TestUtil.getTempDir();
-<a class="jxr_linenumber" name="L499" href="#L499">499</a>     assertTrue(baseDir.delete()); <em class="jxr_comment">// remove empty dir</em>
-<a class="jxr_linenumber" name="L500" href="#L500">500</a>     assertFalse(baseDir.exists(), <span class="jxr_string">"directory does not exist"</span>);
-<a class="jxr_linenumber" name="L501" href="#L501">501</a>     String output = SystemStubs
-<a class="jxr_linenumber" name="L502" href="#L502">502</a>         .tapSystemOut(() -&gt; Migrator.main(TestUtil.args(<span class="jxr_string">"init"</span>, <span class="jxr_string">"--path="</span> + baseDir.getAbsolutePath())));
-<a class="jxr_linenumber" name="L503" href="#L503">503</a>     assertFalse(output.contains(<span class="jxr_string">"Migrations path must be a directory"</span>), output);
-<a class="jxr_linenumber" name="L504" href="#L504">504</a>     assertTrue(<strong class="jxr_keyword">new</strong> File(baseDir, <span class="jxr_string">"README"</span>).exists(), <span class="jxr_string">"README created"</span>);
-<a class="jxr_linenumber" name="L505" href="#L505">505</a>     assertTrue(<strong class="jxr_keyword">new</strong> File(baseDir, <span class="jxr_string">"environments"</span>).isDirectory(), <span class="jxr_string">"environments directory created"</span>);
-<a class="jxr_linenumber" name="L506" href="#L506">506</a>     assertTrue(TestUtil.deleteDirectory(baseDir), <span class="jxr_string">"delete temp dir"</span>);
-<a class="jxr_linenumber" name="L507" href="#L507">507</a>   }
-<a class="jxr_linenumber" name="L508" href="#L508">508</a> 
-<a class="jxr_linenumber" name="L509" href="#L509">509</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> testStatusContainsPendingMigrations() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L510" href="#L510">510</a>     String output = SystemStubs.tapSystemOut(() -&gt; {
-<a class="jxr_linenumber" name="L511" href="#L511">511</a>       Migrator.main(TestUtil.args(<span class="jxr_string">"--path="</span> + dir.getAbsolutePath(), <span class="jxr_string">"status"</span>));
-<a class="jxr_linenumber" name="L512" href="#L512">512</a>     });
-<a class="jxr_linenumber" name="L513" href="#L513">513</a>     assertFalse(output.contains(<span class="jxr_string">"FAILURE"</span>));
-<a class="jxr_linenumber" name="L514" href="#L514">514</a>     assertTrue(output.contains(<span class="jxr_string">"...pending..."</span>));
-<a class="jxr_linenumber" name="L515" href="#L515">515</a>   }
-<a class="jxr_linenumber" name="L516" href="#L516">516</a> 
-<a class="jxr_linenumber" name="L517" href="#L517">517</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> testStatusContainsNoPendingMigrations() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L518" href="#L518">518</a>     String output = SystemStubs.tapSystemOut(() -&gt; {
-<a class="jxr_linenumber" name="L519" href="#L519">519</a>       Migrator.main(TestUtil.args(<span class="jxr_string">"--path="</span> + dir.getAbsolutePath(), <span class="jxr_string">"status"</span>));
-<a class="jxr_linenumber" name="L520" href="#L520">520</a>     });
-<a class="jxr_linenumber" name="L521" href="#L521">521</a>     assertFalse(output.contains(<span class="jxr_string">"FAILURE"</span>));
-<a class="jxr_linenumber" name="L522" href="#L522">522</a>     assertFalse(output.contains(<span class="jxr_string">"...pending..."</span>));
-<a class="jxr_linenumber" name="L523" href="#L523">523</a>   }
-<a class="jxr_linenumber" name="L524" href="#L524">524</a> 
-<a class="jxr_linenumber" name="L525" href="#L525">525</a> }
+<a class="jxr_linenumber" name="L452" href="#L452">452</a>   @EnabledForJreRange(maxVersion = 23)
+<a class="jxr_linenumber" name="L453" href="#L453">453</a>   @Test
+<a class="jxr_linenumber" name="L454" href="#L454">454</a>   <strong class="jxr_keyword">void</strong> shouldShowErrorOnMissingChangelog() <strong class="jxr_keyword">throws</strong> Throwable {
+<a class="jxr_linenumber" name="L455" href="#L455">455</a>     <em class="jxr_comment">// gh-220</em>
+<a class="jxr_linenumber" name="L456" href="#L456">456</a>     <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L457" href="#L457">457</a>       System.setProperty(<span class="jxr_string">"migrations_changelog"</span>, <span class="jxr_string">"changelog1"</span>);
+<a class="jxr_linenumber" name="L458" href="#L458">458</a>       String output = SystemStubs.tapSystemOut(() -&gt; {
+<a class="jxr_linenumber" name="L459" href="#L459">459</a>         Migrator.main(TestUtil.args(<span class="jxr_string">"--path="</span> + dir.getAbsolutePath(), <span class="jxr_string">"up"</span>, <span class="jxr_string">"1"</span>));
+<a class="jxr_linenumber" name="L460" href="#L460">460</a>       });
+<a class="jxr_linenumber" name="L461" href="#L461">461</a>       assertFalse(output.contains(<span class="jxr_string">"FAILURE"</span>));
+<a class="jxr_linenumber" name="L462" href="#L462">462</a> 
+<a class="jxr_linenumber" name="L463" href="#L463">463</a>       System.setProperty(<span class="jxr_string">"migrations_changelog"</span>, <span class="jxr_string">"changelog2"</span>);
+<a class="jxr_linenumber" name="L464" href="#L464">464</a>       output = SystemStubs.tapSystemOut(() -&gt; {
+<a class="jxr_linenumber" name="L465" href="#L465">465</a>         <strong class="jxr_keyword">int</strong> exitCode = SystemStubs.catchSystemExit(() -&gt; {
+<a class="jxr_linenumber" name="L466" href="#L466">466</a>           Migrator.main(TestUtil.args(<span class="jxr_string">"--path="</span> + dir.getAbsolutePath(), <span class="jxr_string">"pending"</span>));
+<a class="jxr_linenumber" name="L467" href="#L467">467</a>         });
+<a class="jxr_linenumber" name="L468" href="#L468">468</a>         assertEquals(1, exitCode);
+<a class="jxr_linenumber" name="L469" href="#L469">469</a>       });
+<a class="jxr_linenumber" name="L470" href="#L470">470</a>       assertTrue(output.contains(<span class="jxr_string">"FAILURE"</span>));
+<a class="jxr_linenumber" name="L471" href="#L471">471</a>       assertTrue(output.contains(<span class="jxr_string">"Change log doesn't exist, no migrations applied.  Try running 'up' instead."</span>));
+<a class="jxr_linenumber" name="L472" href="#L472">472</a>     } <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L473" href="#L473">473</a>       System.clearProperty(<span class="jxr_string">"migrations_changelog"</span>);
+<a class="jxr_linenumber" name="L474" href="#L474">474</a>     }
+<a class="jxr_linenumber" name="L475" href="#L475">475</a>   }
+<a class="jxr_linenumber" name="L476" href="#L476">476</a> 
+<a class="jxr_linenumber" name="L477" href="#L477">477</a>   @Test
+<a class="jxr_linenumber" name="L478" href="#L478">478</a>   <strong class="jxr_keyword">void</strong> testInfoCommand() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L479" href="#L479">479</a>     String output = SystemStubs.tapSystemOut(() -&gt; {
+<a class="jxr_linenumber" name="L480" href="#L480">480</a>       Migrator.main(TestUtil.args(<span class="jxr_string">"info"</span>));
+<a class="jxr_linenumber" name="L481" href="#L481">481</a>     });
+<a class="jxr_linenumber" name="L482" href="#L482">482</a>     assertFalse(output.contains(<span class="jxr_string">"null"</span>), output);
+<a class="jxr_linenumber" name="L483" href="#L483">483</a>   }
+<a class="jxr_linenumber" name="L484" href="#L484">484</a> 
+<a class="jxr_linenumber" name="L485" href="#L485">485</a>   @Test
+<a class="jxr_linenumber" name="L486" href="#L486">486</a>   <strong class="jxr_keyword">void</strong> testInfoWithNonExistentBasePath() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L487" href="#L487">487</a>     File baseDir = TestUtil.getTempDir();
+<a class="jxr_linenumber" name="L488" href="#L488">488</a>     assertTrue(baseDir.delete()); <em class="jxr_comment">// remove empty dir</em>
+<a class="jxr_linenumber" name="L489" href="#L489">489</a>     assertFalse(baseDir.exists(), <span class="jxr_string">"directory does not exist"</span>);
+<a class="jxr_linenumber" name="L490" href="#L490">490</a>     String output = SystemStubs.tapSystemOut(() -&gt; {
+<a class="jxr_linenumber" name="L491" href="#L491">491</a>       Migrator.main(TestUtil.args(<span class="jxr_string">"info"</span>, <span class="jxr_string">"--path="</span> + baseDir.getAbsolutePath()));
+<a class="jxr_linenumber" name="L492" href="#L492">492</a>     });
+<a class="jxr_linenumber" name="L493" href="#L493">493</a>     assertFalse(output.contains(<span class="jxr_string">"Migrations path must be a directory"</span>), <span class="jxr_string">"base path not required for info"</span>);
+<a class="jxr_linenumber" name="L494" href="#L494">494</a>     assertFalse(output.contains(<span class="jxr_string">"null"</span>), output);
+<a class="jxr_linenumber" name="L495" href="#L495">495</a>   }
+<a class="jxr_linenumber" name="L496" href="#L496">496</a> 
+<a class="jxr_linenumber" name="L497" href="#L497">497</a>   @Test
+<a class="jxr_linenumber" name="L498" href="#L498">498</a>   <strong class="jxr_keyword">void</strong> testInitWithNonExistentBasePath() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L499" href="#L499">499</a>     File baseDir = TestUtil.getTempDir();
+<a class="jxr_linenumber" name="L500" href="#L500">500</a>     assertTrue(baseDir.delete()); <em class="jxr_comment">// remove empty dir</em>
+<a class="jxr_linenumber" name="L501" href="#L501">501</a>     assertFalse(baseDir.exists(), <span class="jxr_string">"directory does not exist"</span>);
+<a class="jxr_linenumber" name="L502" href="#L502">502</a>     String output = SystemStubs
+<a class="jxr_linenumber" name="L503" href="#L503">503</a>         .tapSystemOut(() -&gt; Migrator.main(TestUtil.args(<span class="jxr_string">"init"</span>, <span class="jxr_string">"--path="</span> + baseDir.getAbsolutePath())));
+<a class="jxr_linenumber" name="L504" href="#L504">504</a>     assertFalse(output.contains(<span class="jxr_string">"Migrations path must be a directory"</span>), output);
+<a class="jxr_linenumber" name="L505" href="#L505">505</a>     assertTrue(Files.exists(Path.of(baseDir.getCanonicalPath(), <span class="jxr_string">"README"</span>)), <span class="jxr_string">"README created"</span>);
+<a class="jxr_linenumber" name="L506" href="#L506">506</a>     assertTrue(Files.isDirectory(Path.of(baseDir.getCanonicalPath(), <span class="jxr_string">"environments"</span>)),
+<a class="jxr_linenumber" name="L507" href="#L507">507</a>         <span class="jxr_string">"environments directory created"</span>);
+<a class="jxr_linenumber" name="L508" href="#L508">508</a>     assertTrue(TestUtil.deleteDirectory(baseDir), <span class="jxr_string">"delete temp dir"</span>);
+<a class="jxr_linenumber" name="L509" href="#L509">509</a>   }
+<a class="jxr_linenumber" name="L510" href="#L510">510</a> 
+<a class="jxr_linenumber" name="L511" href="#L511">511</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> testStatusContainsPendingMigrations() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L512" href="#L512">512</a>     String output = SystemStubs.tapSystemOut(() -&gt; {
+<a class="jxr_linenumber" name="L513" href="#L513">513</a>       Migrator.main(TestUtil.args(<span class="jxr_string">"--path="</span> + dir.getAbsolutePath(), <span class="jxr_string">"status"</span>));
+<a class="jxr_linenumber" name="L514" href="#L514">514</a>     });
+<a class="jxr_linenumber" name="L515" href="#L515">515</a>     assertFalse(output.contains(<span class="jxr_string">"FAILURE"</span>));
+<a class="jxr_linenumber" name="L516" href="#L516">516</a>     assertTrue(output.contains(<span class="jxr_string">"...pending..."</span>));
+<a class="jxr_linenumber" name="L517" href="#L517">517</a>   }
+<a class="jxr_linenumber" name="L518" href="#L518">518</a> 
+<a class="jxr_linenumber" name="L519" href="#L519">519</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> testStatusContainsNoPendingMigrations() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L520" href="#L520">520</a>     String output = SystemStubs.tapSystemOut(() -&gt; {
+<a class="jxr_linenumber" name="L521" href="#L521">521</a>       Migrator.main(TestUtil.args(<span class="jxr_string">"--path="</span> + dir.getAbsolutePath(), <span class="jxr_string">"status"</span>));
+<a class="jxr_linenumber" name="L522" href="#L522">522</a>     });
+<a class="jxr_linenumber" name="L523" href="#L523">523</a>     assertFalse(output.contains(<span class="jxr_string">"FAILURE"</span>));
+<a class="jxr_linenumber" name="L524" href="#L524">524</a>     assertFalse(output.contains(<span class="jxr_string">"...pending..."</span>));
+<a class="jxr_linenumber" name="L525" href="#L525">525</a>   }
+<a class="jxr_linenumber" name="L526" href="#L526">526</a> 
+<a class="jxr_linenumber" name="L527" href="#L527">527</a> }
 </pre>
 <hr/>
 <div id="footer">© 2010–2025 <a href="https://www.mybatis.org/">MyBatis.org</a></div>

@@ -7,7 +7,7 @@
 <body>
 <div id="overview"><a href="../../../../../../apidocs/org/apache/ibatis/migration/commands/BaseCommand.html">View Javadoc</a></div><pre>
 <a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
-<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> *    Copyright 2010-2023 the original author or authors.</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> *    Copyright 2010-2025 the original author or authors.</em>
 <a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> *</em>
 <a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> *    Licensed under the Apache License, Version 2.0 (the "License");</em>
 <a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> *    you may not use this file except in compliance with the License.</em>
@@ -26,16 +26,16 @@
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.ibatis.migration.utils.Util.file;
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> java.io.File;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> java.io.FileReader;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.io.FileWriter;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.io.IOException;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.io.LineNumberReader;
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.io.OutputStream;
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> java.io.PrintStream;
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> java.io.PrintWriter;
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> java.io.Reader;
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> java.net.URL;
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> java.net.URLClassLoader;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> java.io.IOException;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.io.LineNumberReader;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.io.OutputStream;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.io.PrintStream;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.io.PrintWriter;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> java.io.Reader;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> java.net.URL;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> java.net.URLClassLoader;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> java.nio.file.Files;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> java.nio.file.Path;
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> java.text.DecimalFormat;
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> java.text.ParseException;
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> java.text.SimpleDateFormat;
@@ -169,7 +169,7 @@
 <a class="jxr_linenumber" name="L161" href="#L161">161</a>   <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> copyExternalResourceTo(String resource, File toFile, Properties variables) {
 <a class="jxr_linenumber" name="L162" href="#L162">162</a>     printStream.println(<span class="jxr_string">"Creating: "</span> + toFile.getName());
 <a class="jxr_linenumber" name="L163" href="#L163">163</a>     <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L164" href="#L164">164</a>       File sourceFile = <strong class="jxr_keyword">new</strong> File(resource);
+<a class="jxr_linenumber" name="L164" href="#L164">164</a>       File sourceFile = Path.of(resource).toFile();
 <a class="jxr_linenumber" name="L165" href="#L165">165</a>       copyTemplate(sourceFile, toFile, variables);
 <a class="jxr_linenumber" name="L166" href="#L166">166</a>     } <strong class="jxr_keyword">catch</strong> (Exception e) {
 <a class="jxr_linenumber" name="L167" href="#L167">167</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="MigrationException" href="../../../../../org/apache/ibatis/migration/MigrationException.html#MigrationException">MigrationException</a>(<span class="jxr_string">"Error copying "</span> + resource + <span class="jxr_string">" to "</span> + toFile.getAbsolutePath() + <span class="jxr_string">".  Cause: "</span> + e,
@@ -178,7 +178,7 @@
 <a class="jxr_linenumber" name="L170" href="#L170">170</a>   }
 <a class="jxr_linenumber" name="L171" href="#L171">171</a> 
 <a class="jxr_linenumber" name="L172" href="#L172">172</a>   <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> copyTemplate(File templateFile, File toFile, Properties variables) <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L173" href="#L173">173</a>     <strong class="jxr_keyword">try</strong> (FileReader reader = <strong class="jxr_keyword">new</strong> FileReader(templateFile)) {
+<a class="jxr_linenumber" name="L173" href="#L173">173</a>     <strong class="jxr_keyword">try</strong> (Reader reader = Files.newBufferedReader(templateFile.toPath())) {
 <a class="jxr_linenumber" name="L174" href="#L174">174</a>       copyTemplate(reader, toFile, variables);
 <a class="jxr_linenumber" name="L175" href="#L175">175</a>     }
 <a class="jxr_linenumber" name="L176" href="#L176">176</a>   }
@@ -186,7 +186,7 @@
 <a class="jxr_linenumber" name="L178" href="#L178">178</a>   <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> copyTemplate(Reader templateReader, File toFile, Properties variables) <strong class="jxr_keyword">throws</strong> IOException {
 <a class="jxr_linenumber" name="L179" href="#L179">179</a>     <a name="VariableReplacer" href="../../../../../org/apache/ibatis/migration/VariableReplacer.html#VariableReplacer">VariableReplacer</a> replacer = <strong class="jxr_keyword">new</strong> <a name="VariableReplacer" href="../../../../../org/apache/ibatis/migration/VariableReplacer.html#VariableReplacer">VariableReplacer</a>(variables);
 <a class="jxr_linenumber" name="L180" href="#L180">180</a>     <strong class="jxr_keyword">try</strong> (LineNumberReader reader = <strong class="jxr_keyword">new</strong> LineNumberReader(templateReader);
-<a class="jxr_linenumber" name="L181" href="#L181">181</a>         PrintWriter writer = <strong class="jxr_keyword">new</strong> PrintWriter(<strong class="jxr_keyword">new</strong> FileWriter(toFile))) {
+<a class="jxr_linenumber" name="L181" href="#L181">181</a>         PrintWriter writer = <strong class="jxr_keyword">new</strong> PrintWriter(Files.newBufferedWriter(toFile.toPath()))) {
 <a class="jxr_linenumber" name="L182" href="#L182">182</a>       String line;
 <a class="jxr_linenumber" name="L183" href="#L183">183</a>       <strong class="jxr_keyword">while</strong> ((line = reader.readLine()) != <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L184" href="#L184">184</a>         line = replacer.replace(line);
@@ -267,7 +267,7 @@
 <a class="jxr_linenumber" name="L259" href="#L259">259</a>   <strong class="jxr_keyword">private</strong> File getCustomDriverPath() {
 <a class="jxr_linenumber" name="L260" href="#L260">260</a>     String customDriverPath = environment().getDriverPath();
 <a class="jxr_linenumber" name="L261" href="#L261">261</a>     <strong class="jxr_keyword">if</strong> (customDriverPath != <strong class="jxr_keyword">null</strong> &amp;&amp; customDriverPath.length() &gt; 0) {
-<a class="jxr_linenumber" name="L262" href="#L262">262</a>       <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> File(customDriverPath);
+<a class="jxr_linenumber" name="L262" href="#L262">262</a>       <strong class="jxr_keyword">return</strong> Path.of(customDriverPath).toFile();
 <a class="jxr_linenumber" name="L263" href="#L263">263</a>     }
 <a class="jxr_linenumber" name="L264" href="#L264">264</a>     <strong class="jxr_keyword">return</strong> options.getPaths().getDriverPath();
 <a class="jxr_linenumber" name="L265" href="#L265">265</a>   }

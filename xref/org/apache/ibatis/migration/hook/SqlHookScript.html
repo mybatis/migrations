@@ -7,7 +7,7 @@
 <body>
 <div id="overview"><a href="../../../../../../apidocs/org/apache/ibatis/migration/hook/SqlHookScript.html">View Javadoc</a></div><pre>
 <a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
-<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> *    Copyright 2010-2023 the original author or authors.</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> *    Copyright 2010-2025 the original author or authors.</em>
 <a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> *</em>
 <a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> *    Licensed under the Apache License, Version 2.0 (the "License");</em>
 <a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> *    you may not use this file except in compliance with the License.</em>
@@ -25,61 +25,63 @@
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  <strong class="jxr_keyword">import</strong> java.io.ByteArrayOutputStream;
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> java.io.File;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> java.io.FileInputStream;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> java.io.IOException;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> java.io.IOException;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> java.io.InputStream;
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.io.PrintStream;
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.io.StringReader;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.util.Map;
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.util.Properties;
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.ibatis.migration.MigrationException;
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.apache.ibatis.migration.VariableReplacer;
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.ibatis.migration.utils.Util;
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="SqlHookScript" href="../../../../../org/apache/ibatis/migration/hook/SqlHookScript.html#SqlHookScript">SqlHookScript</a> <strong class="jxr_keyword">implements</strong> <a name="HookScript" href="../../../../../org/apache/ibatis/migration/hook/HookScript.html#HookScript">HookScript</a> {
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.nio.charset.Charset;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.nio.file.Files;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> java.util.Map;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> java.util.Properties;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.ibatis.migration.MigrationException;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.apache.ibatis.migration.VariableReplacer;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.apache.ibatis.migration.utils.Util;
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>    <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> File scriptFile;
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>    <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> String charset;
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>    <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> Properties variables;
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>    <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> PrintStream printStream;
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>    <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <a name="VariableReplacer" href="../../../../../org/apache/ibatis/migration/VariableReplacer.html#VariableReplacer">VariableReplacer</a> replacer;
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>    <strong class="jxr_keyword">public</strong> <a name="SqlHookScript" href="../../../../../org/apache/ibatis/migration/hook/SqlHookScript.html#SqlHookScript">SqlHookScript</a>(File scriptFile, String charset, String[] options, Properties variables,
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>        PrintStream printStream) {
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>      <strong class="jxr_keyword">this</strong>.scriptFile = scriptFile;
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>      <strong class="jxr_keyword">this</strong>.charset = charset;
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>      <strong class="jxr_keyword">this</strong>.variables = variables;
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>      <strong class="jxr_keyword">this</strong>.printStream = printStream;
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>      <em class="jxr_comment">// options can be local variables in key=value format.</em>
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>      <strong class="jxr_keyword">for</strong> (String option : options) {
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>        <strong class="jxr_keyword">int</strong> sep = option.indexOf('=');
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>        <strong class="jxr_keyword">if</strong> (sep &gt; -1) {
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>          <strong class="jxr_keyword">this</strong>.variables.put(option.substring(0, sep), option.substring(sep + 1));
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>        }
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>      }
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>      replacer = <strong class="jxr_keyword">new</strong> <a name="VariableReplacer" href="../../../../../org/apache/ibatis/migration/VariableReplacer.html#VariableReplacer">VariableReplacer</a>(<strong class="jxr_keyword">this</strong>.variables);
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>    }
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>  
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>    @Override
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> execute(Map&lt;String, Object&gt; bindingMap) {
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>      <a name="HookContext" href="../../../../../org/apache/ibatis/migration/hook/HookContext.html#HookContext">HookContext</a> context = (<a name="HookContext" href="../../../../../org/apache/ibatis/migration/hook/HookContext.html#HookContext">HookContext</a>) bindingMap.get(MigrationHook.HOOK_CONTEXT);
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>      printStream.println(Util.horizontalLine(<span class="jxr_string">"Applying SQL hook: "</span> + scriptFile.getName(), 80));
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>      <strong class="jxr_keyword">try</strong> (FileInputStream inputStream = <strong class="jxr_keyword">new</strong> FileInputStream(scriptFile);
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>          ByteArrayOutputStream outputStream = <strong class="jxr_keyword">new</strong> ByteArrayOutputStream()) {
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>        byte[] buffer = <strong class="jxr_keyword">new</strong> byte[1024];
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>        <strong class="jxr_keyword">int</strong> length;
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>        <strong class="jxr_keyword">while</strong> ((length = inputStream.read(buffer)) != -1) {
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>          outputStream.write(buffer, 0, length);
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>        }
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>        <strong class="jxr_keyword">try</strong> (StringReader reader = <strong class="jxr_keyword">new</strong> StringReader(replacer.replace(outputStream.toString(charset)))) {
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>          context.executeSql(reader);
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>        }
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>      } <strong class="jxr_keyword">catch</strong> (IOException e) {
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>        <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="MigrationException" href="../../../../../org/apache/ibatis/migration/MigrationException.html#MigrationException">MigrationException</a>(<span class="jxr_string">"Error occurred while running SQL hook script."</span>, e);
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>      }
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>    }
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  }
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="SqlHookScript" href="../../../../../org/apache/ibatis/migration/hook/SqlHookScript.html#SqlHookScript">SqlHookScript</a> <strong class="jxr_keyword">implements</strong> <a name="HookScript" href="../../../../../org/apache/ibatis/migration/hook/HookScript.html#HookScript">HookScript</a> {
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>    <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> File scriptFile;
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>    <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> String charset;
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>    <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> Properties variables;
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>    <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> PrintStream printStream;
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>    <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <a name="VariableReplacer" href="../../../../../org/apache/ibatis/migration/VariableReplacer.html#VariableReplacer">VariableReplacer</a> replacer;
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>    <strong class="jxr_keyword">public</strong> <a name="SqlHookScript" href="../../../../../org/apache/ibatis/migration/hook/SqlHookScript.html#SqlHookScript">SqlHookScript</a>(File scriptFile, String charset, String[] options, Properties variables,
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>        PrintStream printStream) {
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>      <strong class="jxr_keyword">this</strong>.scriptFile = scriptFile;
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>      <strong class="jxr_keyword">this</strong>.charset = charset;
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>      <strong class="jxr_keyword">this</strong>.variables = variables;
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>      <strong class="jxr_keyword">this</strong>.printStream = printStream;
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>      <em class="jxr_comment">// options can be local variables in key=value format.</em>
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>      <strong class="jxr_keyword">for</strong> (String option : options) {
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>        <strong class="jxr_keyword">int</strong> sep = option.indexOf('=');
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>        <strong class="jxr_keyword">if</strong> (sep &gt; -1) {
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>          <strong class="jxr_keyword">this</strong>.variables.put(option.substring(0, sep), option.substring(sep + 1));
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>        }
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>      }
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>      replacer = <strong class="jxr_keyword">new</strong> <a name="VariableReplacer" href="../../../../../org/apache/ibatis/migration/VariableReplacer.html#VariableReplacer">VariableReplacer</a>(<strong class="jxr_keyword">this</strong>.variables);
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>    }
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>    @Override
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> execute(Map&lt;String, Object&gt; bindingMap) {
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>      <a name="HookContext" href="../../../../../org/apache/ibatis/migration/hook/HookContext.html#HookContext">HookContext</a> context = (<a name="HookContext" href="../../../../../org/apache/ibatis/migration/hook/HookContext.html#HookContext">HookContext</a>) bindingMap.get(MigrationHook.HOOK_CONTEXT);
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>      printStream.println(Util.horizontalLine(<span class="jxr_string">"Applying SQL hook: "</span> + scriptFile.getName(), 80));
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>      <strong class="jxr_keyword">try</strong> (InputStream inputStream = Files.newInputStream(scriptFile.toPath());
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>          ByteArrayOutputStream outputStream = <strong class="jxr_keyword">new</strong> ByteArrayOutputStream()) {
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>        byte[] buffer = <strong class="jxr_keyword">new</strong> byte[1024];
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>        <strong class="jxr_keyword">int</strong> length;
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>        <strong class="jxr_keyword">while</strong> ((length = inputStream.read(buffer)) != -1) {
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>          outputStream.write(buffer, 0, length);
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>        }
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>        <strong class="jxr_keyword">try</strong> (StringReader reader = <strong class="jxr_keyword">new</strong> StringReader(replacer.replace(outputStream.toString(Charset.forName(charset))))) {
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>          context.executeSql(reader);
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>        }
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>      } <strong class="jxr_keyword">catch</strong> (IOException e) {
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>        <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="MigrationException" href="../../../../../org/apache/ibatis/migration/MigrationException.html#MigrationException">MigrationException</a>(<span class="jxr_string">"Error occurred while running SQL hook script."</span>, e);
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>      }
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>    }
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  }
 </pre>
 <hr/>
 <div id="footer">© 2010–2025 <a href="https://www.mybatis.org/">MyBatis.org</a></div>
