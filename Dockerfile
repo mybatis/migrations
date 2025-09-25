@@ -14,13 +14,13 @@
 #    limitations under the License.
 #
 
-FROM openjdk:21 AS build
+FROM openjdk:25 AS build
 RUN mkdir -p /opt/migrations/build
 WORKDIR /opt/migrations/build
 COPY . .
 RUN ./mvnw package -DskipTests
 
-FROM openjdk:21
+FROM openjdk:25
 RUN ["mkdir", "-p", "/opt/migrations"]
 
 COPY --from=build /opt/migrations/build/target/appassembler /opt/migrations
