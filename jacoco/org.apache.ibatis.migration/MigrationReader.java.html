@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MigrationReader.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MyBatis Migrations</a> &gt; <a href="index.source.html" class="el_package">org.apache.ibatis.migration</a> &gt; <span class="el_source">MigrationReader.java</span></div><h1>MigrationReader.java</h1><pre class="source lang-java linenums">/*
+ *    Copyright 2010-2025 the original author or authors.
+ *
+ *    Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *       https://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+package org.apache.ibatis.migration;
+
+import java.io.File;
+import java.io.FilterReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.util.Properties;
+
+public class MigrationReader extends FilterReader {
+
+  // Note: Cannot use lineSeparator directly at this time due to tests manipulating it
+<span class="fc" id="L31">  private final String lineSeparator = System.getProperty(&quot;line.separator&quot;, &quot;\n&quot;);</span>
+
+  private static final String UNDO_TAG = &quot;@UNDO&quot;;
+
+  private boolean undo;
+
+  private Properties variables;
+
+<span class="fc" id="L39">  private Part part = Part.NEW_LINE;</span>
+
+<span class="fc" id="L41">  private VariableStatus variableStatus = VariableStatus.NOTHING;</span>
+
+  private char previousChar;
+
+  private int undoIndex;
+
+  private int afterCommentPrefixIndex;
+
+  private int afterDoubleSlashIndex;
+
+  private boolean inUndo;
+
+<span class="fc" id="L53">  private final StringBuilder buffer = new StringBuilder();</span>
+
+<span class="fc" id="L55">  private final StringBuilder lineBuffer = new StringBuilder();</span>
+
+  private final VariableReplacer replacer;
+
+<span class="fc" id="L59">  private enum Part {</span>
+<span class="fc" id="L60">    NOT_UNDO_LINE,</span>
+
+<span class="fc" id="L62">    NEW_LINE,</span>
+
+<span class="fc" id="L64">    COMMENT_PREFIX,</span>
+
+<span class="fc" id="L66">    AFTER_COMMENT_PREFIX,</span>
+
+<span class="fc" id="L68">    DOUBLE_SLASH,</span>
+
+<span class="fc" id="L70">    AFTER_DOUBLE_SLASH,</span>
+
+<span class="fc" id="L72">    UNDO_TAG,</span>
+
+<span class="fc" id="L74">    AFTER_UNDO_TAG</span>
+  }
+
+<span class="fc" id="L77">  private enum VariableStatus {</span>
+<span class="fc" id="L78">    NOTHING,</span>
+
+<span class="fc" id="L80">    FOUND_DOLLAR,</span>
+
+<span class="fc" id="L82">    FOUND_OPEN_BRACE,</span>
+
+<span class="fc" id="L84">    FOUND_POSSIBLE_VARIABLE</span>
+  }
+
+  public MigrationReader(File file, String charset, boolean undo, Properties variables) throws IOException {
+<span class="fc" id="L88">    this(Files.newInputStream(file.toPath()), charset, undo, variables);</span>
+<span class="fc" id="L89">  }</span>
+
+  public MigrationReader(InputStream inputStream, String charset, boolean undo, Properties variables) {
+<span class="fc" id="L92">    super(scriptFileReader(inputStream, charset));</span>
+<span class="fc" id="L93">    this.undo = undo;</span>
+<span class="fc" id="L94">    this.variables = variables;</span>
+<span class="fc" id="L95">    replacer = new VariableReplacer(this.variables);</span>
+<span class="fc" id="L96">  }</span>
+
+  @Override
+  public int read(char[] cbuf, int off, int len) throws IOException {
+<span class="pc bpc" id="L100" title="1 of 4 branches missed.">    if (!undo &amp;&amp; inUndo) {</span>
+<span class="nc bnc" id="L101" title="All 2 branches missed.">      if (buffer.length() &gt; 0) {</span>
+<span class="nc" id="L102">        return readFromBuffer(cbuf, off, len);</span>
+      }
+<span class="nc" id="L104">      return -1;</span>
+    }
+<span class="fc bfc" id="L106" title="All 2 branches covered.">    while (buffer.length() == 0) {</span>
+<span class="fc" id="L107">      int result = in.read(cbuf, off, len);</span>
+<span class="fc bfc" id="L108" title="All 2 branches covered.">      if (result == -1) {</span>
+<span class="fc bfc" id="L109" title="All 6 branches covered.">        if (lineBuffer.length() &gt; 0 &amp;&amp; (!undo || inUndo)) {</span>
+<span class="fc" id="L110">          addToBuffer(lineBuffer);</span>
+        }
+<span class="fc bfc" id="L112" title="All 2 branches covered.">        if (buffer.length() &gt; 0) {</span>
+<span class="fc" id="L113">          break;</span>
+        }
+<span class="fc" id="L115">        return -1;</span>
+      }
+
+<span class="fc bfc" id="L118" title="All 2 branches covered.">      for (int i = off; i &lt; off + result; i++) {</span>
+<span class="fc" id="L119">        char c = cbuf[i];</span>
+
+<span class="fc" id="L121">        determinePart(c);</span>
+<span class="fc" id="L122">        searchVariable(c);</span>
+
+<span class="fc bfc" id="L124" title="All 6 branches covered.">        if (c == '\r' || c == '\n' &amp;&amp; previousChar != '\r') {</span>
+<span class="pc bpc" id="L125" title="1 of 3 branches missed.">          switch (part) {</span>
+            case AFTER_UNDO_TAG:
+<span class="fc bfc" id="L127" title="All 2 branches covered.">              if (!undo) {</span>
+                // Won't read from the file anymore.
+<span class="fc" id="L129">                lineBuffer.setLength(0);</span>
+<span class="fc" id="L130">                int bufferLen = buffer.length();</span>
+<span class="fc bfc" id="L131" title="All 2 branches covered.">                if (bufferLen == 0) {</span>
+<span class="fc" id="L132">                  return -1;</span>
+                }
+<span class="fc" id="L134">                return readFromBuffer(cbuf, off, len);</span>
+              }
+<span class="fc" id="L136">              addToBuffer(lineBuffer.delete(afterCommentPrefixIndex, afterDoubleSlashIndex)</span>
+<span class="fc" id="L137">                  .insert(afterCommentPrefixIndex, ' '));</span>
+<span class="fc" id="L138">              inUndo = true;</span>
+<span class="fc" id="L139">              break;</span>
+            case NOT_UNDO_LINE:
+<span class="fc bfc" id="L141" title="All 4 branches covered.">              if (!undo || inUndo) {</span>
+<span class="fc" id="L142">                addToBuffer(lineBuffer);</span>
+              } else {
+<span class="fc" id="L144">                lineBuffer.setLength(0);</span>
+              }
+<span class="fc" id="L146">              break;</span>
+            default:
+              break;
+          }
+<span class="fc" id="L150">          part = Part.NEW_LINE;</span>
+<span class="fc bfc" id="L151" title="All 2 branches covered.">        } else if (c == '\n') {</span>
+          // LF after CR
+<span class="fc" id="L153">          part = Part.NEW_LINE;</span>
+        } else {
+<span class="fc" id="L155">          lineBuffer.append(c);</span>
+        }
+<span class="fc" id="L157">        previousChar = c;</span>
+      }
+<span class="fc" id="L159">    }</span>
+<span class="fc" id="L160">    return readFromBuffer(cbuf, off, len);</span>
+  }
+
+  private void addToBuffer(StringBuilder line) {
+<span class="fc" id="L164">    replaceVariables(line);</span>
+<span class="fc" id="L165">    buffer.append(line).append(lineSeparator);</span>
+<span class="fc" id="L166">    lineBuffer.setLength(0);</span>
+<span class="fc" id="L167">  }</span>
+
+  private void replaceVariables(StringBuilder line) {
+<span class="fc bfc" id="L170" title="All 2 branches covered.">    if (variableStatus == VariableStatus.FOUND_POSSIBLE_VARIABLE) {</span>
+<span class="fc" id="L171">      String lineBufferStr = line.toString();</span>
+<span class="fc" id="L172">      String processed = replacer.replace(lineBufferStr);</span>
+<span class="fc bfc" id="L173" title="All 2 branches covered.">      if (!lineBufferStr.equals(processed)) {</span>
+<span class="fc" id="L174">        line.setLength(0);</span>
+<span class="fc" id="L175">        line.append(processed);</span>
+      }
+    }
+<span class="fc" id="L178">    variableStatus = VariableStatus.NOTHING;</span>
+<span class="fc" id="L179">  }</span>
+
+  private int readFromBuffer(char[] cbuf, int off, int len) {
+<span class="fc" id="L182">    int bufferLen = buffer.length();</span>
+<span class="fc bfc" id="L183" title="All 2 branches covered.">    int read = bufferLen &gt; len ? len : bufferLen;</span>
+<span class="fc" id="L184">    buffer.getChars(0, read, cbuf, off);</span>
+<span class="fc" id="L185">    buffer.delete(0, read);</span>
+<span class="fc" id="L186">    return read;</span>
+  }
+
+  private void determinePart(char c) {
+<span class="fc bfc" id="L190" title="All 7 branches covered.">    switch (part) {</span>
+      case NEW_LINE:
+<span class="fc bfc" id="L192" title="All 2 branches covered.">        if (inUndo) {</span>
+<span class="fc" id="L193">          part = Part.NOT_UNDO_LINE;</span>
+<span class="fc bfc" id="L194" title="All 4 branches covered.">        } else if (c == 0x09 || c == 0x20) {</span>
+          // ignore whitespace
+<span class="pc bpc" id="L196" title="1 of 4 branches missed.">        } else if (c == '/' || c == '-') {</span>
+<span class="fc" id="L197">          part = Part.COMMENT_PREFIX;</span>
+        } else {
+<span class="fc" id="L199">          part = Part.NOT_UNDO_LINE;</span>
+        }
+<span class="fc" id="L201">        break;</span>
+      case COMMENT_PREFIX:
+<span class="pc bpc" id="L203" title="3 of 6 branches missed.">        if ((c == '/' || c == '-') &amp;&amp; c == previousChar) {</span>
+<span class="fc" id="L204">          part = Part.AFTER_COMMENT_PREFIX;</span>
+<span class="fc" id="L205">          afterCommentPrefixIndex = lineBuffer.length() + 1;</span>
+        } else {
+<span class="nc" id="L207">          part = Part.NOT_UNDO_LINE;</span>
+        }
+<span class="nc" id="L209">        break;</span>
+      case AFTER_COMMENT_PREFIX:
+<span class="fc bfc" id="L211" title="All 4 branches covered.">        if (c == 0x09 || c == 0x20) {</span>
+          // ignore whitespace
+<span class="fc bfc" id="L213" title="All 2 branches covered.">        } else if (c == '/') {</span>
+<span class="fc" id="L214">          part = Part.DOUBLE_SLASH;</span>
+        } else {
+<span class="fc" id="L216">          part = Part.NOT_UNDO_LINE;</span>
+        }
+<span class="fc" id="L218">        break;</span>
+      case DOUBLE_SLASH:
+<span class="pc bpc" id="L220" title="2 of 4 branches missed.">        if (c == '/' &amp;&amp; c == previousChar) {</span>
+<span class="fc" id="L221">          part = Part.AFTER_DOUBLE_SLASH;</span>
+<span class="fc" id="L222">          afterDoubleSlashIndex = lineBuffer.length() + 1;</span>
+<span class="fc" id="L223">          undoIndex = 0;</span>
+        } else {
+<span class="nc" id="L225">          part = Part.NOT_UNDO_LINE;</span>
+        }
+<span class="nc" id="L227">        break;</span>
+      case AFTER_DOUBLE_SLASH:
+<span class="fc bfc" id="L229" title="All 4 branches covered.">        if (c == 0x09 || c == 0x20) {</span>
+          // ignore whitespace
+<span class="fc bfc" id="L231" title="All 2 branches covered.">        } else if (c == UNDO_TAG.charAt(undoIndex)) {</span>
+<span class="fc" id="L232">          part = Part.UNDO_TAG;</span>
+<span class="fc" id="L233">          undoIndex = 1;</span>
+        } else {
+<span class="fc" id="L235">          part = Part.NOT_UNDO_LINE;</span>
+        }
+<span class="fc" id="L237">        break;</span>
+      case UNDO_TAG:
+<span class="fc bfc" id="L239" title="All 2 branches covered.">        if (c != UNDO_TAG.charAt(undoIndex)) {</span>
+<span class="fc" id="L240">          part = Part.NOT_UNDO_LINE;</span>
+<span class="fc bfc" id="L241" title="All 2 branches covered.">        } else if (++undoIndex &gt;= UNDO_TAG.length()) {</span>
+<span class="fc" id="L242">          part = Part.AFTER_UNDO_TAG;</span>
+        }
+        break;
+      default:
+        break;
+    }
+<span class="fc" id="L248">  }</span>
+
+  private void searchVariable(char c) {
+    // This is just a quick check.
+<span class="fc bfc" id="L252" title="All 4 branches covered.">    switch (variableStatus) {</span>
+      case NOTHING:
+<span class="fc bfc" id="L254" title="All 6 branches covered.">        if ((part == Part.NOT_UNDO_LINE || part == Part.AFTER_UNDO_TAG) &amp;&amp; c == '$') {</span>
+<span class="fc" id="L255">          variableStatus = VariableStatus.FOUND_DOLLAR;</span>
+        }
+        break;
+      case FOUND_DOLLAR:
+<span class="pc bpc" id="L259" title="1 of 2 branches missed.">        variableStatus = c == '{' ? VariableStatus.FOUND_OPEN_BRACE : VariableStatus.NOTHING;</span>
+<span class="fc" id="L260">        break;</span>
+      case FOUND_OPEN_BRACE:
+<span class="fc bfc" id="L262" title="All 2 branches covered.">        if (c == '}') {</span>
+<span class="fc" id="L263">          variableStatus = VariableStatus.FOUND_POSSIBLE_VARIABLE;</span>
+        }
+        break;
+      default:
+        break;
+    }
+<span class="fc" id="L269">  }</span>
+
+  @Override
+  public int read() throws IOException {
+<span class="fc" id="L273">    char[] buf = new char[1];</span>
+<span class="fc" id="L274">    int result = read(buf, 0, 1);</span>
+<span class="fc bfc" id="L275" title="All 2 branches covered.">    return result == -1 ? -1 : (int) buf[0];</span>
+  }
+
+  protected static Reader scriptFileReader(InputStream inputStream, String charset) {
+<span class="pc bpc" id="L279" title="2 of 4 branches missed.">    if (charset == null || charset.length() == 0) {</span>
+<span class="nc" id="L280">      return new InputStreamReader(inputStream);</span>
+    }
+<span class="fc" id="L282">    return new InputStreamReader(inputStream, Charset.forName(charset));</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

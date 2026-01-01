@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FileMigrationLoader.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MyBatis Migrations</a> &gt; <a href="index.source.html" class="el_package">org.apache.ibatis.migration</a> &gt; <span class="el_source">FileMigrationLoader.java</span></div><h1>FileMigrationLoader.java</h1><pre class="source lang-java linenums">/*
+ *    Copyright 2010-2023 the original author or authors.
+ *
+ *    Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *       https://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+package org.apache.ibatis.migration;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.Reader;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Properties;
+
+import org.apache.ibatis.migration.utils.Util;
+
+public class FileMigrationLoader implements MigrationLoader {
+  protected final File scriptsDir;
+
+  protected final String charset;
+
+  protected final Properties variables;
+
+<span class="fc" id="L36">  public FileMigrationLoader(File scriptsDir, String charset, Properties variables) {</span>
+<span class="fc" id="L37">    this.scriptsDir = scriptsDir;</span>
+<span class="fc" id="L38">    this.charset = charset;</span>
+<span class="fc" id="L39">    this.variables = variables;</span>
+<span class="fc" id="L40">  }</span>
+
+  @Override
+  public List&lt;Change&gt; getMigrations() {
+<span class="fc" id="L44">    List&lt;Change&gt; migrations = new ArrayList&lt;&gt;();</span>
+<span class="pc bpc" id="L45" title="1 of 2 branches missed.">    if (scriptsDir.isDirectory()) {</span>
+<span class="fc" id="L46">      String[] filenames = scriptsDir.list();</span>
+<span class="pc bpc" id="L47" title="1 of 2 branches missed.">      if (filenames == null) {</span>
+<span class="nc" id="L48">        throw new MigrationException(scriptsDir + &quot; does not exist.&quot;);</span>
+      }
+<span class="fc" id="L50">      Arrays.sort(filenames);</span>
+<span class="fc bfc" id="L51" title="All 2 branches covered.">      for (String filename : filenames) {</span>
+<span class="fc bfc" id="L52" title="All 4 branches covered.">        if (filename.endsWith(&quot;.sql&quot;) &amp;&amp; !isSpecialFile(filename)) {</span>
+<span class="fc" id="L53">          Change change = parseChangeFromFilename(filename);</span>
+<span class="fc" id="L54">          migrations.add(change);</span>
+        }
+      }
+    }
+<span class="fc" id="L58">    return migrations;</span>
+  }
+
+  protected boolean isSpecialFile(String filename) {
+<span class="pc bpc" id="L62" title="1 of 4 branches missed.">    return &quot;bootstrap.sql&quot;.equals(filename) || &quot;onabort.sql&quot;.equals(filename);</span>
+  }
+
+  protected Change parseChangeFromFilename(String filename) {
+    try {
+<span class="fc" id="L67">      Change change = new Change();</span>
+<span class="fc" id="L68">      int lastIndexOfDot = filename.lastIndexOf('.');</span>
+<span class="fc" id="L69">      String[] parts = filename.substring(0, lastIndexOfDot).split(&quot;_&quot;);</span>
+<span class="fc" id="L70">      change.setId(new BigDecimal(parts[0]));</span>
+<span class="fc" id="L71">      StringBuilder builder = new StringBuilder();</span>
+<span class="fc bfc" id="L72" title="All 2 branches covered.">      for (int i = 1; i &lt; parts.length; i++) {</span>
+<span class="fc bfc" id="L73" title="All 2 branches covered.">        if (i &gt; 1) {</span>
+<span class="fc" id="L74">          builder.append(&quot; &quot;);</span>
+        }
+<span class="fc" id="L76">        builder.append(parts[i]);</span>
+      }
+<span class="fc" id="L78">      change.setDescription(builder.toString());</span>
+<span class="fc" id="L79">      change.setFilename(filename);</span>
+<span class="fc" id="L80">      return change;</span>
+<span class="nc" id="L81">    } catch (Exception e) {</span>
+<span class="nc" id="L82">      throw new MigrationException(&quot;Error parsing change from file.  Cause: &quot; + e, e);</span>
+    }
+  }
+
+  @Override
+  public Reader getScriptReader(Change change, boolean undo) {
+    try {
+<span class="fc" id="L89">      return new MigrationReader(Util.file(scriptsDir, change.getFilename()), charset, undo, variables);</span>
+<span class="nc" id="L90">    } catch (IOException e) {</span>
+<span class="nc" id="L91">      throw new MigrationException(&quot;Error reading &quot; + change.getFilename(), e);</span>
+    }
+  }
+
+  @Override
+  public Reader getBootstrapReader() {
+<span class="fc" id="L97">    String fileName = &quot;bootstrap.sql&quot;;</span>
+<span class="fc" id="L98">    return getSoleScriptReader(fileName);</span>
+  }
+
+  @Override
+  public Reader getOnAbortReader() {
+<span class="nc" id="L103">    String fileName = &quot;onabort.sql&quot;;</span>
+<span class="nc" id="L104">    return getSoleScriptReader(fileName);</span>
+  }
+
+  protected Reader getSoleScriptReader(String fileName) {
+    try {
+<span class="fc" id="L109">      File scriptFile = Util.file(scriptsDir, fileName);</span>
+<span class="pc bpc" id="L110" title="1 of 2 branches missed.">      if (scriptFile.exists()) {</span>
+<span class="fc" id="L111">        return new MigrationReader(scriptFile, charset, false, variables);</span>
+      }
+<span class="nc" id="L113">      return null;</span>
+<span class="nc" id="L114">    } catch (IOException e) {</span>
+<span class="nc" id="L115">      throw new MigrationException(&quot;Error reading &quot; + fileName, e);</span>
+    }
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

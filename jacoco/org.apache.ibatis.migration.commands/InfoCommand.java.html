@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>InfoCommand.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MyBatis Migrations</a> &gt; <a href="index.source.html" class="el_package">org.apache.ibatis.migration.commands</a> &gt; <span class="el_source">InfoCommand.java</span></div><h1>InfoCommand.java</h1><pre class="source lang-java linenums">/*
+ *    Copyright 2010-2023 the original author or authors.
+ *
+ *    Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *       https://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+package org.apache.ibatis.migration.commands;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintStream;
+import java.nio.charset.Charset;
+import java.util.Locale;
+import java.util.Properties;
+
+public final class InfoCommand implements Command {
+  private final PrintStream out;
+
+<span class="fc" id="L29">  public InfoCommand(PrintStream out) {</span>
+<span class="fc" id="L30">    this.out = out;</span>
+<span class="fc" id="L31">  }</span>
+
+  @Override
+  public void execute(String... params) {
+<span class="fc" id="L35">    Properties properties = new Properties();</span>
+<span class="fc" id="L36">    try (InputStream is = getClass().getResourceAsStream(&quot;/mybatis-migrations.properties&quot;)) {</span>
+<span class="pc bpc" id="L37" title="1 of 2 branches missed.">      if (is != null) {</span>
+<span class="fc" id="L38">        properties.load(is);</span>
+      }
+<span class="nc" id="L40">    } catch (IOException e) {</span>
+      // ignore
+<span class="fc" id="L42">    }</span>
+
+<span class="fc" id="L44">    out.printf(&quot;%s %s (%s)%n&quot;, properties.getProperty(&quot;name&quot;), properties.getProperty(&quot;version&quot;),</span>
+<span class="fc" id="L45">        properties.getProperty(&quot;build&quot;));</span>
+<span class="fc" id="L46">    out.printf(&quot;Java version: %s, vendor: %s%n&quot;, System.getProperty(&quot;java.version&quot;), System.getProperty(&quot;java.vendor&quot;));</span>
+<span class="fc" id="L47">    out.printf(&quot;Java home: %s%n&quot;, System.getProperty(&quot;java.home&quot;));</span>
+<span class="fc" id="L48">    out.printf(&quot;Default locale: %s, platform encoding: %s%n&quot;, Locale.getDefault().toLanguageTag(),</span>
+<span class="fc" id="L49">        Charset.defaultCharset().name());</span>
+<span class="fc" id="L50">    out.printf(&quot;OS name: \&quot;%s\&quot;, version: \&quot;%s\&quot;, arch: \&quot;%s\&quot;, family: \&quot;%s\&quot;%n&quot;, System.getProperty(&quot;os.name&quot;),</span>
+<span class="fc" id="L51">        System.getProperty(&quot;os.version&quot;), System.getProperty(&quot;os.arch&quot;), getOsFamily());</span>
+<span class="fc" id="L52">  }</span>
+
+  private static String getOsFamily() {
+<span class="fc" id="L55">    String osName = System.getProperty(&quot;os.name&quot;).toLowerCase();</span>
+<span class="fc" id="L56">    String pathSep = File.pathSeparator;</span>
+
+<span class="pc bpc" id="L58" title="1 of 2 branches missed.">    if (osName.indexOf(&quot;windows&quot;) != -1) {</span>
+<span class="fc" id="L59">      return &quot;windows&quot;;</span>
+    }
+
+<span class="nc bnc" id="L62" title="All 2 branches missed.">    if (osName.indexOf(&quot;os/2&quot;) != -1) {</span>
+<span class="nc" id="L63">      return &quot;os/2&quot;;</span>
+    }
+
+<span class="nc bnc" id="L66" title="All 4 branches missed.">    if (osName.indexOf(&quot;z/os&quot;) != -1 || osName.indexOf(&quot;os/390&quot;) != -1) {</span>
+<span class="nc" id="L67">      return &quot;z/os&quot;;</span>
+    }
+
+<span class="nc bnc" id="L70" title="All 2 branches missed.">    if (osName.indexOf(&quot;os/400&quot;) != -1) {</span>
+<span class="nc" id="L71">      return &quot;os/400&quot;;</span>
+    }
+
+<span class="nc bnc" id="L74" title="All 2 branches missed.">    if (pathSep.equals(&quot;;&quot;)) {</span>
+<span class="nc" id="L75">      return &quot;dos&quot;;</span>
+    }
+
+<span class="nc bnc" id="L78" title="All 2 branches missed.">    if (osName.indexOf(&quot;mac&quot;) != -1) {</span>
+<span class="nc bnc" id="L79" title="All 2 branches missed.">      if (osName.endsWith(&quot;x&quot;)) {</span>
+<span class="nc" id="L80">        return &quot;mac&quot;; // MACOSX</span>
+      }
+<span class="nc" id="L82">      return &quot;unix&quot;;</span>
+    }
+
+<span class="nc bnc" id="L85" title="All 2 branches missed.">    if (osName.indexOf(&quot;nonstop_kernel&quot;) != -1) {</span>
+<span class="nc" id="L86">      return &quot;tandem&quot;;</span>
+    }
+
+<span class="nc bnc" id="L89" title="All 2 branches missed.">    if (osName.indexOf(&quot;openvms&quot;) != -1) {</span>
+<span class="nc" id="L90">      return &quot;openvms&quot;;</span>
+    }
+
+<span class="nc bnc" id="L93" title="All 2 branches missed.">    if (pathSep.equals(&quot;:&quot;)) {</span>
+<span class="nc" id="L94">      return &quot;unix&quot;;</span>
+    }
+
+<span class="nc" id="L97">    return &quot;undefined&quot;;</span>
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

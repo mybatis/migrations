@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>JavaMigrationLoader.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MyBatis Migrations</a> &gt; <a href="index.source.html" class="el_package">org.apache.ibatis.migration</a> &gt; <span class="el_source">JavaMigrationLoader.java</span></div><h1>JavaMigrationLoader.java</h1><pre class="source lang-java linenums">/*
+ *    Copyright 2010-2023 the original author or authors.
+ *
+ *    Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *       https://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+package org.apache.ibatis.migration;
+
+import java.io.Reader;
+import java.io.StringReader;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+import org.apache.ibatis.migration.io.ResolverUtil;
+
+public class JavaMigrationLoader implements MigrationLoader {
+
+  private String[] packageNames;
+
+  private ClassLoader classLoader;
+
+  public JavaMigrationLoader(String... packageNames) {
+<span class="fc" id="L34">    this(null, packageNames);</span>
+<span class="fc" id="L35">  }</span>
+
+<span class="fc" id="L37">  public JavaMigrationLoader(ClassLoader classLoader, String... packageNames) {</span>
+<span class="fc" id="L38">    this.classLoader = classLoader;</span>
+<span class="fc" id="L39">    this.packageNames = packageNames;</span>
+<span class="fc" id="L40">  }</span>
+
+  @Override
+  public List&lt;Change&gt; getMigrations() {
+<span class="fc" id="L44">    List&lt;Change&gt; migrations = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L45">    ResolverUtil&lt;MigrationScript&gt; resolver = getResolver();</span>
+<span class="fc" id="L46">    resolver.findImplementations(MigrationScript.class, packageNames);</span>
+<span class="fc" id="L47">    Set&lt;Class&lt;? extends MigrationScript&gt;&gt; classes = resolver.getClasses();</span>
+<span class="fc bfc" id="L48" title="All 2 branches covered.">    for (Class&lt;? extends MigrationScript&gt; clazz : classes) {</span>
+      try {
+<span class="pc bpc" id="L50" title="1 of 2 branches missed.">        if (!Modifier.isAbstract(clazz.getModifiers())) {</span>
+<span class="fc" id="L51">          MigrationScript script = clazz.getDeclaredConstructor().newInstance();</span>
+<span class="fc" id="L52">          Change change = parseChangeFromMigrationScript(script);</span>
+<span class="fc" id="L53">          migrations.add(change);</span>
+        }
+<span class="nc" id="L55">      } catch (Exception e) {</span>
+<span class="nc" id="L56">        throw new MigrationException(&quot;Could not instanciate MigrationScript: &quot; + clazz.getName(), e);</span>
+<span class="fc" id="L57">      }</span>
+<span class="fc" id="L58">    }</span>
+<span class="fc" id="L59">    return migrations;</span>
+  }
+
+  private Change parseChangeFromMigrationScript(MigrationScript script) {
+<span class="fc" id="L63">    Change change = new Change();</span>
+<span class="fc" id="L64">    change.setId(script.getId());</span>
+<span class="fc" id="L65">    change.setDescription(script.getDescription());</span>
+<span class="fc" id="L66">    change.setFilename(script.getClass().getName());</span>
+<span class="fc" id="L67">    return change;</span>
+  }
+
+  @Override
+  public Reader getScriptReader(Change change, boolean undo) {
+<span class="fc" id="L72">    ResolverUtil&lt;MigrationScript&gt; resolver = getResolver();</span>
+<span class="fc" id="L73">    final String className = change.getFilename();</span>
+<span class="fc bfc" id="L74" title="All 2 branches covered.">    for (String pkg : packageNames) {</span>
+<span class="fc" id="L75">      resolver.find(</span>
+<span class="pc bpc" id="L76" title="1 of 6 branches missed.">          type -&gt; type != null &amp;&amp; MigrationScript.class.isAssignableFrom(type) &amp;&amp; type.getName().equals(className),</span>
+          pkg);
+    }
+<span class="fc" id="L79">    Set&lt;Class&lt;? extends MigrationScript&gt;&gt; classes = resolver.getClasses();</span>
+    // There should be only one script.
+<span class="pc bpc" id="L81" title="1 of 2 branches missed.">    for (Class&lt;? extends MigrationScript&gt; clazz : classes) {</span>
+      try {
+<span class="fc" id="L83">        MigrationScript script = clazz.getDeclaredConstructor().newInstance();</span>
+<span class="pc bpc" id="L84" title="1 of 2 branches missed.">        return new StringReader(undo ? script.getDownScript() : script.getUpScript());</span>
+<span class="nc" id="L85">      } catch (Exception e) {</span>
+<span class="nc" id="L86">        throw new MigrationException(&quot;Could not instanciate MigrationScript: &quot; + clazz.getName(), e);</span>
+      }
+    }
+<span class="nc" id="L89">    return null;</span>
+  }
+
+  @Override
+  public Reader getBootstrapReader() {
+<span class="fc" id="L94">    return getSoleScriptReader(BootstrapScript.class);</span>
+  }
+
+  @Override
+  public Reader getOnAbortReader() {
+<span class="nc" id="L99">    return getSoleScriptReader(OnAbortScript.class);</span>
+  }
+
+  public &lt;T extends SimpleScript&gt; Reader getSoleScriptReader(Class&lt;T&gt; scriptClass) {
+<span class="fc" id="L103">    ResolverUtil&lt;T&gt; resolver = getResolver();</span>
+<span class="fc" id="L104">    resolver.findImplementations(scriptClass, packageNames);</span>
+<span class="fc" id="L105">    Set&lt;Class&lt;? extends T&gt;&gt; classes = resolver.getClasses();</span>
+<span class="pc bpc" id="L106" title="2 of 4 branches missed.">    if (classes == null || classes.isEmpty()) {</span>
+<span class="nc" id="L107">      return null;</span>
+    }
+<span class="pc bpc" id="L109" title="1 of 2 branches missed.">    if (classes.size() &gt; 1) {</span>
+<span class="nc" id="L110">      throw new MigrationException(&quot;There can be only one implementation of &quot; + scriptClass.getName());</span>
+    }
+<span class="fc" id="L112">    Class&lt;? extends T&gt; clazz = classes.iterator().next();</span>
+    try {
+<span class="fc" id="L114">      T script = clazz.getDeclaredConstructor().newInstance();</span>
+<span class="fc" id="L115">      return new StringReader(script.getScript());</span>
+<span class="nc" id="L116">    } catch (Exception e) {</span>
+<span class="nc" id="L117">      throw new MigrationException(&quot;Could not instanciate script class: &quot; + clazz.getName(), e);</span>
+    }
+  }
+
+  private &lt;T&gt; ResolverUtil&lt;T&gt; getResolver() {
+<span class="fc" id="L122">    ResolverUtil&lt;T&gt; resolver = new ResolverUtil&lt;&gt;();</span>
+<span class="pc bpc" id="L123" title="1 of 2 branches missed.">    if (classLoader != null) {</span>
+<span class="nc" id="L124">      resolver.setClassLoader(classLoader);</span>
+    }
+<span class="fc" id="L126">    return resolver;</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>
