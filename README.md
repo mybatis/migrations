@@ -3,9 +3,9 @@ MYBATIS Migrations
 [![Java CI](https://github.com/mybatis/migrations/actions/workflows/ci.yaml/badge.svg)](https://github.com/mybatis/migrations/actions/workflows/ci.yaml)
 [![Coverage Status](https://coveralls.io/repos/github/mybatis/migrations/badge.svg?branch=master)](https://coveralls.io/github/mybatis/migrations?branch=master)
 [![Maven Central](https://img.shields.io/maven-central/v/org.mybatis/mybatis-migrations)](https://central.sonatype.com/artifact/org.mybatis/mybatis-migrations)
-[![Docker pulls](https://img.shields.io/docker/pulls/mybatis/migrations.svg)](https://hub.docker.com/r/mybatis/migrations)
-[![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/https/oss.sonatype.org/org.mybatis/mybatis-migrations.svg)](https://oss.sonatype.org/content/repositories/snapshots/org/mybatis/mybatis-migrations/)
-[![License](https://img.shields.io/:license-apache-brightgreen.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
+[![Docker pulls](https://img.shields.io/docker/pulls/mybatis/migrations)](https://hub.docker.com/r/mybatis/migrations)
+[![Maven Snapshot](https://img.shields.io/maven-central/v/com.github.mybatis/mybatis-migrations?repo=snapshots)](https://oss.sonatype.org/content/repositories/snapshots/org/mybatis/mybatis-migrations/)
+[![License](https://img.shields.io/github/license/mybatis/migrations)](https://www.apache.org/licenses/LICENSE-2.0)
 
 ![mybatis-migrations](https://mybatis.org/images/mybatis-logo.png)
 
