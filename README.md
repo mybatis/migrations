@@ -19,7 +19,6 @@ See the [reference documentation](https://mybatis.org/migrations)
 |Bundle Locations|
 |------|
 |[Releases - https://repo1.maven.org/maven2/org/mybatis/mybatis-migrations/](https://repo1.maven.org/maven2/org/mybatis/mybatis-migrations/)|
-|[Snapshots - https://oss.sonatype.org/content/repositories/snapshots/org/mybatis/mybatis-migrations](https://oss.sonatype.org/content/repositories/snapshots/org/mybatis/mybatis-migrations/)|
 
 #### Windows
 1. Unzip the distribution archive, i.e. mybatis-${project.version}-migrations.zip to the directory you wish
