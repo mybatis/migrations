@@ -39,7 +39,7 @@ See the [reference documentation](https://mybatis.org/migrations)
 Download and extract migrations to any directory.
 ```sh
 cd $HOME/opt
-wget https://oss.sonatype.org/content/repositories/releases/org/mybatis/mybatis-migrations/3.5.0/mybatis-migrations-3.5.0-bundle.zip
+wget https://repo1.maven.org/maven2/org/mybatis/mybatis-migrations/3.5.0/mybatis-migrations-3.5.0-bundle.zip (or wget https://github.com/mybatis/migrations/releases/download/mybatis-migrations-3.5.0/mybatis-migrations-3.5.0-bundle.zip)
 unzip mybatis-migrations-3.5.0-bundle.zip
 ```
 
