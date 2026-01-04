@@ -4,7 +4,6 @@ MYBATIS Migrations
 [![Coverage Status](https://coveralls.io/repos/github/mybatis/migrations/badge.svg?branch=master)](https://coveralls.io/github/mybatis/migrations?branch=master)
 [![Maven Central](https://img.shields.io/maven-central/v/org.mybatis/mybatis-migrations)](https://central.sonatype.com/artifact/org.mybatis/mybatis-migrations)
 [![Docker pulls](https://img.shields.io/docker/pulls/mybatis/migrations)](https://hub.docker.com/r/mybatis/migrations)
-[![Maven Snapshot](https://img.shields.io/badge/snapshot-available-blue)](https://central.sonatype.com/repository/maven-snapshots/org/mybatis/mybatis-migrations/)
 [![License](https://img.shields.io/github/license/mybatis/migrations)](https://www.apache.org/licenses/LICENSE-2.0)
 
 ![mybatis-migrations](https://mybatis.org/images/mybatis-logo.png)
