@@ -22,18 +22,18 @@ See the [reference documentation](https://mybatis.org/migrations)
 |[Releases – https://github.com/mybatis/migrations/releases](https://github.com/mybatis/migrations/releases)|
 
 #### Windows
-1. Unzip the distribution archive, i.e. mybatis-${project.version}-migrations.zip to the directory you wish
+1. Unzip the distribution archive, i.e. ```mybatis-${project.version}-migrations.zip``` to the directory you wish
       to install MyBatis Migrations.
-      These instructions assume you chose C:\Program Files\mybatis.
-      The subdirectory mybatis-migrations-${project.version} will be created from the archive.
-1. Add the MIGRATIONS_HOME environment variable by opening up the system properties (WinKey + Pause), selecting the
-      Advanced tab, and the Environment Variables button, then adding the MIGRATIONS_HOME variable in the user
-      variables with the value C:\Program Files\mybatis\mybatis-migrations-${project.version}.
+      These instructions assume you chose ```C:\Program Files\mybatis```.
+      The subdirectory ```mybatis-migrations-${project.version}``` will be created from the archive.
+1. Add the ``MIGRATIONS_HOME`` environment variable by opening up the system properties (WinKey + Pause), selecting the
+      Advanced tab, and the Environment Variables button, then adding the ```MIGRATIONS_HOME``` variable in the user
+      variables with the value ```C:\Program Files\mybatis\mybatis-migrations-${project.version}```.
       Be sure to omit any quotation marks around the path even if it contains spaces.
-1. In the same dialog, add the MIGRATIONS environment variable in the user variables with the
-      value %MIGRATIONS_HOME%\bin.
+1. In the same dialog, add the ```MIGRATIONS``` environment variable in the user variables with the
+      value ```%MIGRATIONS_HOME%\bin```.
 1. In the same dialog, update/create the Path environment variable in the user variables and prepend the value
-      %MIGRATIONS% to add MyBatis Migrations available in the command line.
+      ```%MIGRATIONS%``` to add MyBatis Migrations available in the command line.
 
 #### Unix-based Operating Systems (Linux, Solaris and Mac OS X)
 Download and extract migrations to any directory.
