@@ -19,7 +19,7 @@ See the [reference documentation](https://mybatis.org/migrations)
 ## Installation
 |Bundle Locations|
 |------|
-|[Releases - https://oss.sonatype.org/content/repositories/releases/org/mybatis/mybatis-migrations](https://oss.sonatype.org/content/repositories/releases/org/mybatis/mybatis-migrations/)|
+|[Releases - https://repo1.maven.org/maven2/org/mybatis/mybatis-migrations/](https://repo1.maven.org/maven2/org/mybatis/mybatis-migrations/)|
 |[Snapshots - https://oss.sonatype.org/content/repositories/snapshots/org/mybatis/mybatis-migrations](https://oss.sonatype.org/content/repositories/snapshots/org/mybatis/mybatis-migrations/)|
 
 #### Windows
