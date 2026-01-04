@@ -1,7 +1,7 @@
 MYBATIS Migrations
 ==================
 [![Java CI](https://github.com/mybatis/migrations/actions/workflows/ci.yaml/badge.svg)](https://github.com/mybatis/migrations/actions/workflows/ci.yaml)
-[![Coverage Status](https://coveralls.io/repos/mybatis/migrations/badge.svg?branch=master&service=github)](https://coveralls.io/github/mybatis/migrations?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/mybatis/migrations/badge.svg?branch=master)](https://coveralls.io/github/mybatis/migrations?branch=master)
 [![Maven central](https://maven-badges.sml.io/maven-central/org.mybatis/mybatis-migrations/badge.svg)](https://central.sonatype.com/artifact/org.mybatis/mybatis-migrations)
 [![Docker pulls](https://img.shields.io/docker/pulls/mybatis/migrations.svg)](https://hub.docker.com/r/mybatis/migrations)
 [![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/https/oss.sonatype.org/org.mybatis/mybatis-migrations.svg)](https://oss.sonatype.org/content/repositories/snapshots/org/mybatis/mybatis-migrations/)
