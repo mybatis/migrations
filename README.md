@@ -2,7 +2,7 @@ MYBATIS Migrations
 ==================
 [![build](https://github.com/mybatis/migrations/workflows/Java%20CI/badge.svg)](https://github.com/mybatis/migrations/actions?query=workflow%3A%22Java+CI%22)
 [![Coverage Status](https://coveralls.io/repos/mybatis/migrations/badge.svg?branch=master&service=github)](https://coveralls.io/github/mybatis/migrations?branch=master)
-[![Maven central](https://maven-badges.herokuapp.com/maven-central/org.mybatis/mybatis-migrations/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.mybatis/mybatis-migrations)
+[![Maven central](https://maven-badges.sml.io/maven-central/org.mybatis/mybatis-migrations/badge.svg)](https://central.sonatype.com/artifact/org.mybatis/mybatis-migrations)
 [![Docker pulls](https://img.shields.io/docker/pulls/mybatis/migrations.svg)](https://hub.docker.com/r/mybatis/migrations)
 [![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/https/oss.sonatype.org/org.mybatis/mybatis-migrations.svg)](https://oss.sonatype.org/content/repositories/snapshots/org/mybatis/mybatis-migrations/)
 [![License](https://img.shields.io/:license-apache-brightgreen.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
@@ -40,8 +40,8 @@ See the [reference documentation](https://mybatis.org/migrations)
 Download and extract migrations to any directory.
 ```sh
 cd $HOME/opt
-wget https://oss.sonatype.org/content/repositories/releases/org/mybatis/mybatis-migrations/3.3.5/mybatis-migrations-3.3.5-bundle.zip
-unzip mybatis-migrations-3.3.5-bundle.zip
+wget https://oss.sonatype.org/content/repositories/releases/org/mybatis/mybatis-migrations/3.5.0/mybatis-migrations-3.5.0-bundle.zip
+unzip mybatis-migrations-3.5.0-bundle.zip
 ```
 
 In your ~/.bashrc or ~/.zshrc or equivalent add
