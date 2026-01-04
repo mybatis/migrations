@@ -76,7 +76,7 @@ sdk install mybatis
 sdk ls mybatis
 
 # install specific version
-sdk install mybatis 3.3.5
+sdk install mybatis 3.5.0
 ```
 
 ## License
