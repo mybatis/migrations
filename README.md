@@ -12,7 +12,7 @@ MYBATIS Migrations
 ## Requirements
 MyBatis Migrations is a Java tool, so you must have Java installed in order to proceed. 
 Users need at least the Java Runtime Environment (JRE), the Java Development Kit (JDK) is a plus. 
-MyBatis Migrations requires Java version 8 or later.
+MyBatis Migrations requires Java version 11 or later.
 
 See the [reference documentation](https://mybatis.org/migrations)
 
@@ -46,7 +46,7 @@ unzip mybatis-migrations-3.3.5-bundle.zip
 
 In your ~/.bashrc or ~/.zshrc or equivalent add
 ```
-export MIGRATIONS=$HOME/opt/mybatis-migrations-3.3.5 # replace with path you extracted to
+export MIGRATIONS=$HOME/opt/mybatis-migrations-3.5.0 # replace with path you extracted to
 export PATH=$MIGRATIONS/bin:$PATH
 ```
 
