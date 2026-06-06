@@ -70,6 +70,9 @@
     <clirr.comparisonVersion>3.2.0</clirr.comparisonVersion>
     <module.name>org.mybatis.migrations</module.name>
 
+    <byte-buddy.version>1.18.10</byte-buddy.version>
+    <junit.version>6.1.0</junit.version>
+
     <!-- Reproducible Builds -->
     <project.build.outputTimestamp>1767305674</project.build.outputTimestamp>
   </properties>
@@ -78,13 +81,13 @@
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-engine</artifactId>
-      <version>6.1.0</version>
+      <version>${junit.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-params</artifactId>
-      <version>6.1.0</version>
+      <version>${junit.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -96,13 +99,13 @@
     <dependency>
       <groupId>net.bytebuddy</groupId>
       <artifactId>byte-buddy</artifactId>
-      <version>1.18.10-jdk5</version>
+      <version>$[byte-buddy.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>net.bytebuddy</groupId>
       <artifactId>byte-buddy-agent</artifactId>
-      <version>1.18.8</version>
+      <version>${byte-buddy.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
