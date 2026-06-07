@@ -70,7 +70,7 @@
     <clirr.comparisonVersion>3.2.0</clirr.comparisonVersion>
     <module.name>org.mybatis.migrations</module.name>
 
-    <byte-buddy.version>1.18.10</byte-buddy.version>
+    <byte-buddy.version>1.18.10-jdk5</byte-buddy.version>
     <junit.version>6.1.0</junit.version>
 
     <!-- Reproducible Builds -->
