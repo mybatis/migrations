@@ -71,7 +71,7 @@
     <module.name>org.mybatis.migrations</module.name>
 
     <byte-buddy.version>1.18.10</byte-buddy.version>
-    <junit.version>6.1.0</junit.version>
+    <junit.version>6.1.1</junit.version>
 
     <!-- Reproducible Builds -->
     <project.build.outputTimestamp>1767305674</project.build.outputTimestamp>
