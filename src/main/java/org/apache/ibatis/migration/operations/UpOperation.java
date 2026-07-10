@@ -1,5 +1,5 @@
 /*
- *    Copyright 2010-2023 the original author or authors.
+ *    Copyright 2010-2026 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@ package org.apache.ibatis.migration.operations;
 import java.io.PrintStream;
 import java.io.Reader;
 import java.sql.Connection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,13 +57,13 @@ public final class UpOperation extends DatabaseOperation {
         option = new DatabaseOperationOption();
       }
 
-      List<Change> changesInDb = Collections.emptyList();
+      List<Change> changesInDb = List.of();
       if (changelogExists(con, option)) {
         changesInDb = getChangelog(con, option);
       }
 
       List<Change> migrations = migrationsLoader.getMigrations();
-      Collections.sort(migrations);
+      migrations.sort(null);
       String skippedOrMissing = checkSkippedOrMissing(changesInDb, migrations);
       int stepCount = 0;
 

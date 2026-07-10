@@ -1,5 +1,5 @@
 /*
- *    Copyright 2010-2023 the original author or authors.
+ *    Copyright 2010-2026 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -55,7 +55,7 @@ public final class DownOperation extends DatabaseOperation {
       if (option == null) {
         option = new DatabaseOperationOption();
       }
-      List<Change> changesInDb = Collections.emptyList();
+      List<Change> changesInDb = List.of();
       if (changelogExists(con, option)) {
         changesInDb = getChangelog(con, option);
       }
@@ -63,7 +63,7 @@ public final class DownOperation extends DatabaseOperation {
         println(printStream, "Changelog exist, but no migration found.");
       } else {
         List<Change> migrations = migrationsLoader.getMigrations();
-        Collections.sort(migrations);
+        migrations.sort(null);
         String skippedOrMissing = checkSkippedOrMissing(changesInDb, migrations);
         Collections.reverse(migrations);
         int stepCount = 0;

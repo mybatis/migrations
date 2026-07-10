@@ -1,5 +1,5 @@
 /*
- *    Copyright 2010-2023 the original author or authors.
+ *    Copyright 2010-2026 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@ import java.io.PrintStream;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -76,7 +75,7 @@ public final class StatusOperation extends DatabaseOperation {
       throw new MigrationException("Error getting connection. Cause: " + e, e);
     }
 
-    Collections.sort(changes);
+    changes.sort(null);
     for (Change change : changes) {
       println(printStream, change.toString());
     }

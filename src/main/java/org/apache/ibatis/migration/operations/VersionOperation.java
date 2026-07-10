@@ -1,5 +1,5 @@
 /*
- *    Copyright 2010-2023 the original author or authors.
+ *    Copyright 2010-2026 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@ import java.io.PrintStream;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Collections;
 import java.util.List;
 
 import org.apache.ibatis.migration.Change;
@@ -50,7 +49,7 @@ public final class VersionOperation extends DatabaseOperation {
       option = new DatabaseOperationOption();
     }
     try (Connection con = connectionProvider.getConnection()) {
-      List<Change> changesInDb = changelogExists(con, option) ? getChangelog(con, option) : Collections.emptyList();
+      List<Change> changesInDb = changelogExists(con, option) ? getChangelog(con, option) : List.of();
       List<Change> migrations = migrationsLoader.getMigrations();
       Change specified = new Change(version);
       if (!migrations.contains(specified)) {
