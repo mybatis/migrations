@@ -205,16 +205,4 @@
     </plugins>
   </build>
 
-  <profiles>
-    <profile>
-      <id>security-manager</id>
-      <activation>
-        <jdk>[18,24)</jdk>
-      </activation>
-      <properties>
-        <argLine>-Djava.security.manager=allow</argLine>
-      </properties>
-    </profile>
-  </profiles>
-
 </project>
