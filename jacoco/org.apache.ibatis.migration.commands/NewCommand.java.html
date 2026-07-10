@@ -36,8 +36,8 @@ public final class NewCommand extends BaseCommand {
 
   @Override
   public void execute(String... params) {
-<span class="pc bpc" id="L39" title="1 of 2 branches missed.">    if (paramsEmpty(params)) {</span>
-<span class="nc" id="L40">      throw new MigrationException(&quot;No description specified for new migration.&quot;);</span>
+<span class="fc bfc" id="L39" title="All 2 branches covered.">    if (paramsEmpty(params)) {</span>
+<span class="fc" id="L40">      throw new MigrationException(&quot;No description specified for new migration.&quot;);</span>
     }
 <span class="fc" id="L42">    String description = params[0];</span>
 <span class="fc" id="L43">    Properties variables = new Properties();</span>
@@ -87,4 +87,4 @@ public final class NewCommand extends BaseCommand {
 <span class="fc" id="L87">    return createFileMigrationHook(before, null, null, after);</span>
   }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

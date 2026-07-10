@@ -7,7 +7,7 @@
 <body>
 <div id="overview"><a href="../../../../../../apidocs/org/apache/ibatis/migration/commands/ScriptCommand.html">View Javadoc</a></div><pre>
 <a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
-<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> *    Copyright 2010-2023 the original author or authors.</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> *    Copyright 2010-2026 the original author or authors.</em>
 <a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> *</em>
 <a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> *    Licensed under the Apache License, Version 2.0 (the "License");</em>
 <a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> *    you may not use this file except in compliance with the License.</em>
@@ -87,7 +87,7 @@
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>        List&lt;Change&gt; migrations = scriptPending || scriptPendingUndo ? <strong class="jxr_keyword">new</strong> <a name="StatusOperation" href="../../../../../org/apache/ibatis/migration/operations/StatusOperation.html#StatusOperation">StatusOperation</a>()
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>            .operate(getConnectionProvider(), getMigrationLoader(), getDatabaseOperationOption(), <strong class="jxr_keyword">null</strong>).getCurrentStatus()
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>            : getMigrationLoader().getMigrations();
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>        Collections.sort(migrations);
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>        migrations.sort(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>        <strong class="jxr_keyword">if</strong> (undo) {
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>          Collections.reverse(migrations);
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>        }

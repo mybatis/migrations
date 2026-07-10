@@ -124,8 +124,8 @@ public class Jsr223HookScript implements HookScript {
 <span class="nc" id="L124">          &quot;Script engine '&quot; + engine.getClass().getName() + &quot;' does not support function/method invocation.&quot;, e);</span>
 <span class="nc" id="L125">    } catch (IOException e) {</span>
 <span class="nc" id="L126">      throw new MigrationException(&quot;Failed to read JSR-223 hook script file.&quot;, e);</span>
-<span class="nc" id="L127">    } catch (ScriptException e) {</span>
-<span class="nc" id="L128">      throw new MigrationException(&quot;Failed to execute JSR-223 hook script.&quot;, e);</span>
+<span class="fc" id="L127">    } catch (ScriptException e) {</span>
+<span class="fc" id="L128">      throw new MigrationException(&quot;Failed to execute JSR-223 hook script.&quot;, e);</span>
 <span class="nc" id="L129">    } catch (NoSuchMethodException e) {</span>
 <span class="nc" id="L130">      throw new MigrationException(&quot;Method or function not found in JSR-223 hook script: &quot; + functionName, e);</span>
 <span class="fc" id="L131">    }</span>
@@ -137,4 +137,4 @@ public class Jsr223HookScript implements HookScript {
 <span class="fc" id="L137">    }</span>
 <span class="fc" id="L138">  }</span>
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>
