@@ -1,5 +1,5 @@
 /*
- *    Copyright 2010-2023 the original author or authors.
+ *    Copyright 2010-2026 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -16,14 +16,13 @@
 package org.apache.ibatis.migration;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
- * @author Clinton Begin
+ * The Class VariableReplacer.
  */
 public class VariableReplacer {
 
@@ -36,7 +35,7 @@ public class VariableReplacer {
   }
 
   public VariableReplacer(List<Map<? extends Object, ? extends Object>> variablesList) {
-    this.variablesList = variablesList == null ? Collections.emptyList()
+    this.variablesList = variablesList == null ? List.of()
         : variablesList.stream().filter(Objects::nonNull).collect(Collectors.toList());
   }
 

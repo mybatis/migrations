@@ -1,5 +1,5 @@
 /*
- *    Copyright 2010-2025 the original author or authors.
+ *    Copyright 2010-2026 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -23,7 +23,6 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -102,7 +101,7 @@ public class Environment {
     for (SETTING_KEY key : keys) {
       list.add(key.toString());
     }
-    SETTING_KEYS = Collections.unmodifiableList(list);
+    SETTING_KEYS = List.copyOf(list);
   }
 
   private final String timeZone;

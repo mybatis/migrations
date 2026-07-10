@@ -1,5 +1,5 @@
 /*
- *    Copyright 2010-2022 the original author or authors.
+ *    Copyright 2010-2026 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -19,15 +19,12 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
  * A {@link VFS} implementation that works with the VFS API provided by JBoss 6.
- *
- * @author Ben Gunter
  */
 public class JBoss6VFS extends VFS {
   private static final Logger log = Logger.getLogger(JBoss6VFS.class.getName());
@@ -166,7 +163,7 @@ public class JBoss6VFS extends VFS {
     VirtualFile directory;
     directory = VFS.getChild(url);
     if (directory == null) {
-      return Collections.emptyList();
+      return List.of();
     }
 
     if (!path.endsWith("/")) {
