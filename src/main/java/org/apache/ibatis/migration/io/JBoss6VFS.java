@@ -25,8 +25,6 @@ import java.util.logging.Logger;
 
 /**
  * A {@link VFS} implementation that works with the VFS API provided by JBoss 6.
- *
- * @author Ben Gunter
  */
 public class JBoss6VFS extends VFS {
   private static final Logger log = Logger.getLogger(JBoss6VFS.class.getName());

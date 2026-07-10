@@ -22,7 +22,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
- * @author Clinton Begin
+ * The Class VariableReplacer.
  */
 public class VariableReplacer {
 

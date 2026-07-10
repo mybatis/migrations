@@ -1,5 +1,5 @@
 /*
- *    Copyright 2010-2023 the original author or authors.
+ *    Copyright 2010-2026 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -28,8 +28,6 @@ import java.util.logging.Logger;
 
 /**
  * Provides a very simple API for accessing resources within an application server.
- *
- * @author Ben Gunter
  */
 public abstract class VFS {
   private static final Logger log = Logger.getLogger(VFS.class.getName());
