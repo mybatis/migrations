@@ -1,5 +1,5 @@
 /*
- *    Copyright 2010-2025 the original author or authors.
+ *    Copyright 2010-2026 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -27,12 +27,14 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 
+import mockit.Mock;
+import mockit.MockUp;
+
 import org.apache.ibatis.migration.Migrator;
 import org.apache.ibatis.migration.io.Resources;
 import org.apache.ibatis.migration.utils.TestUtil;
 import org.apache.ibatis.migration.utils.Util;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.EnabledForJreRange;
 
 import uk.org.webcompere.systemstubs.SystemStubs;
 
@@ -55,16 +57,24 @@ class NewHookTest {
     assertTrue(TestUtil.deleteDirectory(basePath), "delete test dir");
   }
 
-  @EnabledForJreRange(maxVersion = 23)
   @Test
   void shouldNotCreateFileWhenBeforeHookThrowsException() throws Throwable {
     File basePath = initBaseDir();
     File scriptPath = Path.of(basePath.getCanonicalPath(), "scripts").toFile();
+
+    new MockUp<System>() {
+      @Mock
+      public void exit(int status) {
+        throw new ExitException(status);
+      }
+    };
+
     String output = SystemStubs.tapSystemOut(() -> {
-      int exitCode = SystemStubs.catchSystemExit(() -> {
+      try {
         Migrator.main(TestUtil.args("--path=" + basePath.getAbsolutePath(), "new", "create table1"));
-      });
-      assertEquals(1, exitCode);
+      } catch (ExitException e) {
+        assertEquals(1, e.getStatus());
+      }
     });
     assertTrue(output.contains("FAILURE"));
     assertEquals(3, scriptPath.list().length);
@@ -93,4 +103,17 @@ class NewHookTest {
     }
     return basePath;
   }
+
+  private static class ExitException extends RuntimeException {
+    private final int status;
+
+    ExitException(int status) {
+      this.status = status;
+    }
+
+    int getStatus() {
+      return status;
+    }
+  }
+
 }
