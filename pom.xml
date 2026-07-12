@@ -72,7 +72,7 @@
 
     <byte-buddy.version>1.18.11</byte-buddy.version>
     <jmockit.version>2.2.0</jmockit.version>
-    <junit.version>6.1.1</junit.version>
+    <junit.version>6.1.2</junit.version>
 
     <!-- Reproducible Builds -->
     <project.build.outputTimestamp>1783722995</project.build.outputTimestamp>
